@@ -68,17 +68,19 @@ process.controller = {
 
         }
     
-        app.renderLabels();
-        app.openProcessModal();
-
+        
         //this.components.requesterName.setValue('ABC');
         //this.components.requesterName.disable();
         //validator.markAsInvalidField('myTxt');
 
-       
+        //this.forms.form_BankTransfer.enable();
+        //this.forms.form_BankTransfer.disable();
 
 
 
+
+        app.renderLabels();
+        app.openProcessModal();
     },
 
     
@@ -132,6 +134,7 @@ $(document).ready(process.controller.main());
                  <!-- Form-Tab-2 -->
                 <div class="tab-pane fade" id="nav-tab2" role="tabpanel" aria-labelledby="tab2-tab">
                     Form-2
+                    <button type="button" class="btn btn-primary" onclick="process.controller.forms.form_BankTransfer.disable()">disable form</button>
                 </div>
 
                  <!-- Form-Tab-3 -->

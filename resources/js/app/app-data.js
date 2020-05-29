@@ -70,6 +70,14 @@ class Form{
 	fetch(){};
 
 	save(){};
+
+	enable(){
+		util.querySelectorThenRemoveCssClass('data-tab-form-name',this.dbTableName,'disabled');
+	};
+	
+	disable(){
+		util.querySelectorThenAddCssClass('data-tab-form-name',this.dbTableName,'disabled');
+	};
 }
 
 class Component{

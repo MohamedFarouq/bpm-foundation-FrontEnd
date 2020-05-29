@@ -1,5 +1,6 @@
 const util = {
 	
+
 	arrangeTextForDB(text){
 		let cleanText = "";
 		cleanText = text.replace(/'/gi,"''");
@@ -33,6 +34,9 @@ const util = {
 	roundNumber(num,dec){
 		return result = Math.round(num*Math.pow(10,dec))/Math.pow(10,dec);
 	},
+
+
+
 
 
 
@@ -120,8 +124,6 @@ const util = {
 		//get difference from server using java LocalDate
 		app.alertError('method app-util.util.getYearsBetweenDates is not yet implementd');    
 	},
-
-
 
 	isDate(id){
 		return	$(`#${id}`).attr('type') == 'date';
@@ -248,6 +250,12 @@ const util = {
 		
 	},
 
+	querySelectorThenAddCssClass(attr,attrValue,cssClass){
+		let element = this.querySelector(attr,attrValue);
+		if(element)
+			element.classList.add(cssClass);
+	},
+
 	removeCssClass(id,cssClass){
 		let list = this.convertToArray(id);
 		list.forEach( (item) => {
@@ -255,6 +263,15 @@ const util = {
 								$(`#${item}`).removeClass(cssClass);
 							});
 	},
+
+	querySelectorThenRemoveCssClass(attr,attrValue,cssClass){
+		let element = this.querySelector(attr,attrValue);
+		if(element)
+			element.classList.remove(cssClass);
+	},
+
+
+
 
 	elementExists(id){
 		if (id && $(`#${id}`).length > 0)
