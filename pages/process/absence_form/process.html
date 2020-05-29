@@ -1,0 +1,75 @@
+
+<script >
+    
+/**
+ * WorkItem{
+        workFlowName,workflowID,subject,recieveDate,stepNo,workFlowVersion,workFlowType,stepName,nextStepName,instructions,workObjectID,comments,action,
+        sender,reciever,branch,forms,attachments
+        isLastStep = false;
+}
+ */
+
+process.controller = {
+    errMsg : "",
+    groups : {   //groupFollowUpTLs : ["FollowUp_TLs"],    // groupFollowUpEmps : ["FollowUp_Emps"],
+    },
+
+    steps:{
+        BankTransfer_Launch : 'BankTransfer_Launch',
+        BankTransfer_PASec : 'BankTransfer_PASec',
+        BankTransfer_PAEmpApprove : 'BankTransfer_PAEmpApprove',
+        BankTransfer_ReqUpdate : 'BankTransfer_ReqUpdate',
+        BankTransfer_Review : 'BankTransfer_Review',
+        BankTransfer_PAEmpUpdate : 'BankTransfer_PAEmpUpdate',
+        BankTransfer_Notification : 'BankTransfer_Notification',
+        BankTransfer_DeptSec : 'BankTransfer_DeptSec',
+    },
+
+    main(){
+        
+        process.init();
+
+
+        let stepName = process.workItem.stepName;
+        //process.recieversList.loadManager();
+        //process.recieversList.loadDeptManager();
+        //process.branchesList.load()); //to load all branches
+        //process.branchesList.load([1,2,5]); // to load specific branches using branch id
+       // process.actionsList.load([process.actionsList.status,process.actionsList.approved]);
+
+        
+
+        if(stepName == this.steps.BankTransfer_Launch){
+           
+        }
+        else if(stepName == this.steps.BankTransfer_PASec){
+
+        }
+    
+        app.renderLabels();
+        app.openProcessModal();
+
+        //validator.markAsInvalidField('myTxt');
+    },
+
+    
+    validate(){
+
+    },
+
+    send(){
+
+    }
+
+}
+
+
+$(document).ready(process.controller.main());
+
+</script>
+
+<div class="container-fluid border">
+    <h2>Hi i'm an Absence process forms</h2>
+
+    
+</div>

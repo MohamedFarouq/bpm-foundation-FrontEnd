@@ -1,0 +1,146 @@
+
+
+
+<script >
+    
+/**
+ * WorkItem{
+        workFlowName,workflowID,subject,recieveDate,stepNo,workFlowVersion,workFlowType,stepName,nextStepName,instructions,workObjectID,comments,action,
+        sender,reciever,branch,forms,attachments
+        isLastStep = false;
+}
+ */
+
+
+
+process.controller = {
+    errMsg : "",
+    groups : {  
+         //groupFollowUpTLs : ["FollowUp_TLs"],    // groupFollowUpEmps : ["FollowUp_Emps"],
+    },
+
+    steps : {
+        BankTransfer_Launch : 'BankTransfer_Launch',
+        BankTransfer_PASec : 'BankTransfer_PASec',
+        BankTransfer_PAEmpApprove : 'BankTransfer_PAEmpApprove',
+        BankTransfer_ReqUpdate : 'BankTransfer_ReqUpdate',
+        BankTransfer_Review : 'BankTransfer_Review',
+        BankTransfer_PAEmpUpdate : 'BankTransfer_PAEmpUpdate',
+        BankTransfer_Notification : 'BankTransfer_Notification',
+        BankTransfer_DeptSec : 'BankTransfer_DeptSec',
+    },
+
+    forms : {
+        form_BankTransfer :  new Form('Form_BankTransfer', 'نموذج تغير حساب بنكي','Change Bank Account Form'),
+        //form_2 : new Form('Form_BankTransfer', 'نموذج تغير حساب بنكي','Change Bank Account Form'),
+        //form_3 : new Form('Form_BankTransfer', 'نموذج تغير حساب بنكي','Change Bank Account Form'),
+    },
+
+    components : {
+        requesterName : new TxtComponent('RequesterName','الاســم','Name',5),
+    },
+
+   
+
+    main(){
+        
+        // let nameComp = new TxtComponent('RequesterName','formsGrid','',5);
+
+
+
+
+
+        process.init();
+
+        let stepName = process.workItem.stepName;
+        process.recieversList.loadManager();
+        //process.recieversList.loadDeptManager();
+        //process.branchesList.load()); //to load all branches
+        //process.branchesList.load([1,2,5]); // to load specific branches using branch id
+        process.actionsList.load([process.actionsList.status, process.actionsList.approved]);
+
+        
+
+        if(stepName == this.steps.BankTransfer_Launch){
+            
+        }
+        else if(stepName == this.steps.BankTransfer_PASec){
+
+        }
+    
+        app.renderLabels();
+        app.openProcessModal();
+
+        //this.components.requesterName.setValue('ABC');
+        //this.components.requesterName.disable();
+        //validator.markAsInvalidField('myTxt');
+
+       
+
+
+
+    },
+
+    
+    validate(){
+
+    },
+
+    send(){
+
+    }
+
+
+
+
+
+
+}
+
+$(document).ready(process.controller.main());
+
+
+</script>
+
+
+
+<div class="container-fluid pr-1 pl-1" >
+    <div class="row">
+        <div class="col p-1 " >
+            <nav>
+                <div class="nav nav-pills mb-1" id="nav-tab" role="tablist">
+                  <!-- copy and paste one of these anchors to add new form tab and make sure to change [id,href,data-form-name,aria-controls] accordingly by search and replace -->
+                  <a id="tab1-tab" href="#nav-tab1" data-tab-form-name="Form_BankTransfer"  aria-controls="nav-tab1" aria-selected="true"  role="tab"  class="nav-item nav-link active" data-toggle="tab">Home</a>
+                  <a id="tab2-tab" href="#nav-tab2" data-tab-form-name=""  aria-controls="nav-tab2" aria-selected="false" role="tab" class="nav-item nav-link" data-toggle="tab">Profile</a>
+                  <a id="tab3-tab" href="#nav-tab3" data-tab-form-name=""  aria-controls="nav-tab3" aria-selected="false" role="tab" class="nav-item nav-link disabled" data-toggle="tab">Form-3</a> 
+                  <!-- aria-disabled="true" -->
+                </div>
+            </nav>
+            <div class="tab-content border border-secondary rounded p-2" id="nav-tabContent">
+                <!-- Form-Tab-1 -->
+                <div class="tab-pane fade show active" id="nav-tab1" role="tabpanel" aria-labelledby="tab1-tab">
+                    <div data-container-for="RequesterName" class=" p-2 "></div>
+
+                    <input placeholder="Your Date" class="form-control" type="text" onfocus="(this.type='date')" onblur="(this.type='text')" id="date" min="2018-01-01" max="2018-12-31">
+                    
+                    <input type="text" name="myTxt" id="myTxt" class="form-control" >
+                    <br>
+                    <input type="date" name="myDate" id="myDate" class="form-control"  placeholder="select from"  min="2018-01-01" max="2018-12-31"> 
+                    <!-- value="2018-07-22" -->
+                </div>
+
+                 <!-- Form-Tab-2 -->
+                <div class="tab-pane fade" id="nav-tab2" role="tabpanel" aria-labelledby="tab2-tab">
+                    Form-2
+                </div>
+
+                 <!-- Form-Tab-3 -->
+                <div class="tab-pane fade" id="nav-tab3" role="tabpanel" aria-labelledby="tab3-tab">
+                    Form-3
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>
+</div>

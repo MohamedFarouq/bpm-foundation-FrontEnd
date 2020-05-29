@@ -1,0 +1,12 @@
+@font-face {  font-family: "MyArabicFont";  src: url("../webfonts/DroidKufi-Bold.ttf") format("ttf"),url("../webfonts/DroidKufi-Regular.ttf") format("ttf");}
+html , body{ height : 100%; }
+i{ font-size: 20px;  color:  rgb(62, 69, 77);  margin: 0px 8px 0px 8px; }
+
+.bpmLogo{ font-size: 40px;margin:0px;}
+.simpleLink{text-decoration: none !important;font-size: 18px !important; font-family: MyArabicFont !important;}
+.modalCloseBtn{font-size: 35px !important;color:darkgray;}
+/* .procRSBItem{ display: block; width:90% !important;margin: 10px 30px 10px 0px !important;} */
+
+
+
+

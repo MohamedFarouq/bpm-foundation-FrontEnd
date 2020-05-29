@@ -1,0 +1,203 @@
+
+<script>
+
+if(! registery.mainPageController){
+
+registery.mainPageController = {
+
+    main(){
+        app.renderLabels();
+        this.renderNewRequestsLinks();
+        this.renderMyInbox();
+    },
+
+    renderMyInbox(){
+        util.clear("myInboxList");
+        let myInboxItems = peService.fetchInboxWIs(loggedUser.userName);
+        
+        myInboxItems.forEach((wi,index)=>{
+        let html = `<li class="list-group-item"> 
+                            <div class="row">
+                                <div class="col-1 text-muted text-center"><span class="text-muted" >${wi.recieveDate}</span></div>
+                                <div class="col"><a onclick="process.launch(new WorkItem('${wi.workFlowName}',${wi.workflowID},'${wi.subject}','${wi.recieveDate}'))" class="simpleLink" href="#" title="">${wi.subject}</a>    
+                                </div>
+                            </div>
+                        </li>`;
+            util.append("myInboxList",html);
+        });
+
+    },
+    
+    
+    renderNewRequestsLinks(){
+        let hrReqListID = 'humanResourcesRequestsList';
+        let itReqListID = 'informationTechRequestsList';
+        let ssReqListID = 'socialSecurityRequestsList';
+        let finReqListID = 'financeRequestsList';
+        let adminReqListID = 'administrationRequestsList';
+        let genReqListID = 'generalSectorRequestsList';
+        
+        // HR requests
+        this.addNewRequestLink(hrReqListID,processCatalog.Personal_Execuse_Permission);
+        this.addNewRequestLink(hrReqListID,processCatalog.Periodical_Leave);
+        this.addNewRequestLink(hrReqListID,processCatalog.Return_Endorsement);
+        this.addNewRequestLink(hrReqListID,processCatalog.Absence_Form);
+        this.addNewRequestLink(hrReqListID,processCatalog.Bank_Transfer);
+        this.addNewRequestLink(hrReqListID,processCatalog.Issue_Certificate);
+        this.addNewRequestLink(hrReqListID,processCatalog.Salary_Ded_Hiers);
+        this.addNewRequestLink(hrReqListID,processCatalog.Loan_Request);
+        //this.addNewReqLinkToHR(processCatalog.Sick_Leave);
+
+        // IT requests
+        this.addNewRequestLink(itReqListID,processCatalog.User_Signon);
+        this.addNewRequestLink(itReqListID,processCatalog.System_Modification_Request);
+        this.addNewRequestLink(itReqListID,processCatalog.Program_Installation);
+        this.addNewRequestLink(itReqListID,processCatalog.Operation_Support_Request_Forms);
+        this.addNewRequestLink(itReqListID,processCatalog.TS_Service);
+        this.addNewRequestLink(itReqListID,processCatalog.RACF_Security_Form);
+        this.addNewRequestLink(itReqListID,processCatalog.Operation_Support_Request_Forms);
+        //this.addNewReqLinkToIT(processCatalog.Exit_Permit);
+
+        // SSSector requests
+        this.addNewRequestLink(ssReqListID,processCatalog.Process_Transfer);
+        this.addNewRequestLink(ssReqListID,processCatalog.Outgoing_Correspondences);
+        this.addNewRequestLink(ssReqListID,processCatalog.Payment_Order);
+        this.addNewRequestLink(ssReqListID,processCatalog.Pension_Advanced);
+        this.addNewRequestLink(ssReqListID,processCatalog.Pension_Replacement);
+        this.addNewRequestLink(ssReqListID,processCatalog.Pension_Repayment);
+        this.addNewRequestLink(ssReqListID,processCatalog.Pension_Calculation);
+        this.addNewRequestLink(ssReqListID,processCatalog.Pension_Replacement_In_Employment);
+        this.addNewRequestLink(ssReqListID,processCatalog.Share_Advanced);
+        this.addNewRequestLink(ssReqListID,processCatalog.Unemployment_Compensation_Calculation);
+        this.addNewRequestLink(ssReqListID,processCatalog.UCC_Payment);
+        this.addNewRequestLink(ssReqListID,processCatalog.Refund_Memo);
+        this.addNewRequestLink(ssReqListID,processCatalog.Medical_Committee_Memo);
+        this.addNewRequestLink(ssReqListID,processCatalog.Process_Cancellation);
+        this.addNewRequestLink(ssReqListID,processCatalog.File_Change);
+
+        this.addNewRequestLink(finReqListID,processCatalog.Process_Transfer);
+        this.addNewRequestLink(finReqListID,processCatalog.Allow_Item);
+        this.addNewRequestLink(finReqListID,processCatalog.Amounts_Paid_In_Excess);
+        this.addNewRequestLink(finReqListID,processCatalog.Recover_Undeserved_Amounts);
+        this.addNewRequestLink(finReqListID,processCatalog.Refund_Memo);
+        this.addNewRequestLink(finReqListID,processCatalog.Reply_About_RUA);
+        this.addNewRequestLink(finReqListID,processCatalog.Process_Cancellation);
+
+        
+        this.addNewRequestLink(genReqListID,processCatalog.File_Complaint);
+        this.addNewRequestLink(genReqListID,processCatalog.Family_Certificate);
+
+        this.addNewRequestLink(adminReqListID,processCatalog.Purchase);
+        this.addNewRequestLink(adminReqListID,processCatalog.Service_Request);
+        this.addNewRequestLink(adminReqListID,processCatalog.Task_Aassignment_Request);
+        this.addNewRequestLink(adminReqListID,processCatalog.Extract_And_Receive_Files);
+        this.addNewRequestLink(adminReqListID,processCatalog.Document_Retrieval_Suggestions);
+        this.addNewRequestLink(adminReqListID,processCatalog.Modification_Request);
+
+    },		
+
+    addNewRequestLink(containerID,process){
+        let title = (app.isArabicLocale()) ? process.arabicName : process.engLabel;
+        let html = `<li class="list-group-item"> <a onclick="process.launch(new WorkItem('${process.engName}'))" class="simpleLink" href="#">${title} </a>  </li>`;  
+        util.append(containerID,html);
+    },
+
+    
+}
+
+
+}
+
+$(document).ready(registery.mainPageController.main());
+</script>
+
+
+
+<div class="container-fluid ">
+    <div class="row">
+        <div class="col">
+            <nav class="navbar bg-dark">
+                <h6 class="text-white font-weight-bold" data-label="personalInbox"></h6>
+            </nav>    
+            <ul id="myInboxList" class="list-group list-group-flush shadow p-0 overflow-auto bg-white " style="height: 600px;"></ul>
+        </div>
+
+        <div class="col-3 p-0">
+            <div class="accordion shadow " id="newRequestAccordion">
+                        <div class="card">
+                            <div class="card-header" id="headingHRRequests">
+                                <h2 class="mb-0">
+                                <button data-label="humanResourcesRequests" data-target="#humanResourcesRequestsDiv" aria-controls="humanResourcesRequestsDiv" aria-expanded="false" class="btn btn-secondary w-100 collapsed" type="button" data-toggle="collapse"></button>
+                                </h2>
+                            </div>
+                            <div id="humanResourcesRequestsDiv" class="collapse" aria-labelledby="headingHRRequests" data-parent="#newRequestAccordion">
+                                <div class="card-body">
+                                    <ul id="humanResourcesRequestsList" class="list-group list-group-flush"></ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header" id="headingITRequests">
+                                <h2 class="mb-0">
+                                <button data-label="informationTechRequests" data-target="#informationTechRequestsDiv" aria-controls="informationTechRequestsDiv" aria-expanded="false" class="btn btn-secondary w-100 collapsed" type="button" data-toggle="collapse"></button>
+                                </h2>
+                            </div>
+                            <div id="informationTechRequestsDiv" class="collapse" aria-labelledby="headingITRequests" data-parent="#newRequestAccordion">
+                                <div class="card-body">
+                                    <ul id="informationTechRequestsList" class="list-group list-group-flush"></ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header" id="headingSSRequests">
+                                <h2 class="mb-0">
+                                <button data-label="socialSecurityRequests" data-target="#socialSecurityRequestsDiv" aria-controls="socialSecurityRequestsDiv" aria-expanded="false" class="btn btn-secondary w-100 collapsed" type="button" data-toggle="collapse"></button>
+                                </h2>
+                            </div>
+                            <div id="socialSecurityRequestsDiv" class="collapse" aria-labelledby="headingSSRequests" data-parent="#newRequestAccordion">
+                                <div class="card-body">
+                                    <ul id="socialSecurityRequestsList" class="list-group list-group-flush"></ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header" id="headingFinanceRequests">
+                                <h2 class="mb-0">
+                                <button data-label="financeRequests" data-target="#financeRequestsDiv" aria-controls="financeRequestsDiv" aria-expanded="false" class="btn btn-secondary w-100 collapsed" type="button" data-toggle="collapse"></button>
+                                </h2>
+                            </div>
+                            <div id="financeRequestsDiv" class="collapse" aria-labelledby="headingFinanceRequests" data-parent="#newRequestAccordion">
+                                <div class="card-body">
+                                    <ul id="financeRequestsList" class="list-group list-group-flush"></ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header" id="headingAdminRequests">
+                                <h2 class="mb-0">
+                                <button data-label="administrationRequests" data-target="#administrationRequestsDiv" aria-controls="administrationRequestsDiv" aria-expanded="false" class="btn btn-secondary w-100 collapsed" type="button" data-toggle="collapse"></button>
+                                </h2>
+                            </div>
+                            <div id="administrationRequestsDiv" class="collapse" aria-labelledby="headingAdminRequests" data-parent="#newRequestAccordion">
+                                <div class="card-body">
+                                    <ul id="administrationRequestsList" class="list-group list-group-flush"></ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header" id="headingGenSectorRequests">
+                                <h2 class="mb-0">
+                                <button data-label="generalSectorRequests" data-target="#generalSectorRequestsDiv" aria-controls="generalSectorRequestsDiv" aria-expanded="false" class="btn btn-secondary w-100 collapsed" type="button" data-toggle="collapse"></button>
+                                </h2>
+                            </div>
+                            <div id="generalSectorRequestsDiv" class="collapse" aria-labelledby="headingGenSectorRequests" data-parent="#newRequestAccordion">
+                                <div class="card-body">
+                                    <ul id="generalSectorRequestsList" class="list-group list-group-flush"></ul>
+                                </div>
+                            </div>
+                        </div>
+            </div>
+        </div>
+    </div>
+</div>
+ 

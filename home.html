@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>نظام الميكنة الآلية</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="./resources/images/icons/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="./resources/css/all.min.css">
+    <link rel="stylesheet" href="./resources/css/bpmStyles.css">
+    <link rel="stylesheet" href="./resources/css/bootstrap.rtl.min.css">
+    <script src="./resources/js/api/jquery-3.4.1.slim.min.js"></script>
+    <script src="./resources/js/api/bootstrap.bundle.min.js"></script>
+    <script src="./resources/js/app/app-data.js"></script> 
+    <script src="./resources/js/app/app-util.js"></script> 
+    <script src="./resources/js/app/app-service.js"></script>
+    <script src="./resources/js/app/app.js"></script> 
+    <!-- <script src="./resources/js/control/process.js"></script>  -->
+    
+    
+</head>
+
+
+<body>
+  <nav class="navbar navbar-expand-lg bg-dark sticky-top">
+    <div class="btn-group" >
+      <i class="fab fa-medium  mr-1 bpmLogo" style="color: #2f77b1;"></i>  
+      <i class="fas fa-parking text-warning mr-1 bpmLogo" ></i>
+      <i class="fab fa-bootstrap text-success mr-2 bpmLogo"  ></i>
+      <h3 class="text-light font-weight-bolder"  >نظـام الميكنـة الآليـة</h3>
+      <h5 class="text-white-50 my-auto" style="margin-right: 10px;"> mohamed farouk</h5>
+    </div>
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item my-auto" >
+        <a id="myProfile" onclick="menu.loadPage(menu.myProfile)" href="#" style="padding-left:15px;" title="My Profile">
+          <i class="far fa-user text-white" style="font-size: 25px;"></i>  
+        </a>
+      </li>
+      <li class="nav-item my-auto" >
+        <a id="myProfile" onclick="menu.loadPage(menu.myProfile)" href="#" style="padding-left:15px;" title="My Profile">
+          <i class="far fa-bell text-white" style="font-size: 25px;"></i>  
+        </a>
+      </li>
+      <li class="nav-item" >
+        <div class="btn-group" >
+          <button onclick="app.changeLanguage('arabic')" type="button" class="btn btn-sm btn-secondary">Ara</button>
+          <button onclick="app.changeLanguage('english')" type="button" class="btn btn-sm btn-secondary">Eng</button>
+          <button onclick="app.logoff()" type="button" class="btn btn-sm btn-primary">Exit</button>
+        </div>
+      </li>
+    </ul>
+  </nav>
+  
+
+  <div class="container-fluid bg-light">
+    <div class="row">
+      <div class="col-2 p-0 shadow-lg"><div class="list-group" id="sideMenu"></div></div>
+      <div class="col-10 p-3" id="contentArea"></div>   
+    </div>
+   </div>
+   
+
+
+   <!-- Process Modal -->
+  <div class="modal fade" id="processModal" data-backdrop="static"  tabindex="-1" role="dialog" aria-labelledby="processModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-xl  modal-dialog-scrollable modal-dialog-centered" role="document" style=" min-width: 80%;">
+        <div class="modal-content">
+          <div id="processToolBar" class="modal-header bg-light p-0 "></div>
+          <div class="modal-body overflow-auto pt-0">
+            <div class="row">
+              <div id="processRightSideBar" class="col-3 bg-light" ></div>
+              <div id="processBody" class="col-9"></div>
+            </div>
+          </div>
+        </div>
+    </div>
+  </div>
+   
+  
+  <!-- pdf viewer Modal -->
+  <div class="modal fade" id="pdfModal" data-backdrop="static"  tabindex="-1" role="dialog" aria-labelledby="pdfModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-xl  modal-dialog-scrollable modal-dialog-centered" role="document" style=" min-width: 80%;">
+        <div class="modal-content">
+          <div class="modal-header bg-light p-0">
+            <a onclick="app.closePDFModal()" href="#"><i class="fas fa-window-close modalCloseBtn"></i></a>
+          </div>
+          <div id="pdfViewerDiv" class="modal-body overflow-auto p-0">
+              <!-- <object data="./resources/MyPdf.pdf" width="100%" height="500px">  -->
+          </div>
+        </div>
+    </div>
+  </div>
+   
+
+  <!-- Alert Modal -->
+  <div id="alertModal" class="modal"   tabindex="-1" role="dialog" aria-labelledby="alertModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-xl  modal-dialog-scrollable modal-dialog-centered" role="document" style=" max-width: 30%;">
+      <div class="modal-content">
+        <div id="alertDiv" class="alert alert-dismissable m-0" role="alert" >
+          <button type="button" class="close" onclick="app.closeAlertModal()" aria-label="Close" ><span aria-hidden="true">&times;</span> </button>
+          <h4>System Messages</h4>
+          <hr>
+          <div id="alertBody">
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+    
+    <script>
+      $(document).ready(app.main());
+    </script>
+</body>
+</html>

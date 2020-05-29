@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>نظام الميكنة الآلية</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="./resources/images/icons/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="./resources/css/all.min.css">
+    <link rel="stylesheet" href="./resources/css/bpmStyles.css">
+    <link rel="stylesheet" href="./resources/css/bootstrap.rtl.min.css">
+    <script src="./resources/js/api/jquery-3.4.1.slim.min.js"></script>
+    <script src="./resources/js/api/bootstrap.bundle.min.js"></script>
+    <script src="./resources/js/app/app-util.js"></script>    
+    <script src="./resources/js/app/app-login.js"></script>    
+</head>
+<body>
+    <div class="container-fluid h-100  justify-content-center ">    
+        <div class="row p-3 ">
+            <div class="col text-right my-auto">
+                <div class="btn-group">
+                    <i class="fab fa-medium mr-1 bpmLogo text-primary" style="font-size: 40px;"></i>  
+                    <i class="fas fa-parking text-warning mr-1 bpmLogo" style="font-size: 40px;"></i>
+                    <i class="fab fa-bootstrap text-success mr-2 bpmLogo" style="font-size: 40px;"></i>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row h-75">
+            <div class="col-4 mx-auto my-auto">
+                <div class="container shadow p-3 mb-5 border" >
+                    <div class="row">
+                        <div class="col p-0 shadow-lg text-right p-1" style="background-image: url(./resources/images/banner/loginBanner.jpg);">
+                            <h6 class="text-white font-weight-bold">BPM Foundation Sign In</h6>
+                        </div>
+                    </div>
+                    <div class="row align-items-center">
+                        <div class="col text-center">
+                            <img src="./resources/images/icons/Users_Lock_128.png"  width="150" height="150" alt="">
+                        </div>
+                        <div class="col border-left text-right p-3">
+                            <h1 class="text-center font-weight-bolder text-warning display-5">WELCOME</h1>
+                            <!-- <form method="POST" > -->
+                                <div class="form-group">
+                                    <label for="userName">User Name</label>
+                                    <input type="text" class="form-control text-right" id="userName" >
+                                    <label for="pwd">Password</label>
+                                    <input type="password" class="form-control text-right" id="pwd">    
+                                </div>
+                            <!-- </form> -->
+                            <button type="button" onclick="login.login()" class="btn btn-primary">Log In</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> 
+    </div>
+
+
+
+
+     <!-- Alert Modal -->
+  <div id="alertModal" class="modal"   tabindex="-1" role="dialog" aria-labelledby="alertModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-xl  modal-dialog-scrollable modal-dialog-centered" role="document" style=" max-width: 30%;">
+      <div class="modal-content">
+        <div id="alertDiv" class="alert alert-dismissable m-0" role="alert" >
+          <button type="button" class="close" onclick="login.closeAlertModal()" aria-label="Close" ><span aria-hidden="true">&times;</span> </button>
+          <h4>System Messages</h4>
+          <hr>
+          <div id="alertBody">
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body> 
+</html>
