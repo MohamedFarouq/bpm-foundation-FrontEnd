@@ -126,7 +126,7 @@ const util = {
 	},
 
 	isDate(id){
-		return	$(`#${id}`).attr('type') == 'date';
+		return	$(`#${id}`).attr('type') == 'date';	
 	},
 
 	convertToArray(item){
@@ -218,12 +218,12 @@ const util = {
 			component.innerHTML = html;
 	},
 
-	querySelectorThenSetInnerHTML(attr,attrValue,html){
-		let component = this.querySelector(attr,attrValue);
+	findThenSetInnerHTML(compAttr,compAttrValue,html){
+		let component = this.querySelector(compAttr,compAttrValue);
 		if(component)
 			component.innerHTML = html;
 		else
-			this.handlElementNotFound(` element attribute : ${attr} and value ${attrValue} `);	
+			this.handlElementNotFound(` element attribute : ${compAttr} and value ${compAttrValue} `);	
 	},
 
 	querySelector(attr,attrValue){
@@ -250,24 +250,25 @@ const util = {
 		
 	},
 
-	querySelectorThenAddCssClass(attr,attrValue,cssClass){
-		let element = this.querySelector(attr,attrValue);
-		if(element)
-			element.classList.add(cssClass);
+	findThenAddCssClass(compAttr,compAttrValue,cssClass){
+		let component = this.querySelector(compAttr,compAttrValue);
+		if(component)
+			component.classList.add(cssClass);
 	},
 
-	removeCssClass(id,cssClass){
-		let list = this.convertToArray(id);
-		list.forEach( (item) => {
-							if(this.elementExists(item))
-								$(`#${item}`).removeClass(cssClass);
-							});
-	},
+	// removeCssClass(id,cssClass){
+	// 	let list = this.convertToArray(id);
+	// 	list.forEach( (item) => {
+	// 						if(this.elementExists(item))
+	// 							$(`#${item}`).removeClass(cssClass);
+	// 						});
+	// },
 
-	querySelectorThenRemoveCssClass(attr,attrValue,cssClass){
-		let element = this.querySelector(attr,attrValue);
-		if(element)
-			element.classList.remove(cssClass);
+	findThenRemoveCssClass(compAttr,compAttrValue,cssClass){
+		let component = this.querySelector(compAttr,compAttrValue);
+		if(component)
+			component.classList.remove(cssClass);
+		
 	},
 
 

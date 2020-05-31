@@ -64,20 +64,28 @@ class Form{
 		this.dbTableName = dbTableName;
 		this.label = (app.isArabicLocale()) ? labelAra : labelEng;
 		this.dbRecord = {};
-		util.querySelectorThenSetInnerHTML('data-tab-form-name',dbTableName,this.label);
+		util.findThenSetInnerHTML('data-tab-form-name',dbTableName,this.label);
 	}
 
 	fetch(){};
 
 	save(){};
 
-	enable(){
-		util.querySelectorThenRemoveCssClass('data-tab-form-name',this.dbTableName,'disabled');
+	enable(){ 	
+		util.findThenRemoveCssClass('data-tab-form-name',this.dbTableName,'disabled');	
 	};
 	
-	disable(){
-		util.querySelectorThenAddCssClass('data-tab-form-name',this.dbTableName,'disabled');
+	disable(){	
+		util.findThenAddCssClass('data-tab-form-name',this.dbTableName,'disabled'); 
 	};
+
+	setVisible(){
+		util.show();
+	}
+
+	setInvisible(){
+		util.hide();
+	}
 }
 
 class Component{
@@ -106,7 +114,7 @@ class TxtComponent extends Component{
 		let html = `<input type="text" id="${this.name}" data-form-bind="${this.name}" placeholder="${this.label}" maxlength="${this.maxLength}" class="form-control">`;
 		// let container = util.querySelector('data-container-for',this.name);
 		// util.setComponentInnerHTML(container,html);
-		util.querySelectorThenSetInnerHTML('data-container-for',this.name,html);
+		util.findThenSetInnerHTML('data-container-for',this.name,html);
 	};
 
 	

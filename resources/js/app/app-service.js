@@ -2,6 +2,7 @@
 const peService = {
     fetchInboxWIs(username){
         let list = [];
+        list.push(new WorkItem("Periodical_Leave",550, "طلب اجازة دورية" ,"12/5/2019") );
         list.push(new WorkItem("Bank_Transfer",100, "طلب تغيير حساب بنك" ,"12/5/2019") );
         list.push(new WorkItem("Bank_Transfer",110, "طلب تغيير حساب بنك" ,"12/6/2019") );
         list.push(new WorkItem("Loan_Request",1050, "طلب تحويل اجراء" ,"12/7/2019") );

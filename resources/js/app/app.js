@@ -139,8 +139,12 @@ const menu = {
 		util.addCssClass(session.fetchPageID(),"active");//   $(`#${session.fetchPageID()}`).addClass("active");	
 	},
 	
-	markLastPageAsInActive(){ util.removeCssClass(session.fetchPageID(),"active"); },
-	getPageURL(page){ return  `./pages/content/${page.location}/${page.id}.html`;  }
+	markLastPageAsInActive(){ 
+		util.findThenRemoveCssClass('id',session.fetchPageID(),'active'); 
+	},
+	getPageURL(page){ 
+		return  `./pages/content/${page.location}/${page.id}.html`;  
+	}
 
 }
 
@@ -259,7 +263,7 @@ const app = {
 		app.openAlertModal();
 	},
 	setAlertModalCssClass(cssClass){
-		util.removeCssClass('alertDiv','alert-info alert-success alert-warning alert-danger');
+		util.findThenRemoveCssClass('id','alertDiv',['alert-info','alert-success','alert-warning','alert-danger']);
 		util.addCssClass('alertDiv',cssClass);
 	},
 	setAlertBody(html){
@@ -392,7 +396,7 @@ const process = {
 				this.add(this.approved);
 				this.add(this.notApproved);
 			}
-			util.removeCssClass(this.actionDivID, 'd-none');
+			util.findThenRemoveCssClass('id',this.actionDivID, 'd-none');
 		},
 	
 		add(action){
