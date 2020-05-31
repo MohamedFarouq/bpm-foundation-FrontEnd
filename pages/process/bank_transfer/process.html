@@ -40,21 +40,14 @@ process.controller = {
    
 
     main(){
-        
-        // let nameComp = new TxtComponent('RequesterName','formsGrid','',5);
-
-
-
-
-
-        process.init();
+         process.init();
 
         let stepName = process.workItem.stepName;
         process.recieversList.loadManager();
         //process.recieversList.loadDeptManager();
         //process.branchesList.load()); //to load all branches
         //process.branchesList.load([1,2,5]); // to load specific branches using branch id
-        process.actionsList.load([process.actionsList.status, process.actionsList.approved]);
+        //process.actionsList.load([process.actionsList.status, process.actionsList.approved]);
 
         
 

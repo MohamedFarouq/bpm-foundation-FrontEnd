@@ -28,9 +28,9 @@ process.controller = {
     },
 
     forms : {
-        form_BankTransfer :  new Form('Form_BankTransfer', 'نموذج تغير حساب بنكي','Change Bank Account Form'),
-        //form_2 : new Form('Form_BankTransfer', 'نموذج تغير حساب بنكي','Change Bank Account Form'),
-        //form_3 : new Form('Form_BankTransfer', 'نموذج تغير حساب بنكي','Change Bank Account Form'),
+        form_PeriodicalLeave : new Form('Form_PeriodicalLeave', 'نموذج طلب اجازة دورية','Leave Form'),
+        form_WorkDeduction : new Form('Form_WorkDeduction', 'نموذج انقطاع عن العمل','Salary Deduction Form'),
+        
     },
 
     components : {
@@ -40,13 +40,6 @@ process.controller = {
    
 
     main(){
-        
-        // let nameComp = new TxtComponent('RequesterName','formsGrid','',5);
-
-
-
-
-
         process.init();
 
         let stepName = process.workItem.stepName;
@@ -70,9 +63,9 @@ process.controller = {
         //this.components.requesterName.disable();
         //validator.markAsInvalidField('myTxt');
 
-        //this.forms.form_BankTransfer.enable();
-        //this.forms.form_BankTransfer.disable();
-
+        //this.forms.Form_PeriodicalLeave.enable();
+        //this.forms.Form_PeriodicalLeave.disable();
+        //this.forms.Form_PeriodicalLeave.setInvisible();
 
 
 
@@ -109,8 +102,8 @@ $(document).ready(process.controller.main());
             <nav>
                 <div class="nav nav-pills mb-1" id="nav-tab" role="tablist">
                   <!-- copy and paste one of these anchors to add new form tab and make sure to change [id,href,data-form-name,aria-controls] accordingly by search and replace -->
-                  <a id="tab1-tab" href="#nav-tab1" data-tab-form-name="Form_BankTransfer"  aria-controls="nav-tab1" aria-selected="true"  role="tab"  class="nav-item nav-link active" data-toggle="tab">Home</a>
-                  <a id="tab2-tab" href="#nav-tab2" data-tab-form-name=""  aria-controls="nav-tab2" aria-selected="false" role="tab" class="nav-item nav-link" data-toggle="tab">Profile</a>
+                  <a id="tab1-tab" href="#nav-tab1" data-tab-form-name="Form_PeriodicalLeave"  aria-controls="nav-tab1" aria-selected="true"  role="tab"  class="nav-item nav-link active" data-toggle="tab">Home</a>
+                  <a id="tab2-tab" href="#nav-tab2" data-tab-form-name="Form_WorkDeduction"  aria-controls="nav-tab2" aria-selected="false" role="tab" class="nav-item nav-link" data-toggle="tab">Profile</a>
                   <a id="tab3-tab" href="#nav-tab3" data-tab-form-name=""  aria-controls="nav-tab3" aria-selected="false" role="tab" class="nav-item nav-link disabled" data-toggle="tab">Form-3</a> 
                   <!-- aria-disabled="true" -->
                 </div>
@@ -148,8 +141,8 @@ $(document).ready(process.controller.main());
                  <!-- Form-Tab-2 -->
                 <div class="tab-pane fade" id="nav-tab2" role="tabpanel" aria-labelledby="tab2-tab">
                     Form-2
-                    <button type="button" class="btn btn-primary" onclick="process.controller.forms.form_BankTransfer.disable()">disable form</button>
-                    <button type="button" class="btn btn-primary" onclick="process.controller.forms.form_BankTransfer.enable()">disable form</button>
+                    <button type="button" class="btn btn-primary" onclick="process.controller.forms.form_PeriodicalLeave.disable()">disable form</button>
+                    <button type="button" class="btn btn-primary" onclick="process.controller.forms.form_PeriodicalLeave.enable()">disable form</button>
                 </div>
 
 

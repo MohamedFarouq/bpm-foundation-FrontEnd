@@ -136,7 +136,7 @@ const menu = {
 			session.savePageID(this.mainPage.id);
 		let page = this[session.fetchPageID()];
 		util.loadHTML('contentArea',this.getPageURL(page));	
-		util.addCssClass(session.fetchPageID(),"active");//   $(`#${session.fetchPageID()}`).addClass("active");	
+		util.findThenAddCssClass('id',session.fetchPageID(),'active');
 	},
 	
 	markLastPageAsInActive(){ 
@@ -173,7 +173,7 @@ const validator = {
 	assertLessThanOrEqual(srcID,value){},
 
 	markAsInvalidField(id){
-		util.addCssClass(id,'is-invalid');
+		util.findThenAddCssClass('id',id,'is-invalid');
 	}
 
 }
@@ -264,7 +264,7 @@ const app = {
 	},
 	setAlertModalCssClass(cssClass){
 		util.findThenRemoveCssClass('id','alertDiv',['alert-info','alert-success','alert-warning','alert-danger']);
-		util.addCssClass('alertDiv',cssClass);
+		util.findThenAddCssClass('id','alertDiv',cssClass);
 	},
 	setAlertBody(html){
 		util.setInnerHTML('alertBody',html);
@@ -453,11 +453,7 @@ const process = {
 	launch(wi){
         this.workItem = wi;
         let url =  `./pages/process/${wi.workFlowName.toLowerCase()}/process.html`;
-
-		util.loadHTML('processRightSideBar','./pages/process/rightSideBar.html');
-		util.loadHTML('processToolBar','./pages/process/toolBar.html');
 		util.loadHTML('processBody',url);
-
 	},
 
 	init(){
@@ -475,7 +471,7 @@ const process = {
 		}
         
         process.renderNotes();
-	
+		process.hideActionsDiv();
 
     },
 
@@ -521,7 +517,7 @@ const process = {
 	hideAttachmentsBtn(){ util.hide('procAttachmentsBtn');},
 	hideSenderDiv(){ util.hide('senderDiv')},
 	hideRecieverDiv(){ util.hide('recieverDiv')},
-
+	hideActionsDiv(){ util.hide('actionDiv')},
 	
 
 	renderSender(){ util.setValue('senderTxt',this.workItem.sender.deptName+' / '+this.workItem.sender.name); },

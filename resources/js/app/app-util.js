@@ -182,7 +182,7 @@ const util = {
 	},
 
 	hide(id) { 
-		this.addCssClass(id,'d-none'); 
+		this.findThenAddCssClass('id',id,'d-none'); 
 	},
 
 	showModal(id){ 
@@ -225,10 +225,27 @@ const util = {
 		else
 			this.handlElementNotFound(` element attribute : ${compAttr} and value ${compAttrValue} `);	
 	},
+	
+	findThenAddCssClass(compAttr,compAttrValue,cssClass){
+		let component = this.querySelector(compAttr,compAttrValue);
+		if(component)
+			component.classList.add(cssClass);
+		else
+			handlElementNotFound(details);	
+	},
 
-	querySelector(attr,attrValue){
-		let element = document.querySelector(`[${attr}="${attrValue}"]`);
-		return element;
+	findThenRemoveCssClass(compAttr,compAttrValue,cssClass){
+		let component = this.querySelector(compAttr,compAttrValue);
+		if(component)
+			component.classList.remove(cssClass);
+		else
+			handlElementNotFound(details);
+		
+	},
+	
+	querySelector(compAttr,compAttrValue){
+		let component = document.querySelector(`[${compAttr}="${compAttrValue}"]`);
+		return component;
 	},
 
 	loadHTML(divID,htmlURL,dataObject){
@@ -241,35 +258,7 @@ const util = {
 										
 	},
 
-	addCssClass(id,cssClass){
-		let list = this.convertToArray(id);
-		list.forEach( (item) => {
-								if(this.elementExists(item))
-									$(`#${item}`).addClass(cssClass);
-								} );
-		
-	},
-
-	findThenAddCssClass(compAttr,compAttrValue,cssClass){
-		let component = this.querySelector(compAttr,compAttrValue);
-		if(component)
-			component.classList.add(cssClass);
-	},
-
-	// removeCssClass(id,cssClass){
-	// 	let list = this.convertToArray(id);
-	// 	list.forEach( (item) => {
-	// 						if(this.elementExists(item))
-	// 							$(`#${item}`).removeClass(cssClass);
-	// 						});
-	// },
-
-	findThenRemoveCssClass(compAttr,compAttrValue,cssClass){
-		let component = this.querySelector(compAttr,compAttrValue);
-		if(component)
-			component.classList.remove(cssClass);
-		
-	},
+	
 
 
 

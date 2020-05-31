@@ -64,28 +64,22 @@ class Form{
 		this.dbTableName = dbTableName;
 		this.label = (app.isArabicLocale()) ? labelAra : labelEng;
 		this.dbRecord = {};
-		util.findThenSetInnerHTML('data-tab-form-name',dbTableName,this.label);
+		this.getTabeComponent().innerHTML = this.label;
 	}
 
 	fetch(){};
 
 	save(){};
 
-	enable(){ 	
-		util.findThenRemoveCssClass('data-tab-form-name',this.dbTableName,'disabled');	
-	};
+	enable(){ this.getTabeComponent().classList.remove('disabled');	};
 	
-	disable(){	
-		util.findThenAddCssClass('data-tab-form-name',this.dbTableName,'disabled'); 
-	};
+	disable(){ this.getTabeComponent().classList.add('disabled'); };
 
-	setVisible(){
-		util.show();
-	}
+	setVisible(){ this.getTabeComponent().classList.add('visible');	}
 
-	setInvisible(){
-		util.hide();
-	}
+	setInvisible(){ this.getTabeComponent().classList.add('invisible');	}
+
+	getTabeComponent(){	return util.querySelector('data-tab-form-name',this.dbTableName);	}
 }
 
 class Component{
@@ -93,13 +87,25 @@ class Component{
 		this.name = name;
 		this.label = (app.isArabicLocale()) ? labelAra : labelEng;
 	}
-	getValue(){	return util.getValue(this.name); };
+	getValue(){	
+		return document.getElementById(this.name).value;
+	};
 
-	setValue(value){ util.setValue(this.name,value); };
+	setValue(value){ 
+		document.getElementById(this.name).value = value;
+	};
 
-	enable(){ util.enable(this.name); };
+	enable(){ 
+		document.getElementById(this.name).disabled = false;
+	};
 	
-	disable(){ util.disable(this.name); };
+	disable(){ 
+		document.getElementById(this.name).disabled = true;
+	};
+
+	getContainer(){
+		return util.querySelector('data-container-for',this.name);
+	}
 
 }
 
@@ -112,9 +118,7 @@ class TxtComponent extends Component{
 	
 	render(){
 		let html = `<input type="text" id="${this.name}" data-form-bind="${this.name}" placeholder="${this.label}" maxlength="${this.maxLength}" class="form-control">`;
-		// let container = util.querySelector('data-container-for',this.name);
-		// util.setComponentInnerHTML(container,html);
-		util.findThenSetInnerHTML('data-container-for',this.name,html);
+		this.getContainer().innerHTML = html;
 	};
 
 	

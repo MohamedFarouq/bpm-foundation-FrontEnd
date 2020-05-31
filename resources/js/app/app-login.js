@@ -85,7 +85,7 @@ const login = {
 	},
 	setAlertModalCssClass(cssClass){
 		util.findThenRemoveCssClass('id','alertDiv','alert-info alert-success alert-warning alert-danger');
-		util.addCssClass('alertDiv',cssClass);
+		util.findThenAddCssClass('id','alertDiv',cssClass);
 	},
 	setAlertBody(html){
 		util.setInnerHTML('alertBody',html);
