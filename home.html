@@ -91,8 +91,8 @@
                 </nav>
           </div>
           <div class="modal-body overflow-auto pt-0">
-            <div class="row">
-              <div id="processRightSideBar" class="col-3 bg-light" >
+            <div class="row bg-light" >
+              <div id="processRightSideBar" class="col-3" >
                   <!-- RightSideBar Components -->
                   <div id="senderDiv" class="form-group p-1">
                     <label for="senderTxt" data-label="sender"></label>
@@ -116,13 +116,16 @@
                     <select onchange="process.actionsList.onSelect(this.options[this.selectedIndex])" name="actionsList" id="actionsList" class="form-control form-control-sm"></select>
                   </div>
               </div>
-              <div id="processBody" class="col-9"></div>
+              <div id="processBody" class="col-9" style="min-height: 100vh !important;"></div>
             </div>
           </div>
         </div>
     </div>
   </div>
    
+
+
+
   
   <!-- pdf viewer Modal -->
   <div class="modal fade" id="pdfModal" data-backdrop="static"  tabindex="-1" role="dialog" aria-labelledby="pdfModalTitle" aria-hidden="true">
@@ -139,17 +142,18 @@
   </div>
    
 
+
+  
+
   <!-- Alert Modal -->
   <div id="alertModal" class="modal"   tabindex="-1" role="dialog" aria-labelledby="alertModalTitle" aria-hidden="true">
     <div class="modal-dialog modal-xl  modal-dialog-scrollable modal-dialog-centered" role="document" style=" max-width: 30%;">
       <div class="modal-content">
-        <div id="alertDiv" class="alert alert-dismissable m-0" role="alert" >
-          <button type="button" class="close" onclick="app.closeAlertModal()" aria-label="Close" ><span aria-hidden="true">&times;</span> </button>
-          <h4>System Messages</h4>
+        <div id="alertDiv" class="alert alert-dismissable m-0 p-1" role="alert" >
+          <a onclick="app.closeAlertModal()" aria-label="Close" href="#"><i class="fas fa-window-close text-muted" style="font-size: 25px;"></i></a>
+          <h4 class="d-inline">System Error Messages</h4>
           <hr>
-          <div id="alertBody">
-
-          </div>
+          <div id="alertBody" class="container-fluid d-block text-right"></div>
         </div>
       </div>
     </div>

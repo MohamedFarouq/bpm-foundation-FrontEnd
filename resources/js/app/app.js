@@ -10,8 +10,9 @@ const loggedUser = {
 	empNo : 0,
 	trackerEmpID : 0,
 	userName : "",
-	arabicName:"",
-	engName : "",
+	arabicName:"محمد محمد فاروق",
+	engName : "Mohamed Mohamed Farouk",
+	signature : "Mohamed Farouk (2020-05-01)",
 	isSysAdmin : true
 
 	//loggedUserEmpNo,loggedUserEmpLogin,loggedUserTrackerEmpID,loggedUserAraName,loggedUserEngName,loggedUserDeptAraName,loggedUserDeptEngName,loggedUserDeptCode;
@@ -317,6 +318,7 @@ const app = {
 const process = {
 	controller : undefined,
     workItem : undefined,	
+	
 	recieversList : {
 		id : "recieversList",
 	
@@ -445,18 +447,13 @@ const process = {
 
 
 
-
-
-
-
-
 	launch(wi){
         this.workItem = wi;
         let url =  `./pages/process/${wi.workFlowName.toLowerCase()}/process.html`;
 		util.loadHTML('processBody',url);
 	},
 
-	init(){
+	initialize(){
         //dynamic fetch WI data
         process.workItem.sender = new participant(3515,180603018, "ضياء المطر" ,"Dhyia Al-Mutar", "الانظمة الآلــية","scn505");
         process.workItem.comments = "الرجاء اعتماد الطلب";
@@ -502,7 +499,9 @@ const process = {
 		this.workItem = undefined;
 		app.closeProcessModal(); 
 	},
-	
+	setWorkFlowIDLabel(){
+		document.getElementById('workflowIDLabel').innerHTML = `مسلسل الاجراء : ${process.workItem.workflowID}`;
+	},
 
 	isNewRequest(){
 		return process.workItem.workflowID == 0;

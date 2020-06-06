@@ -17,144 +17,216 @@ process.controller = {
     },
 
     steps : {
-        BankTransfer_Launch : 'BankTransfer_Launch',
-        BankTransfer_PASec : 'BankTransfer_PASec',
-        BankTransfer_PAEmpApprove : 'BankTransfer_PAEmpApprove',
-        BankTransfer_ReqUpdate : 'BankTransfer_ReqUpdate',
-        BankTransfer_Review : 'BankTransfer_Review',
-        BankTransfer_PAEmpUpdate : 'BankTransfer_PAEmpUpdate',
-        BankTransfer_Notification : 'BankTransfer_Notification',
-        BankTransfer_DeptSec : 'BankTransfer_DeptSec',
+        PerLeave_Launch : 'PerLeave_Launch',
+        PerLeave_TLApprove: 'PerLeave_TLApprove',
+        PerLeave_SupApprove: 'PerLeave_SupApprove',
+        PerLeave_DeptSec: 'PerLeave_DeptSec',
+        PerLeave_MngApprove: 'PerLeave_MngApprove',
+        PerLeave_Update: 'PerLeave_Update',
+        PerLeave_DDGApprove: 'PerLeave_DDGApprove',
+        PerLeave_DDGSec: 'PerLeave_DDGSec',
+        PerLeave_PersAdminSec : 'PerLeave_PersAdminSec',
+        PerLeave_PersAdminEmp : 'PerLeave_PersAdminEmp',
+        PerLeave_PersAdminTL : 'PerLeave_PersAdminTL',
+        PerLeave_PersAdminSup : 'PerLeave_PersAdminSup',
+        PerLeave_FinSec : 'PerLeave_FinSec',
+        PerLeave_FinSup : 'PerLeave_FinSup',
+        PerLeave_FinTL : 'PerLeave_FinTL',
+        PerLeave_FinEmp : 'PerLeave_FinEmp',
     },
 
     forms : {
-        form_PeriodicalLeave : new Form('Form_PeriodicalLeave', 'نموذج طلب اجازة دورية','Leave Form'),
-        form_WorkDeduction : new Form('Form_WorkDeduction', 'نموذج انقطاع عن العمل','Salary Deduction Form'),
+        Form_PeriodicalLeave : new Form('Form_PeriodicalLeave', 'نموذج طلب اجازة دورية','Leave Form'),
+        Form_WorkDeduction : new Form('Form_WorkDeduction', 'نموذج انقطاع عن العمل','Salary Deduction Form'),
         
     },
 
-    components : {
-        requesterName : new TxtComponent('RequesterName','الاســم','Name',5),
-    },
+    defineComponents(){    
+        this.forms.Form_PeriodicalLeave.components.RequesterName = new TxtComponent('RequesterName','الاســم','Name',5);
+        this.forms.Form_PeriodicalLeave.components.FromDate = new DateComponent('FromDate','من التاريخ','From','','');
+        this.forms.Form_PeriodicalLeave.components.Days = new NumberComponent('Days','ايام الاجازة','Days');
+        this.forms.Form_PeriodicalLeave.components.VactionType = new DropDownListComponent('VactionType','نوع الاجازة','type',[new Option('','','0') ,new Option('دورية','Periodical','1') , new Option('مرضية','Sick Leave','2')]);
+        this.forms.Form_PeriodicalLeave.components.IsPaid = new CheckBoxComponent('IsPaid','اجازة مصروفة','Paid Vacation');
+                
+        this.forms.Form_PeriodicalLeave.components.Notes = new NotesComponent('Notes','الملاحظـــــات','Notes',4,300);
+        this.forms.Form_PeriodicalLeave.components.SupSignature = new SignatureComponent('SupName','SupSig','اعتمـــاد المراقــب المختــص','Supervisor Approval');
+        this.forms.Form_PeriodicalLeave.components.MangerName = new SignatureComponent('MngrName','MngSig','اعتمـــاد مديــر الإدارة','Manager Approval');
 
-   
+        this.Ekrar = new ParagraphComponent('Ekrar','اقر انا الموقع ادناه <br> بانني مسئول عن ماتم ادخاله من بيانات ','I admit that <br> I am responsible for the entered data','text-danger font-weight-bold');
+    },
 
     main(){
-        process.init();
+        try{
+            this.defineComponents();
+            process.initialize();
+            let stepName = process.workItem.stepName;
+            process.recieversList.loadManager();
+            //process.recieversList.loadDeptManager();
+            //process.branchesList.load()); //to load all branches
+            //process.branchesList.load([1,2,5]); // to load specific branches using branch id
+            //process.actionsList.load([process.actionsList.status, process.actionsList.approved]);
 
-        let stepName = process.workItem.stepName;
-        process.recieversList.loadManager();
-        //process.recieversList.loadDeptManager();
-        //process.branchesList.load()); //to load all branches
-        //process.branchesList.load([1,2,5]); // to load specific branches using branch id
-        process.actionsList.load([process.actionsList.status, process.actionsList.approved]);
-
-        
-
-        if(stepName == this.steps.BankTransfer_Launch){
             
-        }
-        else if(stepName == this.steps.BankTransfer_PASec){
 
-        }
-    
+            if(stepName == this.steps.PerLeave_Launch){   
+            }
+            else if(stepName == this.steps.PerLeave_TLApprove){
+            }
         
-        //this.components.requesterName.setValue('ABC');
-        //this.components.requesterName.disable();
-        //validator.markAsInvalidField('myTxt');
+            
+            /* component manipulation */ 
+                //this.forms.Form_PeriodicalLeave.components.RequesterName.setValue('ABC');
+                //this.forms.Form_PeriodicalLeave.components.requesterName.disable();
+                
+                //this.forms.Form_PeriodicalLeave.components.FromDate.setMinDate('2020-05-01');
+                //this.forms.Form_PeriodicalLeave.components.FromDate.setMaxDate('2020-05-10');
+                
+                //this.forms.Form_PeriodicalLeave.components.VactionType.setValue(2);//give it the value of the option object to be selected
+                //alert(this.forms.Form_PeriodicalLeave.components.VactionType.getText()); // retrieves the shown selected text
+                //this.forms.Form_PeriodicalLeave.components.VactionType.setOptions([new Option('','','')]); //load different options
+                //this.forms.Form_PeriodicalLeave.components.VactionType.addOption( new Option('x','x','3') );
+                //this.forms.Form_PeriodicalLeave.components.VactionType.addOption(new Option('y','y','4') );
+                //this.forms.Form_PeriodicalLeave.components.VactionType.setValue('3');
+                //this.forms.Form_PeriodicalLeave.components.VactionType.removeOptionByValue('4');
+                
+                //this.forms.Form_PeriodicalLeave.components.IsPaid.disable();
+                //this.forms.Form_PeriodicalLeave.components.IsPaid.setValue(true);
+                //this.forms.Form_PeriodicalLeave.components.IsPaid.check();
+                //this.forms.Form_PeriodicalLeave.components.IsPaid.uncheck();
 
-        //this.forms.Form_PeriodicalLeave.enable();
-        //this.forms.Form_PeriodicalLeave.disable();
-        //this.forms.Form_PeriodicalLeave.setInvisible();
+                //this.forms.Form_PeriodicalLeave.components.SupSignature.enable();
+            
 
 
 
-        app.renderLabels();
-        app.openProcessModal();
+            
+            /* form manipulation */
+                //this.forms.Form_PeriodicalLeave.enable();
+                //this.forms.Form_PeriodicalLeave.disable();
+                //this.forms.Form_WorkDeduction.hide();
+                //this.forms.Form_WorkDeduction.select();
+                this.forms.Form_PeriodicalLeave.select();
+                this.forms.Form_PeriodicalLeave.updateComponentsFromEntity();
+                
+        
+
+
+
+
+            app.renderLabels();
+            app.openProcessModal();
+            process.setWorkFlowIDLabel();
+        }
+        catch(error){ throw error;}
     },
+
+    validate(){
+        //validator.markAsInvalidField('myTxt');
+     },
+
+    send(){ },
 
     
-    validate(){
-
-    },
-
-    send(){
-
-    }
-
-
-
-
+    // testSignature(){
+    //     util.viewObjectContent(this.forms.Form_PeriodicalLeave.components.SupSignature.getSigner()); 
+    // },
 
 
 }
 
-$(document).ready(process.controller.main());
-
-
+$(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alertError(error.message); }} );
 </script>
 
-
+<style>
+    .nav-pills .nav-link.active {
+    background-color: rgb(108, 117, 126) !important;
+}
+</style>
 
 <div class="container-fluid pr-1 pl-1" >
     <div class="row">
         <div class="col p-1 " >
             <nav>
-                <div class="nav nav-pills mb-1" id="nav-tab" role="tablist">
+                <div class="nav nav-pills mb-1 ml-auto" id="nav-tab" role="tablist">
                   <!-- copy and paste one of these anchors to add new form tab and make sure to change [id,href,data-form-name,aria-controls] accordingly by search and replace -->
-                  <a id="tab1-tab" href="#nav-tab1" data-tab-form-name="Form_PeriodicalLeave"  aria-controls="nav-tab1" aria-selected="true"  role="tab"  class="nav-item nav-link active" data-toggle="tab">Home</a>
+                  <a id="tab1-tab" href="#nav-tab1" data-tab-form-name="Form_PeriodicalLeave"  aria-controls="nav-tab1" aria-selected="true"  role="tab"  class="nav-item nav-link" data-toggle="tab">Home</a>
                   <a id="tab2-tab" href="#nav-tab2" data-tab-form-name="Form_WorkDeduction"  aria-controls="nav-tab2" aria-selected="false" role="tab" class="nav-item nav-link" data-toggle="tab">Profile</a>
-                  <a id="tab3-tab" href="#nav-tab3" data-tab-form-name=""  aria-controls="nav-tab3" aria-selected="false" role="tab" class="nav-item nav-link disabled" data-toggle="tab">Form-3</a> 
-                  <!-- aria-disabled="true" -->
                 </div>
             </nav>
-            <div class="tab-content border border-secondary rounded p-2" id="nav-tabContent">
-                <!-- Form-Tab-1 -->
+            <div class="tab-content border rounded p-2 bg-white  shadow" id="nav-tabContent">
+                
+
+                <!-- Form-PeriodicalLeave-Tab -->
                 <div class="tab-pane fade show active" id="nav-tab1" role="tabpanel" aria-labelledby="tab1-tab">
-                    <!-- the main container for all the controls -->
+                    <!-- the main container for all Form_PeriodicalLeave controls -->
                     <div class="container-fluid">
                         <div class="row">
-                            <div class="col p-3">
-                                <div data-container-for="RequesterName"></div>
-                            </div>
-                            <div class="col p-3">
-                                <input placeholder="Your Date" class="form-control" type="text" onfocus="(this.type='date')" onblur="(this.type='text')" id="date" min="2018-01-01" max="2018-12-31">
-                            </div>
-                        </div>   
+                            <div class="col p-1 mb-4" data-container-for="Form_PeriodicalLeave_title"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pr-3 pl-3" data-container-for="RequesterName"></div>
+                            <div class="col pr-3 pl-3" data-container-for="FromDate"></div>
+                            <div class="col pr-3 pl-3" data-container-for="Days"></div>    
+                        </div>
+                        <div class="row">
+                            <div class="col pr-3 pl-3" data-container-for="VactionType"></div>
+                            <div class="col pr-3 pl-3"></div>
+                            <div class="col pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pr-3 pl-3" data-container-for="IsPaid"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pr-3 pl-3" data-container-for="Notes"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pr-3 pl-3" data-container-for="Ekrar"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pr-3 pl-3" data-container-for="SupName"></div>
+                            <div class="col pr-3 pl-3" data-container-for="MngrName"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col p-3" data-container-for="SupName"></div>
+                        </div>
                     </div>
-                    
-                    
-                    
-                    
-
-                    
-                    
-                    <input type="text" name="myTxt" id="myTxt" class="form-control" >
-                    <br>
-                    <input type="date" name="myDate" id="myDate" class="form-control"  placeholder="select from"  min="2018-01-01" max="2018-12-31"> 
-                    <!-- value="2018-07-22" -->
                 </div>
 
 
 
-
-                 <!-- Form-Tab-2 -->
+                 <!-- Form-WorkDeduction-Tab -->
                 <div class="tab-pane fade" id="nav-tab2" role="tabpanel" aria-labelledby="tab2-tab">
-                    Form-2
-                    <button type="button" class="btn btn-primary" onclick="process.controller.forms.form_PeriodicalLeave.disable()">disable form</button>
-                    <button type="button" class="btn btn-primary" onclick="process.controller.forms.form_PeriodicalLeave.enable()">disable form</button>
+                    <!-- the main container for all Form_PeriodicalLeave controls -->
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col p-3" data-container-for="Form_WorkDeduction_title"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col p-3">
+                                <!-- <input placeholder="Your Date"  class="form-control" type="text" onfocus="(this.type='date')" onblur="(this.type='text')" id="date" min="2018-01-01" max="2018-12-31"> -->
+                                <button type="button" class="btn btn-primary" onclick="process.controller.forms.Form_PeriodicalLeave.disable()">disable نموذج اجازة دورية</button>
+                            </div>
+                            <div class="col p-3">
+                                <button type="button" class="btn btn-primary" onclick="process.controller.forms.Form_PeriodicalLeave.enable()">enable نموذج اجازة دورية</button>
+                            </div>
+                            <div class="col p-3">
+                                <button type="button" class="btn btn-secondary" onclick="process.controller.forms.Form_WorkDeduction.show();">show نموذج انقطاع عن العمل</button>
+                            </div>
+                            <div class="col p-3">
+                                <button type="button" class="btn btn-secondary" onclick="process.controller.forms.Form_WorkDeduction.hide();">hide نموذج انقطاع عن العمل</button>
+                            </div>
+                            <div class="col p-3">
+                                <button type="button" class="btn btn-secondary" onclick="process.controller.forms.Form_PeriodicalLeave.select();">goto نموذج اجازة دورية</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-
-
-
-                 <!-- Form-Tab-3 -->
-                <div class="tab-pane fade" id="nav-tab3" role="tabpanel" aria-labelledby="tab3-tab">
-                    Form-3
+                <div class="text-right">
+                    <hr>
+                    <label id="workflowIDLabel" class="text-danger">مسلسل الاجراء</label>
                 </div>
             </div>
-            
-            
         </div>
     </div>
 </div>

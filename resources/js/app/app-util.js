@@ -178,7 +178,7 @@ const util = {
 	},
 
 	show(id) { 
-		this.removeCssClass(id,'d-none'); 
+		document.getElementById(id).classList.remove('d-none');
 	},
 
 	hide(id) { 
@@ -245,6 +245,8 @@ const util = {
 	
 	querySelector(compAttr,compAttrValue){
 		let component = document.querySelector(`[${compAttr}="${compAttrValue}"]`);
+		if(!component)
+			throw new Error(`no component with <br> [attribut ('${compAttr}') and value ('${compAttrValue}') ] ` );
 		return component;
 	},
 

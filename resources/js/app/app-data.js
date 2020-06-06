@@ -52,6 +52,13 @@ class WorkItem{
 	}
 }
 
+class Option{
+	constructor(labelAra,labelEng,value){
+		this.label = (app.isArabicLocale()) ? labelAra : labelEng;
+		this.value = value;
+	}
+}
+
 class Action{
 	constructor(value,titleKey){
 		this.value = value;
@@ -59,53 +66,103 @@ class Action{
 	}
 }
 
+
+
 class Form{
 	constructor(dbTableName,labelAra,labelEng){
-		this.dbTableName = dbTableName;
-		this.label = (app.isArabicLocale()) ? labelAra : labelEng;
-		this.dbRecord = {};
-		this.getTabeComponent().innerHTML = this.label;
+		try{
+			this.isPrintable = true;
+			this.dbTableName = dbTableName;
+			this.label = (app.isArabicLocale()) ? labelAra : labelEng;
+			this.components = {};
+			this.entity = {id:0, WorkFlowID : process.workItem.workflowID};
+			this.getTabe().innerHTML = this.label;
+			this.renderFormHeader();
+		}
+		catch(error){ app.alertError(error.message);}
 	}
 
-	fetch(){};
+	updateComponentsFromEntity(){
+		wf_TrackerService.loadFormEntity(this.entity);
+		for(let property in this.entity){
+			if(this.components[property])
+				this.components[property].setValue(this.entity[property]);
+		}
+			
+	};
 
-	save(){};
+	updateEntityFromComponents(){
+		for(let property in this.components){
+			let component = this.components[property];
+			if(this.entity[property])
+				this.entity[property] = component.getValue();
+		}
+	};
 
-	enable(){ this.getTabeComponent().classList.remove('disabled');	};
+	select(){ this.getTabe().click();}
 	
-	disable(){ this.getTabeComponent().classList.add('disabled'); };
+	enable(){ this.getTabe().classList.remove('disabled');	};
+	
+	disable(){ this.getTabe().classList.add('disabled'); };
+	
+	show(){ this.getTabe().classList.remove('d-none');	};
+	
+	hide(){ this.getTabe().classList.add('d-none');	};
+	
+	addComponent(component){   this.components[component.name] = component;	};
+	
+	setPrintable(isPrintable){ this.isPrintable = isPrintable};
 
-	setVisible(){ this.getTabeComponent().classList.add('visible');	}
+	renderFormHeader() { 
+		try{	
+			let container = util.querySelector('data-container-for',`${this.dbTableName}_title`);
+			let html = `<div class="form-row">
+							<div class="col-sm-1 p-0"><img src="./resources/images/banner/pifssLogo.jpg"  width="65" height="50" alt=""></div>
+							<div class="col-sm-11 p-0 text-center my-auto">
+								<h3>${this.label}</h3>
+							</div>
+						</div>
+						`;
+			container.innerHTML = html;
+		
+		}
+		catch(error){ throw error; }	
+	};
 
-	setInvisible(){ this.getTabeComponent().classList.add('invisible');	}
-
-	getTabeComponent(){	return util.querySelector('data-tab-form-name',this.dbTableName);	}
+	getTabe(){	
+		try{ return util.querySelector('data-tab-form-name',this.dbTableName);}
+		catch(error){ throw error;	}
+	};
 }
+
+
+
 
 class Component{
 	constructor(name,labelAra,labelEng){
 		this.name = name;
 		this.label = (app.isArabicLocale()) ? labelAra : labelEng;
+		this.labelSize = 4;
 	}
-	getValue(){	
-		return document.getElementById(this.name).value;
-	};
-
-	setValue(value){ 
-		document.getElementById(this.name).value = value;
-	};
-
-	enable(){ 
-		document.getElementById(this.name).disabled = false;
-	};
 	
-	disable(){ 
-		document.getElementById(this.name).disabled = true;
+	getValue(){	return this.getHTMLElement().value;	};
+
+	setValue(value){ this.getHTMLElement().value = value;	};
+
+	enable(){ this.getHTMLElement().disabled = false;	};
+	
+	disable(){ 	this.getHTMLElement().disabled = true;	};
+
+	addEvent(event,handler){   this.getHTMLElement().addEventListener(event,handler, false);}
+
+	removeEvent(event,handler){    this.getHTMLElement().removeEventListener(event,handler, false);}
+
+	getContainer(){ 
+		try{ return util.querySelector('data-container-for',this.name);	}
+		catch(error){ throw error;	}
 	};
 
-	getContainer(){
-		return util.querySelector('data-container-for',this.name);
-	}
+	getHTMLElement(){ return document.getElementById(this.name);  };
 
 }
 
@@ -117,14 +174,290 @@ class TxtComponent extends Component{
 	}
 	
 	render(){
-		let html = `<input type="text" id="${this.name}" data-form-bind="${this.name}" placeholder="${this.label}" maxlength="${this.maxLength}" class="form-control">`;
-		this.getContainer().innerHTML = html;
+		try {
+			let html = `<div class="form-group form-row">
+							<label for="${this.name}" class="col-sm-${this.labelSize} col-form-label bg-info text-white text-center text-nowrap">${this.label}</label>
+							<div class="col-sm-${12-this.labelSize} p-0">
+								<input type="text" id="${this.name}" maxlength="${this.maxLength}" class="form-control" >
+							</div>
+						</div>
+						`;
+			this.getContainer().innerHTML = html;
+		} catch (error) {throw error;	}
+	};
+}
+
+class NumberComponent extends Component{
+	constructor(name,labelAra,labelEng){
+		super(name,labelAra,labelEng);
+		this.render();
+	}
+	
+	render(){
+		try{
+			let html = ` <div class="form-group form-row">
+						<label for="${this.name}" class="col-sm-${this.labelSize} col-form-label bg-info text-white text-center text-nowrap">${this.label}</label>
+						<div class="col-sm-${12-this.labelSize} p-0">
+							<input type="number" id="${this.name}" class="form-control" >
+						</div>
+					</div>
+					`;
+			this.getContainer().innerHTML = html;
+		}
+		catch(error){ throw error;}
 	};
 
+}
+
+class MoneyComponent extends Component{
+	constructor(name,labelAra,labelEng){
+		super(name,labelAra,labelEng);
+		this.render();
+	}
 	
+	render(){
+		try{
+			let html = ` <div class="form-group form-row">
+						<label for="${this.name}" class="col-sm-${this.labelSize} col-form-label bg-info text-white text-center text-nowrap">${this.label}</label>
+						<div class="col-sm-${12-this.labelSize} p-0">
+							<input type="number" id="${this.name}" step="0.001" class="form-control" >
+						</div>
+					</div>
+					`;
+			this.getContainer().innerHTML = html;
+		}catch(error){ throw error;}
+	};
+
+}
+
+
+class CheckBoxComponent extends Component{
+	constructor(name,labelAra,labelEng){
+		super(name,labelAra,labelEng);
+		this.render();
+	}
+	
+	render(){
+		try {
+			let html = `<div class="form-group form-row form-check">
+  							<input id="${this.name}" type="checkbox" class="form-check-input" >
+  							<label class="form-check-label text-muted" for="${this.name}">${this.label}</label>
+						</div>
+						`;
+			this.getContainer().innerHTML = html;
+		} catch (error) {throw error;	}
+	};
+
+	check(){
+		this.getHTMLElement().checked = true;
+	};
+	
+	uncheck(){
+		this.getHTMLElement().checked = false;
+	}
 
 
 }
+
+
+
+
+class DateComponent extends Component{
+	constructor(name,labelAra,labelEng,minDate,maxDate){
+		super(name,labelAra,labelEng);
+		this.minDate = minDate;
+		this.maxDate = maxDate;
+		this.render();
+	}
+	
+	render(){
+		try{
+			let html = ` <div class="form-group form-row">
+						<label for="${this.name}" class="col-sm-${this.labelSize} col-form-label bg-info text-white text-center text-nowrap">${this.label}</label>
+						<div class="col-sm-${12-this.labelSize} p-0">
+							<input id="${this.name}"  min="${this.minDate}" max="${this.maxDate}" class="form-control" type="date" >
+						</div>
+					</div>
+					`;
+			this.getContainer().innerHTML = html;
+		}catch(error){ throw error;}
+	};
+
+	setMinDate(minDate){
+		this.getHTMLElement().min = minDate;
+	};
+
+	setMaxDate(maxDate){
+		this.getHTMLElement().max = maxDate;
+	};
+
+}
+
+class DropDownListComponent extends Component{
+	constructor(name,labelAra,labelEng,optionsList){
+		super(name,labelAra,labelEng);
+		//this.options = optionsList;
+		this.render(optionsList);
+	}
+	
+	render(optionsList){
+		try{
+			let html = `<div class="form-group form-row">
+						<label for="${this.name}" class="col-sm-${this.labelSize} col-form-label bg-info text-white text-center text-nowrap">${this.label}</label>
+						<div class="col-sm-${12-this.labelSize} p-0">
+						<select id="${this.name}" class="form-control">`;
+						
+					for(let opt of optionsList){
+						html += `<option value="${opt.value}">${opt.label}</option>`;
+					}	
+			html += `</select> </div> </div>`;
+			this.getContainer().innerHTML = html;
+		}catch(error){ throw error;}
+	};
+
+	addOption(option){
+		let opt = document.createElement("option");
+		opt.text = option.label;
+		opt.value = option.value;
+		this.getHTMLElement().add(opt);
+	};
+
+	removeOptionByValue(value){
+		let sel = this.getHTMLElement();
+		let options = sel.options;
+		for(let i=0;i<options.length;i++){
+			if(options[i].value == value)
+				sel.remove(i);
+		}
+	};
+
+	removeOptionByIndex(index){
+		this.getHTMLElement().remove(index);
+	};
+
+	getText(){
+		return this.getHTMLElement().options[this.getHTMLElement().selectedIndex].text;
+	};
+
+	setOptions(optionsList){
+		this.render(optionsList);
+	};
+}
+
+class NotesComponent extends Component{
+	constructor(name,labelAra,labelEng,rows,maxLength){
+		super(name,labelAra,labelEng);
+		this.rows = (rows) ? rows : 3;
+		this.maxLength = (maxLength) ? maxLength : 150;
+		this.render();
+	} 
+	
+	render(){
+		try{
+			let html = `<div class="form-row p-0">
+						<label for="${this.name}" class="col-sm col-form-label bg-info text-white text-center text-nowrap">${this.label}</label>
+						</div>
+						<div class="form-row p-0">
+							<textarea type="text" id="${this.name}" maxlength="${this.maxLength}" rows="${this.rows}" class="form-control" style="resize: none;" ></textarea>
+						</div>
+					`;
+			this.getContainer().innerHTML = html;
+		}catch(error){ throw error; }
+	};
+}
+
+class ParagraphComponent extends Component{
+	constructor(name,paraAra,paraEng,cssClasses){
+		super(name,paraAra,paraEng);
+		this.render(cssClasses);
+	} 
+	
+	render(cssClasses){
+		try{
+			cssClasses += (app.isArabicLocale()) ? ' text-left ': ' text-right ';
+			let html = `<div class="form-group form-row p-3"> 
+							<label id="${this.name}" class=" d-block ${cssClasses}"  > ${this.label}</label>
+						</div>`;
+			this.getContainer().innerHTML = html;
+		}catch(error){ throw error; }
+	};
+}
+
+class SignatureComponent{
+	constructor(nameField,sigField,labelAra,labelEng){
+		this.label = (app.isArabicLocale()) ? labelAra : labelEng;
+		this.nameField = nameField;
+		this.sigField = sigField;
+		this.render();
+	} 
+	
+	render(){
+		try{
+			let html = `<div class="border rounded p-0 text-center">
+							<h5 class="p-2 text-center text-nowrap bg-light"><i class="fas fa-file-signature text-muted" style="font-size: 18px;"></i>  ${this.label}</h5>
+							<label id="${this.nameField}" class="text-center text-nowrap d-block">&nbsp;</label>
+							<label id="${this.sigField}" class="text-muted text-center text-nowrap d-block" style="font-size:0.8em;">&nbsp;</label>
+							<a id="${this.sigField}_btn" onclick="util.hide('${this.sigField}_btn'); util.show('${this.sigField}'); document.getElementById('${this.sigField}').innerHTML='${loggedUser.signature}';" href="#" style="padding-left:15px;" class="text-muted d-none">
+								click here to sign 
+        					</a>
+						</div>`;
+			this.getContainer().innerHTML = html;
+		}catch(error){ throw error;}
+	};
+	
+	setSigner(name,sig){
+		document.getElementById(this.nameField).innerHTML = name;
+		document.getElementById(this.sigField).innerHTML = sig;
+	}
+
+	getSigner(){
+		let signer = {};
+		signer[this.nameField] = document.getElementById(`${this.nameField}`).innerHTML;
+		signer[this.sigField] =  document.getElementById(`${this.sigField}`).innerHTML;
+		return signer;
+	};
+
+	enable(){
+		this.setSigner(loggedUser.arabicName, '');
+		util.hide(this.sigField);
+		util.show(`${this.sigField}_btn`);
+	};
+
+	getContainer(){	
+		try{ return util.querySelector('data-container-for',this.nameField);}
+		catch(error){ throw error; }
+	};
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

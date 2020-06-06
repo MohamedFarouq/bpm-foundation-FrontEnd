@@ -2,17 +2,29 @@
 const peService = {
     fetchInboxWIs(username){
         let list = [];
-        list.push(new WorkItem("Periodical_Leave",550, "طلب اجازة دورية" ,"12/5/2019") );
-        list.push(new WorkItem("Bank_Transfer",100, "طلب تغيير حساب بنك" ,"12/5/2019") );
-        list.push(new WorkItem("Bank_Transfer",110, "طلب تغيير حساب بنك" ,"12/6/2019") );
-        list.push(new WorkItem("Loan_Request",1050, "طلب تحويل اجراء" ,"12/7/2019") );
-        list.push(new WorkItem("Pension_Advanced",10575, "طلب معاش مقدم" ,"12/7/2019") );
+        list.push(new WorkItem("Periodical_Leave",500, "طلب اجازة دورية" ,"12/5/2019") );
+        list.push(new WorkItem("Pension_Advanced",600, "طلب صرف معاش مقدم - أنس" ,"12/6/2019") );
+        list.push(new WorkItem("Allow_Item",700, "طلب سماح البند المالي - عائشة" ,"12/7/2019") );
+        list.push(new WorkItem("Personal_Execuse_Permission",800, "طلب استئذان شخصي - عاليه" ,"12/5/2019") );
+        list.push(new WorkItem("Program_Installation",900, "Program Installation - شريفة" ,"12/7/2019") );
         return list;
     },
 
     fetchQueueWIs(){},
+}
 
+const wf_TrackerService = {
+    loadFormEntity(formEntity){
+        formEntity.RequesterName = 'محمد الديب';
+        formEntity.FromDate = '2020-05-01';
+        formEntity.To = '2020-05-15';
+        //formEntity.VactionType = 2;
+        formEntity.Notes = 'الملاحظــــــات المخزنة بقاعدة البيانات';
+    },
 
+    saveFormEntity(formEntity){
+        //send Rest request to store entity in DB
+    },
 }
 
 const mainFrameService = {
