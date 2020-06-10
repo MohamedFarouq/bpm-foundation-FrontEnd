@@ -23,7 +23,7 @@
 <body>
   <nav class="navbar navbar-expand-lg bg-dark sticky-top">
     <div class="btn-group" >
-      <i class="fab fa-medium  mr-1 bpmLogo" style="color: #2f77b1;"></i>  
+      <i class="fab fa-medium  mr-1  bpmLogo" style="color: #2f77b1;"></i>  
       <i class="fas fa-parking text-warning mr-1 bpmLogo" ></i>
       <i class="fab fa-bootstrap text-success mr-2 bpmLogo"  ></i>
       <h3 class="text-light font-weight-bolder"  >نظـام الميكنـة الآليـة</h3>
@@ -53,8 +53,8 @@
 
   <div class="container-fluid bg-light">
     <div class="row">
-      <div class="col-2 p-0 shadow-lg"><div class="list-group" id="sideMenu"></div></div>
-      <div class="col-10 p-3" id="contentArea"></div>   
+      <div class="col-2 p-0 shadow"><div class="list-group" id="sideMenu"></div></div>
+      <div class="col-10 p-2" id="contentArea"></div>   
     </div>
    </div>
    
@@ -63,10 +63,10 @@
    <!-- Process Modal -->
   <div class="modal fade" id="processModal" data-backdrop="static"  tabindex="-1" role="dialog" aria-labelledby="processModalTitle" aria-hidden="true">
     <div class="modal-dialog modal-xl  modal-dialog-scrollable modal-dialog-centered" role="document" style=" min-width: 80%;">
-        <div class="modal-content">
+        <div class="modal-content" style="background-color: #EAEAEA !important;">
           <div id="processToolBar" class="modal-header bg-light p-0 ">
             <!-- ToolBar Components -->
-                <nav class="navbar navbar-expand-lg container-fluid bg-dark p-1">
+                <nav class="navbar navbar-expand-sm container-fluid bg-dark p-1" style=" box-shadow: none; !important">
                   <a onclick="process.close()" href="#"><i class="fas fa-window-close modalCloseBtn"></i></a>
                   <ul class="navbar-nav ml-auto">
                       <li class="my-auto p-1" >
@@ -91,7 +91,7 @@
                 </nav>
           </div>
           <div class="modal-body overflow-auto pt-0">
-            <div class="row bg-light" >
+            <div class="row">
               <div id="processRightSideBar" class="col-3" >
                   <!-- RightSideBar Components -->
                   <div id="senderDiv" class="form-group p-1">

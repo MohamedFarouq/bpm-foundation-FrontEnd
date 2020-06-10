@@ -76,7 +76,7 @@ class Form{
 			this.label = (app.isArabicLocale()) ? labelAra : labelEng;
 			this.components = {};
 			this.entity = {id:0, WorkFlowID : process.workItem.workflowID};
-			this.getTabe().innerHTML = this.label;
+			this.addTab();
 			this.renderFormHeader();
 		}
 		catch(error){ app.alertError(error.message);}
@@ -130,8 +130,16 @@ class Form{
 	};
 
 	getTabe(){	
-		try{ return util.querySelector('data-tab-form-name',this.dbTableName);}
+		try{ return document.getElementById(`${this.dbTableName}-tab`);}
 		catch(error){ throw error;	}
+	};
+
+	addTab(){
+		try{
+			let html = `<a id="${this.dbTableName}-tab" href="#nav-${this.dbTableName}" data-tab-form-name="${this.dbTableName}"  aria-controls="nav-${this.dbTableName}" aria-selected="false" role="tab" class="nav-item nav-link" data-toggle="tab">${this.label}</a>`;
+			document.getElementById('nav-tab').innerHTML += html;
+		}
+		catch(error){ throw error;}
 	};
 }
 
@@ -143,6 +151,7 @@ class Component{
 		this.name = name;
 		this.label = (app.isArabicLocale()) ? labelAra : labelEng;
 		this.labelSize = 4;
+		this.componentCSS = 'bg-primary text-white ';
 	}
 	
 	getValue(){	return this.getHTMLElement().value;	};
@@ -176,7 +185,7 @@ class TxtComponent extends Component{
 	render(){
 		try {
 			let html = `<div class="form-group form-row">
-							<label for="${this.name}" class="col-sm-${this.labelSize} col-form-label bg-info text-white text-center text-nowrap">${this.label}</label>
+							<label for="${this.name}" class="col-sm-${this.labelSize} col-form-label text-center text-nowrap ${this.componentCSS}">${this.label}</label>
 							<div class="col-sm-${12-this.labelSize} p-0">
 								<input type="text" id="${this.name}" maxlength="${this.maxLength}" class="form-control" >
 							</div>
@@ -196,7 +205,7 @@ class NumberComponent extends Component{
 	render(){
 		try{
 			let html = ` <div class="form-group form-row">
-						<label for="${this.name}" class="col-sm-${this.labelSize} col-form-label bg-info text-white text-center text-nowrap">${this.label}</label>
+						<label for="${this.name}" class="col-sm-${this.labelSize} col-form-label text-center text-nowrap ${this.componentCSS}">${this.label}</label>
 						<div class="col-sm-${12-this.labelSize} p-0">
 							<input type="number" id="${this.name}" class="form-control" >
 						</div>
@@ -218,7 +227,7 @@ class MoneyComponent extends Component{
 	render(){
 		try{
 			let html = ` <div class="form-group form-row">
-						<label for="${this.name}" class="col-sm-${this.labelSize} col-form-label bg-info text-white text-center text-nowrap">${this.label}</label>
+						<label for="${this.name}" class="col-sm-${this.labelSize} col-form-label text-center text-nowrap ${this.componentCSS}">${this.label}</label>
 						<div class="col-sm-${12-this.labelSize} p-0">
 							<input type="number" id="${this.name}" step="0.001" class="form-control" >
 						</div>
@@ -229,7 +238,6 @@ class MoneyComponent extends Component{
 	};
 
 }
-
 
 class CheckBoxComponent extends Component{
 	constructor(name,labelAra,labelEng){
@@ -259,9 +267,6 @@ class CheckBoxComponent extends Component{
 
 }
 
-
-
-
 class DateComponent extends Component{
 	constructor(name,labelAra,labelEng,minDate,maxDate){
 		super(name,labelAra,labelEng);
@@ -273,7 +278,7 @@ class DateComponent extends Component{
 	render(){
 		try{
 			let html = ` <div class="form-group form-row">
-						<label for="${this.name}" class="col-sm-${this.labelSize} col-form-label bg-info text-white text-center text-nowrap">${this.label}</label>
+						<label for="${this.name}" class="col-sm-${this.labelSize} col-form-label text-center text-nowrap ${this.componentCSS}">${this.label}</label>
 						<div class="col-sm-${12-this.labelSize} p-0">
 							<input id="${this.name}"  min="${this.minDate}" max="${this.maxDate}" class="form-control" type="date" >
 						</div>
@@ -303,7 +308,7 @@ class DropDownListComponent extends Component{
 	render(optionsList){
 		try{
 			let html = `<div class="form-group form-row">
-						<label for="${this.name}" class="col-sm-${this.labelSize} col-form-label bg-info text-white text-center text-nowrap">${this.label}</label>
+						<label for="${this.name}" class="col-sm-${this.labelSize} col-form-label text-center text-nowrap ${this.componentCSS}">${this.label}</label>
 						<div class="col-sm-${12-this.labelSize} p-0">
 						<select id="${this.name}" class="form-control">`;
 						
@@ -355,7 +360,7 @@ class NotesComponent extends Component{
 	render(){
 		try{
 			let html = `<div class="form-row p-0">
-						<label for="${this.name}" class="col-sm col-form-label bg-info text-white text-center text-nowrap">${this.label}</label>
+						<label for="${this.name}" class="col-sm col-form-label text-center text-nowrap ${this.componentCSS}">${this.label}</label>
 						</div>
 						<div class="form-row p-0">
 							<textarea type="text" id="${this.name}" maxlength="${this.maxLength}" rows="${this.rows}" class="form-control" style="resize: none;" ></textarea>

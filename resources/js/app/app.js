@@ -120,8 +120,8 @@ const menu = {
 
 	addPage(page){
 		let title = properties[session.fetchLanguage()][page.id];
-		let html = `<a id="${page.id}" onclick="menu.loadPage(menu.${page.id})" class="list-group-item list-group-item-action list-group-item-light" data-toggle="list" href="#"  >
-						<i class="fas ${page.icon} ${page.iconColor}" ></i><span class="display-5 font-weight-bolder">${title}</span>
+		let html = `<a id="${page.id}" onclick="menu.loadPage(menu.${page.id})" class="list-group-item list-group-item-action list-group-item-white " data-toggle="list" href="#"  >
+						<i class="fas ${page.icon} " ></i><span class="display-5 font-weight-bolder">${title}</span>
 					</a>`;
 		util.append("sideMenu",html);
 	},

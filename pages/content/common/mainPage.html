@@ -98,7 +98,11 @@ registery.mainPageController = {
 
     addNewRequestLink(containerID,process){
         let title = (app.isArabicLocale()) ? process.arabicName : process.engLabel;
-        let html = `<li class="list-group-item"> <a onclick="process.launch(new WorkItem('${process.engName}'))" class="simpleLink" href="#">${title} </a>  </li>`;  
+        let html = `<li class="list-group-item p-2 ml-2"> 
+                        <i class="fas fa-file-alt text-secondary"></i> 
+                        <a onclick="process.launch(new WorkItem('${process.engName}'))" class="simpleLink text-secondary" href="#">
+                            ${title} </a>  
+                    </li>`;  
         util.append(containerID,html);
     },
 
@@ -115,20 +119,19 @@ $(document).ready(registery.mainPageController.main());
 
 <div class="container-fluid ">
     <div class="row">
-        <div class="col">
-            <nav class="navbar bg-dark">
+        <div class="col pl-1">
+            <nav class="navbar bg-primary">
                 <h6 class="text-white font-weight-bold" data-label="personalInbox"></h6>
             </nav>    
             <ul id="myInboxList" class="list-group list-group-flush shadow p-0 overflow-auto bg-white " style="height: 600px;"></ul>
         </div>
 
         <div class="col-3 p-0">
-            <div class="accordion shadow " id="newRequestAccordion">
+            <div class="accordion  shadow " id="newRequestAccordion">
                         <div class="card">
-                            <div class="card-header" id="headingHRRequests">
-                                <h2 class="mb-0">
-                                <button data-label="humanResourcesRequests" data-target="#humanResourcesRequestsDiv" aria-controls="humanResourcesRequestsDiv" aria-expanded="false" class="btn btn-secondary w-100 collapsed" type="button" data-toggle="collapse"></button>
-                                </h2>
+                            <div class="card-header bg-white" id="headingHRRequests">
+                                <i class="fas fa-folder text-warning"></i>
+                                <a class="btn btn-white w-100 text-primary collapsed text-left d-inline"  data-label="humanResourcesRequests" data-target="#humanResourcesRequestsDiv" aria-controls="humanResourcesRequestsDiv" aria-expanded="false"  data-toggle="collapse"></a>
                             </div>
                             <div id="humanResourcesRequestsDiv" class="collapse" aria-labelledby="headingHRRequests" data-parent="#newRequestAccordion">
                                 <div class="card-body">
@@ -137,10 +140,9 @@ $(document).ready(registery.mainPageController.main());
                             </div>
                         </div>
                         <div class="card">
-                            <div class="card-header" id="headingITRequests">
-                                <h2 class="mb-0">
-                                <button data-label="informationTechRequests" data-target="#informationTechRequestsDiv" aria-controls="informationTechRequestsDiv" aria-expanded="false" class="btn btn-secondary w-100 collapsed" type="button" data-toggle="collapse"></button>
-                                </h2>
+                            <div class="card-header bg-white" id="headingITRequests">
+                                <i class="fas fa-folder text-warning"></i>
+                                <a class="btn btn-white w-100 text-primary collapsed text-left d-inline" data-label="informationTechRequests" data-target="#informationTechRequestsDiv" aria-controls="informationTechRequestsDiv" aria-expanded="false" data-toggle="collapse"></a>
                             </div>
                             <div id="informationTechRequestsDiv" class="collapse" aria-labelledby="headingITRequests" data-parent="#newRequestAccordion">
                                 <div class="card-body">
@@ -149,10 +151,9 @@ $(document).ready(registery.mainPageController.main());
                             </div>
                         </div>
                         <div class="card">
-                            <div class="card-header" id="headingSSRequests">
-                                <h2 class="mb-0">
-                                <button data-label="socialSecurityRequests" data-target="#socialSecurityRequestsDiv" aria-controls="socialSecurityRequestsDiv" aria-expanded="false" class="btn btn-secondary w-100 collapsed" type="button" data-toggle="collapse"></button>
-                                </h2>
+                            <div class="card-header bg-white" id="headingSSRequests">
+                                <i class="fas fa-folder text-warning"></i>
+                                <a class="btn btn-white w-100 text-primary collapsed text-left d-inline" data-label="socialSecurityRequests" data-target="#socialSecurityRequestsDiv" aria-controls="socialSecurityRequestsDiv" aria-expanded="false"data-toggle="collapse"></a>
                             </div>
                             <div id="socialSecurityRequestsDiv" class="collapse" aria-labelledby="headingSSRequests" data-parent="#newRequestAccordion">
                                 <div class="card-body">
@@ -161,10 +162,9 @@ $(document).ready(registery.mainPageController.main());
                             </div>
                         </div>
                         <div class="card">
-                            <div class="card-header" id="headingFinanceRequests">
-                                <h2 class="mb-0">
-                                <button data-label="financeRequests" data-target="#financeRequestsDiv" aria-controls="financeRequestsDiv" aria-expanded="false" class="btn btn-secondary w-100 collapsed" type="button" data-toggle="collapse"></button>
-                                </h2>
+                            <div class="card-header bg-white" id="headingFinanceRequests">
+                                <i class="fas fa-folder text-warning"></i>
+                                <a class="btn btn-white w-100 text-primary collapsed text-left d-inline" data-label="financeRequests" data-target="#financeRequestsDiv" aria-controls="financeRequestsDiv" aria-expanded="false" data-toggle="collapse"></a>
                             </div>
                             <div id="financeRequestsDiv" class="collapse" aria-labelledby="headingFinanceRequests" data-parent="#newRequestAccordion">
                                 <div class="card-body">
@@ -173,10 +173,9 @@ $(document).ready(registery.mainPageController.main());
                             </div>
                         </div>
                         <div class="card">
-                            <div class="card-header" id="headingAdminRequests">
-                                <h2 class="mb-0">
-                                <button data-label="administrationRequests" data-target="#administrationRequestsDiv" aria-controls="administrationRequestsDiv" aria-expanded="false" class="btn btn-secondary w-100 collapsed" type="button" data-toggle="collapse"></button>
-                                </h2>
+                            <div class="card-header bg-white" id="headingAdminRequests">
+                                <i class="fas fa-folder text-warning"></i>
+                                <a class="btn btn-white w-100 text-primary collapsed text-left d-inline" data-label="administrationRequests" data-target="#administrationRequestsDiv" aria-controls="administrationRequestsDiv" aria-expanded="false" data-toggle="collapse"></a>
                             </div>
                             <div id="administrationRequestsDiv" class="collapse" aria-labelledby="headingAdminRequests" data-parent="#newRequestAccordion">
                                 <div class="card-body">
@@ -185,10 +184,9 @@ $(document).ready(registery.mainPageController.main());
                             </div>
                         </div>
                         <div class="card">
-                            <div class="card-header" id="headingGenSectorRequests">
-                                <h2 class="mb-0">
-                                <button data-label="generalSectorRequests" data-target="#generalSectorRequestsDiv" aria-controls="generalSectorRequestsDiv" aria-expanded="false" class="btn btn-secondary w-100 collapsed" type="button" data-toggle="collapse"></button>
-                                </h2>
+                            <div class="card-header bg-white" id="headingGenSectorRequests">
+                                <i class="fas fa-folder text-warning"></i>
+                                <a class="btn btn-white w-100 text-primary collapsed text-left d-inline" data-label="generalSectorRequests" data-target="#generalSectorRequestsDiv" aria-controls="generalSectorRequestsDiv" aria-expanded="false" data-toggle="collapse"></a>
                             </div>
                             <div id="generalSectorRequestsDiv" class="collapse" aria-labelledby="headingGenSectorRequests" data-parent="#newRequestAccordion">
                                 <div class="card-body">
