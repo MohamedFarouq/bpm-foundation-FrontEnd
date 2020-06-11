@@ -42,15 +42,15 @@ process.controller = {
     },
 
     defineComponents(){    
-        this.forms.Form_PeriodicalLeave.components.RequesterName = new TxtComponent('RequesterName','الاســم','Name',5);
-        this.forms.Form_PeriodicalLeave.components.FromDate = new DateComponent('FromDate','من التاريخ','From','','');
-        this.forms.Form_PeriodicalLeave.components.Days = new NumberComponent('Days','ايام الاجازة','Days');
-        this.forms.Form_PeriodicalLeave.components.VactionType = new DropDownListComponent('VactionType','نوع الاجازة','type',[new Option('','','0') ,new Option('دورية','Periodical','1') , new Option('مرضية','Sick Leave','2')]);
-        this.forms.Form_PeriodicalLeave.components.IsPaid = new CheckBoxComponent('IsPaid','اجازة مصروفة','Paid Vacation');
-                
-        this.forms.Form_PeriodicalLeave.components.Notes = new NotesComponent('Notes','الملاحظـــــات','Notes',4,300);
-        this.forms.Form_PeriodicalLeave.components.SupSignature = new SignatureComponent('SupName','SupSig','اعتمـــاد المراقــب المختــص','Supervisor Approval');
-        this.forms.Form_PeriodicalLeave.components.MangerName = new SignatureComponent('MngrName','MngSig','اعتمـــاد مديــر الإدارة','Manager Approval');
+        this.forms.Form_PeriodicalLeave.addComponent(new TxtComponent('RequesterName','الاســم','Name',5) );
+        this.forms.Form_PeriodicalLeave.addComponent(new DateComponent('FromDate','من التاريخ','From','','') );
+        this.forms.Form_PeriodicalLeave.addComponent(new NumberComponent('Days','ايام الاجازة','Days') );
+        this.forms.Form_PeriodicalLeave.addComponent(new DropDownListComponent('VactionType','نوع الاجازة','type',[new Option('','','0') ,new Option('دورية','Periodical','1') , new Option('مرضية','Sick Leave','2')]) );
+        this.forms.Form_PeriodicalLeave.addComponent(new CheckBoxComponent('IsPaid','اجازة مصروفة','Paid Vacation') );
+        this.forms.Form_PeriodicalLeave.addComponent(new NotesComponent('Notes','الملاحظـــــات','Notes',4,300) );
+        this.forms.Form_PeriodicalLeave.addComponent(new AttachmentsTableComponent('Attachments',['مرفق 1','مرفق 2','مرفق 3']) );
+        this.forms.Form_PeriodicalLeave.addComponent(new SignatureComponent('SupName','SupSig','اعتمـــاد المراقــب المختــص','Supervisor Approval') ); //components.SupSignature = new SignatureComponent('SupName','SupSig','اعتمـــاد المراقــب المختــص','Supervisor Approval');
+        this.forms.Form_PeriodicalLeave.addComponent(new SignatureComponent('MngrName','MngSig','اعتمـــاد مديــر الإدارة','Manager Approval') );
 
         this.Ekrar = new ParagraphComponent('Ekrar','اقر انا الموقع ادناه <br> بانني مسئول عن ماتم ادخاله من بيانات ','I admit that <br> I am responsible for the entered data','text-danger font-weight-bold');
     },
@@ -147,17 +147,11 @@ $(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alert
     <div class="row">
         <div class="col p-1 " >
             <nav>
-                <div class="nav nav-pills mb-1 ml-auto" id="nav-tab" role="tablist">
-                  <!-- copy and paste one of these anchors to add new form tab and make sure to change [id,href,data-form-name,aria-controls] accordingly by search and replace -->
-                  <a id="tab1-tab" href="#nav-tab1" data-tab-form-name="Form_PeriodicalLeave"  aria-controls="nav-tab1" aria-selected="true"  role="tab"  class="nav-item nav-link" data-toggle="tab">Home</a>
-                  <a id="tab2-tab" href="#nav-tab2" data-tab-form-name="Form_WorkDeduction"  aria-controls="nav-tab2" aria-selected="false" role="tab" class="nav-item nav-link" data-toggle="tab">Profile</a>
-                </div>
+                <div class="nav nav-pills mb-1 ml-auto" id="nav-tab" role="tablist"></div>
             </nav>
-            <div class="tab-content border rounded p-2 bg-white  shadow" id="nav-tabContent">
-                
-
+            <div class="tab-content shadow border border-secondary rounded p-2 bg-white" id="nav-tabContent">
                 <!-- Form-PeriodicalLeave-Tab -->
-                <div class="tab-pane fade show active" id="nav-tab1" role="tabpanel" aria-labelledby="tab1-tab">
+                <div class="tab-pane fade show active" id="nav-Form_PeriodicalLeave" role="tabpanel" aria-labelledby="Form_PeriodicalLeave-tab">
                     <!-- the main container for all Form_PeriodicalLeave controls -->
                     <div class="container-fluid">
                         <div class="row">
@@ -180,6 +174,10 @@ $(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alert
                             <div class="col pr-3 pl-3" data-container-for="Notes"></div>
                         </div>
                         <div class="row">
+                            <div class="col pr-3 pl-3" data-container-for="Attachments"></div>
+                        </div>
+
+                        <div class="row">
                             <div class="col pr-3 pl-3" data-container-for="Ekrar"></div>
                         </div>
                         <div class="row">
@@ -195,7 +193,7 @@ $(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alert
 
 
                  <!-- Form-WorkDeduction-Tab -->
-                <div class="tab-pane fade" id="nav-tab2" role="tabpanel" aria-labelledby="tab2-tab">
+                <div class="tab-pane fade" id="nav-Form_WorkDeduction" role="tabpanel" aria-labelledby="Form_WorkDeduction-tab">
                     <!-- the main container for all Form_PeriodicalLeave controls -->
                     <div class="container-fluid">
                         <div class="row">

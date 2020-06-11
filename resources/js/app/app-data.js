@@ -99,7 +99,7 @@ class Form{
 		}
 	};
 
-	select(){ this.getTabe().click();}
+	select(){ this.getTabe().click();};
 	
 	enable(){ this.getTabe().classList.remove('disabled');	};
 	
@@ -109,7 +109,10 @@ class Form{
 	
 	hide(){ this.getTabe().classList.add('d-none');	};
 	
-	addComponent(component){   this.components[component.name] = component;	};
+	addComponent(component){   
+		this.components[component.name] = component;
+		this.components[component.name].form = this.dbTableName;
+	};
 	
 	setPrintable(isPrintable){ this.isPrintable = isPrintable};
 
@@ -143,15 +146,13 @@ class Form{
 	};
 }
 
-
-
-
 class Component{
 	constructor(name,labelAra,labelEng){
 		this.name = name;
 		this.label = (app.isArabicLocale()) ? labelAra : labelEng;
 		this.labelSize = 4;
 		this.componentCSS = 'bg-primary text-white ';
+		this.form = '';
 	}
 	
 	getValue(){	return this.getHTMLElement().value;	};
@@ -434,7 +435,53 @@ class SignatureComponent{
 	};
 }
 
+class AttachmentsTableComponent extends Component{
+	constructor(name,attachmentsList){
+		super(name,'','');
+		if(!attachmentsList || !attachmentsList.length)
+			app.alertError(`no list for table : ${this.name}`);
+		this.render(attachmentsList);
+	}
+	
+	render(attachmentsList){
+		try {
+			let html = `<div class="container p-2">`;
+			for(const att of attachmentsList){
+				html += `<div class="row  border">
+							<div class="col-1 text-center border-right">
+								<input class="" value="${att}" data-form-element-for="${this.name}" type="checkbox"  >
+							</div>
+							<div class="col">
+								<label class="text-left text-nowrap ">${att}</label>			
+							</div>
+						</div>`;
+			}
+			// html += `<div class="row  border">
+			// 			<div class="col text-center border-right">
+			// 				<buton type="button" onclick="process.controller.forms.${this.form}.components.${this.name}.getCheckedCount();">count of checked</button>
+			// 			</div>
+			// 		</div	
+			// 		</div>`;
+			
 
+			this.getContainer().innerHTML = html;
+		} catch (error) {throw error;	}
+	};
+
+	getCheckedCount(){
+		alert(this.getValue());
+	};
+
+	getValue(){
+		let value = '';
+		let cbList = util.querySelector('data-form-element-for',this.name);
+		for (const cb in  cbList) {
+			if(cb.checked)
+				value += cb.value+',';
+		}
+		return value;
+	};
+}
 
 
 

@@ -42,15 +42,15 @@ process.controller = {
     },
 
     defineComponents(){    
-        this.forms.Form_PeriodicalLeave.components.RequesterName = new TxtComponent('RequesterName','الاســم','Name',5);
-        this.forms.Form_PeriodicalLeave.components.FromDate = new DateComponent('FromDate','من التاريخ','From','','');
-        this.forms.Form_PeriodicalLeave.components.Days = new NumberComponent('Days','ايام الاجازة','Days');
-        this.forms.Form_PeriodicalLeave.components.VactionType = new DropDownListComponent('VactionType','نوع الاجازة','type',[new Option('','','0') ,new Option('دورية','Periodical','1') , new Option('مرضية','Sick Leave','2')]);
-        this.forms.Form_PeriodicalLeave.components.IsPaid = new CheckBoxComponent('IsPaid','اجازة مصروفة','Paid Vacation');
-                
-        this.forms.Form_PeriodicalLeave.components.Notes = new NotesComponent('Notes','الملاحظـــــات','Notes',4,300);
-        this.forms.Form_PeriodicalLeave.components.SupSignature = new SignatureComponent('SupName','SupSig','اعتمـــاد المراقــب المختــص','Supervisor Approval');
-        this.forms.Form_PeriodicalLeave.components.MangerName = new SignatureComponent('MngrName','MngSig','اعتمـــاد مديــر الإدارة','Manager Approval');
+        this.forms.Form_PeriodicalLeave.addComponent(new TxtComponent('RequesterName','الاســم','Name',5) );
+        this.forms.Form_PeriodicalLeave.addComponent(new DateComponent('FromDate','من التاريخ','From','','') );
+        this.forms.Form_PeriodicalLeave.addComponent(new NumberComponent('Days','ايام الاجازة','Days') );
+        this.forms.Form_PeriodicalLeave.addComponent(new DropDownListComponent('VactionType','نوع الاجازة','type',[new Option('','','0') ,new Option('دورية','Periodical','1') , new Option('مرضية','Sick Leave','2')]) );
+        this.forms.Form_PeriodicalLeave.addComponent(new CheckBoxComponent('IsPaid','اجازة مصروفة','Paid Vacation') );
+        this.forms.Form_PeriodicalLeave.addComponent(new NotesComponent('Notes','الملاحظـــــات','Notes',4,300) );
+        this.forms.Form_PeriodicalLeave.addComponent(new AttachmentsTableComponent('Attachments',['مرفق 1','مرفق 2','مرفق 3']) );
+        this.forms.Form_PeriodicalLeave.addComponent(new SignatureComponent('SupName','SupSig','اعتمـــاد المراقــب المختــص','Supervisor Approval') ); //components.SupSignature = new SignatureComponent('SupName','SupSig','اعتمـــاد المراقــب المختــص','Supervisor Approval');
+        this.forms.Form_PeriodicalLeave.addComponent(new SignatureComponent('MngrName','MngSig','اعتمـــاد مديــر الإدارة','Manager Approval') );
 
         this.Ekrar = new ParagraphComponent('Ekrar','اقر انا الموقع ادناه <br> بانني مسئول عن ماتم ادخاله من بيانات ','I admit that <br> I am responsible for the entered data','text-danger font-weight-bold');
     },
@@ -173,6 +173,10 @@ $(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alert
                         <div class="row">
                             <div class="col pr-3 pl-3" data-container-for="Notes"></div>
                         </div>
+                        <div class="row">
+                            <div class="col pr-3 pl-3" data-container-for="Attachments"></div>
+                        </div>
+
                         <div class="row">
                             <div class="col pr-3 pl-3" data-container-for="Ekrar"></div>
                         </div>
