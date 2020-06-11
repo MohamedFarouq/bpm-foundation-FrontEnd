@@ -441,7 +441,7 @@ class AttachmentsTableComponent extends Component{
 		if(!attachmentsList || !attachmentsList.length)
 			app.alertError(`no list for table : ${this.name}`);
 		this.render(attachmentsList);
-	}
+	} 
 	
 	render(attachmentsList){
 		try {
