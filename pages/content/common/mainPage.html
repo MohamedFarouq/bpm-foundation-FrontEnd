@@ -17,12 +17,12 @@ registery.mainPageController = {
         
         myInboxItems.forEach((wi,index)=>{
         let html = `<li class="list-group-item"> 
-                            <div class="row">
-                                <div class="col-1 text-muted text-center"><span class="text-muted" >${wi.recieveDate}</span></div>
-                                <div class="col"><a onclick="process.launch(new WorkItem('${wi.workFlowName}',${wi.workflowID},'${wi.subject}','${wi.recieveDate}'))" class="simpleLink" href="#" title="">${wi.subject}</a>    
-                                </div>
+                        <div class="row">
+                            <div class="col-1 text-muted text-center"><span class="text-muted" >${wi.recieveDate}</span></div>
+                            <div class="col"><a onclick="process.launch(new WorkItem('${wi.workFlowName}',${wi.workflowID},'${wi.subject}','${wi.recieveDate}'))" class="simpleLink" href="#" title="">${wi.subject}</a>    
                             </div>
-                        </li>`;
+                        </div>
+                    </li>`;
             util.append("myInboxList",html);
         });
 
@@ -120,15 +120,15 @@ $(document).ready(registery.mainPageController.main());
 <div class="container-fluid ">
     <div class="row">
         <div class="col-9 pl-1">
-            <div class="bg-white p-3 shadow-sm">
+            <div class="bg-white p-2 shadow-sm">
                 <i class="fas fa-envelope text-muted"></i>
                 <h5 class="text-muted font-weight-bold d-inline" data-label="personalInbox"></h5>
             </div>
-            <ul id="myInboxList" class="list-group list-group-flush shadow-sm p-3 overflow-auto bg-white " style="min-height: 70vh !important;"></ul>
+            <ul id="myInboxList" class="list-group list-group-flush shadow-sm p-3 overflow-auto bg-white " style="min-height: 80vh !important;"></ul>
         </div>
 
         <div class="col-3 p-1 bg-white shadow-sm">
-            <div class="bg-white p-3">
+            <div class="bg-white p-2">
                 <i class="fas fa-share-square text-muted"></i>
                 <h5 class="text-muted font-weight-bold d-inline" data-label="newRequestGrid"></h5>
             </div>    

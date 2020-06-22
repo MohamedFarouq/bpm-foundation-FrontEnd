@@ -288,7 +288,7 @@
 			let html = `<a id="${page.id}" onclick="menu.loadPage(menu.${page.id})" 
 						   class="list-group-item list-group-item-action list-group-item-light border-0" 
 						   data-toggle="list" href="#"  >
-							<i class="fas ${page.icon} text-muted" ></i><span class="display-5 font-weight-bolder">${title}</span>
+							<i class="fas ${page.icon} text-dark" ></i><span class="display-5 font-weight-bolder">${title}</span>
 						</a>`;
 			util.append("sideMenu",html);
 		},

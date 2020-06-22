@@ -1,0 +1,245 @@
+<script >
+
+process.controller = {
+    errMsg : "",
+    groups : {  
+         //groupFollowUpTLs : ["FollowUp_TLs"],    // groupFollowUpEmps : ["FollowUp_Emps"],
+    },
+
+    steps : {
+        PerLeave_Launch : 'PerLeave_Launch',
+        PerLeave_TLApprove: 'PerLeave_TLApprove',
+        PerLeave_SupApprove: 'PerLeave_SupApprove',
+        PerLeave_DeptSec: 'PerLeave_DeptSec',
+        PerLeave_MngApprove: 'PerLeave_MngApprove',
+        PerLeave_Update: 'PerLeave_Update',
+        PerLeave_DDGApprove: 'PerLeave_DDGApprove',
+        PerLeave_DDGSec: 'PerLeave_DDGSec',
+        PerLeave_PersAdminSec : 'PerLeave_PersAdminSec',
+        PerLeave_PersAdminEmp : 'PerLeave_PersAdminEmp',
+        PerLeave_PersAdminTL : 'PerLeave_PersAdminTL',
+        PerLeave_PersAdminSup : 'PerLeave_PersAdminSup',
+        PerLeave_FinSec : 'PerLeave_FinSec',
+        PerLeave_FinSup : 'PerLeave_FinSup',
+        PerLeave_FinTL : 'PerLeave_FinTL',
+        PerLeave_FinEmp : 'PerLeave_FinEmp',
+    },
+
+    forms : {
+        Form_PersonalExecusePermission : new Form('Form_PersonalExecusePermission', 'نموذج استئذان شخصي للإنصراف أثناء العمل','Personal Excuse Permission'),        
+    },
+
+
+    defineComponents(){    
+       
+        this.Ekrar = new ParagraphComponent('Line1','السيدة مديرة / ادارة الانظمة والتطبيقات الذكية','mrs. Manager / Smart System & Application Department','text-black');
+        this.Ekrar = new ParagraphComponent('Line2','المحترمة','With Respectable','text-black');
+       
+         this.Ekrar = new ParagraphComponent('Line3','تحية طيبة و بعد، <br> يرجى التصريح لي بالانصراف أثناء العمل','Greetings <br> I would like permission to be excused during working hours ','text-balck font-weight-bold');
+       
+         this.forms.Form_PersonalExecusePermission.addComponent(new DateComponent('CurrentDate','التاريخ','Date') );
+       
+ 
+
+
+     
+        this.forms.Form_PersonalExecusePermission.addComponent(new NumberComponent('FromTime','من الساعة','From') );
+        this.forms.Form_PersonalExecusePermission.addComponent(new NumberComponent('ToTime','حتى الساعة','To') );
+       
+       
+       // this.forms.Form_PersonalExecusePermission.addComponent(new DropDownListComponent('VactionType','نوع الاجازة','type',[new Option('','','0') ,new Option('دورية','Periodical','1') , new Option('مرضية','Sick Leave','2')]) );
+        //this.forms.Form_PersonalExecusePermission.addComponent(new CheckBoxComponent('IsPaid','اجازة مصروفة','Paid Vacation') );
+       
+        this.forms.Form_PersonalExecusePermission.addComponent(new NotesComponent('Notes','وذلك للآسباب التالية','Reassons',4,300) );
+       
+        this.forms.Form_PersonalExecusePermission.addComponent(new TxtComponent('RequesterName','الاســم','Name',5) );
+        this.forms.Form_PersonalExecusePermission.addComponent(new NumberComponent('DeptName','الإدارة','Dept') );
+        this.forms.Form_PersonalExecusePermission.addComponent(new NumberComponent('EmpSign','التوقيع','Sign') );
+
+       // this.forms.Form_PersonalExecusePermission.addComponent(new AttachmentsTableComponent('Attachments',['مرفق 1','مرفق 2','مرفق 3']) );
+        
+        //this.forms.Form_PersonalExecusePermission.addComponent(new SignatureComponent('SupName','SupSig','اعتمـــاد المراقــب المختــص','Supervisor Approval') ); //components.SupSignature = new SignatureComponent('SupName','SupSig','اعتمـــاد المراقــب المختــص','Supervisor Approval');
+       // this.forms.Form_PersonalExecusePermission.addComponent(new SignatureComponent('MngrName','MngSig','اعتمـــاد مديــر الإدارة','Manager Approval') );
+
+
+    },
+
+    main(){
+        try{
+            this.defineComponents();
+            process.initialize();
+            let stepName = process.workItem.stepName;
+            process.recieversList.loadManager();
+                        
+
+            if(stepName == this.steps.PerLeave_Launch){   
+            }
+            else if(stepName == this.steps.PerLeave_TLApprove){
+            }
+        
+            
+            this.forms.Form_PersonalExecusePermission.select();
+            this.forms.Form_PersonalExecusePermission.updateComponentsFromEntity();
+                
+        
+
+            app.renderLabels();
+            process.openProcessModal();
+            process.setWorkFlowIDLabel();
+        }
+        catch(error){ throw error;}
+    },
+
+    validate(){
+        //validator.markAsInvalidField('myTxt');
+     },
+
+    send(){ },
+
+    
+    // testSignature(){
+    //     util.viewObjectContent(this.forms.Form_PersonalExecusePermission.components.SupSignature.getSigner()); 
+    // },
+
+
+}
+
+$(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alertError(error.message); }} );
+</script>
+
+<style>
+    .nav-pills .nav-link.active {
+    background-color: rgb(108, 117, 126) !important;
+}
+</style>
+
+<div class="container-fluid pr-1 pl-1" >
+    <div class="row">
+        <div class="col p-1 " >
+            <nav>
+                <div class="nav nav-pills mb-1 ml-auto" id="nav-tab" role="tablist"></div>
+            </nav>
+            <div class="tab-content shadow border border-secondary rounded p-2 bg-white" id="nav-tabContent">
+                <!-- Form-PersonalExecusePermission-Tab -->
+                <div class="tab-pane fade show active" id="nav-Form_PersonalExecusePermission" role="tabpanel" aria-labelledby="Form_PersonalExecusePermission-tab">
+                    <!-- the main container for all Form_PersonalExecusePermission controls -->
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col p-1 mb-4" data-container-for="Form_PersonalExecusePermission_title"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3" data-container-for="Line1"></div>
+                            <div class="col pr-3 pl-3" data-container-for="Line2"></div>
+                        </div>
+                       
+                        <div class="row">
+                                <div class="col pr-3 pl-3" data-container-for="Line3"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3" data-container-for="CurrentDate"></div>
+                            <div class="col pr-3 pl-3" data-container-for=""></div>
+                    </div>
+
+
+                        <div class="row">
+                            <!-- <div class="col pr-3 pl-3" data-container-for="RequesterName"></div> -->
+                            <div class="col pr-1 pl-1" data-container-for=""></div>
+                            <div class="col pr-6 pl-6" data-container-for="FromTime"></div>
+                            <div class="col pr-3 pl-3" data-container-for=""></div>
+                            <div class="col pr-6 pl-6" data-container-for="ToTime"></div>    
+                            <div class="col pr-1 pl-1" data-container-for=""></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pr-3 pl-3" data-container-for="VactionType"></div>
+                            <div class="col pr-3 pl-3"></div>
+                            <div class="col pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pr-3 pl-3" data-container-for="IsPaid"></div>
+                        </div>
+                        <div class="row">
+
+                            <div class="col pr-3 pl-3" data-container-for="Notes"></div>
+ 
+                        </div>
+
+                        <div>   <div class="col pr-3 pl-3" data-container-for=""></div></div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3" data-container-for=""></div>
+                            <div class="col pr-3 pl-3" data-container-for="RequesterName"></div>
+  
+                        </div>
+                     
+                        <div>
+                            <div class="col pr-3 pl-3" data-container-for=""></div>
+                        <div class="col pr-3 pl-3" data-container-for="DeptName"></div>
+                       </div>
+
+                        <div>  
+                            <div class="col pr-3 pl-3" data-container-for=""></div>
+                            <div class="col pr-3 pl-3" data-container-for="EmpSign"></div>  
+                         </div>
+                      
+                    
+                      
+                       
+                       
+                       
+                        <div class="row">
+                            <div class="col pr-3 pl-3" data-container-for="Attachments"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3" data-container-for="Ekrar"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pr-3 pl-3" data-container-for="SupName"></div>
+                            <div class="col pr-3 pl-3" data-container-for="MngrName"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col p-3" data-container-for="SupName"></div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                 <!-- Form-WorkDeduction-Tab -->
+                <div class="tab-pane fade" id="nav-Form_WorkDeduction" role="tabpanel" aria-labelledby="Form_WorkDeduction-tab">
+                    <!-- the main container for all Form_PersonalExecusePermission controls -->
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col p-3" data-container-for="Form_WorkDeduction_title"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col p-3">
+                                <!-- <input placeholder="Your Date"  class="form-control" type="text" onfocus="(this.type='date')" onblur="(this.type='text')" id="date" min="2018-01-01" max="2018-12-31"> -->
+                                <button type="button" class="btn btn-primary" onclick="process.controller.forms.Form_PersonalExecusePermission.disable()">disable نموذج اجازة دورية</button>
+                            </div>
+                            <div class="col p-3">
+                                <button type="button" class="btn btn-primary" onclick="process.controller.forms.Form_PersonalExecusePermission.enable()">enable نموذج اجازة دورية</button>
+                            </div>
+                            <div class="col p-3">
+                                <button type="button" class="btn btn-secondary" onclick="process.controller.forms.Form_WorkDeduction.show();">show نموذج انقطاع عن العمل</button>
+                            </div>
+                            <div class="col p-3">
+                                <button type="button" class="btn btn-secondary" onclick="process.controller.forms.Form_WorkDeduction.hide();">hide نموذج انقطاع عن العمل</button>
+                            </div>
+                            <div class="col p-3">
+                                <button type="button" class="btn btn-secondary" onclick="process.controller.forms.Form_PersonalExecusePermission.select();">goto نموذج اجازة دورية</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-right">
+                    <hr>
+                    <label id="workflowIDLabel" class="text-danger">مسلسل الاجراء</label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
