@@ -14,45 +14,117 @@ process.controller = {
     errMsg : "",
     groups : {  
          //groupFollowUpTLs : ["FollowUp_TLs"],    // groupFollowUpEmps : ["FollowUp_Emps"],
+           /* groupSSSEmps 		     = (isSSS_Main_TLs_DDG) ? ["SSS_Main_TLs_DDG"] : ["SSS_RS"],
+            groupSSSRevs 		     = (isSSS_Main_TLs_DDG) ? ["SSS_Main_TLs_DDG","SSS_Main_TLs"] 		   : ["SSS_Main_TLs"],
+            groupSSSRevsMishref      = (isSSS_Main_TLs_DDG) ? ["SSS_Main_TLs_DDG","SSS_Mishref_TLs"] 	   : ["SSS_Mishref_TLs"],
+            groupSSSRevsGhornata     = (isSSS_Main_TLs_DDG) ? ["SSS_Main_TLs_DDG","SSS_Ghornata_TLs"] 	   : ["SSS_Ghornata_TLs"],
+            groupSSSRevsFahdAhmd     = (isSSS_Main_TLs_DDG) ? ["SSS_Main_TLs_DDG","SSS_FahdAhmd_TLs"] 	   : ["SSS_FahdAhmd_TLs"],
+            groupSSSRevsJanoubSurra  = (isSSS_Main_TLs_DDG) ? ["SSS_Main_TLs_DDG","SSS_JanoubSurra_TLs"]   : ["SSS_JanoubSurra_TLs"],
+            groupSSSRevsArdiya       = (isSSS_Main_TLs_DDG) ? ["SSS_Main_TLs_DDG","SSS_Ardiya_TLs"] 	   : ["SSS_Ardiya_TLs"],
+            groupSSSRevsSaadAbdallah = (isSSS_Main_TLs_DDG) ? ["SSS_Main_TLs_DDG","SSS_SaadAbdallah_TLs"]  : ["SSS_SaadAbdallah_TLs"],
+            groupSSSRevsTahreer      = (isSSS_Main_TLs_DDG) ? ["SSS_Main_TLs_DDG","SSS_Tahreer_TLs"] 	   : ["SSS_Tahreer_TLs"],
+            groupSSSMngs 		     = (isSSS_Main_TLs_DDG) ? ["SSS_Main_TLs_DDG","SSS_Main_Head"] 		   : ["SSS_Main_Head"],
+            groupSSSMngsMishref      = (isSSS_Main_TLs_DDG) ? ["SSS_Main_TLs_DDG","SSS_Mishref_Head"]      : ["SSS_Mishref_Head"],
+            groupSSSMngsGhornata     = (isSSS_Main_TLs_DDG) ? ["SSS_Main_TLs_DDG","SSS_Ghornata_Head"]     : ["SSS_Ghornata_Head"],
+            groupSSSMngsFahdAhmd     = (isSSS_Main_TLs_DDG) ? ["SSS_Main_TLs_DDG","SSS_FahdAhmd_Head"]     : ["SSS_FahdAhmd_Head"],
+            groupSSSMngsJanoubSurra  = (isSSS_Main_TLs_DDG) ? ["SSS_Main_TLs_DDG","SSS_JanoubSurra_Head"]  : ["SSS_JanoubSurra_Head"],
+            groupSSSMngsArdiya       = (isSSS_Main_TLs_DDG) ? ["SSS_Main_TLs_DDG","SSS_Ardiya_Head"]       : ["SSS_Ardiya_Head"],
+            groupSSSMngsSaadAbdallah = (isSSS_Main_TLs_DDG) ? ["SSS_Main_TLs_DDG","SSS_SaadAbdallah_Head"] : ["SSS_SaadAbdallah_Head"],
+            groupSSSMngsTahreer      = (isSSS_Main_TLs_DDG) ? ["SSS_Main_TLs_DDG","SSS_Tahreer_Head"]      : ["SSS_Tahreer_Head"],*/         
     },
 
     steps : {
-        PerLeave_Launch : 'PerLeave_Launch',
-        PerLeave_TLApprove: 'PerLeave_TLApprove',
-        PerLeave_SupApprove: 'PerLeave_SupApprove',
-        PerLeave_DeptSec: 'PerLeave_DeptSec',
-        PerLeave_MngApprove: 'PerLeave_MngApprove',
-        PerLeave_Update: 'PerLeave_Update',
-        PerLeave_DDGApprove: 'PerLeave_DDGApprove',
-        PerLeave_DDGSec: 'PerLeave_DDGSec',
-        PerLeave_PersAdminSec : 'PerLeave_PersAdminSec',
-        PerLeave_PersAdminEmp : 'PerLeave_PersAdminEmp',
-        PerLeave_PersAdminTL : 'PerLeave_PersAdminTL',
-        PerLeave_PersAdminSup : 'PerLeave_PersAdminSup',
-        PerLeave_FinSec : 'PerLeave_FinSec',
-        PerLeave_FinSup : 'PerLeave_FinSup',
-        PerLeave_FinTL : 'PerLeave_FinTL',
-        PerLeave_FinEmp : 'PerLeave_FinEmp',
+        PenAdv_Launch : 'PenAdv_Launch',
+        PenAdv_Execute: 'PenAdv_Execute',
+        PenAdv_UpdateImg: 'PenAdv_UpdateImg',
+        PenAdv_UpdateRev: 'PenAdv_UpdateRev',
+        PenAdv_ImagingMain: 'PenAdv_ImagingMain',
+        PenAdv_ImagingMishref: 'PenAdv_ImagingMishref',
+        PenAdv_ImagingFahdAhmd: 'PenAdv_ImagingFahdAhmd',
+        PenAdv_ImagingGhornata: 'PenAdv_ImagingGhornata',
+        PenAdv_ImagingJanoubSurra : 'PenAdv_ImagingJanoubSurra',
+        PenAdv_ImagingArdiya : 'PenAdv_ImagingArdiya',
+        PenAdv_ImagingSaadAbdallah : 'PenAdv_ImagingSaadAbdallah',
+        PenAdv_ImagingTahreer : 'PenAdv_ImagingTahreer',
+        PenAdv_SSSecMain : 'PenAdv_SSSecMain',
+        PenAdv_SSSecMishref : 'PenAdv_SSSecMishref',
+        PenAdv_SSSecFahdAhmd : 'PenAdv_SSSecFahdAhmd',
+        PenAdv_SSSecGhornata : 'PenAdv_SSSecGhornata',
+        PenAdv_SSSecJanoubSurra : 'PenAdv_SSSecJanoubSurra',
+        PenAdv_SSSecArdiya : 'PenAdv_SSSecArdiya',
+        PenAdv_SSSecSaadAbdallah : 'PenAdv_SSSecSaadAbdallah',
+        PenAdv_SSSecTahreer : 'PenAdv_SSSecTahreer',
+        PenAdv_SSReviewer : 'PenAdv_SSReviewer',
+        PenAdv_SSMngApprove : 'PenAdv_SSMngApprove',
     },
 
     forms : {
-        Form_PeriodicalLeave : new Form('Form_PeriodicalLeave', 'نموذج طلب اجازة دورية','Leave Form'),
-        Form_WorkDeduction : new Form('Form_WorkDeduction', 'نموذج انقطاع عن العمل','Salary Deduction Form'),
+        Form_AttachmentsSheet : new Form('Form_AttachmentsSheet','نموذج المستندات المرفقة بالملف','نموذج المستندات المرفقة بالملف'),
+        Form_PenAdvPaymentRequest : new Form('Form_PenAdvPaymentRequest','ﺍﺳﺘﻤـــﺎﺭﺓ ﻃﻠـــﺐ ﺻـــﺮﻑ ﻣﻌـــﺎﺵ ﻣﻘـــﺪﻡ','ﺍﺳﺘﻤـــﺎﺭﺓ ﻃﻠـــﺐ ﺻـــﺮﻑ ﻣﻌـــﺎﺵ ﻣﻘـــﺪﻡ'),
+        Form_PenAdvPaymentOrder : new Form('Form_PenAdvPaymentOrder','ﺍﺳﺘﻤـــﺎﺭﺓ ﻃﻠـــﺐ ﺻـــﺮﻑ ﻣﻌـــﺎﺵ ﻣﻘـــﺪﻡ - ﺃﻣـــﺮ ﺍﻟﺪﻓـــﻊ','ﺍﺳﺘﻤـــﺎﺭﺓ ﻃﻠـــﺐ ﺻـــﺮﻑ ﻣﻌـــﺎﺵ ﻣﻘـــﺪﻡ - ﺃﻣـــﺮ ﺍﻟﺪﻓـــﻊ'),
         
     },
 
     defineComponents(){    
-        this.forms.Form_PeriodicalLeave.addComponent(new TxtComponent('RequesterName','الاســم','Name',5) );
-        this.forms.Form_PeriodicalLeave.addComponent(new DateComponent('FromDate','من التاريخ','From','','') );
-        this.forms.Form_PeriodicalLeave.addComponent(new NumberComponent('Days','ايام الاجازة','Days') );
-        this.forms.Form_PeriodicalLeave.addComponent(new DropDownListComponent('VactionType','نوع الاجازة','type',[new Option('','','0') ,new Option('دورية','Periodical','1') , new Option('مرضية','Sick Leave','2')]) );
-        this.forms.Form_PeriodicalLeave.addComponent(new CheckBoxComponent('IsPaid','اجازة مصروفة','Paid Vacation') );
-        this.forms.Form_PeriodicalLeave.addComponent(new NotesComponent('Notes','الملاحظـــــات','Notes',4,300) );
-        this.forms.Form_PeriodicalLeave.addComponent(new AttachmentsTableComponent('Attachments',['مرفق 1','مرفق 2','مرفق 3']) );
-        this.forms.Form_PeriodicalLeave.addComponent(new SignatureComponent('SupName','SupSig','اعتمـــاد المراقــب المختــص','Supervisor Approval') ); //components.SupSignature = new SignatureComponent('SupName','SupSig','اعتمـــاد المراقــب المختــص','Supervisor Approval');
-        this.forms.Form_PeriodicalLeave.addComponent(new SignatureComponent('MngrName','MngSig','اعتمـــاد مديــر الإدارة','Manager Approval') );
+        this.forms.Form_AttachmentsSheet.addComponent(new TxtComponent('From','من','من','') );
+        this.forms.Form_AttachmentsSheet.addComponent(new TxtComponent('To','إلى','إلى','') );
+        this.forms.Form_AttachmentsSheet.addComponent(new DateComponent('RequestDate','التاريخ','التاريخ','','') );
+        this.forms.Form_AttachmentsSheet.addComponent(new TxtComponent('CounterNo','رقم الكاونتر','رقم الكاونتر','') );
+        this.forms.Form_AttachmentsSheet.addComponent(new DateComponent('AppointmentDate','تاريخ المراجعة','تاريخ المراجعة','','') );
+        this.forms.Form_AttachmentsSheet.addComponent(new TxtComponent('ClientName','الاسم','الاسم','') );
+        this.forms.Form_AttachmentsSheet.addComponent(new TxtComponent('CivilID','الرقم المدني','الرقم المدني','') );
+        this.forms.Form_AttachmentsSheet.addComponent(new TxtComponent('FileNo','رقم الحفظ','رقم الحفظ','') );
+        this.forms.Form_AttachmentsSheet.addComponent(new TxtComponent('SSNo','رقم الهوية','رقم الهوية','') );
+        this.forms.Form_AttachmentsSheet.addComponent(new AttachmentsTableComponent('Attachments',['استمارة طلب صرف معاش مقدم','صورة البطاقة المدنية','إقرار بصحة جهة الصرف']) );
+        this.forms.Form_AttachmentsSheet.addComponent(new TxtComponent('NoOfAttachments',null,null,'') );
+        this.forms.Form_AttachmentsSheet.addComponent(new NotesComponent('Notes','الملاحظـــــات','Notes',4,300) );
+        this.forms.Form_AttachmentsSheet.addComponent(new NotesComponent('MissingDocuments','نواقص في المستندات','نواقص في المستندات',4,300) );
+        this.forms.Form_AttachmentsSheet.addSignature(new Signature('AttachmentsIssuerSignature','AttachmentsIssuerUserName','AttachmentsIssuerSig','توقيع الباحثة التأمينية','توقيع الباحثة التأمينية'));
 
-        this.Ekrar = new ParagraphComponent('Ekrar','اقر انا الموقع ادناه <br> بانني مسئول عن ماتم ادخاله من بيانات ','I admit that <br> I am responsible for the entered data','text-danger font-weight-bold');
+
+
+        this.PayReqTxt1 = new ParagraphComponent('PayReqTxt1','السيـــــد / المديـــــر العـــــام المحتـــــرم','السيـــــد / المديـــــر العـــــام المحتـــــرم','text-body font-weight-bold font-family: Arial, Helvetica, sans-serif; font-size: 17px;');
+        this.forms.Form_PenAdvPaymentRequest.addComponent(new TxtComponent('ClientName1','انا الموقع أدناه /','انا الموقع أدناه /','') );
+        this.forms.Form_PenAdvPaymentRequest.addComponent(new TxtComponent('CivilID1','الرقم المدني','الرقم المدني','') );
+        this.forms.Form_PenAdvPaymentRequest.addComponent(new TxtComponent('FileNo1','رقم الحفظ','رقم الحفظ','') );
+        this.forms.Form_PenAdvPaymentRequest.addComponent(new TxtComponent('SSNo1','رقم الهوية','رقم الهوية','') );
+        this.forms.Form_PenAdvPaymentRequest.addComponent(new DateComponent('RequestDate1','التاريخ','التاريخ','','') );
+        this.forms.Form_PenAdvPaymentRequest.addComponent(new DateComponent('AppointmentDate1','تاريخ المراجعة','تاريخ المراجعة','','') );
+        this.forms.Form_PenAdvPaymentRequest.addComponent(new TxtComponent('PhoneNo','رقم الهاتف','رقم الهاتف','') );
+        this.forms.Form_PenAdvPaymentRequest.addComponent(new TxtComponent('Email','البريد الإلكتروني','البريد الإلكتروني','') );
+        this.forms.Form_PenAdvPaymentRequest.addComponent(new TxtComponent('Address','العنوان','العنوان','') );
+            this.PayReqTxt2 = new ParagraphComponent('PayReqTxt2','يـرجـى التكـرم بالموافقـة علـى صـرف معـاش مقـدم عـن :','يـرجـى التكـرم بالموافقـة علـى صـرف معـاش مقـدم عـن :','text-body font-weight-bold');
+        //Table of Month & Year-------------------------------------------------------------------------
+        this.forms.Form_PenAdvPaymentRequest.addComponent(new NotesComponent('Reasons','وذلـك للأسبـاب التاليــة','وذلـك للأسبـاب التاليــة',4,300) );
+        this.PayReqTxt3 = new ParagraphComponent('PayReqTxt3','وتفضلـــوا بقبـــول فائـــق الاحتـــرام,,,','وتفضلـــوا بقبـــول فائـــق الاحتـــرام,,,','text-body font-weight-bold');
+        this.PayReqClientSigLabel = new ParagraphComponent('PayReqClientSigLabel','توقيـــع صاحـــب العلاقـــة / الوكيـــل','توقيـــع صاحـــب العلاقـــة / الوكيـــل','text-body font-weight-bold text-decoration-none');
+        //this.forms.Form_PenAdvPaymentRequest.addComponent(new CheckBoxComponent('SMS','أوافق على إرسال رسالة SMS :','أوافق على إرسال رسالة SMS :') );
+        this.forms.Form_PenAdvPaymentRequest.addComponent(new DropDownListComponent('SMS','أوافق على إرسال رسالة SMS :','أوافق على إرسال رسالة SMS :',[new Option('نعم','نعم','1') , new Option('لا','لا','2')]) );
+        this.PayReqTxt4 = new ParagraphComponent('PayReqTxt4','المذكـور سبـق لـه صـرف معـاش مقـدم :','المذكـور سبـق لـه صـرف معـاش مقـدم :','text-body font-weight-bold');
+        //Table of Previous Month & Year-------------------------------------------------------------------------
+        //this.forms.Form_PenAdvPaymentRequest.addComponent(new SignatureComponent('PRIssuerUserName','PRIssuerSig','توقيع الباحثة التأمينية','توقيع الباحثة التأمينية') );
+        this.PayReqTxt5 = new ParagraphComponent('PayReqTxt5','رأي المديـــر العـــام :','رأي المديـــر العـــام :','text-body font-weight-bold');
+        this.PayReqTxt6 = new ParagraphComponent('PayReqTxt6','-------------------------------------------------------------------------------------------------------------------------------------------------------------------------','-------------------------------------------------------------------------------------------------------------------------------------------------------------------------','text-body font-weight-bold');
+        this.PayReqTxt6 = new ParagraphComponent('PayReqTxt7','-------------------------------------------------------------------------------------------------------------------------------------------------------------------------','-------------------------------------------------------------------------------------------------------------------------------------------------------------------------','text-body font-weight-bold');
+
+        this.forms.Form_PenAdvPaymentOrder.addComponent(new TxtComponent('ClientName2','الاسم','الاسم','') );
+        this.forms.Form_PenAdvPaymentOrder.addComponent(new TxtComponent('CivilID2','الرقم المدني','الرقم المدني','') );
+        this.forms.Form_PenAdvPaymentOrder.addComponent(new TxtComponent('FileNo2','رقم الحفظ','رقم الحفظ','') );
+        this.forms.Form_PenAdvPaymentOrder.addComponent(new TxtComponent('SSNo2','رقم الهوية','رقم الهوية','') );
+        this.forms.Form_PenAdvPaymentOrder.addComponent(new DateComponent('RequestDate2','التاريخ','التاريخ','','') );
+        this.forms.Form_PenAdvPaymentOrder.addComponent(new DateComponent('ExecutionDate','تاريخ التنفيذ','تاريخ التنفيذ','','') );
+        this.forms.Form_PenAdvPaymentOrder.addComponent(new TxtComponent('NoOfMonthes','الأشهر المدفوعة مقدما','الأشهر المدفوعة مقدما','') );
+        this.forms.Form_PenAdvPaymentOrder.addComponent(new TxtComponent('PaymentMethod','طريقـة الدفــع','طريقـة الدفــع','') );
+        this.forms.Form_PenAdvPaymentOrder.addComponent(new TxtComponent('PaidAmount','المبلـغ المدفـوع','المبلـغ المدفـوع','') );
+        this.forms.Form_PenAdvPaymentOrder.addComponent(new TxtComponent('MonthesDescription','','','') );
+        this.forms.Form_PenAdvPaymentOrder.addComponent(new TxtComponent('TransferTo','يحـــول لحسـابـــه إلـــى :','يحـــول لحسـابـــه إلـــى :','') );
+        this.forms.Form_PenAdvPaymentOrder.addComponent(new TxtComponent('Bank','البنـــك','البنـــك','') );
+        this.forms.Form_PenAdvPaymentOrder.addComponent(new TxtComponent('AccountNo','رقـم الحســاب','رقـم الحســاب','') );
+        this.forms.Form_PenAdvPaymentOrder.addComponent(new NotesComponent('PONotes','الملاحظـــــات','Notes',4,300) );
+        
+        // this.forms.Form_PenAdvPaymentOrder.addComponent(new SignatureComponent('POIssuerName','POIssuerSig','توقيع الباحثة التأمينية','توقيع الباحثة التأمينية') );
+        // this.forms.Form_PenAdvPaymentOrder.addComponent(new SignatureComponent('POSupName','POSupSig','توقيع المراجعـــة التأمينية','توقيع المراجعـــة التأمينية') );
+        // this.forms.Form_PenAdvPaymentOrder.addComponent(new SignatureComponent('POMngName','POMngSig','توقيـــــع رئيســـة الباحثـــات','توقيـــــع رئيســـة الباحثـــات') );
     },
 
     main(){
@@ -68,9 +140,9 @@ process.controller = {
 
             
 
-            if(stepName == this.steps.PerLeave_Launch){   
+            if(stepName == this.steps.PenAdv_Launch){   
             }
-            else if(stepName == this.steps.PerLeave_TLApprove){
+            else if(stepName == this.steps.PenAdv_SSReviewer){
             }
         
             
@@ -105,8 +177,8 @@ process.controller = {
                 //this.forms.Form_PeriodicalLeave.disable();
                 //this.forms.Form_WorkDeduction.hide();
                 //this.forms.Form_WorkDeduction.select();
-                this.forms.Form_PeriodicalLeave.select();
-                this.forms.Form_PeriodicalLeave.updateComponentsFromEntity();
+                this.forms.Form_AttachmentsSheet.select();
+                this.forms.Form_AttachmentsSheet.updateComponentsFromEntity();
                 
         
 
@@ -114,7 +186,7 @@ process.controller = {
 
 
             app.renderLabels();
-            app.openProcessModal();
+            process.openProcessModal();
             process.setWorkFlowIDLabel();
         }
         catch(error){ throw error;}
@@ -151,72 +223,221 @@ $(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alert
             </nav>
             <div class="tab-content shadow border border-secondary rounded p-2 bg-white" id="nav-tabContent">
                 <!-- Form-PeriodicalLeave-Tab -->
-                <div class="tab-pane fade show active" id="nav-Form_PeriodicalLeave" role="tabpanel" aria-labelledby="Form_PeriodicalLeave-tab">
-                    <!-- the main container for all Form_PeriodicalLeave controls -->
+                <div class="tab-pane fade show active" id="nav-Form_AttachmentsSheet" role="tabpanel" aria-labelledby="Form_AttachmentsSheet-tab">
+                    <!-- the main container for all Form_AttachmentsSheet controls -->
                     <div class="container-fluid">
                         <div class="row">
-                            <div class="col p-1 mb-4" data-container-for="Form_PeriodicalLeave_title"></div>
+                            <div class="col p-1 mb-4" data-container-for="Form_AttachmentsSheet_title"></div>
                         </div>
                         <div class="row">
-                            <div class="col pr-3 pl-3" data-container-for="RequesterName"></div>
-                            <div class="col pr-3 pl-3" data-container-for="FromDate"></div>
-                            <div class="col pr-3 pl-3" data-container-for="Days"></div>    
+                            <div class="col pr-3 pl-3" data-container-for="From"></div>
+                            <div class="col pr-3 pl-3" data-container-for="RequestDate"></div>
                         </div>
                         <div class="row">
-                            <div class="col pr-3 pl-3" data-container-for="VactionType"></div>
+                            <div class="col pr-3 pl-3" data-container-for="To"></div>
+                            <div class="col pr-3 pl-3" data-container-for="AppointmentDate"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pr-3 pl-3" data-container-for="FileNo"></div>
+                            <div class="col pr-3 pl-3" data-container-for="CounterNo"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pr-3 pl-3" data-container-for="SSNo"></div>
                             <div class="col pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pr-3 pl-3" data-container-for="CivilID"></div>
                             <div class="col pr-3 pl-3"></div>
                         </div>
                         <div class="row">
-                            <div class="col pr-3 pl-3" data-container-for="IsPaid"></div>
+                            <div class="col pr-3 pl-3" data-container-for="ClientName"></div>
+                            <div class="col pr-3 pl-3"></div>
+                        </div> 
+                        <div class="row">
+                            <div class="col pr-3 pl-3"></div>
+                            <div class="col pr-3 pl-3" data-container-for="Attachments"></div>
+                            <div class="col pr-3 pl-3"></div>
                         </div>
+                        <div class="row">
+                            <div class="col pr-3 pl-3"></div>
+                            <div class="col pr-3 pl-3" data-container-for="NoOfAttachments"></div>
+                            <div class="col pr-3 pl-3"></div>
+                        </div>                            
                         <div class="row">
                             <div class="col pr-3 pl-3" data-container-for="Notes"></div>
                         </div>
                         <div class="row">
-                            <div class="col pr-3 pl-3" data-container-for="Attachments"></div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col pr-3 pl-3" data-container-for="Ekrar"></div>
+                            <div class="col pr-3 pl-3" data-container-for="MissingDocuments"></div>
                         </div>
                         <div class="row">
-                            <div class="col pr-3 pl-3" data-container-for="SupName"></div>
-                            <div class="col pr-3 pl-3" data-container-for="MngrName"></div>
-                        </div>
-                        <div class="row">
-                            <div class="col p-3" data-container-for="SupName"></div>
+                            <div class="col pr-3 pl-3"></div>
+                            <div class="col pr-3 pl-3"></div>
+                            <div class="col pr-3 pl-3"></div>
+                            <div class="col pr-3 pl-3"></div>
+                            <div class="col pr-3 pl-3"></div>
+                            <div class="col pr-3 pl-3"></div>
+                            <div class="col pr-3 pl-3"></div>
+                            <div class="col pr-3 pl-3"></div>
+                            <div class="col pr-3 pl-3"></div>
+                            <div class="col pr-3 pl-3" data-container-for="AttachmentsIssuerSignature"></div>
+                            <div class="col pr-3 pl-3" data-container-for="AttachmentsIssuerSig"></div>
                         </div>
                     </div>
                 </div>
 
 
 
-                 <!-- Form-WorkDeduction-Tab -->
-                <div class="tab-pane fade" id="nav-Form_WorkDeduction" role="tabpanel" aria-labelledby="Form_WorkDeduction-tab">
+                 <!-- Form_PenAdvPaymentRequest-Tab -->
+                <div class="tab-pane fade" id="nav-Form_PenAdvPaymentRequest" role="tabpanel" aria-labelledby="Form_PenAdvPaymentRequest-tab">
                     <!-- the main container for all Form_PeriodicalLeave controls -->
                     <div class="container-fluid">
                         <div class="row">
-                            <div class="col p-3" data-container-for="Form_WorkDeduction_title"></div>
+                            <div class="col p-3" data-container-for="Form_PenAdvPaymentRequest_title"></div>
                         </div>
                         <div class="row">
-                            <div class="col p-3">
-                                <!-- <input placeholder="Your Date"  class="form-control" type="text" onfocus="(this.type='date')" onblur="(this.type='text')" id="date" min="2018-01-01" max="2018-12-31"> -->
-                                <button type="button" class="btn btn-primary" onclick="process.controller.forms.Form_PeriodicalLeave.disable()">disable نموذج اجازة دورية</button>
-                            </div>
-                            <div class="col p-3">
-                                <button type="button" class="btn btn-primary" onclick="process.controller.forms.Form_PeriodicalLeave.enable()">enable نموذج اجازة دورية</button>
-                            </div>
-                            <div class="col p-3">
-                                <button type="button" class="btn btn-secondary" onclick="process.controller.forms.Form_WorkDeduction.show();">show نموذج انقطاع عن العمل</button>
-                            </div>
-                            <div class="col p-3">
-                                <button type="button" class="btn btn-secondary" onclick="process.controller.forms.Form_WorkDeduction.hide();">hide نموذج انقطاع عن العمل</button>
-                            </div>
-                            <div class="col p-3">
-                                <button type="button" class="btn btn-secondary" onclick="process.controller.forms.Form_PeriodicalLeave.select();">goto نموذج اجازة دورية</button>
-                            </div>
+                            <div class="col pr-3 pl-3" data-container-for="PayReqTxt1"></div>
                         </div>
+                        <div class="row">
+                            <div class="col pr-3 pl-3" data-container-for="ClientName1"></div>
+                            <div class="col pr-3 pl-3" data-container-for="RequestDate1"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pr-3 pl-3" data-container-for="SSNo1"></div>
+                            <div class="col pr-3 pl-3" data-container-for="AppointmentDate1"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pr-3 pl-3" data-container-for="FileNo1"></div>
+                            <div class="col pr-3 pl-3" data-container-for="PhoneNo"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pr-3 pl-3" data-container-for="CivilID1"></div>
+                            <div class="col pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pr-3 pl-3" data-container-for="Email"></div>
+                            <div class="col pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pr-3 pl-3" data-container-for="Address"></div>
+                        </div> 
+                        <div class="row">
+                            <div class="col pr-3 pl-3" data-container-for="PayReqTxt2"></div>
+                        </div>
+                        <div class="row">
+                            <!--Table of Month & Year-->
+                        </div>
+                        <div class="row">
+                            <div class="col pr-3 pl-3" data-container-for="Reasons"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pr-3 pl-3" data-container-for="PayReqTxt3"></div>
+                            <div class="col pr-3 pl-3"></div>
+                            <div class="col pr-3 pl-3" data-container-for="PayReqClientSigLabel"></div>
+                        </div>                                
+                        <div class="row">
+                            <div class="col pr-3 pl-3" data-container-for="SMS"></div>
+                            <div class="col pr-3 pl-3" data-container-for="ClientName"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pr-3 pl-3" data-container-for="PayReqTxt4"></div>
+                        </div>
+                        <div class="row">
+                            <!--Table of Previous Month & Year-->
+                        </div>                                  
+                        <div class="row">
+                            <div class="col pr-3 pl-3"></div>
+                            <div class="col pr-3 pl-3"></div>
+                            <div class="col pr-3 pl-3"></div>
+                            <div class="col pr-3 pl-3"></div>
+                            <div class="col pr-3 pl-3"></div>
+                            <div class="col pr-3 pl-3"></div>
+                            <div class="col pr-3 pl-3"></div>
+                            <div class="col pr-3 pl-3"></div>
+                            <div class="col pr-3 pl-3"></div>
+                            <div class="col pr-3 pl-3" data-container-for="PRIssuerUserName"></div>
+                            <div class="col pr-3 pl-3" data-container-for="PRIssuerSig"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pr-3 pl-3" data-container-for="PayReqTxt5"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pr-3 pl-3" data-container-for="PayReqTxt6"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pr-3 pl-3" data-container-for="PayReqTxt7"></div>
+                        </div> 
+                    </div>
+                </div>
+
+                 <!-- Form_PenAdvPaymentOrder-Tab -->
+                 <div class="tab-pane fade" id="nav-Form_PenAdvPaymentOrder" role="tabpanel" aria-labelledby="Form_PenAdvPaymentOrder-tab">
+                    <!-- the main container for all Form_PeriodicalLeave controls -->
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col p-3" data-container-for="Form_PenAdvPaymentOrder_title"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pr-3 pl-3" data-container-for="FileNo2"></div>
+                            <div class="col pr-3 pl-3" data-container-for="RequestDate2"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pr-3 pl-3" data-container-for="SSNo2"></div>
+                            <div class="col pr-3 pl-3" data-container-for="ExecutionDate"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pr-3 pl-3" data-container-for="CivilID2"></div>
+                            <div class="col pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pr-3 pl-3" data-container-for="ClientName2"></div>
+                            <div class="col pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pr-3 pl-3"></div>
+                            <div class="col pr-3 pl-3" data-container-for="NoOfMonthes"></div>
+                            <div class="col pr-3 pl-3"></div>
+                        </div> 
+                        <div class="row">
+                            <div class="col pr-3 pl-3"></div>
+                            <div class="col pr-3 pl-3" data-container-for="PaymentMethod"></div>
+                            <div class="col pr-3 pl-3"></div>
+                        </div>                         
+                        <div class="row">
+                            <div class="col pr-3 pl-3"></div>
+                            <div class="col pr-3 pl-3" data-container-for="PaidAmount"></div>
+                            <div class="col pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pr-3 pl-3" data-container-for="MonthesDescription"></div>
+                            <div class="col pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pr-3 pl-3" data-container-for="TransferTo"></div>
+                            <div class="col pr-3 pl-3"></div>
+                        </div>                          
+                        
+                        <div class="row">
+                            <div class="col pr-3 pl-3" data-container-for="Bank"></div>
+                            <div class="col pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pr-3 pl-3" data-container-for="AccountNo"></div>
+                            <div class="col pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pr-3 pl-3" data-container-for="PONotes"></div>
+                        </div>  
+                        <div class="row">
+                            <div class="col pr-3 pl-3"></div>
+                            <div class="col pr-3 pl-3" data-container-for="POIssuerName"></div>
+                            <div class="col pr-3 pl-3" data-container-for="POIssuerSig"></div>
+                            <div class="col pr-3 pl-3" data-container-for="POSupName"></div>
+                            <div class="col pr-3 pl-3" data-container-for="POSupSig"></div>
+                            <div class="col pr-3 pl-3" data-container-for="POMngName"></div>
+                            <div class="col pr-3 pl-3" data-container-for="POMngSig"></div>
+                            <div class="col pr-3 pl-3"></div>
+                        </div>
+           
                     </div>
                 </div>
 

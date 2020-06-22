@@ -2,11 +2,17 @@
 html , body{ height : 100%; }
 i{ font-size: 16px;  color:  rgb(62, 69, 77);  margin: 0px 8px 0px 8px; }
 
-.bpmLogo{ font-size: 35px;margin:0px;}
+.bpmLogo{ font-size: 30px;margin:0px;}
 .simpleLink{text-decoration: none !important;/*font-size: 18px !important;*/ }
 .modalCloseBtn{font-size: 35px !important;color:darkgray;}
 /* .procRSBItem{ display: block; width:90% !important;margin: 10px 30px 10px 0px !important;} */
 
-
+.modal-dialog{
+    overflow-y: initial !important
+}
+.modal-body{
+    max-height: calc(100vh - 150px);
+    overflow-y: auto;
+}
 
 

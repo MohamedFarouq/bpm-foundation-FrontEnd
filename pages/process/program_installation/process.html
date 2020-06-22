@@ -10,6 +10,7 @@
 
 
 
+
 process.controller = {
     errMsg : "",
     groups : {  
@@ -36,23 +37,46 @@ process.controller = {
     },
 
     forms : {
-        Form_PeriodicalLeave : new Form('Form_PeriodicalLeave', 'نموذج طلب اجازة دورية','Leave Form'),
-        Form_WorkDeduction : new Form('Form_WorkDeduction', 'نموذج انقطاع عن العمل','Salary Deduction Form'),
+        Form_ProgramInstallation : new Form('Form_ProgramInstallation', 'Program Installation Form','Program Installation Form'),
+
         
     },
 
-    defineComponents(){    
-        this.forms.Form_PeriodicalLeave.addComponent(new TxtComponent('RequesterName','الاســم','Name',5) );
-        this.forms.Form_PeriodicalLeave.addComponent(new DateComponent('FromDate','من التاريخ','From','','') );
-        this.forms.Form_PeriodicalLeave.addComponent(new NumberComponent('Days','ايام الاجازة','Days') );
-        this.forms.Form_PeriodicalLeave.addComponent(new DropDownListComponent('VactionType','نوع الاجازة','type',[new Option('','','0') ,new Option('دورية','Periodical','1') , new Option('مرضية','Sick Leave','2')]) );
-        this.forms.Form_PeriodicalLeave.addComponent(new CheckBoxComponent('IsPaid','اجازة مصروفة','Paid Vacation') );
-        this.forms.Form_PeriodicalLeave.addComponent(new NotesComponent('Notes','الملاحظـــــات','Notes',4,300) );
-        this.forms.Form_PeriodicalLeave.addComponent(new AttachmentsTableComponent('Attachments',['مرفق 1','مرفق 2','مرفق 3']) );
-        this.forms.Form_PeriodicalLeave.addComponent(new SignatureComponent('SupName','SupSig','اعتمـــاد المراقــب المختــص','Supervisor Approval') ); //components.SupSignature = new SignatureComponent('SupName','SupSig','اعتمـــاد المراقــب المختــص','Supervisor Approval');
-        this.forms.Form_PeriodicalLeave.addComponent(new SignatureComponent('MngrName','MngSig','اعتمـــاد مديــر الإدارة','Manager Approval') );
+    defineComponents(){ 
+        this.forms.Form_ProgramInstallation.addComponent(new DateComponent('RequesterDate','Request Date','Request Date','','') );
+        this.forms.Form_ProgramInstallation.addComponent(new DropDownListComponent('Priority','Priority','Priority',[new Option('','','0') ,new Option('عاجل','Urgent','1') , new Option('عادي','Normal','2')]) );
+        this.forms.Form_ProgramInstallation.addComponent(new TxtComponent('MaximoNo','Maximo No','Maximo No',6) );
 
-        this.Ekrar = new ParagraphComponent('Ekrar','اقر انا الموقع ادناه <br> بانني مسئول عن ماتم ادخاله من بيانات ','I admit that <br> I am responsible for the entered data','text-danger font-weight-bold');
+        this.forms.Form_ProgramInstallation.addComponent(new DateComponent('MemoDate','Memo Date','Memo Date','','') );
+        this.forms.Form_ProgramInstallation.addComponent(new TxtComponent('SMRNO','SMRs No','SMRs No',35) );
+
+        this.forms.Form_ProgramInstallation.addComponent(new DropDownListComponent('RequestType','RequestType','RequestType',[new Option('','','0') ,new Option('تثبيت جديد','Install New','1') , new Option('تحديث','Update','2')]) );
+        this.forms.Form_ProgramInstallation.addComponent(new DropDownListComponent('To','إلى','To',[new Option('','','0') ,new Option('LAN Section','LAN Section','1') , new Option('.Computer Services Sup','.Computer Services Sup','2')]) );
+
+        this.forms.Form_ProgramInstallation.addComponent(new TxtComponent('ProgName','Program/Package Names','Program/Package Names',20) );
+        this.forms.Form_ProgramInstallation.addComponent(new TxtComponent('SrcDes','Source Destination','Source Destination',22) );
+        this.forms.Form_ProgramInstallation.addComponent(new TxtComponent('InstallLocation','Install into location','Install into location',41) );
+
+        this.forms.Form_ProgramInstallation.addComponent(new TxtComponent('CrystalRepName','Crystal Report Names','Crystal Report Names',40) );
+        this.forms.Form_ProgramInstallation.addComponent(new TxtComponent('SourceDes','Source Destination','Source Destination',22) );
+        this.forms.Form_ProgramInstallation.addComponent(new TxtComponent('InstallLoc','Install into location','Install into location',41) );
+
+        this.forms.Form_ProgramInstallation.addComponent(new TxtComponent('TxtFilesName','Text Files Names','Text Files Names',14) );
+        this.forms.Form_ProgramInstallation.addComponent(new TxtComponent('SrcDestination','Source Destination','Source Destination',22) );
+        this.forms.Form_ProgramInstallation.addComponent(new TxtComponent('Installocation','Install into location','Install into location',41) );
+
+        this.forms.Form_ProgramInstallation.addComponent(new NotesComponent('InstallationRemarks','Installation Remarks','Installation Remarks',4,300) );
+        
+        // this.forms.Form_ProgramInstallation.addComponent(new SignatureComponent('SysEng','SysEngSig','System Engineer','System Engineer') ); 
+        // this.forms.Form_ProgramInstallation.addComponent(new SignatureComponent('TeamLeader','TeamLeaderSig','Team Leader','Team Leader') );
+        // this.forms.Form_ProgramInstallation.addComponent(new SignatureComponent('Sup','SupSig','Supervisor','Supervisor') );
+
+        this.forms.Form_ProgramInstallation.addComponent(new NotesComponent('Notes','Notes and Knowledge base','Notes and Knowledge base',4,300) );
+
+        //this.forms.Form_ProgramInstallation.addComponent(new SignatureComponent('SystemEng','SysEngSig','System Engineer','System Engineer') ); 
+        //this.forms.Form_ProgramInstallation.addComponent(new SignatureComponent('Approval','ApprovalSig','Approval','Approval') );
+
+        this.forms.Form_ProgramInstallation.addComponent(new DateComponent('CompletionDate','Completion Date','Completion Date','','') );
     },
 
     main(){
@@ -75,38 +99,36 @@ process.controller = {
         
             
             /* component manipulation */ 
-                //this.forms.Form_PeriodicalLeave.components.RequesterName.setValue('ABC');
-                //this.forms.Form_PeriodicalLeave.components.requesterName.disable();
+                //this.forms.Form_ProgramInstallation.components.RequesterDate.setValue('ABC');
+                //this.forms.Form_ProgramInstallation.components.RequesterDate.disable();
                 
-                //this.forms.Form_PeriodicalLeave.components.FromDate.setMinDate('2020-05-01');
-                //this.forms.Form_PeriodicalLeave.components.FromDate.setMaxDate('2020-05-10');
+                //this.forms.Form_ProgramInstallation.components.FromDate.setMinDate('2020-05-01');
+                //this.forms.Form_ProgramInstallation.components.FromDate.setMaxDate('2020-05-10');
                 
-                //this.forms.Form_PeriodicalLeave.components.VactionType.setValue(2);//give it the value of the option object to be selected
-                //alert(this.forms.Form_PeriodicalLeave.components.VactionType.getText()); // retrieves the shown selected text
-                //this.forms.Form_PeriodicalLeave.components.VactionType.setOptions([new Option('','','')]); //load different options
-                //this.forms.Form_PeriodicalLeave.components.VactionType.addOption( new Option('x','x','3') );
-                //this.forms.Form_PeriodicalLeave.components.VactionType.addOption(new Option('y','y','4') );
-                //this.forms.Form_PeriodicalLeave.components.VactionType.setValue('3');
-                //this.forms.Form_PeriodicalLeave.components.VactionType.removeOptionByValue('4');
+                //this.forms.Form_ProgramInstallation.components.VactionType.setValue(2);//give it the value of the option object to be selected
+                //alert(this.forms.Form_ProgramInstallation.components.VactionType.getText()); // retrieves the shown selected text
+                //this.forms.Form_ProgramInstallation.components.VactionType.setOptions([new Option('','','')]); //load different options
+                //this.forms.Form_ProgramInstallation.components.VactionType.addOption( new Option('x','x','3') );
+                //this.forms.Form_ProgramInstallation.components.VactionType.addOption(new Option('y','y','4') );
+                //this.forms.Form_ProgramInstallation.components.VactionType.setValue('3');
+                //this.forms.Form_ProgramInstallation.components.VactionType.removeOptionByValue('4');
                 
-                //this.forms.Form_PeriodicalLeave.components.IsPaid.disable();
-                //this.forms.Form_PeriodicalLeave.components.IsPaid.setValue(true);
-                //this.forms.Form_PeriodicalLeave.components.IsPaid.check();
-                //this.forms.Form_PeriodicalLeave.components.IsPaid.uncheck();
+                //this.forms.Form_ProgramInstallation.components.IsPaid.disable();
+                //this.forms.Form_ProgramInstallation.components.IsPaid.setValue(true);
+                //this.forms.Form_ProgramInstallation.components.IsPaid.check();
+                //this.forms.Form_ProgramInstallation.components.IsPaid.uncheck();
 
-                //this.forms.Form_PeriodicalLeave.components.SupSignature.enable();
+                //this.forms.Form_ProgramInstallation.components.SupSignature.enable();
             
 
 
 
             
             /* form manipulation */
-                //this.forms.Form_PeriodicalLeave.enable();
-                //this.forms.Form_PeriodicalLeave.disable();
-                //this.forms.Form_WorkDeduction.hide();
-                //this.forms.Form_WorkDeduction.select();
-                this.forms.Form_PeriodicalLeave.select();
-                this.forms.Form_PeriodicalLeave.updateComponentsFromEntity();
+                //this.forms.Form_ProgramInstallation.enable();
+                //this.forms.Form_ProgramInstallation.disable();
+                this.forms.Form_ProgramInstallation.select();
+                this.forms.Form_ProgramInstallation.updateComponentsFromEntity();
                 
         
 
@@ -114,7 +136,7 @@ process.controller = {
 
 
             app.renderLabels();
-            app.openProcessModal();
+            process.openProcessModal();
             process.setWorkFlowIDLabel();
         }
         catch(error){ throw error;}
@@ -128,7 +150,7 @@ process.controller = {
 
     
     // testSignature(){
-    //     util.viewObjectContent(this.forms.Form_PeriodicalLeave.components.SupSignature.getSigner()); 
+    //     util.viewObjectContent(this.forms.Form_ProgramInstallation.components.SupSignature.getSigner()); 
     // },
 
 
@@ -150,75 +172,96 @@ $(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alert
                 <div class="nav nav-pills mb-1 ml-auto" id="nav-tab" role="tablist"></div>
             </nav>
             <div class="tab-content shadow border border-secondary rounded p-2 bg-white" id="nav-tabContent">
-                <!-- Form-PeriodicalLeave-Tab -->
-                <div class="tab-pane fade show active" id="nav-Form_PeriodicalLeave" role="tabpanel" aria-labelledby="Form_PeriodicalLeave-tab">
-                    <!-- the main container for all Form_PeriodicalLeave controls -->
+                <!-- Form_ProgramInstallation -->
+                <div class="tab-pane fade show active" id="nav-Form_ProgramInstallation" role="tabpanel" aria-labelledby="Form_ProgramInstallation-tab">
+                    <!-- the main container for all Form_ProgramInstallation controls -->
                     <div class="container-fluid">
                         <div class="row">
-                            <div class="col p-1 mb-4" data-container-for="Form_PeriodicalLeave_title"></div>
+                            <div class="col p-1 mb-4" data-container-for="Form_ProgramInstallation_title"></div>
                         </div>
+
+                        <div class="text-right">Systems Section</div>
+
                         <div class="row">
-                            <div class="col pr-3 pl-3" data-container-for="RequesterName"></div>
-                            <div class="col pr-3 pl-3" data-container-for="FromDate"></div>
-                            <div class="col pr-3 pl-3" data-container-for="Days"></div>    
+                            <div class="col pr-3 pl-3" data-container-for="RequesterDate"></div>
+                            <div class="col pr-3 pl-3" data-container-for="Priority"></div>
+                            <div class="col pr-3 pl-3" data-container-for="MaximoNo"></div>    
                         </div>
+
                         <div class="row">
-                            <div class="col pr-3 pl-3" data-container-for="VactionType"></div>
+                            <div class="col pr-3 pl-3" data-container-for="MemoDate"></div>
+                            <div class="col pr-3 pl-3" data-container-for="SMRNO"></div>
                             <div class="col pr-3 pl-3"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3" data-container-for="RequestType"></div>
+                            <div class="col pr-3 pl-3" data-container-for="To"></div>
                             <div class="col pr-3 pl-3"></div>
                         </div>
+
                         <div class="row">
-                            <div class="col pr-3 pl-3" data-container-for="IsPaid"></div>
+                            <div class="col pr-3 pl-3" style="direction:ltr;" data-container-for="ProgName" ></div>
                         </div>
+                        <div class="row">
+                            <div class="col pr-3 pl-3" data-container-for="SrcDes" ></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pr-3 pl-3" data-container-for="InstallLocation" ></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3" data-container-for="CrystalRepName" ></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pr-3 pl-3" data-container-for="SrcDestination" ></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pr-3 pl-3" data-container-for="InstallLoc" ></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3" data-container-for="TxtFilesName" ></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pr-3 pl-3" data-container-for="SourceDes" ></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pr-3 pl-3" data-container-for="Installocation" ></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3" data-container-for="InstallationRemarks"></div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col pr-3 pl-3" data-container-for="Sup"></div>
+                            <div class="col pr-3 pl-3" data-container-for="TeamLeader"></div>
+                            <div class="col pr-3 pl-3" data-container-for="SysEng"></div>
+                        </div>
+
+                        <div class="text-right">Operations Section</div>
+
                         <div class="row">
                             <div class="col pr-3 pl-3" data-container-for="Notes"></div>
                         </div>
+
                         <div class="row">
-                            <div class="col pr-3 pl-3" data-container-for="Attachments"></div>
+                            <div class="col pr-3 pl-3" data-container-for="Approval"></div>
+                            <div class="col pr-3 pl-3"></div>
+                            <div class="col pr-3 pl-3" data-container-for="SystemEng"></div>
                         </div>
 
                         <div class="row">
-                            <div class="col pr-3 pl-3" data-container-for="Ekrar"></div>
-                        </div>
-                        <div class="row">
-                            <div class="col pr-3 pl-3" data-container-for="SupName"></div>
-                            <div class="col pr-3 pl-3" data-container-for="MngrName"></div>
-                        </div>
-                        <div class="row">
-                            <div class="col p-3" data-container-for="SupName"></div>
+                            <div class="col pr-3 pl-3"></div>
+                            <div class="col pr-3 pl-3"></div>
+                            <div class="col pr-3 pl-3" data-container-for="CompletionDate"></div>
                         </div>
                     </div>
                 </div>
 
 
 
-                 <!-- Form-WorkDeduction-Tab -->
-                <div class="tab-pane fade" id="nav-Form_WorkDeduction" role="tabpanel" aria-labelledby="Form_WorkDeduction-tab">
-                    <!-- the main container for all Form_PeriodicalLeave controls -->
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col p-3" data-container-for="Form_WorkDeduction_title"></div>
-                        </div>
-                        <div class="row">
-                            <div class="col p-3">
-                                <!-- <input placeholder="Your Date"  class="form-control" type="text" onfocus="(this.type='date')" onblur="(this.type='text')" id="date" min="2018-01-01" max="2018-12-31"> -->
-                                <button type="button" class="btn btn-primary" onclick="process.controller.forms.Form_PeriodicalLeave.disable()">disable نموذج اجازة دورية</button>
-                            </div>
-                            <div class="col p-3">
-                                <button type="button" class="btn btn-primary" onclick="process.controller.forms.Form_PeriodicalLeave.enable()">enable نموذج اجازة دورية</button>
-                            </div>
-                            <div class="col p-3">
-                                <button type="button" class="btn btn-secondary" onclick="process.controller.forms.Form_WorkDeduction.show();">show نموذج انقطاع عن العمل</button>
-                            </div>
-                            <div class="col p-3">
-                                <button type="button" class="btn btn-secondary" onclick="process.controller.forms.Form_WorkDeduction.hide();">hide نموذج انقطاع عن العمل</button>
-                            </div>
-                            <div class="col p-3">
-                                <button type="button" class="btn btn-secondary" onclick="process.controller.forms.Form_PeriodicalLeave.select();">goto نموذج اجازة دورية</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
                 <div class="text-right">
                     <hr>

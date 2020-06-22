@@ -49,10 +49,17 @@ process.controller = {
         this.forms.Form_PeriodicalLeave.addComponent(new CheckBoxComponent('IsPaid','اجازة مصروفة','Paid Vacation') );
         this.forms.Form_PeriodicalLeave.addComponent(new NotesComponent('Notes','الملاحظـــــات','Notes',4,300) );
         this.forms.Form_PeriodicalLeave.addComponent(new AttachmentsTableComponent('Attachments',['مرفق 1','مرفق 2','مرفق 3']) );
-        this.forms.Form_PeriodicalLeave.addComponent(new SignatureComponent('SupName','SupSig','اعتمـــاد المراقــب المختــص','Supervisor Approval') ); //components.SupSignature = new SignatureComponent('SupName','SupSig','اعتمـــاد المراقــب المختــص','Supervisor Approval');
-        this.forms.Form_PeriodicalLeave.addComponent(new SignatureComponent('MngrName','MngSig','اعتمـــاد مديــر الإدارة','Manager Approval') );
+        this.forms.Form_PeriodicalLeave.addComponent(new ParagraphComponent('Ekrar','اقر انا الموقع ادناه بانني مسئول عن ماتم ادخاله من بيانات ','I admit that I am responsible for the entered data','text-danger font-weight-bold') );
+        
+        this.forms.Form_PeriodicalLeave.addSignature(new Signature('reqDeptSupSig','SupName','SupSig','اعتمـــاد المراقــب المختــص','Supervisor Approval')  );
+        this.forms.Form_PeriodicalLeave.addSignature(new Signature('reqDeptMngSig','MngName','MngSig','اعتمـــاد المراقــب المختــص','Supervisor Approval')  );
+        
+        
+        this.forms.Form_WorkDeduction.addComponent(new TxtComponent('RequesterName','','',5) );
+        
 
-        this.Ekrar = new ParagraphComponent('Ekrar','اقر انا الموقع ادناه <br> بانني مسئول عن ماتم ادخاله من بيانات ','I admit that <br> I am responsible for the entered data','text-danger font-weight-bold');
+
+        
     },
 
     main(){
@@ -93,10 +100,15 @@ process.controller = {
                 //this.forms.Form_PeriodicalLeave.components.IsPaid.setValue(true);
                 //this.forms.Form_PeriodicalLeave.components.IsPaid.check();
                 //this.forms.Form_PeriodicalLeave.components.IsPaid.uncheck();
+                
+                this.forms.Form_PeriodicalLeave.components.SupName.setValue('محمد فاروق');
+                 this.forms.Form_PeriodicalLeave.components.SupSig.enable();
+                
 
-                //this.forms.Form_PeriodicalLeave.components.SupSignature.enable();
-            
-
+                //this.forms.Form_PeriodicalLeave.components.Attachments.setValue('مرفق 1*مرفق 3*');
+                //this.forms.Form_PeriodicalLeave.components.Attachments.disable();
+                //this.forms.Form_PeriodicalLeave.components.Attachments.enable();
+                
 
 
             
@@ -109,27 +121,56 @@ process.controller = {
                 this.forms.Form_PeriodicalLeave.updateComponentsFromEntity();
                 
         
-
-
+            
 
 
             app.renderLabels();
-            app.openProcessModal();
+            process.openProcessModal();
             process.setWorkFlowIDLabel();
         }
         catch(error){ throw error;}
     },
 
     validate(){
-        //validator.markAsInvalidField('myTxt');
+      
+        if(!validator.assertHasValue(this.forms.Form_PeriodicalLeave.components.FromDate))
+            return false;
+        //if(!validator.assertEquals(this.forms.Form_PeriodicalLeave.components.FromDate,'2020-05-02'))
+           // return false;    
+        if(!validator.assertGreaterThanOrEquals(this.forms.Form_PeriodicalLeave.components.FromDate,'2020-05-02'))
+            return false;        
+        if(!validator.assertGreaterThanOrEquals(this.forms.Form_PeriodicalLeave.components.Days,5))
+            return false;        
+        if(!validator.assertValidIBAN(this.forms.Form_PeriodicalLeave.components.RequesterName,'20'))
+            return false;        
+           
+            
+            
+            
+        if(!validator.assertSigned(this.forms.Form_PeriodicalLeave.components.SupName,this.forms.Form_PeriodicalLeave.components.SupSig))
+            return false;
+         
+
+
+
+        return true;
      },
 
-    send(){ },
+    send(){
+        try{
+            let isValid = this.validate();
+            if(isValid)
+                app.alertSuccess();
 
-    
-    // testSignature(){
-    //     util.viewObjectContent(this.forms.Form_PeriodicalLeave.components.SupSignature.getSigner()); 
-    // },
+                
+           
+        }
+        catch(error){
+            app.alertError(error.message);
+        }
+        
+     },
+
 
 
 }
@@ -151,41 +192,37 @@ $(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alert
             </nav>
             <div class="tab-content shadow border border-secondary rounded p-2 bg-white" id="nav-tabContent">
                 <!-- Form-PeriodicalLeave-Tab -->
-                <div class="tab-pane fade show active" id="nav-Form_PeriodicalLeave" role="tabpanel" aria-labelledby="Form_PeriodicalLeave-tab">
+                <div class="tab-pane show active" id="nav-Form_PeriodicalLeave" role="tabpanel" aria-labelledby="Form_PeriodicalLeave-tab">
                     <!-- the main container for all Form_PeriodicalLeave controls -->
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col p-1 mb-4" data-container-for="Form_PeriodicalLeave_title"></div>
                         </div>
-                        <div class="row">
+                        <div class="row p-1">
                             <div class="col pr-3 pl-3" data-container-for="RequesterName"></div>
                             <div class="col pr-3 pl-3" data-container-for="FromDate"></div>
-                            <div class="col pr-3 pl-3" data-container-for="Days"></div>    
+                            <div class="col pr-3 pl-3" data-container-for="Days"></div>       
                         </div>
-                        <div class="row">
+                        <div class="row p-1">
                             <div class="col pr-3 pl-3" data-container-for="VactionType"></div>
                             <div class="col pr-3 pl-3"></div>
                             <div class="col pr-3 pl-3"></div>
                         </div>
-                        <div class="row">
+                        <div class="row p-1">
                             <div class="col pr-3 pl-3" data-container-for="IsPaid"></div>
                         </div>
-                        <div class="row">
+                        <div class="row p-1">
                             <div class="col pr-3 pl-3" data-container-for="Notes"></div>
                         </div>
-                        <div class="row">
+                        <div class="row p-1">
                             <div class="col pr-3 pl-3" data-container-for="Attachments"></div>
                         </div>
-
-                        <div class="row">
+                        <div class="row p-1">
                             <div class="col pr-3 pl-3" data-container-for="Ekrar"></div>
                         </div>
-                        <div class="row">
-                            <div class="col pr-3 pl-3" data-container-for="SupName"></div>
-                            <div class="col pr-3 pl-3" data-container-for="MngrName"></div>
-                        </div>
-                        <div class="row">
-                            <div class="col p-3" data-container-for="SupName"></div>
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" data-container-for="reqDeptSupSig"></div>
+                            <div class="col pr-3 pl-3" data-container-for="reqDeptMngSig"></div>
                         </div>
                     </div>
                 </div>
@@ -193,11 +230,14 @@ $(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alert
 
 
                  <!-- Form-WorkDeduction-Tab -->
-                <div class="tab-pane fade" id="nav-Form_WorkDeduction" role="tabpanel" aria-labelledby="Form_WorkDeduction-tab">
+                <div class="tab-pane" id="nav-Form_WorkDeduction" role="tabpanel" aria-labelledby="Form_WorkDeduction-tab">
                     <!-- the main container for all Form_PeriodicalLeave controls -->
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col p-3" data-container-for="Form_WorkDeduction_title"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pr-3 pl-3" data-container-for="RequesterName"></div>
                         </div>
                         <div class="row">
                             <div class="col p-3">
@@ -215,6 +255,9 @@ $(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alert
                             </div>
                             <div class="col p-3">
                                 <button type="button" class="btn btn-secondary" onclick="process.controller.forms.Form_PeriodicalLeave.select();">goto نموذج اجازة دورية</button>
+                            </div>
+                            <div class="col p-3">
+                                <button type="button" class="btn btn-secondary" onclick="alert(process.controller.forms.Form_PeriodicalLeave.components.RequesterName.getValue()); alert(process.controller.forms.Form_WorkDeduction.components.RequesterName.getValue()) ">goto نموذج اجازة دورية</button>
                             </div>
                         </div>
                     </div>

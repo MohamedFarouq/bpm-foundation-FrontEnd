@@ -192,6 +192,12 @@ const util = {
 	hideModal(id){ 
 		$(`#${id}`).modal('hide'); 
 	},
+
+	focusModal(id){ 
+		$(`#${id}`).modal({
+			focus: true
+		  })
+	},
 	
 	enable(id){
 		if(this.elementExists(id))
@@ -248,6 +254,13 @@ const util = {
 		if(!component)
 			throw new Error(`no component with <br> [attribut ('${compAttr}') and value ('${compAttrValue}') ] ` );
 		return component;
+	},
+
+	querySelectorAll(compAttr,compAttrValue){
+		let components = document.querySelectorAll(`[${compAttr}="${compAttrValue}"]`);
+		if(!components)
+			throw new Error(`no components with <br> [attribut ('${compAttr}') and value ('${compAttrValue}') ] ` );
+		return components;
 	},
 
 	loadHTML(divID,htmlURL,dataObject){

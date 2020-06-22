@@ -19,25 +19,26 @@
     
 </head>
 
-
 <body>
+
   <nav class="navbar navbar-expand-lg bg-dark sticky-top">
     <div class="btn-group" >
       <i class="fab fa-medium  mr-1  bpmLogo" style="color: #2f77b1;"></i>  
       <i class="fas fa-parking text-warning mr-1 bpmLogo" ></i>
       <i class="fab fa-bootstrap text-success mr-2 bpmLogo"  ></i>
       <h3 class="text-light font-weight-bolder"  >نظـام الميكنـة الآليـة</h3>
-      <h5 class="text-white-50 my-auto" style="margin-right: 10px;"> mohamed farouk</h5>
     </div>
     <ul class="navbar-nav ml-auto">
       <li class="nav-item my-auto" >
-        <a id="myProfile" onclick="menu.loadPage(menu.myProfile)" href="#" style="padding-left:15px;" title="My Profile">
-          <i class="far fa-user text-white" style="font-size: 25px;"></i>  
+        <a id="myProfile" onclick="menu.loadPage(menu.myProfile)" href="#" class="simpleLink text-white-50"  style="padding-left:15px;" title="My Profile">
+          <i class="far fa-user text-white" style="font-size: 25px;"></i>
+          <label >Mohamed Farouk</label>
         </a>
       </li>
       <li class="nav-item my-auto" >
-        <a id="myProfile" onclick="menu.loadPage(menu.myProfile)" href="#" style="padding-left:15px;" title="My Profile">
+        <a id="myProfile" onclick="menu.loadPage(menu.myProfile)" href="#" class="simpleLink text-white-50" style="padding-left:15px;" title="Notifications">
           <i class="far fa-bell text-white" style="font-size: 25px;"></i>  
+          <label data-label="notifications">Notifications</label>
         </a>
       </li>
       <li class="nav-item" >
@@ -53,113 +54,105 @@
 
   <div class="container-fluid bg-light">
     <div class="row">
-      <div class="col-2 p-0 shadow"><div class="list-group" id="sideMenu"></div></div>
+      <div class="col-2 p-0 bg-white shadow">
+        <div class="list-group  bg-white" style="min-height: 93vh;" id="sideMenu"></div>
+      </div>
       <div class="col-10 p-2" id="contentArea"></div>   
     </div>
    </div>
    
 
-
-   <!-- Process Modal -->
-  <div class="modal fade" id="processModal" data-backdrop="static"  tabindex="-1" role="dialog" aria-labelledby="processModalTitle" aria-hidden="true">
-    <div class="modal-dialog modal-xl  modal-dialog-scrollable modal-dialog-centered" role="document" style=" min-width: 80%;">
-        <div class="modal-content" style="background-color: #EAEAEA !important;">
-          <div id="processToolBar" class="modal-header bg-light p-0 ">
-            <!-- ToolBar Components -->
-                <nav class="navbar navbar-expand-sm container-fluid bg-dark p-1" style=" box-shadow: none !important;">
-                  <a onclick="process.close()" href="#"><i class="fas fa-window-close modalCloseBtn"></i></a>
-                  <ul class="navbar-nav ml-auto">
-                      <li class="my-auto p-1" >
-                          <button id="procInstructionsBtn" onclick="process.openUserGuide()" type="button" class="btn btn-sm btn-dark">
-                              <span data-label="userGuide"></span>
-                              <i class="fas fa-info-circle text-white"></i>
-                          </button> 
-                      </li>
-                      <li class="my-auto p-1" >
-                          <button id="procStepsBtn" onclick="process.openSteps()" type="button" class="btn btn-sm btn-dark"><span data-label="steps"></span><i class="fas fa-list-ol text-white"></i></button> 
-                      </li>
-                      <li class="nav-item my-auto p-1" >
-                          <button id="procPrintBtn" onclick="process.print()" type="button" class="btn btn-sm btn-dark"><span data-label="print"></span><i class="fas fa-print text-white"></i></button> 
-                      </li>
-                      <li class="nav-item my-auto p-1" >
-                          <button id="procAttachmentsBtn" onclick="process.openAttachments()" type="button" class="btn btn-sm btn-dark"><span data-label="attachments"></span><i class="fas fa-paperclip text-white"></i></button>
-                      </li>
-                      <li class="nav-item my-auto p-1" >
-                          <button id="procDispatchBtn" onclick="process.send()" type="button" class="btn btn-sm btn-success text-white"><span data-label="completeStep"></span><i class="fas fa-check-square text-white"></i></button>
-                      </li>
-                  </ul>
-                </nav>
-          </div>
-          <div class="modal-body overflow-auto pt-0">
-            <div class="row">
-              <div id="processRightSideBar" class="col-3" >
-                  <!-- RightSideBar Components -->
-                  <div id="senderDiv" class="form-group p-1">
-                    <label for="senderTxt" data-label="sender"></label>
-                    <input id="senderTxt" type="text" class="form-control form-control text-muted " readonly>
+     
+ <!-- Process Modal -->
+ <div class="modal " id="processModal" data-backdrop="static"  tabindex="-1" role="dialog" aria-labelledby="processModalTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document" style=" min-width: 90%;">
+      <div class="modal-content" style="background-color: #EAEAEA !important;">
+        <!-- ToolBar Components -->
+        <div id="processToolBar" class="modal-header bg-light p-0 ">
+              <nav class="navbar navbar-expand-sm container-fluid bg-dark p-1" style=" box-shadow: none !important;">
+                <a onclick="process.close()" href="#"><i class="fas fa-window-close modalCloseBtn"></i></a>
+                <ul class="navbar-nav ml-auto">
+                    <li class="my-auto p-1" >
+                        <button id="procInstructionsBtn" onclick="process.openUserGuide()" type="button" class="btn btn-sm btn-dark">
+                            <span data-label="userGuide"></span>
+                            <i class="fas fa-info-circle text-white"></i>
+                        </button> 
+                    </li>
+                    <li class="my-auto p-1" >
+                        <button id="procStepsBtn" onclick="process.openSteps()" type="button" class="btn btn-sm btn-dark"><span data-label="steps"></span><i class="fas fa-list-ol text-white"></i></button> 
+                    </li>
+                    <li class="nav-item my-auto p-1" >
+                        <button id="procPrintBtn" onclick="process.print()" type="button" class="btn btn-sm btn-dark"><span data-label="print"></span><i class="fas fa-print text-white"></i></button> 
+                    </li>
+                    <li class="nav-item my-auto p-1" >
+                        <button id="procAttachmentsBtn" onclick="process.openAttachments()" type="button" class="btn btn-sm btn-dark"><span data-label="attachments"></span><i class="fas fa-paperclip text-white"></i></button>
+                    </li>
+                    <li class="nav-item my-auto p-1" >
+                        <button id="procDispatchBtn" onclick="process.controller.send()" type="button" class="btn btn-sm btn-success text-white"><span data-label="completeStep"></span><i class="fas fa-check-square text-white"></i></button>
+                    </li>
+                </ul>
+              </nav>
+        </div>
+        <div class="modal-body overflow-auto pt-0">
+          <div class="row">
+            <!-- RightSideBar Components -->
+            <div id="processRightSideBar" class="col-3" >
+                <div id="senderDiv" class="form-group p-1">
+                  <label for="senderTxt" data-label="sender"></label>
+                  <input id="senderTxt" type="text" class="form-control form-control text-muted " readonly>
+                </div>
+                <div id="recieverDiv" class="form-group border-top p-1">
+                  <label for="recieversList" data-label="reciever"></label>
+                  <div id="branchDiv" class="form-group p-1">
+                    <select onchange="process.branchesList.onSelect(this.options[this.selectedIndex])" name="branchesList" id="branchesList" class="form-control form-control-sm" disabled>
+                      <option data-label="branch" class="text-muted"></option>
+                    </select>
                   </div>
-                  <div id="recieverDiv" class="form-group border-top p-1">
-                    <label for="recieversList" data-label="reciever"></label>
-                    <div id="branchDiv" class="form-group p-1">
-                      <select onchange="process.branchesList.onSelect(this.options[this.selectedIndex])" name="branchesList" id="branchesList" class="form-control form-control-sm" disabled>
-                        <option data-label="branch" class="text-muted"></option>
-                      </select>
-                    </div>
-                    <select onchange="process.recieversList.onSelect(this.options[this.selectedIndex])" name="recieversList" id="recieversList" class="form-control form-control-sm"></select>
-                    <label id="recieverDeptTxt" class="text-muted" style="display: block; margin-top: 10px;height: 20px;"></label>
-                  </div>
-                  <div id="notesDiv" class="form-group p-1 border-top">
-                    <label for="notesTxt" data-label="notes"></label>
-                    <textarea id="notesTxt" class="form-control"  rows="3" ></textarea>
-                  </div>
-                  <div id="actionDiv" class="form-group p-1 d-none" >
-                    <select onchange="process.actionsList.onSelect(this.options[this.selectedIndex])" name="actionsList" id="actionsList" class="form-control form-control-sm"></select>
-                  </div>
-              </div>
-              <div id="processBody" class="col-9" style="min-height: 100vh !important;"></div>
+                  <select onchange="process.recieversList.onSelect(this.options[this.selectedIndex])" name="recieversList" id="recieversList" class="form-control form-control-sm"></select>
+                  <label id="recieverDeptTxt" class="text-muted" style="display: block; margin-top: 10px;height: 20px;"></label>
+                </div>
+                <div id="notesDiv" class="form-group p-1 border-top">
+                  <label for="notesTxt" data-label="notes"></label>
+                  <textarea id="notesTxt" class="form-control"  rows="3" ></textarea>
+                </div>
+                <div id="actionDiv" class="form-group p-1 d-none" >
+                  <select onchange="process.actionsList.onSelect(this.options[this.selectedIndex])" name="actionsList" id="actionsList" class="form-control form-control-sm"></select>
+                </div>
             </div>
+            <div id="processBody" class="col-9" style="min-height: 100vh !important;"></div>
           </div>
         </div>
-    </div>
+      </div>
   </div>
-   
+</div>
 
-
-
-  
-  <!-- pdf viewer Modal -->
-  <div class="modal fade" id="pdfModal" data-backdrop="static"  tabindex="-1" role="dialog" aria-labelledby="pdfModalTitle" aria-hidden="true">
-    <div class="modal-dialog modal-xl  modal-dialog-scrollable modal-dialog-centered" role="document" style=" min-width: 80%;">
-        <div class="modal-content">
-          <div class="modal-header bg-light p-0">
-            <a onclick="app.closePDFModal()" href="#"><i class="fas fa-window-close modalCloseBtn"></i></a>
-          </div>
-          <div id="pdfViewerDiv" class="modal-body overflow-auto p-0">
-              <!-- <object data="./resources/MyPdf.pdf" width="100%" height="500px">  -->
-          </div>
+<!-- pdf viewer Modal -->
+<div class="modal" id="pdfModal" data-backdrop="static"  tabindex="-1" role="dialog" aria-labelledby="pdfModalTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document" style=" min-width: 85%;">
+      <div class="modal-content">
+        <div class="modal-headerbg-light p-0">
+          <a class="col-form-label text-center p-0" onclick="pdfViewer.closeModal()" href="#"><i class="fas fa-window-close modalCloseBtn"></i></a>
+          <label id="pdfModalTitle" class="font-weight-bolder col-form-label text-center text-muted p-0" style="font-size:1.5em;" ></label>
         </div>
-    </div>
+        <div id="pdfViewerDiv" class="modal-body overflow-auto p-0"></div>
+      </div>
   </div>
-   
-
-
-  
+</div>
 
   <!-- Alert Modal -->
-  <div id="alertModal" class="modal"   tabindex="-1" role="dialog" aria-labelledby="alertModalTitle" aria-hidden="true">
-    <div class="modal-dialog modal-xl  modal-dialog-scrollable modal-dialog-centered" role="document" style=" max-width: 30%;">
+  <div id="alertModal" class="modal"  tabindex="-1" role="dialog" aria-labelledby="alertModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document" style=" max-width: 30%;">
       <div class="modal-content">
-        <div id="alertDiv" class="alert alert-dismissable m-0 p-1" role="alert" >
-          <a onclick="app.closeAlertModal()" aria-label="Close" href="#"><i class="fas fa-window-close text-muted" style="font-size: 25px;"></i></a>
-          <h4 class="d-inline">System Error Messages</h4>
+        <div id="alertDiv" class="alert alert-dismissable m-0 p-2 text-left" role="alert" >
+          <a onclick="app.closeAlertModal()" aria-label="Close" href="#"><i class="fas fa-window-close  alert-link" style="font-size: 25px;"></i></a>
+          <h5 class="d-inline font-weight-bold" data-label="systemMsgs">System Messages - رسائل النظـام</h5>
           <hr>
-          <div id="alertBody" class="container-fluid d-block text-right"></div>
+          <div id="alertBody" class="container-fluid d-block text-left text-wrap p-2"></div>
         </div>
       </div>
     </div>
   </div>
-
-
+  
 
     
     <script>
