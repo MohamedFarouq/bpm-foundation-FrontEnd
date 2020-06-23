@@ -9,25 +9,6 @@
 		}
 	}
 
-	class participant{
-		constructor(trackerEmpID,empNo,name,engName,deptName,empLoginID){
-			this.trackerEmpID = trackerEmpID;
-			this.empNo = empNo;
-			this.name = name;
-			this.engName = engName;
-			this.deptName = deptName;
-			this.empLoginID = empLoginID;
-		}
-	}
-
-	class Branch{
-		constructor(id,name,engName){
-			this.id = id;
-			this.name = name;
-			this.engName = engName;
-		}
-	}
-
 	class WorkItem{
 		constructor(workFlowName,workflowID,subject,recieveDate){
 			this.workFlowName = workFlowName;
@@ -52,11 +33,120 @@
 		}
 	}
 
+	class participant{
+		constructor(trackerEmpID,empNo,name,engName,deptName,empLoginID){
+			this.trackerEmpID = trackerEmpID;
+			this.empNo = empNo;
+			this.name = name;
+			this.engName = engName;
+			this.deptName = deptName;
+			this.empLoginID = empLoginID;
+		}
+	}
+
 	class Option{
 		constructor(labelAra,labelEng,value){
 			this.label = (app.isArabicLocale()) ? labelAra : labelEng;
 			this.value = value;
 		}
+	}
+
+	class TableColumn{
+		constructor(labelAra,labelEng,items,type){
+			this.name = name;
+			this.label = (app.isArabicLocale()) ? labelAra : labelEng;
+			this.items = (items) ? items : [''];
+			this.type = type;
+			this.colmID = '';
+		}
+
+		getHTML(){};
+
+		getValueAsArray(){
+			try{ 
+				let value = [];
+				let inputList = document.querySelectorAll(`#${this.colmID} input[type=${this.type}]`);
+				inputList.forEach(element=> { value.push(element.value); });
+				return value;
+			}
+			catch(error){ 
+				app.alertError(error.message);
+				throw error;	
+			}
+		}
+
+		keepItemsNotLessThan(itemsCount){
+			try{
+				for(let i=this.items.length;i<itemsCount;i++){
+					this.items.push('');
+				}
+			}
+			catch(error){ 
+				app.alertError(error.message);
+				throw error;	
+			}
+		};
+	}
+
+	class TableColTxt extends TableColumn{
+		constructor(labelAra,labelEng,items,txtMaxLength){
+			super(labelAra,labelEng,items,'text');
+			this.txtMaxLength = txtMaxLength;
+		}
+
+		getHTML(){
+			try {
+				let html = `<div class="container-fluid p-0" id="${this.colmID}" >	
+								<div class="form-row p-0">
+									<label class="col-sm col-form-label text-center text-nowrap bg-primary text-white border ">${this.label}</label>
+								</div>
+							`;
+				this.items.forEach( rowItem => {
+								html += `<div class="form-row p-0" >
+											<div class="col-sm text-center my-auto p-0">
+												<input value="${rowItem}" maxlength="${this.txtMaxLength}" class="form-control" type="text">
+											</div>
+							 			</div>`;
+				});				
+				html += `</div>`;
+				return html;
+			} catch (error) {
+				app.alertError(error.message);
+				throw error;	
+			}
+		};
+
+	}
+
+	class TableColDate extends TableColumn{
+		constructor(labelAra,labelEng,items,minDate,maxDate){
+			super(labelAra,labelEng,items,'date');
+			this.minDate = minDate;
+			this.maxDate = maxDate;
+		}
+
+		getHTML(){
+			try {
+				let html = `<div class="container-fluid p-0" id="${this.colmID}" >	
+								<div class="form-row p-0">
+									<label class="col-sm col-form-label text-center text-nowrap bg-primary text-white border ">${this.label}</label>
+								</div>
+							`;
+				this.items.forEach( rowItem => {
+								html += `<div class="form-row p-0" >
+											<div class="col-sm text-center my-auto p-0">
+												<input value="${rowItem}" min="${this.minDate}" max="${this.maxDate}" class="form-control" type="date" >	
+											</div>
+							 			</div>`;
+				});				
+				html += `</div>`;
+				return html;
+			} catch (error) {
+				app.alertError(error.message);
+				throw error;	
+			}
+		};
+
 	}
 
 	class Action{
@@ -65,6 +155,15 @@
 			this.title = app.getPropertyValue(titleKey);
 		}
 	}
+
+	class Branch{
+		constructor(id,name,engName){
+			this.id = id;
+			this.name = name;
+			this.engName = engName;
+		}
+	}
+
 
 
 
@@ -148,7 +247,10 @@
 				container.innerHTML = html;
 			
 			}
-			catch(error){ throw error; }	
+			catch(error){ 
+				app.alertError(error.message);
+				throw error; 
+			}	
 		};
 
 		getTab(){	
@@ -211,7 +313,7 @@
 		getContainer(){ 
 			try{ 
 				let parent = document.getElementById(`nav-${this.form}`);
-				return parent.querySelector(`[data-container-for="${this.dbColName}"]`);	// util.querySelector('data-container-for',this.name);	
+				return parent.querySelector(`[data-container-for="${this.dbColName}"]`);
 			}
 			catch(error){ throw error;	}
 		};
@@ -411,8 +513,7 @@
 							</div>
 							<div class="form-row p-0">
 								<textarea type="text" id="${this.id}" maxlength="${this.maxLength}" rows="${this.rows}" class="form-control" style="resize: none;" ></textarea>
-							</div>
-						`;
+							</div>`;
 				this.getContainer().innerHTML = html;
 			}catch(error){ throw error; }
 		};
@@ -500,6 +601,58 @@
 		};
 	}
 
+	class TableComponent extends Component{
+		constructor(dbColName,colmList,minRowsCount){
+			super(dbColName,'','');
+			this.colmList = colmList;
+			this.rowsCount = minRowsCount;
+			this.setRowsCount(minRowsCount);
+		}
+
+		render(){
+			try {
+				let html = `<div class="container-fluid p-0"> 
+								<div class="form-row" >`;
+				for(let i=0;i<this.colmList.length;i++){
+					
+					let col = this.colmList[i];
+						
+					col.colmID = `${this.id}_${i}`;
+					col.keepItemsNotLessThan(this.rowsCount);
+					html += `<div class="col" > ${col.getHTML()}</div>`;				
+				}
+				this.getContainer().innerHTML = html;
+			} catch (error) {throw error;	}
+		};
+
+		getValue(){
+			let value = '';
+			this.colmList.forEach(col=>{
+				let valueAssArray = col.getValueAsArray();
+				valueAssArray.forEach(v=> value+= `${v}*`);
+			});
+			return value;
+		};
+
+		setRowsCount(minRowsCount){
+			let maxColItems = this.getMaxColItemsCount();
+			this.rowsCount = (minRowsCount) ? (  (minRowsCount > maxColItems) ? minRowsCount : maxColItems  ) : maxColItems;
+		};
+
+		getMaxColItemsCount(){
+			let count = 0;
+			for(let i=0;i<this.colmList.length;i++){
+				if(this.colmList[i].items.length > count)
+					count = this.colmList[i].items.length;
+			}
+			return count;
+		};
+
+	}
+
+
+
+
 	class AttachmentsTableComponent extends Component{
 		constructor(dbColName,attachmentsList){
 			super(dbColName,'','');
@@ -528,7 +681,11 @@
 				
 
 				this.getContainer().innerHTML = html;
-			} catch (error) {throw error;	}
+			} 
+			catch (error) {
+				app.alertError(error.message);
+				throw error;	
+			}
 		};
 		
 		getValue(){

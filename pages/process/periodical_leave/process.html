@@ -56,8 +56,15 @@ process.controller = {
         
         
         this.forms.Form_WorkDeduction.addComponent(new TxtComponent('RequesterName','','',5) );
+        this.forms.Form_WorkDeduction.addComponent(new TableComponent('WorkDedTable',[
+                                                                                        new TableColTxt('الأول','First',['A','B','','C','']),
+                                                                                        new TableColTxt('الثاني','Second',['D','E','F']),
+                                                                                        new TableColDate('الثالث','Third',['2020-01-01','2020-02-02'],'2020-01-01','2020-03-01'),
+                                                                                        
+                                                                                    ], 7
+                                                                                    ) );
         
-
+        
 
         
     },
@@ -236,8 +243,12 @@ $(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alert
                         <div class="row">
                             <div class="col p-3" data-container-for="Form_WorkDeduction_title"></div>
                         </div>
-                        <div class="row">
-                            <div class="col pr-3 pl-3" data-container-for="RequesterName"></div>
+                        
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" data-container-for="WorkDedTable"></div>
+                            <div class="col p-3">
+                                <button type="button" class="btn btn-primary" onclick="alert(process.controller.forms.Form_WorkDeduction.components.WorkDedTable.getValue());">get Table Value</button>
+                            </div>
                         </div>
                         <div class="row">
                             <div class="col p-3">
@@ -260,6 +271,10 @@ $(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alert
                                 <button type="button" class="btn btn-secondary" onclick="alert(process.controller.forms.Form_PeriodicalLeave.components.RequesterName.getValue()); alert(process.controller.forms.Form_WorkDeduction.components.RequesterName.getValue()) ">goto نموذج اجازة دورية</button>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col pr-3 pl-3" data-container-for="RequesterName"></div>
+                        </div>
+                        
                     </div>
                 </div>
 
