@@ -1,0 +1,777 @@
+<script >
+    
+/**
+ * WorkItem{
+        workFlowName,workflowID,subject,recieveDate,stepNo,workFlowVersion,workFlowType,stepName,nextStepName,instructions,workObjectID,comments,action,
+        sender,reciever,branch,forms,attachments
+        isLastStep = false;
+}
+ */
+
+
+
+
+process.controller = {
+    errMsg : "",
+    groups : {  
+         //groupFollowUpTLs : ["FollowUp_TLs"],    // groupFollowUpEmps : ["FollowUp_Emps"],
+    },
+
+    steps : {
+        PerLeave_Launch : 'PerLeave_Launch',
+        PerLeave_TLApprove: 'PerLeave_TLApprove',
+        PerLeave_SupApprove: 'PerLeave_SupApprove',
+        PerLeave_DeptSec: 'PerLeave_DeptSec',
+        PerLeave_MngApprove: 'PerLeave_MngApprove',
+        PerLeave_Update: 'PerLeave_Update',
+        PerLeave_DDGApprove: 'PerLeave_DDGApprove',
+        PerLeave_DDGSec: 'PerLeave_DDGSec',
+        PerLeave_PersAdminSec : 'PerLeave_PersAdminSec',
+        PerLeave_PersAdminEmp : 'PerLeave_PersAdminEmp',
+        PerLeave_PersAdminTL : 'PerLeave_PersAdminTL',
+        PerLeave_PersAdminSup : 'PerLeave_PersAdminSup',
+        PerLeave_FinSec : 'PerLeave_FinSec',
+        PerLeave_FinSup : 'PerLeave_FinSup',
+        PerLeave_FinTL : 'PerLeave_FinTL',
+        PerLeave_FinEmp : 'PerLeave_FinEmp',
+    },
+
+    forms : {
+        Form_PromotionForm : new Form('Form_PromotionForm','Promotion Form','Promotion Form'),
+        Form_QMFBatchJob : new Form('Form_QMFBatchJob','QMF Batch Job Form','QMF Batch Job Form'),
+        Form_BatchJob : new Form('Form_BatchJob','Batch Job Form','Batch Job Form'),
+        Form_DataModification : new Form('Form_DataModification','Data Modification Form','Data Modification Form'),
+        Form_EGLDeployment : new Form('Form_EGLDeployment','EGL Deployment Form','EGL Deployment Form'),
+        Form_SpecialReqforReport: new Form('Form_SpecialReqforReport','طلب كشوف ( حالة خاصة )','SpecialReqforReport Form'),
+        Form_OperationSupportAction : new Form('Form_OperationSupportAction','OperationSupportAction Form','OperationSupportAction Form'),
+        /*Form_ReportSpecialRequest : new Form('Form_ReportSpecialRequest','ReportSpecialRequest Form','ReportSpecialRequest Form'),
+        Form_OperationReportRequest : new Form('Form_OperationReportRequest','OperationReportRequest Form','OperationReportRequest Form'),
+        Form_MergeSSNoReportRequest : new Form('Form_MergeSSNoReportRequest','MergeSSNoReportRequest Form','MergeSSNoReportRequest Form'),
+        */
+    },
+
+    defineComponents(){ 
+        
+         /*Form_PromotionForm*/
+        this.forms.Form_PromotionForm.addComponent(new DateComponent('RequesterDate','Date','Date','','') );
+        this.forms.Form_PromotionForm.addComponent(new TxtComponent('RFCNumber','RFC Number','RFC Number',6) );
+
+        this.forms.Form_PromotionForm.addComponent(new TxtComponent('RequestingDept','Requesting Dept.','Requesting Dept.',100) );
+        this.forms.Form_PromotionForm.addComponent(new DateComponent('ImplementDate','Implement Date','Implement Date','','') );
+
+        this.forms.Form_PromotionForm.addComponent(new DropDownListComponent('Systems','System','System',[new Option('','','0') ,new Option('MOP','MOP','1') , new Option('ROP','ROP','2'),new Option('CEP','CEP','3')]) );
+        this.forms.Form_PromotionForm.addComponent(new TxtComponent('ImplementTime','Implement Time','Implement Time',6) );
+
+        this.forms.Form_PromotionForm.addComponent(new TxtComponent('PackageName','Package Name','Package Name',30) );
+
+        this.forms.Form_PromotionForm.addComponent(new TxtComponent('RFCDesc','RFC Description','RFC Description',300) );
+
+        this.forms.Form_PromotionForm.addComponent(new TableComponent('ProgramTable',[
+                                                                                        new TableColTxt('Job Frequency','Job Frequency'),
+                                                                                        new TableColTxt('New(Y,N)','New(Y,N)'),
+                                                                                        new TableColTxt('JCL Job Name(DEV1.JCL)','JCL Job Name(DEV1.JCL)'),
+                                                                                        new TableColTxt('Modified CopyBook','Modified CopyBook'),
+                                                                                        new TableColTxt('Program Name','Program Name'),
+                                                                                        new TableColTxt('Online Map Name','Online Map Name'),
+
+                                                                                    ], 11
+                                                                                    ) );
+
+        this.forms.Form_PromotionForm.addComponent(new NotesComponent('SpecialInstructions','Special Instructions','Special Instructions',4,300) );
+        
+        this.forms.Form_PromotionForm.addSignature(new Signature('SE','SEName','SESig','Responsible SE','Responsible SE') ); 
+        this.forms.Form_PromotionForm.addSignature(new Signature('TeamLeader','TeamLdName','TeamLeaderSig','Team Leader','Team Leader') );
+        this.forms.Form_PromotionForm.addSignature(new Signature('GroupLeader','GroupLeaderName','GroupLeaderSig','Group Leader','Group Leader') );
+
+
+
+        /*Form_QMFBatchJob*/
+        this.forms.Form_QMFBatchJob.addComponent(new DateComponent('RequesterDate','Date','Date','','') );
+        this.forms.Form_QMFBatchJob.addComponent(new TxtComponent('RFCNumber','RFC Number','RFC Number',6) );
+
+        this.forms.Form_QMFBatchJob.addComponent(new TxtComponent('RequestingDept','Requesting Dept.','Requesting Dept.',100) );
+        this.forms.Form_QMFBatchJob.addComponent(new TxtComponent('NoOfCopy','No. of Copy','No. of Copy',10) );
+
+        this.forms.Form_QMFBatchJob.addComponent(new TxtComponent('UserDeptName','User Dept. Name','User Dept. Name',60) );
+        this.forms.Form_QMFBatchJob.addComponent(new DateComponent('ImplementDate','Implement Date','Implement Date','','') );
+
+        this.forms.Form_QMFBatchJob.addComponent(new TxtComponent('Systems','System','System',60) );
+        this.forms.Form_QMFBatchJob.addComponent(new TxtComponent('ImplementTime','Implement Time','Implement Time',6) );
+        
+        this.forms.Form_QMFBatchJob.addComponent(new TxtComponent('QMFjob','QMF Job','QMF Job',50) );
+        this.forms.Form_QMFBatchJob.addComponent(new TxtComponent('NEWOld','New/Old','New/Old',10) );
+
+        this.forms.Form_QMFBatchJob.addComponent(new DropDownListComponent('Environments','Environment','Environment',[new Option('','','0') ,new Option('DB2U','DB2U','1') , new Option('DB2P','DB2P','2')]) );
+        
+        this.forms.Form_QMFBatchJob.addComponent(new TxtComponent('RFCDesc','RFC Description','RFC Description',300) );
+
+        this.forms.Form_QMFBatchJob.addComponent(new TableComponent('JobTable',[
+                                                                                        new TableColTxt('User ID','User ID'),
+                                                                                        new TableColTxt('Job Name','Job Name'),
+                                                                                        new TableColTxt('Job Library','Job Library'),
+
+                                                                                    ], 6
+                                                                                    ) );
+
+        this.forms.Form_QMFBatchJob.addComponent(new TableComponent('QueryTable',[
+                                                                                        new TableColTxt('Report Name','Report Name'),
+                                                                                        new TableColTxt('Report Number','Report Number'),
+                                                                                        new TableColTxt('Parm Fields','Parm Fields'),
+                                                                                        new TableColTxt('Proc','Proc'),
+                                                                                        new TableColTxt('Form','Form'),
+                                                                                        new TableColTxt('Query','Query'),
+
+                                                                                    ], 3
+                                                                                    ) ); 
+
+        this.forms.Form_QMFBatchJob.addComponent(new NotesComponent('SpecialInstructions','Special Instructions','Special Instructions',4,300) );
+        
+        this.forms.Form_QMFBatchJob.addSignature(new Signature('ResSE','SEName','SESig','Responsible SE','Responsible SE') ); 
+        this.forms.Form_QMFBatchJob.addSignature(new Signature('Team','TeamLdName','TeamLeaderSig','Team Leader','Team Leader') );
+        this.forms.Form_QMFBatchJob.addSignature(new Signature('Group','GroupLeaderName','GroupLeaderSig','Group Leader','Group Leader') );
+
+
+        /*Form_BatchJob*/
+        this.forms.Form_BatchJob.addComponent(new DateComponent('RequesterDate','Date','Date','','') );
+        this.forms.Form_BatchJob.addComponent(new TxtComponent('RFCNumber','RFC Number','RFC Number',6) );
+
+        this.forms.Form_BatchJob.addComponent(new TxtComponent('RequestingDept','Requesting Dept.','Requesting Dept.',100) );
+        this.forms.Form_BatchJob.addComponent(new DateComponent('JobDate','Job Date','Job Date','','') );
+
+        this.forms.Form_BatchJob.addComponent(new TxtComponent('Systems','System','System',60) );
+        this.forms.Form_BatchJob.addComponent(new TxtComponent('JobTime','Job Time','Job Time',6) );
+
+        this.forms.Form_BatchJob.addComponent(new TxtComponent('JobName','Job Name','Job Name',30) );
+        this.forms.Form_BatchJob.addComponent(new DateComponent('ImplementDate','Implement Date','Implement Date','','') );
+
+        this.forms.Form_BatchJob.addComponent(new DropDownListComponent('JobType','Job Type','Job Type',[new Option('','','0') ,new Option('Report','Report','1') , new Option('Update Cycle','Update Cycle','2')]) );
+        this.forms.Form_BatchJob.addComponent(new TxtComponent('ImplementTime','Implement Time','Implement Time',6) );
+
+        this.forms.Form_BatchJob.addComponent(new DropDownListComponent('JobFrequency','Job Frequency','Job Frequency',[new Option('','','0') ,new Option('Daily','Daily','1') , new Option('Monthly','Monthly','2'), new Option('Yearly','Yearly','3'), new Option('On-Request','On-Request','4')]) );
+        this.forms.Form_BatchJob.addComponent(new TxtComponent('NEWOld','New/Old','New/Old',10) );
+
+        this.forms.Form_BatchJob.addComponent(new DropDownListComponent('RecoveryJobReq','Recovery Job Req.','Recovery Job Req.',[new Option('','','0') ,new Option('Y','Y','1') , new Option('N','N','2')]) );
+
+        this.forms.Form_BatchJob.addComponent(new TxtComponent('RFCDesc','RFC Description','RFC Description',300) );
+
+        this.forms.Form_BatchJob.addComponent(new TxtComponent('UserDeptName','User Dept. Names','User Dept. Names',200) );
+
+        this.forms.Form_BatchJob.addComponent(new TableComponent('ReportTable',[
+                                                                                        new TableColTxt('Add to Report Manager','Add to Report Manager'),
+                                                                                        new TableColTxt('No. of Copies','No. of Copies'),
+                                                                                        new TableColTxt('Report Name','Report Name'),
+                                                                                        new TableColTxt('Report Number','Report Number'),
+
+                                                                                    ], 8
+                                                                                    ) );
+
+        this.forms.Form_BatchJob.addComponent(new TableComponent('RunProgTable',[
+                                                                                        new TableColTxt('Before Run Program','Before Run Program'),
+                                                                                        new TableColTxt('Table Name','Table Name'),
+
+                                                                                    ], 4
+                                                                                    ) );  
+
+        this.forms.Form_BatchJob.addComponent(new NotesComponent('SpecialInstructions','Special Instructions','Special Instructions',4,300) );
+        
+        this.forms.Form_BatchJob.addSignature(new Signature('ReSE','SEName','SESig','Responsible SE','Responsible SE') ); 
+        this.forms.Form_BatchJob.addSignature(new Signature('TeamL','TeamLdName','TeamLeaderSig','Team Leader','Team Leader') );
+        this.forms.Form_BatchJob.addSignature(new Signature('GroupL','GroupLeaderName','GroupLeaderSig','Group Leader','Group Leader') );                                                                           
+
+         /*Form_DataModification*/
+        this.forms.Form_DataModification.addComponent(new DateComponent('RequesterDate','Date','Date','','') );
+        this.forms.Form_DataModification.addComponent(new TxtComponent('RFCNumber','RFC Number','RFC Number',6) );
+
+        this.forms.Form_DataModification.addComponent(new TxtComponent('RequestingDept','Requesting Dept.','Requesting Dept.',100) );
+        this.forms.Form_DataModification.addComponent(new DateComponent('ImplementDate','Implement Date','Implement Date','','') );
+
+        this.forms.Form_DataModification.addComponent(new TxtComponent('Systems','System','System',60) );
+        this.forms.Form_DataModification.addComponent(new TxtComponent('ImplementTime','Implement Time','Implement Time',6) );
+
+        this.forms.Form_DataModification.addComponent(new DropDownListComponent('Environments','Environment','Environment',[new Option('','','0') ,new Option('DB2U','DB2U','1') , new Option('DB2P','DB2P','2')]) );
+
+        this.forms.Form_DataModification.addComponent(new TxtComponent('RFCDesc','RFC Description','RFC Description',300) );
+
+        this.forms.Form_DataModification.addComponent(new TableComponent('SpufiTable',[
+                                                                                        new TableColTxt('Action(I/U/D)','Action(I/U/D)'),
+                                                                                        new TableColTxt('DB2 Table Affected','DB2 Table Affected'),
+                                                                                        new TableColTxt('Run Time','Run Time'),
+                                                                                        new TableColTxt('Spufi Member','Spufi Member'),
+                                                                                        new TableColTxt('Spufi Library','Spufi Library'),
+
+                                                                                    ], 4
+                                                                                    ) );
+        this.forms.Form_DataModification.addComponent(new TableComponent('DB2Description',[
+                                                                                        new TableColTxt('Action(I/U/D)','Action(I/U/D)'),
+                                                                                        new TableColTxt('DB2 Table Affected','DB2 Table Affected'),
+                                                                                        new TableColTxt('Run Time','Run Time'),
+                                                                                        new TableColTxt('Spufi Member','Spufi Member'),
+                                                                                        new TableColTxt('Spufi Library','Spufi Library'),
+
+                                                                                    ], 4
+                                                                                    ) );
+
+        this.forms.Form_DataModification.addComponent(new TxtComponent('DB2Description','','','') );  
+        this.forms.Form_DataModification.addComponent(new TxtComponent('DB2Desc','','','') );                                                                          
+
+        this.forms.Form_DataModification.addSignature(new Signature('RSE','SEName','SESig','Responsible SE','Responsible SE') ); 
+        this.forms.Form_DataModification.addSignature(new Signature('TeamLd','TeamLdName','TeamLeaderSig','Team Leader','Team Leader') );
+        this.forms.Form_DataModification.addSignature(new Signature('GroupLd','GroupLeaderName','GroupLeaderSig','Group Leader','Group Leader') ); 
+
+        /*Form_EGLDeployment*/
+        this.forms.Form_EGLDeployment.addComponent(new DateComponent('RequesterDate','Date','Date','','') );
+        this.forms.Form_EGLDeployment.addComponent(new TxtComponent('RFCNumber','RFC Number','RFC Number',6) );
+
+        this.forms.Form_EGLDeployment.addComponent(new TxtComponent('RequestingDept','Requesting Dept.','Requesting Dept.',100) );
+        this.forms.Form_EGLDeployment.addComponent(new DateComponent('ImplementDate','Implement Date','Implement Date','','') );
+
+        this.forms.Form_EGLDeployment.addComponent(new TxtComponent('Systems','System','System',60) );
+        this.forms.Form_EGLDeployment.addComponent(new TxtComponent('ImplementTime','Implement Time','Implement Time',6) );
+
+        this.forms.Form_EGLDeployment.addComponent(new TxtComponent('Documentations','Documentation','Documentation',50) );
+
+        this.forms.Form_EGLDeployment.addComponent(new TxtComponent('RFCDesc','RFC Description','RFC Description',300) );
+
+        this.forms.Form_EGLDeployment.addComponent(new TableComponent('ModuleTable',[
+                                                                                        new TableColTxt('NEW(Y/N)','NEW(Y/N)'),
+                                                                                        new TableColTxt('WSDL (Y/N)','WSDL (Y/N)'),
+                                                                                        new TableColTxt('Layer (F/B)','Layer (F/B)'),
+                                                                                        new TableColTxt('Module Name','Module Name'),
+
+                                                                                    ], 3
+                                                                                    ) );
+
+        this.forms.Form_EGLDeployment.addComponent(new NotesComponent('SpecialInstructions','Special Instructions','Special Instructions',4,300) );
+        
+        this.forms.Form_EGLDeployment.addSignature(new Signature('ResponSE','SEName','SESig','Responsible SE','Responsible SE') ); 
+        this.forms.Form_EGLDeployment.addSignature(new Signature('TeamLed','TeamLdName','TeamLeaderSig','Team Leader','Team Leader') );
+        this.forms.Form_EGLDeployment.addSignature(new Signature('GroupLed','GroupLeaderName','GroupLeaderSig','Group Leader','Group Leader') );   
+
+         /*Form_SpecialReqforReport*/
+        this.forms.Form_SpecialReqforReport.addComponent(new DateComponent('RequesterDate','Date','Date','','') );
+        this.forms.Form_SpecialReqforReport.addComponent(new DateComponent('StartDate','Start Date','Start Date','','') );
+
+        this.forms.Form_SpecialReqforReport.addComponent(new TxtComponent('RequestingDept','Requesting Dept.','Requesting Dept.',100) );
+        this.forms.Form_SpecialReqforReport.addComponent(new DateComponent('EndDate','End Date','End Date','','') );
+
+        this.forms.Form_SpecialReqforReport.addComponent(new TxtComponent('ReportName','Report Name','ReportName',100) );
+        this.forms.Form_SpecialReqforReport.addComponent(new TxtComponent('NoOfCopy','No. of Copy','No. of Copy',10) );
+
+        this.forms.Form_SpecialReqforReport.addComponent(new TxtComponent('ReportNo','Report No.','Report No.',30) );
+        this.forms.Form_SpecialReqforReport.addComponent(new TxtComponent('CopiesType','Copies Type','Copies Type',10) );
+
+        this.forms.Form_SpecialReqforReport.addComponent(new NotesComponent('SpecialInstructions','Special Instructions','Special Instructions',4,300) );
+
+        this.forms.Form_SpecialReqforReport.addSignature(new Signature('ResponsibleSE','SEName','SESig','Responsible SE','Responsible SE') ); 
+        this.forms.Form_SpecialReqforReport.addSignature(new Signature('TeamLead','TeamLdName','TeamLeaderSig','Team Leader','Team Leader') );
+        this.forms.Form_SpecialReqforReport.addSignature(new Signature('GroupLead','GroupLeaderName','GroupLeaderSig','Group Leader','Group Leader') );  
+
+         /*Form_OperationSupportAction*/
+        this.forms.Form_OperationSupportAction.addComponent(new DateComponent('RequesterDate','Date','Date','','') );
+        this.forms.Form_OperationSupportAction.addComponent(new TxtComponent('RFCNumber','RFC Number','RFC Number',6) );
+
+        this.forms.Form_OperationSupportAction.addComponent(new TxtComponent('RequestingDept','Requesting Dept.','Requesting Dept.',100) );
+        this.forms.Form_OperationSupportAction.addComponent(new DateComponent('ImplementDate','Implement Date','Implement Date','','') );
+
+        this.forms.Form_OperationSupportAction.addComponent(new TxtComponent('Systems','System','System',60) );
+        this.forms.Form_OperationSupportAction.addComponent(new TxtComponent('ImplementTime','Implement Time','Implement Time',6) );
+
+        this.forms.Form_OperationSupportAction.addComponent(new NotesComponent('OpsNotes','Ops Notes','Ops Notes',4,300) );
+
+        this.forms.Form_OperationSupportAction.addSignature(new Signature('ImplementedBy','ImpName','ImpSig','Implemented By','Implemented By') ); 
+        this.forms.Form_OperationSupportAction.addSignature(new Signature('Approval','AppName','AppSig','Approval','Approval') );
+    },
+
+    main(){
+        try{
+            this.defineComponents();
+            process.initialize();
+            let stepName = process.workItem.stepName
+            process.recieversList.loadManager();
+
+            
+
+            if(stepName == this.steps.PerLeave_Launch){   
+            }
+            else if(stepName == this.steps.PerLeave_TLApprove){
+            }
+        
+            
+            
+            /* form manipulation */
+                //this.forms.Form_PromotionForm.enable();
+                //this.forms.Form_PromotionForm.disable();
+                this.forms.Form_PromotionForm.select();
+                this.forms.Form_PromotionForm.updateComponentsFromEntity();
+                
+        
+
+
+
+
+            app.renderLabels();
+            process.openProcessModal();
+            process.setWorkFlowIDLabel();
+        }
+        catch(error){ throw error;}
+    },
+
+    validate(){
+        //validator.markAsInvalidField('myTxt');
+     },
+
+    send(){ },
+
+    
+    // testSignature(){
+    //     util.viewObjectContent(this.forms.Form_PromotionForm.components.SupSignature.getSigner()); 
+    // },
+
+
+}
+
+$(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alertError(error.message); }} );
+</script>
+
+<style>
+    .nav-pills .nav-link.active {
+    background-color: rgb(108, 117, 126) !important;
+}
+</style>
+
+<div class="container-fluid pr-1 pl-1" >
+    <div class="row">
+        <div class="col p-1 " >
+            <nav>
+                <div class="nav nav-pills mb-1 ml-auto" id="nav-tab" role="tablist"></div>
+            </nav>
+            <div class="tab-content shadow border border-secondary rounded p-2 bg-white" id="nav-tabContent">
+                <!-- Form_PromotionForm -->
+                <div class="tab-pane fade show active" id="nav-Form_PromotionForm" role="tabpanel" aria-labelledby="Form_PromotionForm-tab">
+                    <!-- the main container for all Form_PromotionForm controls -->
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col p-1 mb-4" data-container-for="Form_PromotionForm_title"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RFCNumber"></div>
+                            <div class="col pr-3 pl-3 pt-2"></div>
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RequesterDate"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="ImplementDate"></div>
+                            <div class="col pr-3 pl-3 pt-2"></div>
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RequestingDept"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="ImplementTime"></div>
+                            <div class="col pr-3 pl-3 pt-2"></div>
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="Systems"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2"></div>
+                            <div class="col pr-3 pl-3 pt-2"></div>
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="PackageName"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RFCDesc"></div>
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3 pt-2" data-container-for="ProgramTable"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2" data-container-for="SpecialInstructions"></div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2 pb-2" data-container-for="GroupLeader"></div>
+                            <div class="col pr-3 pl-3 pt-2 pb-2" data-container-for="TeamLeader"></div>
+                            <div class="col pr-3 pl-3 pt-2 pb-2" data-container-for="SE"></div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Form_QMFBatchJob -->
+                <div class="tab-pane" id="nav-Form_QMFBatchJob" role="tabpanel" aria-labelledby="Form_QMFBatchJob-tab">
+                    <!-- the main container for all Form_QMFBatchJob controls -->
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col p-1 mb-4" data-container-for="Form_QMFBatchJob_title"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RFCNumber"></div>
+                            <div class="col pr-3 pl-3 pt-2"></div>
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RequesterDate"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="NoOfCopy"></div>
+                            <div class="col pr-3 pl-3 pt-2"></div>
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RequestingDept"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="ImplementDate"></div>
+                            <div class="col pr-3 pl-3 pt-2"></div>
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="UserDeptName"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="ImplementTime"></div>
+                            <div class="col pr-3 pl-3 pt-2"></div>
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="Systems"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="NEWOld"></div>
+                            <div class="col pr-3 pl-3 pt-2"></div>
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="QMFjob"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2"></div>
+                            <div class="col pr-3 pl-3 pt-2"></div>
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="Environments"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RFCDesc"></div>
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3 pt-2" data-container-for="JobTable"></div>
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3 pt-2" data-container-for="QueryTable"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2" data-container-for="SpecialInstructions"></div>
+                        </div>
+                      
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2 pb-2" data-container-for="Group"></div>
+                            <div class="col pr-3 pl-3 pt-2 pb-2" data-container-for="Team"></div>
+                            <div class="col pr-3 pl-3 pt-2 pb-2" data-container-for="ResSE"></div>
+                        </div>
+                        
+                    </div>
+                </div>
+
+
+                <!-- Form_BatchJob -->
+                <div class="tab-pane" id="nav-Form_BatchJob" role="tabpanel" aria-labelledby="Form_BatchJob-tab">
+                    <!-- the main container for all Form_BatchJob controls -->
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col p-1 mb-4" data-container-for="Form_BatchJob_title"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RFCNumber"></div>
+                            <div class="col pr-3 pl-3 pt-2"></div>
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RequesterDate"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="JobDate"></div>
+                            <div class="col pr-3 pl-3 pt-2"></div>
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RequestingDept"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="JobTime"></div>
+                            <div class="col pr-3 pl-3 pt-2"></div>
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="Systems"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="ImplementDate"></div>
+                            <div class="col pr-3 pl-3 pt-2"></div>
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="JobName"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="ImplementTime"></div>
+                            <div class="col pr-3 pl-3 pt-2"></div>
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="JobType"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="NEWOld"></div>
+                            <div class="col pr-3 pl-3 pt-2"></div>
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="JobFrequency"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2"></div>
+                            <div class="col pr-3 pl-3 pt-2"></div>
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RecoveryJobReq"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RFCDesc"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="UserDeptName"></div>
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3 pb-2" data-container-for="ReportTable"></div>
+                        </div>
+
+                        <div style="text-align: left; font-weight: bold;">DB2 Tables to backup Before Run</div>
+
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3 pt-2" data-container-for="RunProgTable"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2" data-container-for="SpecialInstructions"></div>
+                        </div>
+                      
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2 pb-2" data-container-for="GroupL"></div>
+                            <div class="col pr-3 pl-3 pt-2 pb-2" data-container-for="TeamL"></div>
+                            <div class="col pr-3 pl-3 pt-2 pb-2" data-container-for="ReSE"></div>
+                        </div>
+                        
+                    </div>
+                </div>
+
+                <!-- Form_DataModification -->
+                <div class="tab-pane" id="nav-Form_DataModification" role="tabpanel" aria-labelledby="Form_DataModification-tab">
+                    <!-- the main container for all Form_DataModification controls -->
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col p-1 mb-4" data-container-for="Form_DataModification_title"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RFCNumber"></div>
+                            <div class="col pr-3 pl-3 pt-2"></div>
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RequesterDate"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="ImplementDate"></div>
+                            <div class="col pr-3 pl-3 pt-2"></div>
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RequestingDept"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="ImplementTime"></div>
+                            <div class="col pr-3 pl-3 pt-2"></div>
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="Systems"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2"></div>
+                            <div class="col pr-3 pl-3 pt-2"></div>
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="Environments"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RFCDesc"></div>
+                        </div>
+
+                        <br>
+
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3 pt-2" data-container-for="SpufiTable"></div>
+                        </div>
+
+                        <br>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2" data-container-for="DB2Description"></div>
+                            <div class="col pr-3 pl-3 pt-2" data-container-for="DB2Desc"></div>
+                        </div>
+                        
+                        <br>
+                        <br>
+                        
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-3 pb-2" data-container-for="GroupLd"></div>
+                            <div class="col pr-3 pl-3 pt-3 pb-2" data-container-for="TeamLd"></div>
+                            <div class="col pr-3 pl-3 pt-3 pb-2" data-container-for="RSE"></div>
+                        </div>
+                    </div>
+                </div>
+
+                 <!-- Form_EGLDeployment -->
+                 <div class="tab-pane" id="nav-Form_EGLDeployment" role="tabpanel" aria-labelledby="Form_EGLDeployment-tab">
+                    <!-- the main container for all Form_EGLDeployment controls -->
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col p-1 mb-4" data-container-for="Form_EGLDeployment_title"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RFCNumber"></div>
+                            <div class="col pr-3 pl-3 pt-2"></div>
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RequesterDate"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="ImplementDate"></div>
+                            <div class="col pr-3 pl-3 pt-2"></div>
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RequestingDept"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="ImplementTime"></div>
+                            <div class="col pr-3 pl-3 pt-2"></div>
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="Systems"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2"></div>
+                            <div class="col pr-3 pl-3 pt-2"></div>
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="Documentations"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RFCDesc"></div>
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3 pt-2" data-container-for="ModuleTable"></div>
+                        </div>
+
+                        <br> 
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2" data-container-for="SpecialInstructions"></div>
+                        </div>
+                        <br>
+                        <br>  
+                        <br>
+                        <br>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-3 pb-2" data-container-for="GroupLed"></div>
+                            <div class="col pr-3 pl-3 pt-3 pb-2" data-container-for="TeamLed"></div>
+                            <div class="col pr-3 pl-3 pt-3 pb-2" data-container-for="ResponSE"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form_SpecialReqforReport -->
+                <div class="tab-pane" id="nav-Form_SpecialReqforReport" role="tabpanel" aria-labelledby="Form_SpecialReqforReport-tab">
+                    <!-- the main container for all Form_SpecialReqforReport controls -->
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col p-1 mb-4" data-container-for="Form_SpecialReqforReport_title"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="StartDate"></div>
+                            <div class="col pr-3 pl-3 pt-2"></div>
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RequesterDate"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="EndDate"></div>
+                            <div class="col pr-3 pl-3 pt-2"></div>
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RequestingDept"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="NoOfCopy"></div>
+                            <div class="col pr-3 pl-3 pt-2"></div>
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="ReportName"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="CopiesType"></div>
+                            <div class="col pr-3 pl-3 pt-2"></div>
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="ReportNo"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RFCDesc"></div>
+                        </div>
+
+                        <br> 
+                        
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2" data-container-for="SpecialInstructions"></div>
+                        </div>
+                        
+                        <br>
+                        <br>
+                        <br>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-3 pb-2" data-container-for="GroupLead"></div>
+                            <div class="col pr-3 pl-3 pt-3 pb-2" data-container-for="TeamLead"></div>
+                            <div class="col pr-3 pl-3 pt-3 pb-2" data-container-for="ResponsibleSE"></div>
+                        </div>
+                    </div>
+                </div>
+
+                 <!-- Form_OperationSupportAction -->
+                 <div class="tab-pane" id="nav-Form_OperationSupportAction" role="tabpanel" aria-labelledby="Form_OperationSupportAction-tab">
+                    <!-- the main container for all Form_OperationSupportAction controls -->
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col p-1 mb-4" data-container-for="Form_OperationSupportAction_title"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RFCNumber"></div>
+                            <div class="col pr-3 pl-3 pt-2"></div>
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RequesterDate"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="ImplementDate"></div>
+                            <div class="col pr-3 pl-3 pt-2"></div>
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RequestingDept"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="ImplementTime"></div>
+                            <div class="col pr-3 pl-3 pt-2"></div>
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="Systems"></div>
+                        </div>
+
+                        <br> 
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2" data-container-for="OpsNotes"></div>
+                        </div>
+
+                        <br>
+                        <br>
+                        <br>
+                        
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2 pb-2" data-container-for="Approval"></div>
+                            <div class="col pr-3 pl-3 pt-2"></div>
+                            <div class="col pr-3 pl-3 pt-2 pb-2" data-container-for="ImplementedBy"></div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="text-right">
+                    <hr>
+                    <label id="workflowIDLabel" class="text-danger">مسلسل الاجراء</label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

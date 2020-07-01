@@ -1,0 +1,227 @@
+<script >
+    
+/**
+ * WorkItem{
+        workFlowName,workflowID,subject,recieveDate,stepNo,workFlowVersion,workFlowType,stepName,nextStepName,instructions,workObjectID,comments,action,
+        sender,reciever,branch,forms,attachments
+        isLastStep = false;
+}
+ */
+
+
+
+process.controller = {
+    errMsg : "",
+    groups : {  
+         //groupFollowUpTLs : ["FollowUp_TLs"],    // groupFollowUpEmps : ["FollowUp_Emps"],
+    },
+
+    steps : {
+        PerLeave_Launch : 'PerLeave_Launch',
+        PerLeave_TLApprove: 'PerLeave_TLApprove',
+        PerLeave_SupApprove: 'PerLeave_SupApprove',
+        PerLeave_DeptSec: 'PerLeave_DeptSec',
+        PerLeave_MngApprove: 'PerLeave_MngApprove',
+        PerLeave_Update: 'PerLeave_Update',
+        PerLeave_DDGApprove: 'PerLeave_DDGApprove',
+        PerLeave_DDGSec: 'PerLeave_DDGSec',
+        PerLeave_PersAdminSec : 'PerLeave_PersAdminSec',
+        PerLeave_PersAdminEmp : 'PerLeave_PersAdminEmp',
+        PerLeave_PersAdminTL : 'PerLeave_PersAdminTL',
+        PerLeave_PersAdminSup : 'PerLeave_PersAdminSup',
+        PerLeave_FinSec : 'PerLeave_FinSec',
+        PerLeave_FinSup : 'PerLeave_FinSup',
+        PerLeave_FinTL : 'PerLeave_FinTL',
+        PerLeave_FinEmp : 'PerLeave_FinEmp',
+    },
+
+    forms : {
+        Form_TsService : new Form('Form_TsService', 'طلب خدمة تشغيل آلي','TS Service'),
+    },
+
+    defineComponents(){    
+        this.forms.Form_TsService.addComponent(new DateComponent('RequesterDate','التاريخ','Date','','') );
+        this.forms.Form_TsService.addComponent(new DateComponent('StartDate','تاريخ البدء','Start Date','','') );
+
+        this.forms.Form_TsService.addComponent(new TxtComponent('Department','الإدارة','Department',100) );
+        this.forms.Form_TsService.addComponent(new DateComponent('EndDate','تاريخ الانتهاء','End Date','','') );
+
+        this.forms.Form_TsService.addComponent(new TxtComponent('ReportName','اسم الكشف','Report Name',20) );
+        this.forms.Form_TsService.addComponent(new TxtComponent('ReportNumber','رقم الكشف','Report Number',20) );
+
+        this.forms.Form_TsService.addComponent(new TxtComponent('NoOfCopy','عدد النسخ','No. of Copy',10) );
+ 
+        this.forms.Form_TsService.addComponent(new NotesComponent('SpecialInstructions','تعليمات خاصة','Special Instructions',4,300) );
+        
+        this.forms.Form_TsService.addSignature(new Signature('SysEng','SysName','SysSig','مقدم الطلب','System Engineer')  );
+        this.forms.Form_TsService.addSignature(new Signature('Manager','MngName','MngSig','اعتمــاد المدير','Manager Approval')  );
+        
+        this.forms.Form_TsService.addComponent(new NotesComponent('Notes','الملاحظـــــات','Notes',4,300) );
+
+        this.forms.Form_TsService.addSignature(new Signature('ImplementedBy','IMPName','IMPSig','الموظف','OPS Employee')  );
+        this.forms.Form_TsService.addSignature(new Signature('Approval','AppName','AppSig','الاعتمــاد','Approval')  );
+        
+        
+    },
+
+    main(){
+        try{
+            this.defineComponents();
+            process.initialize();
+            let stepName = process.workItem.stepName;
+            process.recieversList.loadManager();
+
+
+            if(stepName == this.steps.PerLeave_Launch){   
+            }
+            else if(stepName == this.steps.PerLeave_TLApprove){
+            }
+        
+            
+            /* component manipulation */ 
+                //this.forms.Form_TsService.components.RequesterName.setValue('ABC');
+                //this.forms.Form_TsService.components.requesterName.disable();
+                
+                //this.forms.Form_TsService.components.FromDate.setMinDate('2020-05-01');
+                //this.forms.Form_TsService.components.FromDate.setMaxDate('2020-05-10');
+                
+                //this.forms.Form_TsService.components.VactionType.setValue(2);//give it the value of the option object to be selected
+                //alert(this.forms.Form_TsService.components.VactionType.getText()); // retrieves the shown selected text
+                //this.forms.Form_TsService.components.VactionType.setOptions([new Option('','','')]); //load different options
+                //this.forms.Form_TsService.components.VactionType.addOption( new Option('x','x','3') );
+                //this.forms.Form_TsService.components.VactionType.addOption(new Option('y','y','4') );
+                //this.forms.Form_TsService.components.VactionType.setValue('3');
+                //this.forms.Form_TsService.components.VactionType.removeOptionByValue('4');
+                
+                //this.forms.Form_TsService.components.IsPaid.disable();
+                //this.forms.Form_TsService.components.IsPaid.setValue(true);
+                //this.forms.Form_TsService.components.IsPaid.check();
+                //this.forms.Form_TsService.components.IsPaid.uncheck();
+                
+                //this.forms.Form_TsService.components.SupName.setValue('محمد فاروق');
+                // this.forms.Form_TsService.components.SupSig.enable();
+                
+
+                //this.forms.Form_TsService.components.Attachments.setValue('مرفق 1*مرفق 3*');
+                //this.forms.Form_TsService.components.Attachments.disable();
+                //this.forms.Form_TsService.components.Attachments.enable();
+                
+
+
+            
+            /* form manipulation */
+                //this.forms.Form_TsService.enable();
+                //this.forms.Form_TsService.disable();
+                this.forms.Form_TsService.select();
+                this.forms.Form_TsService.updateComponentsFromEntity();
+                
+        
+            
+
+
+            app.renderLabels();
+            process.openProcessModal();
+            process.setWorkFlowIDLabel();
+        }
+        catch(error){ throw error;}
+    },
+
+    validate(){
+        //validator.markAsInvalidField('myTxt');
+     },
+
+    send(){
+       
+    
+    // testSignature(){
+    //     util.viewObjectContent(this.forms.Form_RACFSecutiyForm.components.SupSignature.getSigner()); 
+    // },
+
+        
+     },
+
+
+
+}
+
+$(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alertError(error.message); }} );
+</script>
+
+<style>
+    .nav-pills .nav-link.active {
+    background-color: rgb(108, 117, 126) !important;
+}
+</style>
+
+<div class="container-fluid pr-1 pl-1" >
+    <div class="row">
+        <div class="col p-1 " >
+            <nav>
+                <div class="nav nav-pills mb-1 ml-auto" id="nav-tab" role="tablist"></div>
+            </nav>
+            <div class="tab-content shadow border border-secondary rounded p-2 bg-white" id="nav-tabContent">
+                <!-- Form_TsService-Tab -->
+                <div class="tab-pane show active" id="nav-Form_TsService" role="tabpanel" aria-labelledby="Form_TsService-tab">
+                    <!-- the main container for all Form_TsService controls -->
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col p-1 mb-4" data-container-for="Form_TsService_title"></div>
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" data-container-for="RequesterDate"></div>
+                            <div class="col pr-3 pl-3"></div>
+                            <div class="col pr-3 pl-3" data-container-for="StartDate"></div>       
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" data-container-for="Department"></div>
+                            <div class="col pr-3 pl-3"></div>
+                            <div class="col pr-3 pl-3" data-container-for="EndDate"></div>      
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" data-container-for="ReportName"></div>
+                            <div class="col pr-3 pl-3"></div>
+                            <div class="col pr-3 pl-3" data-container-for="ReportNumber"></div>  
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" data-container-for="NoOfCopy"></div>
+                            <div class="col pr-3 pl-3"></div>
+                            <div class="col pr-3 pl-3"></div>
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" data-container-for="SpecialInstructions"></div>
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3 pt-2 pb-2" data-container-for="SysEng"></div>
+                            <div class="col pr-3 pl-3 pt-2 pb-2"></div>
+                            <div class="col pr-3 pl-3 pt-2 pb-2" data-container-for="Manager"></div>
+                        </div>
+
+                        <div style="text-align: right; font-weight: bold;">إدارة التشغيــل</div>
+
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" data-container-for="Notes"></div>
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3 pt-2" data-container-for="ImplementedBy"></div>
+                            <div class="col pr-3 pl-3 pt-2"></div>
+                            <div class="col pr-3 pl-3 pt-2" data-container-for="Approval"></div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="text-right">
+                    <hr>
+                    <label id="workflowIDLabel" class="text-danger">مسلسل الاجراء</label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

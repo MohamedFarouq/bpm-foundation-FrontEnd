@@ -1,0 +1,733 @@
+<script >
+    
+/**
+ * WorkItem{
+        workFlowName,workflowID,subject,recieveDate,stepNo,workFlowVersion,workFlowType,stepName,nextStepName,instructions,workObjectID,comments,action,
+        sender,reciever,branch,forms,attachments
+        isLastStep = false;
+}
+ */
+
+
+
+process.controller = {
+    errMsg : "",
+    groups : {  
+        /*	groupSSSEmps 	  = (isSSS_Main_TLs_DDG) ? ["SSS_Main_TLs_DDG"] : ["SSS_RS"];
+			groupPensLRes     = ["Pens_LegalResearchers"];
+			groupPensLRevs    = ["Pens_LegalTLs"];
+			groupPensAccs     = ["Pens_Accountants"];
+			groupPensAccRevs  = ["Pens_AccountantTLs"];
+			groupFollowUpEmps = ["FollowUp_Emps"];	*/
+    },
+
+    steps : {
+        PenRepay_Launch : 'PenRepay_Launch',
+        PenRepay_ImagingMain: 'PenRepay_ImagingMain',
+        PenRepay_ImagingGhornata: 'PenRepay_ImagingGhornata',
+        PenRepay_ImagingFahdAhmd: 'PenRepay_ImagingFahdAhmd',
+        PenRepay_ImagingJanoubSurra: 'PenRepay_ImagingJanoubSurra',
+        PenRepay_ImagingArdiya : 'PenRepay_ImagingArdiya',
+        PenRepay_ImagingSaadAbdallah : 'PenRepay_ImagingSaadAbdallah',
+        PenRepay_UpdateImg : 'PenRepay_UpdateImg',
+        PenRepay_PensSecInit : 'PenRepay_PensSecInit',
+        PenRepay_PensLegalResStudy : 'PenRepay_PensLegalResStudy',
+        PenRepay_PensLegalResStdUpdate : 'PenRepay_PensLegalResStdUpdate',
+        PenRepay_PensLegalTLApprove : 'PenRepay_PensLegalTLApprove',
+        PenRepay_PensSecToAcc : 'PenRepay_PensSecToAcc',
+        PenRepay_PensAccRepay : 'PenRepay_PensAccRepay',
+        PenRepay_PensAccRepayUpdate : 'PenRepay_PensAccRepayUpdate',
+        PenRepay_PensRevApproveRepay : 'PenRepay_PensRevApproveRepay',
+        PenRepay_PensAccPayment : 'PenRepay_PensAccPayment',
+        PenRepay_PensAccPaymentUpdate : 'PenRepay_PensAccPaymentUpdate',
+        PenRepay_PensRevApprovePayment : 'PenRepay_PensRevApprovePayment',
+        PenRepay_PensMngApprovePayment : 'PenRepay_PensMngApprovePayment',
+        PenRepay_PensAccRoute : 'PenRepay_PensAccRoute',
+        PenRepay_PensRevApproveToLegal : 'PenRepay_PensRevApproveToLegal',
+        PenRepay_PensAccUpdatetoLagal : 'PenRepay_PensAccUpdatetoLagal',
+        PenRepay_PensSecToLegalCorres : 'PenRepay_PensSecToLegalCorres',
+        PenRepay_PensLegalResCorres : 'PenRepay_PensLegalResCorres',
+        PenRepay_PensRevApprFileChgFin : 'PenRepay_PensRevApprFileChgFin',
+        PenRepay_PensAccUpdFileChgFin : 'PenRepay_PensAccUpdFileChgFin',
+        PenRepay_PensMngApprFileChgFin : 'PenRepay_PensMngApprFileChgFin',
+        PenRepay_FollowSecFileChg : 'PenRepay_FollowSecFileChg',
+        PenRepay_FollowEmpFileChg : 'PenRepay_FollowEmpFileChg',
+        PenRepay_PensRevApproveGenReg : 'PenRepay_PensRevApproveGenReg',
+        PenRepay_PensMngApproveGenReg : 'PenRepay_PensMngApproveGenReg',
+    },
+
+    forms : {
+        Form_AttachmentsSheet : new Form('Form_AttachmentsSheet','نموذج المستندات المرفقة بالملف','نموذج المستندات المرفقة بالملف'),
+        Form_PenRepayFileChangeSStoPen : new Form('Form_PenRepayFileChangeSStoPen','نموذج تحويل ملف للمعاشات','نموذج تحويل ملف للمعاشات'),
+        Form_PenRepayMergeMemo : new Form('Form_PenRepayMergeMemo','نموذج  مذكرة الموافقة على الجمع  بين المعاش التقاعدي والمرتب المقدم','نموذج  مذكرة الموافقة على الجمع  بين المعاش التقاعدي والمرتب المقدم'),
+        Form_PenRepayNotesMemoToAcc : new Form('Form_PenRepayNotesMemoToAcc','مذكرة الملاحظات','مذكرة الملاحظات'),
+        Form_PenRepayPaymentRequest : new Form('Form_PenRepayPaymentRequest','نموذج إعادة صرف معاش','نموذج إعادة صرف معاش'),
+        Form_PenRepayPaymentOrder : new Form('Form_PenRepayPaymentOrder','نموذج صرف مدفوعات غير دورية','نموذج صرف مدفوعات غير دورية'),
+        Form_PenRepayFileChangePentoFin : new Form('Form_PenRepayFileChangePentoFin','نموذج تحويل ملف لمتابعة السداد','نموذج تحويل ملف لمتابعة السداد'),
+        Form_PenRepayNotesMemoToLRS : new Form('Form_PenRepayNotesMemoToLRS','مذكرة الملاحظات إلى الباحث القانوني','مذكرة الملاحظات إلى الباحث القانوني'),
+        
+    },
+
+    defineComponents(){    
+        this.forms.Form_AttachmentsSheet.addComponent(new TxtComponent('From','من','من','') );
+        this.forms.Form_AttachmentsSheet.addComponent(new TxtComponent('To','إلى','إلى','') );
+        this.forms.Form_AttachmentsSheet.addComponent(new DateComponent('RequestDate','التاريخ','التاريخ','','') );
+        this.forms.Form_AttachmentsSheet.addComponent(new TxtComponent('CounterNo','رقم الكاونتر','رقم الكاونتر','') );
+        this.forms.Form_AttachmentsSheet.addComponent(new DateComponent('AppointmentDate','تاريخ المراجعة','تاريخ المراجعة','','') );
+        this.forms.Form_AttachmentsSheet.addComponent(new TxtComponent('ClientName','الاسم','الاسم','') );
+        this.forms.Form_AttachmentsSheet.addComponent(new TxtComponent('CivilID','الرقم المدني','الرقم المدني','') );
+        this.forms.Form_AttachmentsSheet.addComponent(new TxtComponent('FileNo','رقم الحفظ','رقم الحفظ','') );
+        this.forms.Form_AttachmentsSheet.addComponent(new TxtComponent('SSNo','رقم الهوية','رقم الهوية','') );
+        this.forms.Form_AttachmentsSheet.addComponent(new AttachmentsTableComponent('Attachments',['نموذج تحديث البيانات','صورة البطاقة المدنية','إقرار بصحة جهة الصرف']) );
+        this.forms.Form_AttachmentsSheet.addComponent(new NotesComponent('Notes','الملاحظـــــات','الملاحظـــــات',4,300) );
+        this.forms.Form_AttachmentsSheet.addComponent(new NotesComponent('MissingDocuments','نواقص في المستندات','نواقص في المستندات',4,300) );
+        this.forms.Form_AttachmentsSheet.addSignature(new Signature('AttachmentsIssuerSignature','AttachmentsIssuerUserName','AttachmentsIssuerSig','توقيع الباحثة التأمينية','توقيع الباحثة التأمينية'));
+        this.forms.Form_AttachmentsSheet.components.From.labelSize = 3;
+        this.forms.Form_AttachmentsSheet.components.From.render();
+        this.forms.Form_AttachmentsSheet.components.To.labelSize = 3;
+        this.forms.Form_AttachmentsSheet.components.To.render();
+        this.forms.Form_AttachmentsSheet.components.SSNo.labelSize = 3;
+        this.forms.Form_AttachmentsSheet.components.SSNo.render();
+        this.forms.Form_AttachmentsSheet.components.FileNo.labelSize = 3;
+        this.forms.Form_AttachmentsSheet.components.FileNo.render();
+        this.forms.Form_AttachmentsSheet.components.CivilID.labelSize = 3;
+        this.forms.Form_AttachmentsSheet.components.CivilID.render();
+        this.forms.Form_AttachmentsSheet.components.ClientName.labelSize = 3;
+        this.forms.Form_AttachmentsSheet.components.ClientName.render();
+
+        //نوع المعاملة
+        this.forms.Form_PenRepayFileChangeSStoPen.addComponent(new TxtComponent('FileChgSStoPenRequestType','نوع المعاملـة','نوع المعاملـة','إعادة صرف معاش') );
+        this.forms.Form_PenRepayFileChangeSStoPen.addComponent(new DateComponent('FileChgSStoPenDate','التاريخ','التاريخ','','') );
+        this.forms.Form_PenRepayFileChangeSStoPen.addComponent(new TxtComponent('FileChgSStoPenFrom','من','من','') );
+        this.forms.Form_PenRepayFileChangeSStoPen.addComponent(new TxtComponent('FileChgSStoPenTo','إلى','إلى','') );
+        this.forms.Form_PenRepayFileChangeSStoPen.addComponent(new TxtComponent('FileNo','رقم الحفظ','رقم الحفظ','') );
+        this.forms.Form_PenRepayFileChangeSStoPen.addComponent(new TxtComponent('SSNo','رقم الهوية','رقم الهوية','') );
+        this.forms.Form_PenRepayFileChangeSStoPen.addComponent(new TxtComponent('ClientName','الاسم','الاسم','') );
+        this.forms.Form_PenRepayFileChangeSStoPen.addComponent(new NotesComponent('FileChgSStoPenSubject','الملاحظـــــات','الملاحظـــــات',15,1200) );
+        this.forms.Form_PenRepayFileChangeSStoPen.addSignature(new Signature('FileChgSStoPenIssuerSignature','FileChgSStoPenIssuerName','FileChgSStoPenIssuerSig','توقيع الباحثة التأمينية','توقيع الباحثة التأمينية'));
+        this.forms.Form_PenRepayFileChangeSStoPen.components.FileChgSStoPenRequestType.labelSize = 3;
+        this.forms.Form_PenRepayFileChangeSStoPen.components.FileChgSStoPenRequestType.render();
+        this.forms.Form_PenRepayFileChangeSStoPen.components.FileChgSStoPenFrom.labelSize = 3;
+        this.forms.Form_PenRepayFileChangeSStoPen.components.FileChgSStoPenFrom.render();
+        this.forms.Form_PenRepayFileChangeSStoPen.components.FileChgSStoPenTo.labelSize = 3;
+        this.forms.Form_PenRepayFileChangeSStoPen.components.FileChgSStoPenTo.render();
+        this.forms.Form_PenRepayFileChangeSStoPen.components.FileNo.labelSize = 3;
+        this.forms.Form_PenRepayFileChangeSStoPen.components.FileNo.render();
+        this.forms.Form_PenRepayFileChangeSStoPen.components.SSNo.labelSize = 3;
+        this.forms.Form_PenRepayFileChangeSStoPen.components.SSNo.render();
+        this.forms.Form_PenRepayFileChangeSStoPen.components.ClientName.labelSize = 3;
+        this.forms.Form_PenRepayFileChangeSStoPen.components.ClientName.render();
+
+        this.forms.Form_PenRepayMergeMemo.addComponent(new DateComponent('MergeMemoDate','التاريخ','التاريخ','','') );
+        this.forms.Form_PenRepayMergeMemo.addComponent(new TxtComponent('FileNo','رقم الحفظ','رقم الحفظ','') );
+        this.forms.Form_PenRepayMergeMemo.addComponent(new TxtComponent('SSNo','رقم الهوية','رقم الهوية','') );
+        this.forms.Form_PenRepayMergeMemo.addComponent(new TxtComponent('ClientName','الاسم','الاسم','') );
+        this.forms.Form_PenRepayMergeMemo.addComponent(new ParagraphComponent('mrgMemoLine1','السيد المحاسب/','السيد المحاسب/','text-body font-weight-bold') );
+        this.forms.Form_PenRepayMergeMemo.addComponent(new ParagraphComponent('mrgMemoLine2','بعد الاطلاع على طلب الجمع بين المعـــاش التقاعـــدي والمرتب المقدم من المذكور إلى المؤسســة بتاريخ','بعد الاطلاع على طلب الجمع بين المعـــاش التقاعـــدي والمرتب المقدم من المذكور إلى المؤسســة بتاريخ','text-body font-weight-bold') );
+        this.forms.Form_PenRepayMergeMemo.addComponent(new DateComponent('InitialDate','','','','') );
+        this.forms.Form_PenRepayMergeMemo.addComponent(new ParagraphComponent('mrgMemoLine3','بشأن إبداء رغبتـــه في الجمـــع بين معاشـــه التقاعـــدي و مرتبـــه الذي يتقاضـــاه مـــن','بشأن إبداء رغبتـــه في الجمـــع بين معاشـــه التقاعـــدي و مرتبـــه الذي يتقاضـــاه مـــن','text-body font-weight-bold') );
+        this.forms.Form_PenRepayMergeMemo.addComponent(new TxtComponent('Destination','','','') );
+        this.forms.Form_PenRepayMergeMemo.addComponent(new ParagraphComponent('mrgMemoLine4','اعتباراً من','اعتباراً من','text-body font-weight-bold') );
+        this.forms.Form_PenRepayMergeMemo.addComponent(new DateComponent('PensionStartDate','','','','') );
+        this.forms.Form_PenRepayMergeMemo.addComponent(new ParagraphComponent('mrgMemoLine5','وحيث أن شروط الجمع تتوافر في شأنه.','وحيث أن شروط الجمع تتوافر في شأنه.','text-body font-weight-bold') );
+        this.forms.Form_PenRepayMergeMemo.addComponent(new ParagraphComponent('mrgMemoLine6','لـذا يجمع بين معاشـــه التقاعـــدي و مرتبه لدى صاحب العمل المذكور أعـلاه اعتباراً من','لـذا يجمع بين معاشـــه التقاعـــدي و مرتبه لدى صاحب العمل المذكور أعـلاه اعتباراً من','text-body font-weight-bold') );
+        this.forms.Form_PenRepayMergeMemo.addComponent(new DateComponent('MergeMemoStartDate','','','','') );
+        this.forms.Form_PenRepayMergeMemo.addComponent(new NotesComponent('MergeMemoNotes','ملاحظـــــات','ملاحظـــــات',9,300) );
+        this.forms.Form_PenRepayMergeMemo.addSignature(new Signature('MergeMemoLegalResSignature','MergeMemoLegalResName','MergeMemoLegalResSig','توقيـــع الباحـــث القانونـــــي','توقيـــع الباحـــث القانونـــــي'));
+        this.forms.Form_PenRepayMergeMemo.addSignature(new Signature('MergeMemoLegalSupSignature','MergeMemoLegalSupName','MergeMemoLegalSupSig','توقيـــع المراجــــــع القانونــي',' توقيـــع المراجــــــع القانونــي'));
+        this.forms.Form_PenRepayMergeMemo.components.FileNo.labelSize = 3;
+        this.forms.Form_PenRepayMergeMemo.components.FileNo.render();
+        this.forms.Form_PenRepayMergeMemo.components.SSNo.labelSize = 3;
+        this.forms.Form_PenRepayMergeMemo.components.SSNo.render();
+        this.forms.Form_PenRepayMergeMemo.components.ClientName.labelSize = 3;
+        this.forms.Form_PenRepayMergeMemo.components.ClientName.render();
+
+        this.forms.Form_PenRepayNotesMemoToAcc.addComponent(new DateComponent('NotesMemoToAccDate','التاريخ','التاريخ','','') );
+        this.forms.Form_PenRepayNotesMemoToAcc.addComponent(new TxtComponent('FileNo','رقم الحفظ','رقم الحفظ','') );
+        this.forms.Form_PenRepayNotesMemoToAcc.addComponent(new TxtComponent('SSNo','رقم الهوية','رقم الهوية','') );
+        this.forms.Form_PenRepayNotesMemoToAcc.addComponent(new TxtComponent('ClientName','الاسم','الاسم','') );
+        this.forms.Form_PenRepayNotesMemoToAcc.addComponent(new ParagraphComponent('memoToAccLine1','السيد المحاسب/','السيد المحاسب/','text-body font-weight-bold') );
+        this.forms.Form_PenRepayNotesMemoToAcc.addComponent(new NotesComponent('NotesMemoToAccSubject','الموضـــــــــوع','الموضـــــــــوع',15,300) );
+        this.forms.Form_PenRepayNotesMemoToAcc.addSignature(new Signature('NotesMemoToAccLegalResSignature','NotesMemoToAccLegalResName','NotesMemoToAccLegalResName','توقيـــع الباحـــث القانونـــــي','توقيـــع الباحـــث القانونـــــي'));
+        this.forms.Form_PenRepayNotesMemoToAcc.addSignature(new Signature('NotesMemoToAccLegalSupSignature','NotesMemoToAccLegalSupName','NotesMemoToAccLegalSupSig','توقيـــع المراجــــــع القانونــي',' توقيـــع المراجــــــع القانونــي'));
+        this.forms.Form_PenRepayNotesMemoToAcc.components.FileNo.labelSize = 3;
+        this.forms.Form_PenRepayNotesMemoToAcc.components.FileNo.render();
+        this.forms.Form_PenRepayNotesMemoToAcc.components.SSNo.labelSize = 3;
+        this.forms.Form_PenRepayNotesMemoToAcc.components.SSNo.render();
+        this.forms.Form_PenRepayNotesMemoToAcc.components.ClientName.labelSize = 3;
+        this.forms.Form_PenRepayNotesMemoToAcc.components.ClientName.render();
+
+        this.forms.Form_PenRepayPaymentRequest.addComponent(new DateComponent('PRDate','التاريخ','التاريخ','','') );
+        this.forms.Form_PenRepayPaymentRequest.addComponent(new TxtComponent('FileNo','رقم الحفظ','رقم الحفظ','') );
+        this.forms.Form_PenRepayPaymentRequest.addComponent(new TxtComponent('ClientName','الاسم','الاسم','') );
+        this.forms.Form_PenRepayPaymentRequest.addComponent(new ParagraphComponent('prLine1','نـــوع الحقـــوق التأمينيـــة المطلـــوب إعـــادة صرفهـــا','نـــوع الحقـــوق التأمينيـــة المطلـــوب إعـــادة صرفهـــا','text-body font-weight-bold') );
+        this.forms.Form_PenRepayPaymentRequest.addComponent(new TxtComponent('PRType','','','') );
+        this.forms.Form_PenRepayPaymentRequest.addComponent(new ParagraphComponent('prLine2','تـــم صـــرف المعــــاش التقــــاعدي حتــــى تاريــــــــخ','تـــم صـــرف المعــــاش التقــــاعدي حتــــى تاريــــــــخ','text-body font-weight-bold') );
+        this.forms.Form_PenRepayPaymentRequest.addComponent(new DateComponent('PaymentDate','','','') );
+        this.forms.Form_PenRepayPaymentRequest.addComponent(new TxtComponent('PRPaymentMethod','سبب إعادة الصرف','سبب إعادة الصرف','') );
+        this.forms.Form_PenRepayPaymentRequest.addComponent(new TxtComponent('PRSusAmount','المبلغ المعلق','المبلغ المعلق','') );
+        this.forms.Form_PenRepayPaymentRequest.addComponent(new DateComponent('ExecutionDate','تاريخ النفاذ','تاريخ النفاذ','') );
+        this.forms.Form_PenRepayPaymentRequest.addComponent(new TxtComponent('TotalAmount','إجمالي المعاش','إجمالي المعاش','') );
+        //----Multi columns makes sperations--------------------------------------------------
+        this.forms.Form_PenRepayPaymentRequest.addComponent(new TableComponent('DeductionCode',[new TableColTxt('مميــز الاستقطــاع','مميــز الاستقطــاع',['']),], 7) );
+        this.forms.Form_PenRepayPaymentRequest.addComponent(new TableComponent('DeductionAmount',[new TableColTxt('قيمــة الاستقطــاع','قيمــة الاستقطــاع',['']),], 7) );                                                                                    
+        this.forms.Form_PenRepayPaymentRequest.addComponent(new TableComponent('LastDateofCollection',[new TableColDate('محصــل حتــى',' محصــل حتــى',['',''],'',''),], 7) );                                                                                    
+        //-------------------------------------------------------------------------------------
+        this.forms.Form_PenRepayPaymentRequest.addComponent(new ParagraphComponent('prLine3','الفروق المستحقة عن الفترة مـن :','الفروق المستحقة عن الفترة مـن :','text-body text-right font-weight-bold') );
+        this.forms.Form_PenRepayPaymentRequest.addComponent(new DateComponent('PeriodFromDate','','','','') );
+        this.forms.Form_PenRepayPaymentRequest.addComponent(new ParagraphComponent('prLine4','حتى:','حتى:','text-body text-right font-weight-bold') );
+        this.forms.Form_PenRepayPaymentRequest.addComponent(new DateComponent('PeriodToDate','','','','') );
+        this.forms.Form_PenRepayPaymentRequest.addComponent(new TxtComponent('NetAmount','صافي المعاش','صافي المعاش','') );
+        this.forms.Form_PenRepayPaymentRequest.addComponent(new NotesComponent('PRNotes','ملاحظـــــات','ملاحظـــــات',7,300) );
+        this.forms.Form_PenRepayPaymentRequest.addSignature(new Signature('PREmpSignature','PREmpName','PREmpSig','توقـيـــــع المحاســــــــــب','توقـيـــــع المحاســــــــــب'));
+        this.forms.Form_PenRepayPaymentRequest.addSignature(new Signature('PRSupSignature','PRSupName','PRSupSig','توقـيـــــع المراجــــــــــــع','توقـيـــــع المراجــــــــــــع'));
+        this.forms.Form_PenRepayPaymentRequest.components.FileNo.labelSize = 3;
+        this.forms.Form_PenRepayPaymentRequest.components.FileNo.render();
+        this.forms.Form_PenRepayPaymentRequest.components.ClientName.labelSize = 3;
+        this.forms.Form_PenRepayPaymentRequest.components.ClientName.render();
+
+        this.forms.Form_PenRepayPaymentOrder.addComponent(new TxtComponent('FileNo','رقم الحفظ','رقم الحفظ','') );
+        this.forms.Form_PenRepayPaymentOrder.addComponent(new TxtComponent('SSNo','رقم الهوية','رقم الهوية','') );
+        this.forms.Form_PenRepayPaymentOrder.addComponent(new TxtComponent('RegistrationNo','رقم التسجيل','رقم التسجيل','') );
+        this.forms.Form_PenRepayPaymentOrder.addComponent(new TxtComponent('ClientName','الاسم','الاسم','') );
+        this.forms.Form_PenRepayPaymentOrder.addComponent(new TxtComponent('POSusAmount','المبلغ المعلق','المبلغ المعلق','') );
+        this.forms.Form_PenRepayPaymentOrder.addComponent(new TxtComponent('PORequestedAmount','المبلغ المطلوب صرفه','المبلغ المطلوب صرفه','') );
+        this.forms.Form_PenRepayPaymentOrder.addComponent(new TxtComponent('POPaymentReason','سبب الصـــرف','سبب الصـــرف','') );
+        this.forms.Form_PenRepayPaymentOrder.addComponent(new TxtComponent('POPaymentMethod','طريقة الصـــرف','طريقة الصـــرف','') );
+        this.forms.Form_PenRepayPaymentOrder.addComponent(new TxtComponent('POPaymentDestination','جهة السداد','جهة السداد','') );
+        this.forms.Form_PenRepayPaymentOrder.addComponent(new ParagraphComponent('poLine1','يـــحـــول المبـلـغ الــى:','يـــحـــول المبـلـغ الــى:','text-danger font-weight-bold') );
+        this.forms.Form_PenRepayPaymentOrder.addComponent(new TxtComponent('Bank','البنك','البنك','') );
+        this.forms.Form_PenRepayPaymentOrder.addComponent(new TxtComponent('AccountNo','رقم الحساب','رقم الحساب','') );
+        this.forms.Form_PenRepayPaymentOrder.addComponent(new NotesComponent('POPaymentType','نــوع المستحــقـــات','نــوع المستحــقـــات',7,300) );
+        this.forms.Form_PenRepayPaymentOrder.addComponent(new DateComponent('PODate','تحـــرير فــــي','تحـــرير فــــي','','') );
+        this.forms.Form_PenRepayPaymentOrder.addSignature(new Signature('POEmpSignature','POEmpName','POEmpSig','توقـيـــــع المحاســــــــــب','توقـيـــــع المحاســــــــــب'));
+        this.forms.Form_PenRepayPaymentOrder.addSignature(new Signature('POSupSignature','POSupName','POSupSig','توقـيـــــع المراجــــــــــــع','توقـيـــــع المراجــــــــــــع'));
+        this.forms.Form_PenRepayPaymentOrder.addSignature(new Signature('POMngSignature','POMngName','POMngSig','توقـيـــــع مديــــــر الإدارة','توقـيـــــع مديــــــر الإدارة'));
+        this.forms.Form_PenRepayPaymentOrder.components.FileNo.labelSize = 3;
+        this.forms.Form_PenRepayPaymentOrder.components.FileNo.render();
+        this.forms.Form_PenRepayPaymentOrder.components.SSNo.labelSize = 3;
+        this.forms.Form_PenRepayPaymentOrder.components.SSNo.render();
+        this.forms.Form_PenRepayPaymentOrder.components.RegistrationNo.labelSize = 3;
+        this.forms.Form_PenRepayPaymentOrder.components.RegistrationNo.render();
+        this.forms.Form_PenRepayPaymentOrder.components.ClientName.labelSize = 3;
+        this.forms.Form_PenRepayPaymentOrder.components.ClientName.render();
+        this.forms.Form_PenRepayPaymentOrder.components.POSusAmount.labelSize = 5;
+        this.forms.Form_PenRepayPaymentOrder.components.POSusAmount.render();
+        this.forms.Form_PenRepayPaymentOrder.components.PORequestedAmount.labelSize = 5;
+        this.forms.Form_PenRepayPaymentOrder.components.PORequestedAmount.render();
+        this.forms.Form_PenRepayPaymentOrder.components.POPaymentReason.labelSize = 5;
+        this.forms.Form_PenRepayPaymentOrder.components.POPaymentReason.render();
+        this.forms.Form_PenRepayPaymentOrder.components.POPaymentMethod.labelSize = 5;
+        this.forms.Form_PenRepayPaymentOrder.components.POPaymentMethod.render();
+        this.forms.Form_PenRepayPaymentOrder.components.POPaymentDestination.labelSize = 5;
+        this.forms.Form_PenRepayPaymentOrder.components.POPaymentDestination.render();
+
+        this.forms.Form_PenRepayFileChangePentoFin.addComponent(new DateComponent('FileChgPentoFinDate','التاريخ','التاريخ','','') );
+        this.forms.Form_PenRepayFileChangePentoFin.addComponent(new TxtComponent('FileChgPentoFinFrom','من','من','') );
+        this.forms.Form_PenRepayFileChangePentoFin.addComponent(new TxtComponent('FileChgPentoFinTo','إلى','إلى','') );
+        this.forms.Form_PenRepayFileChangePentoFin.addComponent(new TxtComponent('FileNo','رقم الحفظ','رقم الحفظ','') );
+        this.forms.Form_PenRepayFileChangePentoFin.addComponent(new TxtComponent('SSNo','رقم الهوية','رقم الهوية','') );
+        this.forms.Form_PenRepayFileChangePentoFin.addComponent(new TxtComponent('ClientName','الاسم','الاسم','') );
+        this.forms.Form_PenRepayFileChangePentoFin.addComponent(new NotesComponent('FileChgPentoFinSubject','الملاحظـــــات','الملاحظـــــات',15,1200) );
+        this.forms.Form_PenRepayFileChangePentoFin.addSignature(new Signature('FileChgPentoFinEmpSignature','FileChgPentoFinEmpName','FileChgPentoFinEmpSig','توقـيـــــع المحاســــــــــب','توقـيـــــع المحاســــــــــب'));
+        this.forms.Form_PenRepayFileChangePentoFin.addSignature(new Signature('FileChgPentoFinSupSignature','FileChgPentoFinSupName','FileChgPentoFinSupSig','توقـيـــــع المراجــــــــــــع','توقـيـــــع المراجــــــــــــع'));
+        this.forms.Form_PenRepayFileChangePentoFin.addSignature(new Signature('FileChgPentoFinMngSignature','FileChgPentoFinMngName','FileChgPentoFinMngSig','توقـيـــــع مديــــــر الإدارة','توقـيـــــع مديــــــر الإدارة'));
+        this.forms.Form_PenRepayFileChangePentoFin.components.FileChgPentoFinFrom.labelSize = 3;
+        this.forms.Form_PenRepayFileChangePentoFin.components.FileChgPentoFinFrom.render();
+        this.forms.Form_PenRepayFileChangePentoFin.components.FileChgPentoFinTo.labelSize = 3;
+        this.forms.Form_PenRepayFileChangePentoFin.components.FileChgPentoFinTo.render();
+        this.forms.Form_PenRepayFileChangePentoFin.components.FileNo.labelSize = 3;
+        this.forms.Form_PenRepayFileChangePentoFin.components.FileNo.render();
+        this.forms.Form_PenRepayFileChangePentoFin.components.SSNo.labelSize = 3;
+        this.forms.Form_PenRepayFileChangePentoFin.components.SSNo.render();
+        this.forms.Form_PenRepayFileChangePentoFin.components.ClientName.labelSize = 3;
+        this.forms.Form_PenRepayFileChangePentoFin.components.ClientName.render();
+
+        this.forms.Form_PenRepayNotesMemoToLRS.addComponent(new DateComponent('NotesMemoToLRSDate','التاريخ','التاريخ','','') );
+        this.forms.Form_PenRepayNotesMemoToLRS.addComponent(new TxtComponent('FileNo','رقم الحفظ','رقم الحفظ','') );
+        this.forms.Form_PenRepayNotesMemoToLRS.addComponent(new TxtComponent('SSNo','رقم الهوية','رقم الهوية','') );
+        this.forms.Form_PenRepayNotesMemoToLRS.addComponent(new TxtComponent('ClientName','الاسم','الاسم','') );
+        this.forms.Form_PenRepayNotesMemoToLRS.addComponent(new ParagraphComponent('memoToLRSLine1','السيد الباحث القانوني/','السيد الباحث القانوني/','text-body font-weight-bold') );
+        this.forms.Form_PenRepayNotesMemoToLRS.addComponent(new NotesComponent('NotesMemoToLRSSubject','الموضـــــــــوع','الموضـــــــــوع',15,300) );
+        this.forms.Form_PenRepayNotesMemoToLRS.addSignature(new Signature('NotesMemoToLRSEmpSignature','NotesMemoToLRSEmpName','NotesMemoToLRSEmpSig','توقيـــع الباحـــث القانونـــــي','توقيـــع الباحـــث القانونـــــي'));
+        this.forms.Form_PenRepayNotesMemoToLRS.addSignature(new Signature('NotesMemoToLRSSupSignature','NotesMemoToLRSSupName','NotesMemoToLRSSupSig','توقيـــع المراجــــــع القانونــي',' توقيـــع المراجــــــع القانونــي'));
+        this.forms.Form_PenRepayNotesMemoToLRS.components.FileNo.labelSize = 3;
+        this.forms.Form_PenRepayNotesMemoToLRS.components.FileNo.render();
+        this.forms.Form_PenRepayNotesMemoToLRS.components.SSNo.labelSize = 3;
+        this.forms.Form_PenRepayNotesMemoToLRS.components.SSNo.render();
+        this.forms.Form_PenRepayNotesMemoToLRS.components.ClientName.labelSize = 3;
+        this.forms.Form_PenRepayNotesMemoToLRS.components.ClientName.render();
+        this.forms.Form_PenRepayNotesMemoToLRS.components.FileNo.labelSize = 3;
+        this.forms.Form_PenRepayNotesMemoToLRS.components.FileNo.render();
+        this.forms.Form_PenRepayNotesMemoToLRS.components.SSNo.labelSize = 3;
+        this.forms.Form_PenRepayNotesMemoToLRS.components.SSNo.render();
+        this.forms.Form_PenRepayNotesMemoToLRS.components.ClientName.labelSize = 3;
+        this.forms.Form_PenRepayNotesMemoToLRS.components.ClientName.render();     
+    },
+
+    main(){
+        try{
+            this.defineComponents();
+            process.initialize();
+            let stepName = process.workItem.stepName;
+            process.recieversList.loadManager();
+
+            if(stepName == this.steps.PenAdv_Launch){   
+            }
+            else if(stepName == this.steps.PenAdv_SSReviewer){
+            }
+        
+            
+            this.forms.Form_AttachmentsSheet.select();
+            this.forms.Form_AttachmentsSheet.updateComponentsFromEntity();
+            app.renderLabels();
+            process.openProcessModal();
+            process.setWorkFlowIDLabel();
+        }
+        catch(error){ throw error;}
+    },
+
+    validate(){
+        //validator.markAsInvalidField('myTxt');
+     },
+
+    send(){ },
+
+}
+
+$(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alertError(error.message); }} );
+</script>
+
+<style>
+    .nav-pills .nav-link.active {
+    background-color: rgb(108, 117, 126) !important;
+}
+</style>
+
+<div class="container-fluid pr-1 pl-1" >
+    <div class="row">
+        <div class="col p-1 " >
+            <nav>
+                <div class="nav nav-pills mb-1 ml-auto" id="nav-tab" role="tablist"></div>
+            </nav>
+            <div class="tab-content shadow border border-secondary rounded p-2 bg-white" id="nav-tabContent">
+                <!-- Form_AttachmentsSheet-Tab -->
+                <div class="tab-pane fade show active" id="nav-Form_AttachmentsSheet" role="tabpanel" aria-labelledby="Form_AttachmentsSheet-tab">
+                    <!-- the main container for all Form_AttachmentsSheet controls -->
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col p-1 mb-4" data-container-for="Form_AttachmentsSheet_title"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="From"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3" data-container-for="RequestDate"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="To"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3" data-container-for="AppointmentDate"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="FileNo"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3" data-container-for="CounterNo"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="SSNo"></div>
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="CivilID"></div>
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="ClientName"></div>
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3"></div>
+                        </div> 
+                        <div class="row">
+                            <div class="col pt-3 pd-3 pr-3 pl-3"></div>
+                            <div class="col pt-3 pd-3 pr-3 pl-3" data-container-for="Attachments"></div>
+                            <div class="col pt-3 pd-3 pr-3 pl-3"></div>
+                        </div>                          
+                        <div class="row">
+                            <div class="col pt-3 pd-3 pr-3 pl-3" data-container-for="Notes"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pt-3 pd-3 pr-3 pl-3" data-container-for="MissingDocuments"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4 pr-3 pl-3"></div>
+                            <div class="col-4 pr-3 pl-3"></div>
+                            <div class="col-4 pt-3 pd-3 pr-3 pl-3" data-container-for="AttachmentsIssuerSignature"></div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                 <!-- Form_PenRepayFileChangeSStoPen-Tab -->
+                <div class="tab-pane fade" id="nav-Form_PenRepayFileChangeSStoPen" role="tabpanel" aria-labelledby="Form_PenRepayFileChangeSStoPen-tab">
+                    <!-- the main container for all Form_PenRepayFileChangeSStoPen controls -->
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col p-3" data-container-for="Form_PenRepayFileChangeSStoPen_title"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="FileChgSStoPenRequestType"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3" data-container-for="FileChgSStoPenDate"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="FileChgSStoPenFrom"></div>
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="FileChgSStoPenTo"></div>
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="FileNo"></div>
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="SSNo"></div>
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="ClientName"></div>
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>                       
+                        <div class="row">
+                            <div class="col pt-3 pd-3 pr-3 pl-3" data-container-for="FileChgSStoPenSubject"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4 pr-3 pl-3"></div>
+                            <div class="col-4 pr-3 pl-3"></div>
+                            <div class="col-4 pt-3 pd-3 pr-3 pl-3" data-container-for="FileChgSStoPenIssuerSignature"></div>
+                        </div>                        
+                    </div>
+                </div>
+
+                <!-- Form_PenRepayMergeMemo-Tab -->
+                <div class="tab-pane fade" id="nav-Form_PenRepayMergeMemo" role="tabpanel" aria-labelledby="Form_PenRepayMergeMemo-tab">
+                    <!-- the main container for all Form_PenRepayMergeMemo controls -->
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col p-3" data-container-for="Form_PenRepayMergeMemo_title"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="FileNo"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3" data-container-for="MergeMemoDate"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="SSNo"></div>
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="ClientName"></div>
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>                       
+                        <div class="row">
+                            <div class="col pt-3 pd-3 pr-3 pl-3" style="font-family: Arial, Helvetica, sans-serif; font-size: 22px;" data-container-for="mrgMemoLine1"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-1 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-7 pt-3 pd-3 text-left" style="font-family: Arial, Helvetica, sans-serif; font-size: 22px;" data-container-for="mrgMemoLine2"></div>
+                            <div class="col-2 pt-3 pd-3" style="text-align: right;" data-container-for="InitialDate"></div>
+                            <div class="col-2 pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-1 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-6 pt-3 pd-3 pr-3 pl-3" style="font-family: Arial, Helvetica, sans-serif; font-size: 22px;" data-container-for="mrgMemoLine3"></div>
+                            <div class="col-4 pt-3 pd-3 pr-3 pl-3" data-container-for="Destination"></div>
+                            <div class="col-1 pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-1 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-1 pt-3 pd-3 pr-3 pl-3" style="font-family: Arial, Helvetica, sans-serif; font-size: 22px;" data-container-for="mrgMemoLine4"></div>
+                            <div class="col-2 pt-3 pd-3 pr-3 pl-3" data-container-for="PensionStartDate"></div>
+                            <div class="col-4 pt-3 pd-3 pr-3 pl-3" style="font-family: Arial, Helvetica, sans-serif; font-size: 22px;" data-container-for="mrgMemoLine5"></div>
+                            <div class="col-4 pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-1 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-6 pt-3 pd-3 pr-3 pl-3" style="font-family: Arial, Helvetica, sans-serif; font-size: 22px;" data-container-for="mrgMemoLine6"></div>
+                            <div class="col-2 pt-3 pd-3 pr-3 pl-3" data-container-for="MergeMemoStartDate"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pt-3 pd-3 pr-3 pl-3" data-container-for="MergeMemoNotes"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4 pt-3 pd-3 pr-3 pl-3" data-container-for="MergeMemoLegalResSignature"></div>
+                            <div class="col-4 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-4 pt-3 pd-3 pr-3 pl-3" data-container-for="MergeMemoLegalSupSignature"></div>
+                        </div>           
+                    </div>
+                </div>
+
+                <!-- Form_PenRepayNotesMemoToAcc-Tab -->
+                <div class="tab-pane fade" id="nav-Form_PenRepayNotesMemoToAcc" role="tabpanel" aria-labelledby="Form_PenRepayNotesMemoToAcc-tab">
+                    <!-- the main container for all Form_PenRepayNotesMemoToAcc controls -->
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col p-3" data-container-for="Form_PenRepayNotesMemoToAcc_title"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="FileNo"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3" data-container-for="NotesMemoToAccDate"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="SSNo"></div>
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="ClientName"></div>
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pt-3 pd-3 pr-3 pl-3" style="font-family: Arial, Helvetica, sans-serif; font-size: 22px;" data-container-for="memoToAccLine1"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pt-3 pd-3 pr-3 pl-3" data-container-for="NotesMemoToAccSubject"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4 pt-3 pd-3 pr-3 pl-3" data-container-for="NotesMemoToAccLegalResSignature"></div>
+                            <div class="col-4 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-4 pt-3 pd-3 pr-3 pl-3" data-container-for="NotesMemoToAccLegalSupSignature"></div>
+                        </div>                    
+                    </div>
+                </div>
+
+
+                <!-- Form_PenRepayPaymentRequest-Tab -->
+                <div class="tab-pane fade" id="nav-Form_PenRepayPaymentRequest" role="tabpanel" aria-labelledby="Form_PenRepayPaymentRequest-tab">
+                    <!-- the main container for all Form_PenRepayPaymentRequest controls -->
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col p-3" data-container-for="Form_PenRepayPaymentRequest_title"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="FileNo"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3" data-container-for="PRDate"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="ClientName"></div>
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3"></div>
+                        </div> 
+                        <div class="row">
+                            <div class="col-1 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-4 pt-3 pd-3 text-left" style="font-family: Arial, Helvetica, sans-serif; font-size: 22px;" data-container-for="prLine1"></div>
+                            <div class="col-2 pt-3 pd-3" style="text-align: right;" data-container-for="PRType"></div>
+                            <div class="col-5 pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-1 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-4 pt-3 pd-3 text-left" style="font-family: Arial, Helvetica, sans-serif; font-size: 22px;" data-container-for="prLine2"></div>
+                            <div class="col-2 pt-3 pd-3" style="text-align: right;" data-container-for="PaymentDate"></div>
+                            <div class="col-5 pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-1 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-4 pt-3 pd-3" data-container-for="PRPaymentMethod"></div>
+                            <div class="col-2 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-4 pt-3 pd-3" data-container-for="PRSusAmount"></div>
+                            <div class="col-1 pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-1 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-4 pt-3 pd-3" data-container-for="ExecutionDate"></div>
+                            <div class="col-2 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-4 pt-3 pd-3" data-container-for="TotalAmount"></div>
+                            <div class="col-1 pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-1 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-4 pt-3 pd-3" data-container-for="DeductionCode"></div>
+                            <div class="col-3 pt-3 pd-3" data-container-for="DeductionAmount"></div>
+                            <div class="col-3 pt-3 pd-3" data-container-for="LastDateofCollection"></div>
+                            <div class="col-1 pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-1 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-3 pt-3 pd-3 text-left" style="font-family: Arial, Helvetica, sans-serif; font-size: 22px;" data-container-for="prLine3"></div>
+                            <div class="col-2 pt-3 pd-3" style="text-align: right;" data-container-for="PeriodFromDate"></div>
+                            <div class="col-1 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-4 pt-3 pd-3" data-container-for="NetAmount"></div>
+                            <div class="col-1 pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-1 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-3 pt-3 pd-3 text-left" style="font-family: Arial, Helvetica, sans-serif; font-size: 22px;" data-container-for="prLine4"></div>
+                            <div class="col-2 pt-3 pd-3" style="text-align: right;" data-container-for="PeriodToDate"></div>
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pt-3 pd-3 pr-3 pl-3" data-container-for="PRNotes"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-1 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-4 pt-3 pd-3 pr-3 pl-3" data-container-for="PREmpSignature"></div>
+                            <div class="col-2 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-4 pt-3 pd-3 pr-3 pl-3" data-container-for="PRSupSignature"></div>
+                            <div class="col-1 pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>                    
+                    </div>
+                </div>
+
+
+                <!-- Form_PenRepayPaymentOrder-Tab -->
+                <div class="tab-pane fade" id="nav-Form_PenRepayPaymentOrder" role="tabpanel" aria-labelledby="Form_PenRepayPaymentOrder-tab">
+                    <!-- the main container for all Form_PenRepayPaymentOrder controls -->
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col p-3" data-container-for="Form_PenRepayPaymentOrder_title"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="FileNo"></div>
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3"></div>
+                        </div> 
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="SSNo"></div>
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3"></div>
+                        </div> 
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="RegistrationNo"></div>
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3"></div>
+                        </div> 
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="ClientName"></div>
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3"></div>
+                        </div> 
+                        <div class="row">
+                            <div class="col-1 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-4 pt-3 pd-3" data-container-for="POSusAmount"></div>
+                            <div class="col-2 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-4 pt-3 pd-3" data-container-for="PORequestedAmount"></div>
+                            <div class="col-1 pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-1 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-4 pt-3 pd-3" data-container-for="POPaymentReason"></div>
+                            <div class="col-2 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-4 pt-3 pd-3" data-container-for="POPaymentMethod"></div>
+                            <div class="col-1 pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-1 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-4 pt-3 pd-3" data-container-for="POPaymentDestination"></div>
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-1 pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pt-3 pd-3 pr-3 pl-3" data-container-for="poLine1"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="Bank"></div>
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>  
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="AccountNo"></div>
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pt-3 pd-3 pr-3 pl-3" data-container-for="POPaymentType"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3 pt-3 pd-3 pr-3 pl-3" data-container-for="PODate"></div>
+                            <div class="col-9 pt-3 pd-3 pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4 pt-3 pd-3 pr-3 pl-3" data-container-for="POEmpSignature"></div>
+                            <div class="col-4 pt-3 pd-3 pr-3 pl-3" data-container-for="POSupSignature"></div>
+                            <div class="col-4 pt-3 pd-3 pr-3 pl-3" data-container-for="POMngSignature"></div>
+                        </div>                    
+                    </div>
+                </div>
+
+                <!-- Form_PenRepayFileChangePentoFin-Tab -->
+                <div class="tab-pane fade" id="nav-Form_PenRepayFileChangePentoFin" role="tabpanel" aria-labelledby="Form_PenRepayFileChangePentoFin-tab">
+                    <!-- the main container for all Form_PenRepayFileChangePentoFin controls -->
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col p-3" data-container-for="Form_PenRepayFileChangePentoFin_title"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="FileChgPentoFinFrom"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3" data-container-for="FileChgPentoFinDate"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="FileChgPentoFinTo"></div>
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="FileNo"></div>
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="SSNo"></div>
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="ClientName"></div>
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>                       
+                        <div class="row">
+                            <div class="col pt-3 pd-3 pr-3 pl-3" data-container-for="FileChgPentoFinSubject"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4 pt-3 pd-3 pr-3 pl-3" data-container-for="FileChgPentoFinEmpSignature"></div>
+                            <div class="col-4 pt-3 pd-3 pr-3 pl-3" data-container-for="FileChgPentoFinSupSignature"></div>
+                            <div class="col-4 pt-3 pd-3 pr-3 pl-3" data-container-for="FileChgPentoFinMngSignature"></div>
+                        </div>                    
+                    </div>
+                </div>                
+
+                <!-- Form_PenRepayNotesMemoToLRS-Tab -->
+                <div class="tab-pane fade" id="nav-Form_PenRepayNotesMemoToLRS" role="tabpanel" aria-labelledby="Form_PenRepayNotesMemoToLRS-tab">
+                    <!-- the main container for all Form_PenRepayNotesMemoToLRS controls -->
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col p-3" data-container-for="Form_PenRepayNotesMemoToLRS_title"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="FileNo"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3" data-container-for="NotesMemoToLRSDate"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="SSNo"></div>
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="ClientName"></div>
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pt-3 pd-3 pr-3 pl-3" style="font-family: Arial, Helvetica, sans-serif; font-size: 22px;" data-container-for="memoToLRSLine1"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pt-3 pd-3 pr-3 pl-3" data-container-for="NotesMemoToLRSSubject"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4 pt-3 pd-3 pr-3 pl-3" data-container-for="NotesMemoToLRSEmpSignature"></div>
+                            <div class="col-4 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-4 pt-3 pd-3 pr-3 pl-3" data-container-for="NotesMemoToLRSSupSignature"></div>
+                        </div>                    
+                    </div>
+                </div> 
+
+                <div class="text-right">
+                    <hr>
+                    <label id="workflowIDLabel" class="text-danger">مسلسل الاجراء</label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,662 @@
+<script >
+    
+/**
+ * WorkItem{
+        workFlowName,workflowID,subject,recieveDate,stepNo,workFlowVersion,workFlowType,stepName,nextStepName,instructions,workObjectID,comments,action,
+        sender,reciever,branch,forms,attachments
+        isLastStep = false;
+}
+ */
+
+
+
+process.controller = {
+    errMsg : "",
+    groups : {  
+        /*  groupRegAutoEntryEmps = ["Reg_AutoEntryEmps"];
+			groupRegAutoEntryTLs  = ["Reg_AutoEntryTLs"];
+			groupRegLegalEmps 	  = ["Reg_LegalResearchers"];
+			groupRegLegalTLs 	  = ["Reg_LegalTLs"];
+			groupReg3rdEmps 	  = ["Reg_3rdResearchers"];
+			groupReg3rdTLs 	  	  = ["Reg_3rdTLs"];
+			groupReg5thEmps 	  = ["Reg_5thResearchers"];
+			groupReg5thTLs 	  	  = ["Reg_5thTLs"];
+			groupRegEmployerEmps  = ["Reg_EmployerResarchers"];
+			groupRegEmployerTLs   = ["Reg_EmployerTLs"];			
+			groupPensLegalEmps	  = ["Pens_LegalResearchers"];
+			groupPensLegalTLs	  = ["Pens_LegalTLs"];
+			groupPensAccEmps	  = ["Pens_Accountants"];
+			groupPensAccTLs		  = ["Pens_AccountantTLs"];
+			groupFollowUpEmps 	  = ["FollowUp_Emps"];*/         
+    },
+
+    steps : {
+        PenReplInEmp_Launch : 'PenReplInEmp_Launch',
+        PenReplInEmp_ImagingMain: 'PenReplInEmp_ImagingMain',
+        PenReplInEmp_ImagingMishref: 'PenReplInEmp_ImagingMishref',
+        PenReplInEmp_ImagingGhornata: 'PenReplInEmp_ImagingGhornata',
+        PenReplInEmp_ImagingFahdAhmd: 'PenReplInEmp_ImagingFahdAhmd',
+        PenReplInEmp_ImagingJanoubSurra: 'PenReplInEmp_ImagingJanoubSurra',
+        PenReplInEmp_ImagingArdiya: 'PenReplInEmp_ImagingArdiya',
+        PenReplInEmp_ImagingSaadAbdallah: 'PenReplInEmp_ImagingSaadAbdallah',
+        PenReplInEmp_UpdateImg : 'PenReplInEmp_UpdateImg',
+        PenReplInEmp_RegSecInit : 'PenReplInEmp_RegSecInit',
+        PenReplInEmp_RegAutoEntry : 'PenReplInEmp_RegAutoEntry',
+        PenReplInEmp_RegAutoTLApprove : 'PenReplInEmp_RegAutoTLApprove',
+        PenReplInEmp_RegAutoEntryUpdate : 'PenReplInEmp_RegAutoEntryUpdate',
+        PenReplInEmp_RegManagement : 'PenReplInEmp_RegManagement',
+        PenReplInEmp_RegSecRoute : 'PenReplInEmp_RegSecRoute',
+        PenReplInEmp_RegLegalRes : 'PenReplInEmp_RegLegalRes',
+        PenReplInEmp_RegLegalTLApprove : 'PenReplInEmp_RegLegalTLApprove',
+        PenReplInEmp_RegLegalResUpdate : 'PenReplInEmp_RegLegalResUpdate',
+        PenReplInEmp_Reg3rdRes : 'PenReplInEmp_Reg3rdRes',
+        PenReplInEmp_Reg3rdTLApprove : 'PenReplInEmp_Reg3rdTLApprove',
+        PenReplInEmp_Reg3rdResUpdate : 'PenReplInEmp_Reg3rdResUpdate',
+        PenReplInEmp_Reg5thRes : 'PenReplInEmp_Reg5thRes',
+        PenReplInEmp_Reg5thTLApprove : 'PenReplInEmp_Reg5thTLApprove',
+        PenReplInEmp_Reg5thResUpdate : 'PenReplInEmp_Reg5thResUpdate',
+        PenReplInEmp_RegEmployerRes : 'PenReplInEmp_RegEmployerRes',
+        PenReplInEmp_RegEmployerTLApprove : 'PenReplInEmp_RegEmployerTLApprove',
+        PenReplInEmp_RegEmployerResUpdate : 'PenReplInEmp_RegEmployerResUpdate',
+        PenReplInEmp_PensSecToLegalRes : 'PenReplInEmp_PensSecToLegalRes',
+        PenReplInEmp_PensLegalRes : 'PenReplInEmp_PensLegalRes',
+        PenReplInEmp_PensLegalTLApprove : 'PenReplInEmp_PensLegalTLApprove',
+        PenReplInEmp_PensLegalResUpdate : 'PenReplInEmp_PensLegalResUpdate',
+        PenReplInEmp_PensSecToAccEstm : 'PenReplInEmp_PensSecToAccEstm',
+        PenReplInEmp_PensAccEstm : 'PenReplInEmp_PensAccEstm',
+        PenReplInEmp_PensAccTLEstmApprove : 'PenReplInEmp_PensAccTLEstmApprove',
+        PenReplInEmp_PensAccEstmUpdate : 'PenReplInEmp_PensAccEstmUpdate',
+        PenReplInEmp_PensAccPay : 'PenReplInEmp_PensAccPay',
+        PenReplInEmp_PensTLApprovePay : 'PenReplInEmp_PensTLApprovePay',
+        PenReplInEmp_PensAccPayUpdate : 'PenReplInEmp_PensAccPayUpdate',
+        PenReplInEmp_PensMngApprovePay : 'PenReplInEmp_PensMngApprovePay',
+        PenReplInEmp_PensAccRoute : 'PenReplInEmp_PensAccRoute',
+        PenReplInEmp_PensTLApproveToLegal : 'PenReplInEmp_PensTLApproveToLegal',
+        PenReplInEmp_PensAccUpdatetoLegal : 'PenReplInEmp_PensAccUpdatetoLegal',
+        PenReplInEmp_PensSecToLegalCorres : 'PenReplInEmp_PensSecToLegalCorres',
+        PenReplInEmp_PensLegalResCorres : 'PenReplInEmp_PensLegalResCorres',
+        PenReplInEmp_PensTLApprFileChgFin : 'PenReplInEmp_PensTLApprFileChgFin',
+        PenReplInEmp_PensAccUpdFileChgFin : 'PenReplInEmp_PensAccUpdFileChgFin',
+        PenReplInEmp_PensMngApprFileChgFin : 'PenReplInEmp_PensMngApprFileChgFin',
+        PenReplInEmp_FollowSecFileChg : 'PenReplInEmp_FollowSecFileChg',
+        PenReplInEmp_FollowEmpFileChg : 'PenReplInEmp_FollowEmpFileChg',
+        PenReplInEmp_PensTLApproveGenReg : 'PenReplInEmp_PensTLApproveGenReg',
+        PenReplInEmp_PensMngApproveGenReg : 'PenReplInEmp_PensMngApproveGenReg',
+
+    },
+
+    forms : {
+        Form_AttachmentsSheet : new Form('Form_AttachmentsSheet','نموذج المستندات المرفقة بالملف','نموذج المستندات المرفقة بالملف'),
+        Form_NotesMemoRegLegal : new Form('Form_NotesMemoRegLegal','مذكرة ملاحظات الباحث القانوني-التسجيل','مذكرة ملاحظات الباحث القانوني-التسجيل'),
+        Form_NotesMemoReg3rd : new Form('Form_NotesMemoReg3rd','مذكرة ملاحظات الباب الثالث-التسجيل','مذكرة ملاحظات الباب الثالث-التسجيل'),
+        Form_NotesMemoReg5th : new Form('Form_NotesMemoReg5th','مذكرة ملاحظات الباب الخامس-التسجيل','مذكرة ملاحظات الباب الخامس-التسجيل'),
+        Form_NotesMemoRegEmployer : new Form('Form_NotesMemoRegEmployer','مذكرة ملاحظات أصحاب الأعمال-التسجيل','مذكرة ملاحظات أصحاب الأعمال-التسجيل'),
+        Form_PenReplInEmpContributionPeriods : new Form('Form_PenReplInEmpContributionPeriods','نموذج مدد الاشتراك','نموذج مدد الاشتراك'),
+        /*Form_PenReplInEmpEstmPenLegCalc : new Form('Form_PenReplInEmpEstmPenLegCalc','نموذج تسوية معاش افتراضى-القانونيين','نموذج تسوية معاش افتراضى-القانونيين'),
+        Form_PenReplInEmpEstmPenAccCalc : new Form('Form_PenReplInEmpEstmPenAccCalc','نموذج تسوية معاش افتراضى-المحاسبين','نموذج تسوية معاش افتراضى-المحاسبين'),
+        Form_PenReplInEmpPaymentOrder : new Form('Form_PenReplInEmpPaymentOrder','نموذج استبدال جزء من المعاش الافتراضي','نموذج استبدال جزء من المعاش الافتراضي'),
+        Form_PenReplInEmpNotesMemoPens : new Form('Form_PenReplInEmpNotesMemoPens','مذكرة ملاحظات-أصحاب المعاشات','مذكرة ملاحظات-أصحاب المعاشات'),
+        Form_PenReplInEmpFileChangePentoFin : new Form('Form_PenReplInEmpFileChangePentoFin','نموذج تحويل ملف لمتابعة السداد','نموذج تحويل ملف لمتابعة السداد'),
+        Form_PenReplInEmpNotesMemoEnd : new Form('Form_PenReplInEmpNotesMemoEnd','مذكرة ملاحظات إنهاء المعاملة','مذكرة ملاحظات إنهاء المعاملة'),*/
+    },
+
+    defineComponents(){    
+        this.forms.Form_AttachmentsSheet.addComponent(new TxtComponent('From','من','من','') );
+        this.forms.Form_AttachmentsSheet.addComponent(new TxtComponent('To','إلى','إلى','') );
+        this.forms.Form_AttachmentsSheet.addComponent(new DateComponent('RequestDate','التاريخ','التاريخ','','') );
+        this.forms.Form_AttachmentsSheet.addComponent(new TxtComponent('CounterNo','رقم الكاونتر','رقم الكاونتر','') );
+        this.forms.Form_AttachmentsSheet.addComponent(new DateComponent('AppointmentDate','تاريخ المراجعة','تاريخ المراجعة','','') );
+        this.forms.Form_AttachmentsSheet.addComponent(new TxtComponent('ClientName','الاسم','الاسم','') );
+        this.forms.Form_AttachmentsSheet.addComponent(new TxtComponent('CivilID','الرقم المدني','الرقم المدني','') );
+        this.forms.Form_AttachmentsSheet.addComponent(new TxtComponent('FileNo','رقم الحفظ','رقم الحفظ','') );
+        this.forms.Form_AttachmentsSheet.addComponent(new TxtComponent('SSNo','رقم الهوية','رقم الهوية','') );
+//------Require for more colum as an attachment counter + some attachments count more that 1 document-------------------
+        this.forms.Form_AttachmentsSheet.addComponent(new AttachmentsTableComponent('Attachments',['كتاب وطلب استبدال أثناء الخدمة من جهة العمل مع التأكد من استيفاء جميع البيانات',
+                                                                                                   'صورة شهادة الجنسية الجديدة',
+                                                                                                   'صورة البطاقة المدنية سارية المفعول',
+                                                                                                   'صورة من شهادة الميلاد لمقدم طلب الاستبدال',
+                                                                                                   'صور من شهادات الميلاد للأبناء المشمولين بالعلاوة الاجتماعية',
+                                                                                                   'شهادة اثبات الإعاقة للأبناء المعاقين المشمولين بالعلاوة الاجتماعية إن وجد',
+                                                                                                   'صورة من شهادة اثبات إعاقة وبطاقة الإعاقة سارية المفعول للمعاق عند التقدم بطلب استبدال أثناء الخدمة',
+                                                                                                   'صورة من كتاب موافقة ديوان الخدمة المدنية على منح المرأة علاوة اجتماعية عن أولادها التي تعولهم وتتقاضي علاوة اجتماعية عنهم سارية المفعول',
+                                                                                                   'إشعار تحويل من البنك موضحاً بها رقم الآيبان وأن الحساب شخصي',
+                                                                                                   'شهادة راتب حديثة مفصلة شاملة لجميع الاستقطاعات التي تخصم من المرتب صادرة خلال شهر من تاريخ طلب استبدال أثناء الخدمة',
+                                                                                                   'صورة من قرار التعيين',
+                                                                                                   'شهادة تدرج أيام الانقطاع والإجازات الخاصة بدون مرتب',
+                                                                                                   'صورة من الوكالة والبطاقة المدنية سارية المفعول إذا كان مقدم الطلب الوكيل',
+                                                                                                   'نموذج تحويل ملف للمستندات الواردة من إدارة الخدمة التأمينية',
+                                                                                                   'قرارات',
+                                                                                                   'أخرى']) );
+//-------------------------------------------------------------------------------------------------------------------------
+        this.forms.Form_AttachmentsSheet.addComponent(new NotesComponent('Notes','الملاحظـــــات','الملاحظـــــات',4,300) );
+        this.forms.Form_AttachmentsSheet.addSignature(new Signature('AttachmentsIssuerSignature','AttachmentsIssuerUserName','AttachmentsIssuerSig','توقيع الباحثة التأمينية','توقيع الباحثة التأمينية'));
+        this.forms.Form_AttachmentsSheet.components.From.labelSize = 3;
+        this.forms.Form_AttachmentsSheet.components.From.render();
+        this.forms.Form_AttachmentsSheet.components.To.labelSize = 3;
+        this.forms.Form_AttachmentsSheet.components.To.render();
+        this.forms.Form_AttachmentsSheet.components.SSNo.labelSize = 3;
+        this.forms.Form_AttachmentsSheet.components.SSNo.render();
+        this.forms.Form_AttachmentsSheet.components.FileNo.labelSize = 3;
+        this.forms.Form_AttachmentsSheet.components.FileNo.render();
+        this.forms.Form_AttachmentsSheet.components.CivilID.labelSize = 3;
+        this.forms.Form_AttachmentsSheet.components.CivilID.render();
+        this.forms.Form_AttachmentsSheet.components.ClientName.labelSize = 3;
+        this.forms.Form_AttachmentsSheet.components.ClientName.render();
+
+
+
+        this.forms.Form_NotesMemoRegLegal.addComponent(new DateComponent('NotesMemoRegLegalDate','التاريخ','التاريخ','','') );
+        this.forms.Form_NotesMemoRegLegal.addComponent(new TxtComponent('NotesMemoRegLegalFrom','من','من','') );
+        this.forms.Form_NotesMemoRegLegal.addComponent(new TxtComponent('NotesMemoRegLegalTo','إلى','إلى','') );
+        this.forms.Form_NotesMemoRegLegal.addComponent(new TxtComponent('NotesMemoRegLegalFileNo','رقم الحفظ','رقم الحفظ','') );
+        this.forms.Form_NotesMemoRegLegal.addComponent(new TxtComponent('NotesMemoRegLegalSSNo','رقم الهوية','رقم الهوية','') );
+        this.forms.Form_NotesMemoRegLegal.addComponent(new TxtComponent('NotesMemoRegLegalCivilID','الرقم المدني','الرقم المدني','') );
+        this.forms.Form_NotesMemoRegLegal.addComponent(new TxtComponent('NotesMemoRegLegalClientName','الاسم','الاسم','') );
+        this.forms.Form_NotesMemoRegLegal.addComponent(new NotesComponent('NotesMemoRegLegalSubject','الموضــــــــــــــــوع','الموضــــــــــــــــوع',15,1200) );
+        this.forms.Form_NotesMemoRegLegal.addSignature(new Signature('NotesMemoRegLegalAutoEntryEmpSignature','NotesMemoRegLegalAutoEntryEmpName','NotesMemoRegLegalAutoEntryEmpSig','توقـيـــــع المدخل الآلي','توقـيـــــع المدخل الآلي'));
+        this.forms.Form_NotesMemoRegLegal.addSignature(new Signature('NotesMemoRegLegalAutoEntryTLSignature','NotesMemoRegLegalAutoEntryTLName','NotesMemoRegLegalAutoEntryTLSig','توقـيـــــع المراجع الآلي','توقـيـــــع المراجع الآلي'));
+        this.forms.Form_NotesMemoRegLegal.addComponent(new NotesComponent('NotesMemoRegLegalReply','رد الباحـــــــــــــــــــــــث','رد الباحـــــــــــــــــــــــث',15,1200) );
+        this.forms.Form_NotesMemoRegLegal.addSignature(new Signature('NotesMemoRegLegalResSignature','NotesMemoRegLegalResName','NotesMemoRegLegalResSig','توقـيـــــع الباحــــــــــث','توقـيـــــع الباحــــــــــث'));
+        this.forms.Form_NotesMemoRegLegal.addSignature(new Signature('NotesMemoRegLegalTLSignature','NotesMemoRegLegalTLName','NotesMemoRegLegalTLSig','توقـيـــــع المراجــــــــــــع','توقـيـــــع المراجــــــــــــع'));
+        this.forms.Form_NotesMemoRegLegal.components.NotesMemoRegLegalFrom.labelSize = 3;
+        this.forms.Form_NotesMemoRegLegal.components.NotesMemoRegLegalFrom.render();
+        this.forms.Form_NotesMemoRegLegal.components.NotesMemoRegLegalTo.labelSize = 3;
+        this.forms.Form_NotesMemoRegLegal.components.NotesMemoRegLegalTo.render();
+        this.forms.Form_NotesMemoRegLegal.components.NotesMemoRegLegalFileNo.labelSize = 3;
+        this.forms.Form_NotesMemoRegLegal.components.NotesMemoRegLegalFileNo.render();
+        this.forms.Form_NotesMemoRegLegal.components.NotesMemoRegLegalSSNo.labelSize = 3;
+        this.forms.Form_NotesMemoRegLegal.components.NotesMemoRegLegalSSNo.render();
+        this.forms.Form_NotesMemoRegLegal.components.NotesMemoRegLegalCivilID.labelSize = 3;
+        this.forms.Form_NotesMemoRegLegal.components.NotesMemoRegLegalCivilID.render();
+        this.forms.Form_NotesMemoRegLegal.components.NotesMemoRegLegalClientName.labelSize = 3;
+        this.forms.Form_NotesMemoRegLegal.components.NotesMemoRegLegalClientName.render();
+
+        this.forms.Form_NotesMemoReg3rd.addComponent(new DateComponent('NotesMemoReg3rdDate','التاريخ','التاريخ','','') );
+        this.forms.Form_NotesMemoReg3rd.addComponent(new TxtComponent('NotesMemoReg3rdFrom','من','من','') );
+        this.forms.Form_NotesMemoReg3rd.addComponent(new TxtComponent('NotesMemoReg3rdTo','إلى','إلى','') );
+        this.forms.Form_NotesMemoReg3rd.addComponent(new TxtComponent('NotesMemoReg3rdFileNo','رقم الحفظ','رقم الحفظ','') );
+        this.forms.Form_NotesMemoReg3rd.addComponent(new TxtComponent('NotesMemoReg3rdSSNo','رقم الهوية','رقم الهوية','') );
+        this.forms.Form_NotesMemoReg3rd.addComponent(new TxtComponent('NotesMemoReg3rdCivilID','الرقم المدني','الرقم المدني','') );
+        this.forms.Form_NotesMemoReg3rd.addComponent(new TxtComponent('NotesMemoReg3rdClientName','الاسم','الاسم','') );
+        this.forms.Form_NotesMemoReg3rd.addComponent(new NotesComponent('NotesMemoReg3rdSubject','الموضــــــــــــــــوع','الموضــــــــــــــــوع',15,1200) );
+        this.forms.Form_NotesMemoReg3rd.addSignature(new Signature('NotesMemoReg3rdAutoEntryEmpSignature','NotesMemoReg3rdAutoEntryEmpName','NotesMemoReg3rdAutoEntryEmpSig','توقـيـــــع المدخل الآلي','توقـيـــــع المدخل الآلي'));
+        this.forms.Form_NotesMemoReg3rd.addSignature(new Signature('NotesMemoReg3rdAutoEntryTLSignature','NotesMemoReg3rdAutoEntryTLName','NotesMemoReg3rdAutoEntryTLSig','توقـيـــــع المراجع الآلي','توقـيـــــع المراجع الآلي'));
+        this.forms.Form_NotesMemoReg3rd.addComponent(new NotesComponent('NotesMemoReg3rdReply','رد الباحـــــــــــــــــــــــث','رد الباحـــــــــــــــــــــــث',15,1200) );
+        this.forms.Form_NotesMemoReg3rd.addSignature(new Signature('NotesMemoReg3rdResSignature','NotesMemoReg3rdResName','NotesMemoReg3rdResSig','توقـيـــــع الباحــــــــــث','توقـيـــــع الباحــــــــــث'));
+        this.forms.Form_NotesMemoReg3rd.addSignature(new Signature('NotesMemoReg3rdTLSignature','NotesMemoReg3rdTLName','NotesMemoReg3rdTLSig','توقـيـــــع المراجــــــــــــع','توقـيـــــع المراجــــــــــــع'));
+        this.forms.Form_NotesMemoReg3rd.components.NotesMemoReg3rdFrom.labelSize = 3;
+        this.forms.Form_NotesMemoReg3rd.components.NotesMemoReg3rdFrom.render();
+        this.forms.Form_NotesMemoReg3rd.components.NotesMemoReg3rdTo.labelSize = 3;
+        this.forms.Form_NotesMemoReg3rd.components.NotesMemoReg3rdTo.render();
+        this.forms.Form_NotesMemoReg3rd.components.NotesMemoReg3rdFileNo.labelSize = 3;
+        this.forms.Form_NotesMemoReg3rd.components.NotesMemoReg3rdFileNo.render();
+        this.forms.Form_NotesMemoReg3rd.components.NotesMemoReg3rdSSNo.labelSize = 3;
+        this.forms.Form_NotesMemoReg3rd.components.NotesMemoReg3rdSSNo.render();
+        this.forms.Form_NotesMemoReg3rd.components.NotesMemoReg3rdCivilID.labelSize = 3;
+        this.forms.Form_NotesMemoReg3rd.components.NotesMemoReg3rdCivilID.render();
+        this.forms.Form_NotesMemoReg3rd.components.NotesMemoReg3rdClientName.labelSize = 3;
+        this.forms.Form_NotesMemoReg3rd.components.NotesMemoReg3rdClientName.render();
+
+        this.forms.Form_NotesMemoReg5th.addComponent(new DateComponent('NotesMemoReg5thDate','التاريخ','التاريخ','','') );
+        this.forms.Form_NotesMemoReg5th.addComponent(new TxtComponent('NotesMemoReg5thFrom','من','من','') );
+        this.forms.Form_NotesMemoReg5th.addComponent(new TxtComponent('NotesMemoReg5thTo','إلى','إلى','') );
+        this.forms.Form_NotesMemoReg5th.addComponent(new TxtComponent('NotesMemoReg5thFileNo','رقم الحفظ','رقم الحفظ','') );
+        this.forms.Form_NotesMemoReg5th.addComponent(new TxtComponent('NotesMemoReg5thSSNo','رقم الهوية','رقم الهوية','') );
+        this.forms.Form_NotesMemoReg5th.addComponent(new TxtComponent('NotesMemoReg5thCivilID','الرقم المدني','الرقم المدني','') );
+        this.forms.Form_NotesMemoReg5th.addComponent(new TxtComponent('NotesMemoReg5thClientName','الاسم','الاسم','') );
+        this.forms.Form_NotesMemoReg5th.addComponent(new NotesComponent('NotesMemoReg5thSubject','الموضــــــــــــــــوع','الموضــــــــــــــــوع',15,1200) );
+        this.forms.Form_NotesMemoReg5th.addSignature(new Signature('NotesMemoReg5thAutoEntryEmpSignature','NotesMemoReg5thAutoEntryEmpName','NotesMemoReg5thAutoEntryEmpSig','توقـيـــــع المدخل الآلي','توقـيـــــع المدخل الآلي'));
+        this.forms.Form_NotesMemoReg5th.addSignature(new Signature('NotesMemoReg5thAutoEntryTLSignature','NotesMemoReg5thAutoEntryTLName','NotesMemoReg5thAutoEntryTLSig','توقـيـــــع المراجع الآلي','توقـيـــــع المراجع الآلي'));
+        this.forms.Form_NotesMemoReg5th.addComponent(new NotesComponent('NotesMemoReg5thReply','رد الباحـــــــــــــــــــــــث','رد الباحـــــــــــــــــــــــث',15,1200) );
+        this.forms.Form_NotesMemoReg5th.addSignature(new Signature('NotesMemoReg5thResSignature','NotesMemoReg5thResName','NotesMemoReg5thResSig','توقـيـــــع الباحــــــــــث','توقـيـــــع الباحــــــــــث'));
+        this.forms.Form_NotesMemoReg5th.addSignature(new Signature('NotesMemoReg5thTLSignature','NotesMemoReg5thTLName','NotesMemoReg5thTLSig','توقـيـــــع المراجــــــــــــع','توقـيـــــع المراجــــــــــــع'));
+        this.forms.Form_NotesMemoReg5th.components.NotesMemoReg5thFrom.labelSize = 3;
+        this.forms.Form_NotesMemoReg5th.components.NotesMemoReg5thFrom.render();
+        this.forms.Form_NotesMemoReg5th.components.NotesMemoReg5thTo.labelSize = 3;
+        this.forms.Form_NotesMemoReg5th.components.NotesMemoReg5thTo.render();
+        this.forms.Form_NotesMemoReg5th.components.NotesMemoReg5thFileNo.labelSize = 3;
+        this.forms.Form_NotesMemoReg5th.components.NotesMemoReg5thFileNo.render();
+        this.forms.Form_NotesMemoReg5th.components.NotesMemoReg5thSSNo.labelSize = 3;
+        this.forms.Form_NotesMemoReg5th.components.NotesMemoReg5thSSNo.render();
+        this.forms.Form_NotesMemoReg5th.components.NotesMemoReg5thCivilID.labelSize = 3;
+        this.forms.Form_NotesMemoReg5th.components.NotesMemoReg5thCivilID.render();
+        this.forms.Form_NotesMemoReg5th.components.NotesMemoReg5thClientName.labelSize = 3;
+        this.forms.Form_NotesMemoReg5th.components.NotesMemoReg5thClientName.render();
+
+        this.forms.Form_NotesMemoRegEmployer.addComponent(new DateComponent('NotesMemoRegEmployerDate','التاريخ','التاريخ','','') );
+        this.forms.Form_NotesMemoRegEmployer.addComponent(new TxtComponent('NotesMemoRegEmployerFrom','من','من','') );
+        this.forms.Form_NotesMemoRegEmployer.addComponent(new TxtComponent('NotesMemoRegEmployerTo','إلى','إلى','') );
+        this.forms.Form_NotesMemoRegEmployer.addComponent(new TxtComponent('NotesMemoRegEmployerFileNo','رقم الحفظ','رقم الحفظ','') );
+        this.forms.Form_NotesMemoRegEmployer.addComponent(new TxtComponent('NotesMemoRegEmployerSSNo','رقم الهوية','رقم الهوية','') );
+        this.forms.Form_NotesMemoRegEmployer.addComponent(new TxtComponent('NotesMemoRegEmployerCivilID','الرقم المدني','الرقم المدني','') );
+        this.forms.Form_NotesMemoRegEmployer.addComponent(new TxtComponent('NotesMemoRegEmployerClientName','الاسم','الاسم','') );
+        this.forms.Form_NotesMemoRegEmployer.addComponent(new NotesComponent('NotesMemoRegEmployerSubject','الموضــــــــــــــــوع','الموضــــــــــــــــوع',15,1200) );
+        this.forms.Form_NotesMemoRegEmployer.addSignature(new Signature('NotesMemoRegEmployerAutoEntryEmpSignature','NotesMemoRegEmployerAutoEntryEmpName','NotesMemoRegEmployerAutoEntryEmpSig','توقـيـــــع المدخل الآلي','توقـيـــــع المدخل الآلي'));
+        this.forms.Form_NotesMemoRegEmployer.addSignature(new Signature('NotesMemoRegEmployerAutoEntryTLSignature','NotesMemoRegEmployerAutoEntryTLName','NotesMemoRegEmployerAutoEntryTLSig','توقـيـــــع المراجع الآلي','توقـيـــــع المراجع الآلي'));
+        this.forms.Form_NotesMemoRegEmployer.addComponent(new NotesComponent('NotesMemoRegEmployerReply','رد الباحـــــــــــــــــــــــث','رد الباحـــــــــــــــــــــــث',15,1200) );
+        this.forms.Form_NotesMemoRegEmployer.addSignature(new Signature('NotesMemoRegEmployerResSignature','NotesMemoRegEmployerResName','NotesMemoRegEmployerResSig','توقـيـــــع الباحــــــــــث','توقـيـــــع الباحــــــــــث'));
+        this.forms.Form_NotesMemoRegEmployer.addSignature(new Signature('NotesMemoRegEmployerTLSignature','NotesMemoRegEmployerTLName','NotesMemoRegEmployerTLSig','توقـيـــــع المراجــــــــــــع','توقـيـــــع المراجــــــــــــع'));
+        this.forms.Form_NotesMemoRegEmployer.components.NotesMemoRegEmployerFrom.labelSize = 3;
+        this.forms.Form_NotesMemoRegEmployer.components.NotesMemoRegEmployerFrom.render();
+        this.forms.Form_NotesMemoRegEmployer.components.NotesMemoRegEmployerTo.labelSize = 3;
+        this.forms.Form_NotesMemoRegEmployer.components.NotesMemoRegEmployerTo.render();
+        this.forms.Form_NotesMemoRegEmployer.components.NotesMemoRegEmployerFileNo.labelSize = 3;
+        this.forms.Form_NotesMemoRegEmployer.components.NotesMemoRegEmployerFileNo.render();
+        this.forms.Form_NotesMemoRegEmployer.components.NotesMemoRegEmployerSSNo.labelSize = 3;
+        this.forms.Form_NotesMemoRegEmployer.components.NotesMemoRegEmployerSSNo.render();
+        this.forms.Form_NotesMemoRegEmployer.components.NotesMemoRegEmployerCivilID.labelSize = 3;
+        this.forms.Form_NotesMemoRegEmployer.components.NotesMemoRegEmployerCivilID.render();
+        this.forms.Form_NotesMemoRegEmployer.components.NotesMemoRegEmployerClientName.labelSize = 3;
+        this.forms.Form_NotesMemoRegEmployer.components.NotesMemoRegEmployerClientName.render();
+
+        this.forms.Form_PenReplInEmpContributionPeriods.addComponent(new DateComponent('ContPeriodRequestDate','التاريخ','التاريخ','','') );
+        this.forms.Form_PenReplInEmpContributionPeriods.addComponent(new TxtComponent('FileNo','رقم الحفظ','رقم الحفظ','') );
+        this.forms.Form_PenReplInEmpContributionPeriods.addComponent(new TxtComponent('SSNo','رقم الهوية','رقم الهوية','') );
+        this.forms.Form_PenReplInEmpContributionPeriods.addComponent(new TxtComponent('CivilID','الرقم المدني','الرقم المدني','') );
+        this.forms.Form_PenReplInEmpContributionPeriods.addComponent(new TxtComponent('ClientName','الاسم','الاسم','') );
+        this.forms.Form_PenReplInEmpContributionPeriods.addComponent(new DateComponent('ContPeriodBirthDate','تاريخ الميلاد','تاريخ الميلاد','','') );
+        this.forms.Form_PenReplInEmpContributionPeriods.addComponent(new TxtComponent('ContPeriodNationality','الجنسية','الجنسية','') );
+        this.forms.Form_PenReplInEmpContributionPeriods.addComponent(new DateComponent('ContPeriodNationalityDate','تاريخ الحصول عليها','تاريخ الحصول عليها','','') );
+        this.forms.Form_PenReplInEmpContributionPeriods.addComponent(new TxtComponent('ContPeriodStopReason','سبب إنتهاء الخدمة','سبب إنتهاء الخدمة','') );
+        this.forms.Form_PenReplInEmpContributionPeriods.addComponent(new TxtComponent('ContPeriodBasicSalary','الراتب الأساسي','الراتب الأساسي','') );
+        this.forms.Form_PenReplInEmpContributionPeriods.addComponent(new TxtComponent('ContPeriodSocialBonus','علاوة اجتماعية','علاوة اجتماعية','') );
+        //----Multi columns makes sperations--------------------------------------------------
+        this.forms.Form_PenReplInEmpContributionPeriods.addComponent(new TableComponent('Serial',[new TableColTxt('م','م',['']),], 10) );
+        this.forms.Form_PenReplInEmpContributionPeriods.addComponent(new TableComponent('ContPeriodEmployer',[new TableColTxt('صاحب العمل \n سبب إنتهاء الخدمة','صاحب العمل \n سبب إنتهاء الخدمة',['']),], 10) );
+        this.forms.Form_PenReplInEmpContributionPeriods.addComponent(new TableComponent('ContPeriodContDate',[new TableColTxt('تاريخ الاشتراك','تاريخ الاشتراك',['']),], 10) );
+        this.forms.Form_PenReplInEmpContributionPeriods.addComponent(new TableComponent('ContPeriodExcluDate',[new TableColTxt('مدة مستبعدة','مدة مستبعدة',['']),], 10) );
+        this.forms.Form_PenReplInEmpContributionPeriods.addComponent(new TableComponent('ContPeriodRecruitEvasion',[new TableColTxt('مدة هروب من التجنيد','مدة هروب من التجنيد',['']),], 10) );
+        this.forms.Form_PenReplInEmpContributionPeriods.addComponent(new TableComponent('ContPeriodBenefit',[new TableColTxt('الاستفادة','الاستفادة',['']),], 10) );
+        this.forms.Form_PenReplInEmpContributionPeriods.addComponent(new TableComponent('ContPeriodRewardPay',[new TableColTxt('صرف المكافأة','صرف المكافأة',['']),], 10) );
+        this.forms.Form_PenReplInEmpContributionPeriods.addComponent(new TableComponent('ContPeriodActionCode',[new TableColTxt('النشاط','النشاط',['']),], 10) );
+        this.forms.Form_PenReplInEmpContributionPeriods.addComponent(new TableComponent('ContPeriodPensionerNotes',[new TableColTxt('ملاحظات إدارة أصحاب المعاشات','ملاحظات إدارة أصحاب المعاشات',['']),], 10) );
+        //-------------------------------------------------------------------------------------
+        this.forms.Form_PenReplInEmpContributionPeriods.addComponent(new NotesComponent('ContPeriodNotes','ملاحظــــــــــــــــــــــات','ملاحظــــــــــــــــــــــات',7,1200) );
+        this.forms.Form_PenReplInEmpContributionPeriods.addSignature(new Signature('ContPeriodRegEmpSignature','ContPeriodRegEmpName','ContPeriodRegEmpSig','توقـيـــــع المدخل الآلي','توقـيـــــع المدخل الآلي'));
+        this.forms.Form_PenReplInEmpContributionPeriods.addSignature(new Signature('ContPeriodRegTLSignature','ContPeriodRegTLName','ContPeriodRegTLSig','توقـيـــــع المراجع الآلي','توقـيـــــع المراجع الآلي'));
+        this.forms.Form_PenReplInEmpContributionPeriods.addSignature(new Signature('ContPeriodRegMngSignature','ContPeriodRegMngName','ContPeriodRegMngSig','الاعتمــــــــــــــــــــاد','الاعتمــــــــــــــــــــاد'));
+        this.forms.Form_PenReplInEmpContributionPeriods.components.FileNo.labelSize = 3;
+        this.forms.Form_PenReplInEmpContributionPeriods.components.FileNo.render();
+        this.forms.Form_PenReplInEmpContributionPeriods.components.SSNo.labelSize = 3;
+        this.forms.Form_PenReplInEmpContributionPeriods.components.SSNo.render();
+        this.forms.Form_PenReplInEmpContributionPeriods.components.CivilID.labelSize = 3;
+        this.forms.Form_PenReplInEmpContributionPeriods.components.CivilID.render();
+        this.forms.Form_PenReplInEmpContributionPeriods.components.ClientName.labelSize = 3;
+        this.forms.Form_PenReplInEmpContributionPeriods.components.ClientName.render();
+        this.forms.Form_PenReplInEmpContributionPeriods.components.ContPeriodBasicSalary.labelSize = 5;
+        this.forms.Form_PenReplInEmpContributionPeriods.components.ContPeriodBasicSalary.render();
+        this.forms.Form_PenReplInEmpContributionPeriods.components.ContPeriodSocialBonus.labelSize = 5;
+        this.forms.Form_PenReplInEmpContributionPeriods.components.ContPeriodSocialBonus.render();
+    },
+
+    main(){
+        try{
+            this.defineComponents();
+            process.initialize();
+            let stepName = process.workItem.stepName;
+            process.recieversList.loadManager();
+
+            if(stepName == this.steps.PenAdv_Launch){   
+            }
+            else if(stepName == this.steps.PenAdv_SSReviewer){
+            }
+        
+            
+            this.forms.Form_AttachmentsSheet.select();
+            this.forms.Form_AttachmentsSheet.updateComponentsFromEntity();
+            app.renderLabels();
+            process.openProcessModal();
+            process.setWorkFlowIDLabel();
+        }
+        catch(error){ throw error;}
+    },
+
+    validate(){
+        //validator.markAsInvalidField('myTxt');
+     },
+
+    send(){ },
+
+}
+
+$(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alertError(error.message); }} );
+</script>
+
+<style>
+    .nav-pills .nav-link.active {
+    background-color: rgb(108, 117, 126) !important;
+}
+</style>
+
+<div class="container-fluid pr-1 pl-1" >
+    <div class="row">
+        <div class="col p-1 " >
+            <nav>
+                <div class="nav nav-pills mb-1 ml-auto" id="nav-tab" role="tablist"></div>
+            </nav>
+            <div class="tab-content shadow border border-secondary rounded p-2 bg-white" id="nav-tabContent">
+                <!-- Form_AttachmentsSheet-Tab -->
+                <div class="tab-pane fade show active" id="nav-Form_AttachmentsSheet" role="tabpanel" aria-labelledby="Form_AttachmentsSheet-tab">
+                    <!-- the main container for all Form_AttachmentsSheet controls -->
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col p-1 mb-4" data-container-for="Form_AttachmentsSheet_title"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="From"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3" data-container-for="RequestDate"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="To"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3" data-container-for="AppointmentDate"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="FileNo"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3" data-container-for="CounterNo"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="SSNo"></div>
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="CivilID"></div>
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="ClientName"></div>
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3"></div>
+                        </div> 
+                        <div class="row">
+                            <div class="col pt-3 pd-3 pr-3 pl-3" data-container-for="Attachments"></div>
+                        </div>                          
+                        <div class="row">
+                            <div class="col pt-3 pd-3 pr-3 pl-3" data-container-for="Notes"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pt-3 pd-3 pr-3 pl-3" data-container-for="MissingDocuments"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4 pr-3 pl-3"></div>
+                            <div class="col-4 pr-3 pl-3"></div>
+                            <div class="col-4 pt-3 pd-3 pr-3 pl-3" data-container-for="AttachmentsIssuerSignature"></div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                 <!-- Form_NotesMemoRegLegal-Tab -->
+                <div class="tab-pane fade" id="nav-Form_NotesMemoRegLegal" role="tabpanel" aria-labelledby="Form_NotesMemoRegLegal-tab">
+                    <!-- the main container for all Form_NotesMemoRegLegal controls -->
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col p-3" data-container-for="Form_NotesMemoRegLegal_title"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="NotesMemoRegLegalFrom"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3" data-container-for="NotesMemoRegLegalDate"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="NotesMemoRegLegalTo"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pt-1 pd-1 pr-3 pl-3" data-container-for="NotesMemoRegLegalFileNo"></div>
+                            <div class="col pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pt-1 pd-1 pr-3 pl-3" data-container-for="NotesMemoRegLegalSSNo"></div>
+                            <div class="col pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pt-1 pd-1 pr-3 pl-3" data-container-for="NotesMemoRegLegalCivilID"></div>
+                            <div class="col pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pt-1 pd-1 pr-3 pl-3" data-container-for="NotesMemoRegLegalClientName"></div>
+                            <div class="col pt-1 pd-1 pr-3 pl-3"></div>
+                        </div> 
+                        <div class="row">
+                            <div class="col pt-3 pd-3 pr-3 pl-3" data-container-for="NotesMemoRegLegalSubject"></div>
+                        </div>                                 
+                        <div class="row">
+                            <div class="col-4 pt-3 pd-3 pr-3 pl-3" data-container-for="NotesMemoRegLegalAutoEntryEmpSignature"></div>
+                            <div class="col-4 pt-3 pd-3 pr-3 pl-3"></div>
+                            <div class="col-4 pt-3 pd-3 pr-3 pl-3" data-container-for="NotesMemoRegLegalAutoEntryTLSignature"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pt-3 pd-3 pr-3 pl-3" data-container-for="NotesMemoRegLegalReply"></div>
+                        </div>                                 
+                        <div class="row">
+                            <div class="col-4 pt-3 pd-3 pr-3 pl-3" data-container-for="NotesMemoRegLegalResSignature"></div>
+                            <div class="col-4 pt-3 pd-3 pr-3 pl-3"></div>
+                            <div class="col-4 pt-3 pd-3 pr-3 pl-3" data-container-for="NotesMemoRegLegalTLSignature"></div>
+                        </div>
+                    </div>
+                </div>
+
+                 <!-- Form_NotesMemoReg3rd-Tab -->
+                 <div class="tab-pane fade" id="nav-Form_NotesMemoReg3rd" role="tabpanel" aria-labelledby="Form_NotesMemoReg3rd-tab">
+                    <!-- the main container for all Form_NotesMemoReg3rd controls -->
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col p-3" data-container-for="Form_NotesMemoReg3rd_title"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="NotesMemoReg3rdFrom"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3" data-container-for="NotesMemoReg3rdDate"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="NotesMemoReg3rdTo"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pt-1 pd-1 pr-3 pl-3" data-container-for="NotesMemoReg3rdFileNo"></div>
+                            <div class="col pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pt-1 pd-1 pr-3 pl-3" data-container-for="NotesMemoReg3rdSSNo"></div>
+                            <div class="col pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pt-1 pd-1 pr-3 pl-3" data-container-for="NotesMemoReg3rdCivilID"></div>
+                            <div class="col pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pt-1 pd-1 pr-3 pl-3" data-container-for="NotesMemoReg3rdClientName"></div>
+                            <div class="col pt-1 pd-1 pr-3 pl-3"></div>
+                        </div> 
+                        <div class="row">
+                            <div class="col pt-3 pd-3 pr-3 pl-3" data-container-for="NotesMemoReg3rdSubject"></div>
+                        </div>                                 
+                        <div class="row">
+                            <div class="col-4 pt-3 pd-3 pr-3 pl-3" data-container-for="NotesMemoReg3rdAutoEntryEmpSignature"></div>
+                            <div class="col-4 pt-3 pd-3 pr-3 pl-3"></div>
+                            <div class="col-4 pt-3 pd-3 pr-3 pl-3" data-container-for="NotesMemoReg3rdAutoEntryTLSignature"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pt-3 pd-3 pr-3 pl-3" data-container-for="NotesMemoReg3rdReply"></div>
+                        </div>                                 
+                        <div class="row">
+                            <div class="col-4 pt-3 pd-3 pr-3 pl-3" data-container-for="NotesMemoReg3rdResSignature"></div>
+                            <div class="col-4 pt-3 pd-3 pr-3 pl-3"></div>
+                            <div class="col-4 pt-3 pd-3 pr-3 pl-3" data-container-for="NotesMemoReg3rdTLSignature"></div>
+                        </div>
+                    </div>
+                </div>
+
+                 <!-- Form_NotesMemoReg5th-Tab -->
+                 <div class="tab-pane fade" id="nav-Form_NotesMemoReg5th" role="tabpanel" aria-labelledby="Form_NotesMemoReg5th-tab">
+                    <!-- the main container for all Form_NotesMemoReg5th controls -->
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col p-3" data-container-for="Form_NotesMemoReg5th_title"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="NotesMemoReg5thFrom"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3" data-container-for="NotesMemoReg5thDate"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="NotesMemoReg5thTo"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pt-1 pd-1 pr-3 pl-3" data-container-for="NotesMemoReg5thFileNo"></div>
+                            <div class="col pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pt-1 pd-1 pr-3 pl-3" data-container-for="NotesMemoReg5thSSNo"></div>
+                            <div class="col pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pt-1 pd-1 pr-3 pl-3" data-container-for="NotesMemoReg5thCivilID"></div>
+                            <div class="col pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pt-1 pd-1 pr-3 pl-3" data-container-for="NotesMemoReg5thClientName"></div>
+                            <div class="col pt-1 pd-1 pr-3 pl-3"></div>
+                        </div> 
+                        <div class="row">
+                            <div class="col pt-3 pd-3 pr-3 pl-3" data-container-for="NotesMemoReg5thSubject"></div>
+                        </div>                                 
+                        <div class="row">
+                            <div class="col-4 pt-3 pd-3 pr-3 pl-3" data-container-for="NotesMemoReg5thAutoEntryEmpSignature"></div>
+                            <div class="col-4 pt-3 pd-3 pr-3 pl-3"></div>
+                            <div class="col-4 pt-3 pd-3 pr-3 pl-3" data-container-for="NotesMemoReg5thAutoEntryTLSignature"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pt-3 pd-3 pr-3 pl-3" data-container-for="NotesMemoReg5thReply"></div>
+                        </div>                                 
+                        <div class="row">
+                            <div class="col-4 pt-3 pd-3 pr-3 pl-3" data-container-for="NotesMemoReg5thResSignature"></div>
+                            <div class="col-4 pt-3 pd-3 pr-3 pl-3"></div>
+                            <div class="col-4 pt-3 pd-3 pr-3 pl-3" data-container-for="NotesMemoReg5thTLSignature"></div>
+                        </div>
+                    </div>
+                </div>
+
+                 <!-- Form_NotesMemoRegEmployer-Tab -->
+                 <div class="tab-pane fade" id="nav-Form_NotesMemoRegEmployer" role="tabpanel" aria-labelledby="Form_NotesMemoRegEmployer-tab">
+                    <!-- the main container for all Form_NotesMemoRegEmployer controls -->
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col p-3" data-container-for="Form_NotesMemoRegEmployer_title"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="NotesMemoRegEmployerFrom"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3" data-container-for="NotesMemoRegEmployerDate"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="NotesMemoRegEmployerTo"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pt-1 pd-1 pr-3 pl-3" data-container-for="NotesMemoRegEmployerFileNo"></div>
+                            <div class="col pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pt-1 pd-1 pr-3 pl-3" data-container-for="NotesMemoRegEmployerSSNo"></div>
+                            <div class="col pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pt-1 pd-1 pr-3 pl-3" data-container-for="NotesMemoRegEmployerCivilID"></div>
+                            <div class="col pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pt-1 pd-1 pr-3 pl-3" data-container-for="NotesMemoRegEmployerClientName"></div>
+                            <div class="col pt-1 pd-1 pr-3 pl-3"></div>
+                        </div> 
+                        <div class="row">
+                            <div class="col pt-3 pd-3 pr-3 pl-3" data-container-for="NotesMemoRegEmployerSubject"></div>
+                        </div>                                 
+                        <div class="row">
+                            <div class="col-4 pt-3 pd-3 pr-3 pl-3" data-container-for="NotesMemoRegEmployerAutoEntryEmpSignature"></div>
+                            <div class="col-4 pt-3 pd-3 pr-3 pl-3"></div>
+                            <div class="col-4 pt-3 pd-3 pr-3 pl-3" data-container-for="NotesMemoRegEmployerAutoEntryTLSignature"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pt-3 pd-3 pr-3 pl-3" data-container-for="NotesMemoRegEmployerReply"></div>
+                        </div>                                 
+                        <div class="row">
+                            <div class="col-4 pt-3 pd-3 pr-3 pl-3" data-container-for="NotesMemoRegEmployerResSignature"></div>
+                            <div class="col-4 pt-3 pd-3 pr-3 pl-3"></div>
+                            <div class="col-4 pt-3 pd-3 pr-3 pl-3" data-container-for="NotesMemoRegEmployerTLSignature"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Form_PenReplInEmpContributionPeriods-Tab -->
+                <div class="tab-pane fade" id="nav-Form_PenReplInEmpContributionPeriods" role="tabpanel" aria-labelledby="Form_PenReplInEmpContributionPeriods-tab">
+                    <!-- the main container for all Form_PenReplInEmpContributionPeriods controls -->
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col p-3" data-container-for="Form_PenReplInEmpContributionPeriods_title"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="FileNo"></div>
+                            <div class="col-2 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-4 pt-1 pd-1 pr-3 pl-3" data-container-for="ContPeriodRequestDate"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="SSNo"></div>
+                            <div class="col-2 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-4 pt-1 pd-1 pr-3 pl-3" data-container-for="ContPeriodBirthDate"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="CivilID"></div>
+                            <div class="col-2 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-4 pt-1 pd-1 pr-3 pl-3" data-container-for="ContPeriodNationality"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="ClientName"></div>
+                            <div class="col-2 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-4 pt-1 pd-1 pr-3 pl-3" data-container-for="ContPeriodNationalityDate"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4 pt-1 pd-1 pr-3 pl-3" data-container-for="ContPeriodBasicSalary"></div>
+                            <div class="col-4 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-4 pt-1 pd-1 pr-3 pl-3" data-container-for="ContPeriodStopReason"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4 pt-1 pd-1 pr-3 pl-3" data-container-for="ContPeriodSocialBonus"></div>
+                            <div class="col-8 pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-1 pt-1 pd-1 pr-3 pl-3" data-container-for="Serial"></div>
+                            <div class="col-4 pt-1 pd-1 pr-3 pl-3" data-container-for="ContPeriodEmployer"></div>
+                            <div class="col-1 pt-1 pd-1 pr-3 pl-3" data-container-for="ContPeriodContDate"></div>
+                            <div class="col-1 pt-1 pd-1 pr-3 pl-3" data-container-for="ContPeriodExcluDate"></div>
+                            <div class="col-1 pt-1 pd-1 pr-3 pl-3" data-container-for="ContPeriodRecruitEvasion"></div>
+                            <div class="col-1 pt-1 pd-1 pr-3 pl-3" data-container-for="ContPeriodBenefit"></div>
+                            <div class="col-1 pt-1 pd-1 pr-3 pl-3" data-container-for="ContPeriodRewardPay"></div>
+                            <div class="col-1 pt-1 pd-1 pr-3 pl-3" data-container-for="ContPeriodActionCode"></div>
+                            <div class="col-1 pt-1 pd-1 pr-3 pl-3" data-container-for="ContPeriodPensionerNotes"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pt-3 pd-3 pr-3 pl-3" data-container-for="ContPeriodNotes"></div>
+                        </div>                                 
+                        <div class="row">
+                            <div class="col-4 pt-3 pd-3 pr-3 pl-3" data-container-for="ContPeriodRegEmpSignature"></div>
+                            <div class="col-4 pt-3 pd-3 pr-3 pl-3" data-container-for="ContPeriodRegTLSignature"></div>
+                            <div class="col-4 pt-3 pd-3 pr-3 pl-3" data-container-for="ContPeriodRegMngSignature"></div>
+                        </div>
+                    </div>
+                </div>                 
+                <div class="text-right">
+                    <hr>
+                    <label id="workflowIDLabel" class="text-danger">مسلسل الاجراء</label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

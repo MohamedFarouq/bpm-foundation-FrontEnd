@@ -76,55 +76,92 @@ process.controller = {
         this.forms.Form_AttachmentsSheet.addComponent(new TxtComponent('FileNo','رقم الحفظ','رقم الحفظ','') );
         this.forms.Form_AttachmentsSheet.addComponent(new TxtComponent('SSNo','رقم الهوية','رقم الهوية','') );
         this.forms.Form_AttachmentsSheet.addComponent(new AttachmentsTableComponent('Attachments',['استمارة طلب صرف معاش مقدم','صورة البطاقة المدنية','إقرار بصحة جهة الصرف']) );
-        this.forms.Form_AttachmentsSheet.addComponent(new TxtComponent('NoOfAttachments',null,null,'') );
         this.forms.Form_AttachmentsSheet.addComponent(new NotesComponent('Notes','الملاحظـــــات','Notes',4,300) );
         this.forms.Form_AttachmentsSheet.addComponent(new NotesComponent('MissingDocuments','نواقص في المستندات','نواقص في المستندات',4,300) );
         this.forms.Form_AttachmentsSheet.addSignature(new Signature('AttachmentsIssuerSignature','AttachmentsIssuerUserName','AttachmentsIssuerSig','توقيع الباحثة التأمينية','توقيع الباحثة التأمينية'));
+        this.forms.Form_AttachmentsSheet.components.From.labelSize = 3;
+        this.forms.Form_AttachmentsSheet.components.From.render();
+        this.forms.Form_AttachmentsSheet.components.To.labelSize = 3;
+        this.forms.Form_AttachmentsSheet.components.To.render();
+        this.forms.Form_AttachmentsSheet.components.SSNo.labelSize = 3;
+        this.forms.Form_AttachmentsSheet.components.SSNo.render();
+        this.forms.Form_AttachmentsSheet.components.FileNo.labelSize = 3;
+        this.forms.Form_AttachmentsSheet.components.FileNo.render();
+        this.forms.Form_AttachmentsSheet.components.CivilID.labelSize = 3;
+        this.forms.Form_AttachmentsSheet.components.CivilID.render();
+        this.forms.Form_AttachmentsSheet.components.ClientName.labelSize = 3;
+        this.forms.Form_AttachmentsSheet.components.ClientName.render();
 
 
-
-        this.PayReqTxt1 = new ParagraphComponent('PayReqTxt1','السيـــــد / المديـــــر العـــــام المحتـــــرم','السيـــــد / المديـــــر العـــــام المحتـــــرم','text-body font-weight-bold font-family: Arial, Helvetica, sans-serif; font-size: 17px;');
-        this.forms.Form_PenAdvPaymentRequest.addComponent(new TxtComponent('ClientName1','انا الموقع أدناه /','انا الموقع أدناه /','') );
-        this.forms.Form_PenAdvPaymentRequest.addComponent(new TxtComponent('CivilID1','الرقم المدني','الرقم المدني','') );
-        this.forms.Form_PenAdvPaymentRequest.addComponent(new TxtComponent('FileNo1','رقم الحفظ','رقم الحفظ','') );
-        this.forms.Form_PenAdvPaymentRequest.addComponent(new TxtComponent('SSNo1','رقم الهوية','رقم الهوية','') );
-        this.forms.Form_PenAdvPaymentRequest.addComponent(new DateComponent('RequestDate1','التاريخ','التاريخ','','') );
-        this.forms.Form_PenAdvPaymentRequest.addComponent(new DateComponent('AppointmentDate1','تاريخ المراجعة','تاريخ المراجعة','','') );
+        this.forms.Form_PenAdvPaymentRequest.addComponent(new ParagraphComponent('PayReqTxt1','السيـــــد / المديـــــر العـــــام المحتـــــرم','السيـــــد / المديـــــر العـــــام المحتـــــرم','text-body font-weight-bold') );
+        this.forms.Form_PenAdvPaymentRequest.addComponent(new TxtComponent('ClientName','انا الموقع أدناه /','انا الموقع أدناه /','') );
+        this.forms.Form_PenAdvPaymentRequest.addComponent(new TxtComponent('CivilID','الرقم المدني','الرقم المدني','') );
+        this.forms.Form_PenAdvPaymentRequest.addComponent(new TxtComponent('FileNo','رقم الحفظ','رقم الحفظ','') );
+        this.forms.Form_PenAdvPaymentRequest.addComponent(new TxtComponent('SSNo','رقم الهوية','رقم الهوية','') );
+        this.forms.Form_PenAdvPaymentRequest.addComponent(new DateComponent('RequestDate','التاريخ','التاريخ','','') );
+        this.forms.Form_PenAdvPaymentRequest.addComponent(new DateComponent('AppointmentDate','تاريخ المراجعة','تاريخ المراجعة','','') );
         this.forms.Form_PenAdvPaymentRequest.addComponent(new TxtComponent('PhoneNo','رقم الهاتف','رقم الهاتف','') );
         this.forms.Form_PenAdvPaymentRequest.addComponent(new TxtComponent('Email','البريد الإلكتروني','البريد الإلكتروني','') );
         this.forms.Form_PenAdvPaymentRequest.addComponent(new TxtComponent('Address','العنوان','العنوان','') );
-            this.PayReqTxt2 = new ParagraphComponent('PayReqTxt2','يـرجـى التكـرم بالموافقـة علـى صـرف معـاش مقـدم عـن :','يـرجـى التكـرم بالموافقـة علـى صـرف معـاش مقـدم عـن :','text-body font-weight-bold');
-        //Table of Month & Year-------------------------------------------------------------------------
+        this.forms.Form_PenAdvPaymentRequest.addComponent(new ParagraphComponent('PayReqTxt2','يـرجـى التكـرم بالموافقـة علـى صـرف معـاش مقـدم عـن :','يـرجـى التكـرم بالموافقـة علـى صـرف معـاش مقـدم عـن :','text-body font-weight-bold') );
+        this.forms.Form_PenAdvPaymentRequest.addComponent(new TableComponent('YearMonthTable',[new TableColTxt('الشهر','الشهر',[]),new TableColTxt('السنة','السنة',[]),], 2) );
         this.forms.Form_PenAdvPaymentRequest.addComponent(new NotesComponent('Reasons','وذلـك للأسبـاب التاليــة','وذلـك للأسبـاب التاليــة',4,300) );
-        this.PayReqTxt3 = new ParagraphComponent('PayReqTxt3','وتفضلـــوا بقبـــول فائـــق الاحتـــرام,,,','وتفضلـــوا بقبـــول فائـــق الاحتـــرام,,,','text-body font-weight-bold');
-        this.PayReqClientSigLabel = new ParagraphComponent('PayReqClientSigLabel','توقيـــع صاحـــب العلاقـــة / الوكيـــل','توقيـــع صاحـــب العلاقـــة / الوكيـــل','text-body font-weight-bold text-decoration-none');
-        //this.forms.Form_PenAdvPaymentRequest.addComponent(new CheckBoxComponent('SMS','أوافق على إرسال رسالة SMS :','أوافق على إرسال رسالة SMS :') );
+        this.forms.Form_PenAdvPaymentRequest.addComponent(new ParagraphComponent('PayReqTxt3','وتفضلـــوا بقبـــول فائـــق الاحتـــرام,,,','وتفضلـــوا بقبـــول فائـــق الاحتـــرام,,,','text-body font-weight-bold') );
+        this.forms.Form_PenAdvPaymentRequest.addComponent(new ParagraphComponent('PayReqClientSigLabel','توقيـــع صاحـــب العلاقـــة / الوكيـــل','توقيـــع صاحـــب العلاقـــة / الوكيـــل','text-body font-weight-bold') );
         this.forms.Form_PenAdvPaymentRequest.addComponent(new DropDownListComponent('SMS','أوافق على إرسال رسالة SMS :','أوافق على إرسال رسالة SMS :',[new Option('نعم','نعم','1') , new Option('لا','لا','2')]) );
-        this.PayReqTxt4 = new ParagraphComponent('PayReqTxt4','المذكـور سبـق لـه صـرف معـاش مقـدم :','المذكـور سبـق لـه صـرف معـاش مقـدم :','text-body font-weight-bold');
-        //Table of Previous Month & Year-------------------------------------------------------------------------
-        //this.forms.Form_PenAdvPaymentRequest.addComponent(new SignatureComponent('PRIssuerUserName','PRIssuerSig','توقيع الباحثة التأمينية','توقيع الباحثة التأمينية') );
-        this.PayReqTxt5 = new ParagraphComponent('PayReqTxt5','رأي المديـــر العـــام :','رأي المديـــر العـــام :','text-body font-weight-bold');
-        this.PayReqTxt6 = new ParagraphComponent('PayReqTxt6','-------------------------------------------------------------------------------------------------------------------------------------------------------------------------','-------------------------------------------------------------------------------------------------------------------------------------------------------------------------','text-body font-weight-bold');
-        this.PayReqTxt6 = new ParagraphComponent('PayReqTxt7','-------------------------------------------------------------------------------------------------------------------------------------------------------------------------','-------------------------------------------------------------------------------------------------------------------------------------------------------------------------','text-body font-weight-bold');
+        this.forms.Form_PenAdvPaymentRequest.addComponent(new TxtComponent('ClientName1','','','') );
+        this.forms.Form_PenAdvPaymentRequest.addComponent(new ParagraphComponent('PayReqTxt4','المذكـور سبـق لـه صـرف معـاش مقـدم :','المذكـور سبـق لـه صـرف معـاش مقـدم :','text-danger font-weight-bold font-family: Arial, Helvetica, sans-serif; font-size: 17px;') );
+        this.forms.Form_PenAdvPaymentRequest.addComponent(new TableComponent('LastYearMonthTable',[new TableColTxt('الشهر','الشهر',[]),new TableColTxt('السنة','السنة',[]),], 2) );
+        this.forms.Form_PenAdvPaymentRequest.addSignature(new Signature('PRIssuerSignature','PRIssuerUserName','PRIssuerSig','توقيع الباحثة التأمينية','توقيع الباحثة التأمينية'));
+        this.forms.Form_PenAdvPaymentRequest.addComponent(new ParagraphComponent('PayReqTxt5','رأي المديـــر العـــام :','رأي المديـــر العـــام :','text-body font-weight-bold') );
+        this.forms.Form_PenAdvPaymentRequest.addComponent(new ParagraphComponent('PayReqTxt6','-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------','-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------','text-body font-weight-bold') );
+        this.forms.Form_PenAdvPaymentRequest.addComponent(new ParagraphComponent('PayReqTxt7','-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------','-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------','text-body font-weight-bold') );
+        this.forms.Form_PenAdvPaymentRequest.components.ClientName.labelSize = 3;
+        this.forms.Form_PenAdvPaymentRequest.components.ClientName.render();
+        this.forms.Form_PenAdvPaymentRequest.components.CivilID.labelSize = 3;
+        this.forms.Form_PenAdvPaymentRequest.components.CivilID.render();
+        this.forms.Form_PenAdvPaymentRequest.components.FileNo.labelSize = 3;
+        this.forms.Form_PenAdvPaymentRequest.components.FileNo.render();
+        this.forms.Form_PenAdvPaymentRequest.components.SSNo.labelSize = 3;
+        this.forms.Form_PenAdvPaymentRequest.components.SSNo.render();
+        this.forms.Form_PenAdvPaymentRequest.components.Email.labelSize = 3;
+        this.forms.Form_PenAdvPaymentRequest.components.Email.render();
+        this.forms.Form_PenAdvPaymentRequest.components.Address.labelSize = 2;
+        this.forms.Form_PenAdvPaymentRequest.components.Address.render();
+        this.forms.Form_PenAdvPaymentRequest.components.SMS.labelSize = 9;
+        this.forms.Form_PenAdvPaymentRequest.components.SMS.render();
 
-        this.forms.Form_PenAdvPaymentOrder.addComponent(new TxtComponent('ClientName2','الاسم','الاسم','') );
-        this.forms.Form_PenAdvPaymentOrder.addComponent(new TxtComponent('CivilID2','الرقم المدني','الرقم المدني','') );
-        this.forms.Form_PenAdvPaymentOrder.addComponent(new TxtComponent('FileNo2','رقم الحفظ','رقم الحفظ','') );
-        this.forms.Form_PenAdvPaymentOrder.addComponent(new TxtComponent('SSNo2','رقم الهوية','رقم الهوية','') );
-        this.forms.Form_PenAdvPaymentOrder.addComponent(new DateComponent('RequestDate2','التاريخ','التاريخ','','') );
+        this.forms.Form_PenAdvPaymentOrder.addComponent(new TxtComponent('ClientName','الاسم','الاسم','') );
+        this.forms.Form_PenAdvPaymentOrder.addComponent(new TxtComponent('CivilID','الرقم المدني','الرقم المدني','') );
+        this.forms.Form_PenAdvPaymentOrder.addComponent(new TxtComponent('FileNo','رقم الحفظ','رقم الحفظ','') );
+        this.forms.Form_PenAdvPaymentOrder.addComponent(new TxtComponent('SSNo','رقم الهوية','رقم الهوية','') );
+        this.forms.Form_PenAdvPaymentOrder.addComponent(new DateComponent('RequestDate','التاريخ','التاريخ','','') );
         this.forms.Form_PenAdvPaymentOrder.addComponent(new DateComponent('ExecutionDate','تاريخ التنفيذ','تاريخ التنفيذ','','') );
         this.forms.Form_PenAdvPaymentOrder.addComponent(new TxtComponent('NoOfMonthes','الأشهر المدفوعة مقدما','الأشهر المدفوعة مقدما','') );
         this.forms.Form_PenAdvPaymentOrder.addComponent(new TxtComponent('PaymentMethod','طريقـة الدفــع','طريقـة الدفــع','') );
         this.forms.Form_PenAdvPaymentOrder.addComponent(new TxtComponent('PaidAmount','المبلـغ المدفـوع','المبلـغ المدفـوع','') );
-        this.forms.Form_PenAdvPaymentOrder.addComponent(new TxtComponent('MonthesDescription','','','') );
+        this.forms.Form_PenAdvPaymentOrder.addComponent(new ParagraphComponent('MonthesDescription','ذلك عن معاش شهر مارس لسنة 2020','ذلك عن معاش شهر مارس لسنة 2020','text-danger font-weight-bold') );
         this.forms.Form_PenAdvPaymentOrder.addComponent(new TxtComponent('TransferTo','يحـــول لحسـابـــه إلـــى :','يحـــول لحسـابـــه إلـــى :','') );
         this.forms.Form_PenAdvPaymentOrder.addComponent(new TxtComponent('Bank','البنـــك','البنـــك','') );
         this.forms.Form_PenAdvPaymentOrder.addComponent(new TxtComponent('AccountNo','رقـم الحســاب','رقـم الحســاب','') );
         this.forms.Form_PenAdvPaymentOrder.addComponent(new NotesComponent('PONotes','الملاحظـــــات','Notes',4,300) );
-        
-        // this.forms.Form_PenAdvPaymentOrder.addComponent(new SignatureComponent('POIssuerName','POIssuerSig','توقيع الباحثة التأمينية','توقيع الباحثة التأمينية') );
-        // this.forms.Form_PenAdvPaymentOrder.addComponent(new SignatureComponent('POSupName','POSupSig','توقيع المراجعـــة التأمينية','توقيع المراجعـــة التأمينية') );
-        // this.forms.Form_PenAdvPaymentOrder.addComponent(new SignatureComponent('POMngName','POMngSig','توقيـــــع رئيســـة الباحثـــات','توقيـــــع رئيســـة الباحثـــات') );
+        this.forms.Form_PenAdvPaymentOrder.components.ClientName.labelSize = 3;
+        this.forms.Form_PenAdvPaymentOrder.components.ClientName.render();
+        this.forms.Form_PenAdvPaymentOrder.components.CivilID.labelSize = 3;
+        this.forms.Form_PenAdvPaymentOrder.components.CivilID.render();
+        this.forms.Form_PenAdvPaymentOrder.components.FileNo.labelSize = 3;
+        this.forms.Form_PenAdvPaymentOrder.components.FileNo.render();
+        this.forms.Form_PenAdvPaymentOrder.components.SSNo.labelSize = 3;
+        this.forms.Form_PenAdvPaymentOrder.components.SSNo.render();
+        this.forms.Form_PenAdvPaymentOrder.components.NoOfMonthes.labelSize = 6;
+        this.forms.Form_PenAdvPaymentOrder.components.NoOfMonthes.render();
+        this.forms.Form_PenAdvPaymentOrder.components.PaymentMethod.labelSize = 6;
+        this.forms.Form_PenAdvPaymentOrder.components.PaymentMethod.render();
+        this.forms.Form_PenAdvPaymentOrder.components.PaidAmount.labelSize = 6;
+        this.forms.Form_PenAdvPaymentOrder.components.PaidAmount.render();
+        this.forms.Form_PenAdvPaymentOrder.addSignature(new Signature('POIssuerSignature','POIssuerName','POIssuerSig','توقيع الباحثة التأمينية','توقيع الباحثة التأمينية'));
+        this.forms.Form_PenAdvPaymentOrder.addSignature(new Signature('POSupSignature','POSupName','POSupSig','توقيع المراجعـــة التأمينية','توقيع المراجعـــة التأمينية'));
+        this.forms.Form_PenAdvPaymentOrder.addSignature(new Signature('POMngSignature','POMngName','POMngSig','توقيـــــع رئيســـة الباحثـــات','توقيـــــع رئيســـة الباحثـــات'));
     },
 
     main(){
@@ -133,12 +170,6 @@ process.controller = {
             process.initialize();
             let stepName = process.workItem.stepName;
             process.recieversList.loadManager();
-            //process.recieversList.loadDeptManager();
-            //process.branchesList.load()); //to load all branches
-            //process.branchesList.load([1,2,5]); // to load specific branches using branch id
-            //process.actionsList.load([process.actionsList.status, process.actionsList.approved]);
-
-            
 
             if(stepName == this.steps.PenAdv_Launch){   
             }
@@ -146,45 +177,8 @@ process.controller = {
             }
         
             
-            /* component manipulation */ 
-                //this.forms.Form_PeriodicalLeave.components.RequesterName.setValue('ABC');
-                //this.forms.Form_PeriodicalLeave.components.requesterName.disable();
-                
-                //this.forms.Form_PeriodicalLeave.components.FromDate.setMinDate('2020-05-01');
-                //this.forms.Form_PeriodicalLeave.components.FromDate.setMaxDate('2020-05-10');
-                
-                //this.forms.Form_PeriodicalLeave.components.VactionType.setValue(2);//give it the value of the option object to be selected
-                //alert(this.forms.Form_PeriodicalLeave.components.VactionType.getText()); // retrieves the shown selected text
-                //this.forms.Form_PeriodicalLeave.components.VactionType.setOptions([new Option('','','')]); //load different options
-                //this.forms.Form_PeriodicalLeave.components.VactionType.addOption( new Option('x','x','3') );
-                //this.forms.Form_PeriodicalLeave.components.VactionType.addOption(new Option('y','y','4') );
-                //this.forms.Form_PeriodicalLeave.components.VactionType.setValue('3');
-                //this.forms.Form_PeriodicalLeave.components.VactionType.removeOptionByValue('4');
-                
-                //this.forms.Form_PeriodicalLeave.components.IsPaid.disable();
-                //this.forms.Form_PeriodicalLeave.components.IsPaid.setValue(true);
-                //this.forms.Form_PeriodicalLeave.components.IsPaid.check();
-                //this.forms.Form_PeriodicalLeave.components.IsPaid.uncheck();
-
-                //this.forms.Form_PeriodicalLeave.components.SupSignature.enable();
-            
-
-
-
-            
-            /* form manipulation */
-                //this.forms.Form_PeriodicalLeave.enable();
-                //this.forms.Form_PeriodicalLeave.disable();
-                //this.forms.Form_WorkDeduction.hide();
-                //this.forms.Form_WorkDeduction.select();
-                this.forms.Form_AttachmentsSheet.select();
-                this.forms.Form_AttachmentsSheet.updateComponentsFromEntity();
-                
-        
-
-
-
-
+            this.forms.Form_AttachmentsSheet.select();
+            this.forms.Form_AttachmentsSheet.updateComponentsFromEntity();
             app.renderLabels();
             process.openProcessModal();
             process.setWorkFlowIDLabel();
@@ -197,12 +191,6 @@ process.controller = {
      },
 
     send(){ },
-
-    
-    // testSignature(){
-    //     util.viewObjectContent(this.forms.Form_PeriodicalLeave.components.SupSignature.getSigner()); 
-    // },
-
 
 }
 
@@ -222,7 +210,7 @@ $(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alert
                 <div class="nav nav-pills mb-1 ml-auto" id="nav-tab" role="tablist"></div>
             </nav>
             <div class="tab-content shadow border border-secondary rounded p-2 bg-white" id="nav-tabContent">
-                <!-- Form-PeriodicalLeave-Tab -->
+                <!-- Form_AttachmentsSheet-Tab -->
                 <div class="tab-pane fade show active" id="nav-Form_AttachmentsSheet" role="tabpanel" aria-labelledby="Form_AttachmentsSheet-tab">
                     <!-- the main container for all Form_AttachmentsSheet controls -->
                     <div class="container-fluid">
@@ -230,57 +218,47 @@ $(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alert
                             <div class="col p-1 mb-4" data-container-for="Form_AttachmentsSheet_title"></div>
                         </div>
                         <div class="row">
-                            <div class="col pr-3 pl-3" data-container-for="From"></div>
-                            <div class="col pr-3 pl-3" data-container-for="RequestDate"></div>
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="From"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3" data-container-for="RequestDate"></div>
                         </div>
                         <div class="row">
-                            <div class="col pr-3 pl-3" data-container-for="To"></div>
-                            <div class="col pr-3 pl-3" data-container-for="AppointmentDate"></div>
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="To"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3" data-container-for="AppointmentDate"></div>
                         </div>
                         <div class="row">
-                            <div class="col pr-3 pl-3" data-container-for="FileNo"></div>
-                            <div class="col pr-3 pl-3" data-container-for="CounterNo"></div>
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="FileNo"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3" data-container-for="CounterNo"></div>
                         </div>
                         <div class="row">
-                            <div class="col pr-3 pl-3" data-container-for="SSNo"></div>
-                            <div class="col pr-3 pl-3"></div>
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="SSNo"></div>
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3"></div>
                         </div>
                         <div class="row">
-                            <div class="col pr-3 pl-3" data-container-for="CivilID"></div>
-                            <div class="col pr-3 pl-3"></div>
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="CivilID"></div>
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3"></div>
                         </div>
                         <div class="row">
-                            <div class="col pr-3 pl-3" data-container-for="ClientName"></div>
-                            <div class="col pr-3 pl-3"></div>
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="ClientName"></div>
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3"></div>
                         </div> 
                         <div class="row">
-                            <div class="col pr-3 pl-3"></div>
-                            <div class="col pr-3 pl-3" data-container-for="Attachments"></div>
-                            <div class="col pr-3 pl-3"></div>
+                            <div class="col pt-3 pd-3 pr-3 pl-3"></div>
+                            <div class="col pt-3 pd-3 pr-3 pl-3" data-container-for="Attachments"></div>
+                            <div class="col pt-3 pd-3 pr-3 pl-3"></div>
+                        </div>                          
+                        <div class="row">
+                            <div class="col pt-3 pd-3 pr-3 pl-3" data-container-for="Notes"></div>
                         </div>
                         <div class="row">
-                            <div class="col pr-3 pl-3"></div>
-                            <div class="col pr-3 pl-3" data-container-for="NoOfAttachments"></div>
-                            <div class="col pr-3 pl-3"></div>
-                        </div>                            
-                        <div class="row">
-                            <div class="col pr-3 pl-3" data-container-for="Notes"></div>
+                            <div class="col pt-3 pd-3 pr-3 pl-3" data-container-for="MissingDocuments"></div>
                         </div>
                         <div class="row">
-                            <div class="col pr-3 pl-3" data-container-for="MissingDocuments"></div>
-                        </div>
-                        <div class="row">
-                            <div class="col pr-3 pl-3"></div>
-                            <div class="col pr-3 pl-3"></div>
-                            <div class="col pr-3 pl-3"></div>
-                            <div class="col pr-3 pl-3"></div>
-                            <div class="col pr-3 pl-3"></div>
-                            <div class="col pr-3 pl-3"></div>
-                            <div class="col pr-3 pl-3"></div>
-                            <div class="col pr-3 pl-3"></div>
-                            <div class="col pr-3 pl-3"></div>
-                            <div class="col pr-3 pl-3" data-container-for="AttachmentsIssuerSignature"></div>
-                            <div class="col pr-3 pl-3" data-container-for="AttachmentsIssuerSig"></div>
+                            <div class="col-4 pr-3 pl-3"></div>
+                            <div class="col-4 pr-3 pl-3"></div>
+                            <div class="col-4 pt-3 pd-3 pr-3 pl-3" data-container-for="AttachmentsIssuerSignature"></div>
                         </div>
                     </div>
                 </div>
@@ -289,153 +267,153 @@ $(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alert
 
                  <!-- Form_PenAdvPaymentRequest-Tab -->
                 <div class="tab-pane fade" id="nav-Form_PenAdvPaymentRequest" role="tabpanel" aria-labelledby="Form_PenAdvPaymentRequest-tab">
-                    <!-- the main container for all Form_PeriodicalLeave controls -->
+                    <!-- the main container for all Form_PenAdvPaymentRequest controls -->
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col p-3" data-container-for="Form_PenAdvPaymentRequest_title"></div>
                         </div>
                         <div class="row">
-                            <div class="col pr-3 pl-3" data-container-for="PayReqTxt1"></div>
+                            <div class="col pr-3 pl-3" data-container-for="PayReqTxt1" style="font-family: Arial, Helvetica, sans-serif; font-size: 22px;"></div>
                         </div>
                         <div class="row">
-                            <div class="col pr-3 pl-3" data-container-for="ClientName1"></div>
-                            <div class="col pr-3 pl-3" data-container-for="RequestDate1"></div>
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="ClientName"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3" data-container-for="RequestDate"></div>
                         </div>
                         <div class="row">
-                            <div class="col pr-3 pl-3" data-container-for="SSNo1"></div>
-                            <div class="col pr-3 pl-3" data-container-for="AppointmentDate1"></div>
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="SSNo"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3" data-container-for="AppointmentDate"></div>
                         </div>
                         <div class="row">
-                            <div class="col pr-3 pl-3" data-container-for="FileNo1"></div>
-                            <div class="col pr-3 pl-3" data-container-for="PhoneNo"></div>
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="FileNo"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3" data-container-for="PhoneNo"></div>
                         </div>
                         <div class="row">
-                            <div class="col pr-3 pl-3" data-container-for="CivilID1"></div>
-                            <div class="col pr-3 pl-3"></div>
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="CivilID"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3"></div>
                         </div>
                         <div class="row">
-                            <div class="col pr-3 pl-3" data-container-for="Email"></div>
-                            <div class="col pr-3 pl-3"></div>
+                            <div class="col pt-1 pd-1 pr-3 pl-3" data-container-for="Email"></div>
+                            <div class="col pt-1 pd-1 pr-3 pl-3"></div>
                         </div>
                         <div class="row">
-                            <div class="col pr-3 pl-3" data-container-for="Address"></div>
+                            <div class="col pt-1 pd-1 pr-3 pl-3" data-container-for="Address"></div>
                         </div> 
                         <div class="row">
-                            <div class="col pr-3 pl-3" data-container-for="PayReqTxt2"></div>
+                            <div class="col pt-2 pd-2 pr-3 pl-3" data-container-for="PayReqTxt2" style="font-family: Arial, Helvetica, sans-serif; font-size: 22px;"></div>
                         </div>
                         <div class="row">
-                            <!--Table of Month & Year-->
+                            <div class="col-4 pt-2 pd-2 pr-3 pl-3"></div>
+                            <div class="col-4 pt-2 pd-2 pr-3 pl-3" data-container-for="YearMonthTable"></div>
+                            <div class="col-4 pt-2 pd-2 pr-3 pl-3"></div>
                         </div>
                         <div class="row">
-                            <div class="col pr-3 pl-3" data-container-for="Reasons"></div>
+                            <div class="col pt-3 pd-3 pr-3 pl-3" data-container-for="Reasons"></div>
                         </div>
                         <div class="row">
-                            <div class="col pr-3 pl-3" data-container-for="PayReqTxt3"></div>
-                            <div class="col pr-3 pl-3"></div>
-                            <div class="col pr-3 pl-3" data-container-for="PayReqClientSigLabel"></div>
+                            <div class="col pt-3 pd-3 pr-3 pl-3" data-container-for="PayReqTxt3" style="font-family: Arial, Helvetica, sans-serif; font-size: 22px;"></div>
+                            <div class="col pt-3 pd-3 pr-3 pl-3"></div>
+                            <div class="col pt-3 pd-3 pr-3 pl-5" data-container-for="PayReqClientSigLabel" style="font-family: Arial, Helvetica, sans-serif; font-size: 22px;"></div>
                         </div>                                
                         <div class="row">
-                            <div class="col pr-3 pl-3" data-container-for="SMS"></div>
-                            <div class="col pr-3 pl-3" data-container-for="ClientName"></div>
+                            <div class="col-3 pt-3 pd-3 pr-3 pl-3" data-container-for="SMS"></div>
+                            <div class="col-4 pt-3 pd-3 pr-3 pl-3"></div>
+                            <div class="col-5 pt-3 pd-3 pr-5 pl-3" data-container-for="ClientName1"></div>
                         </div>
                         <div class="row">
-                            <div class="col pr-3 pl-3" data-container-for="PayReqTxt4"></div>
+                            <div class="col pt-3 pd-3 pr-3 pl-3" data-container-for="PayReqTxt4" style="font-family: Arial, Helvetica, sans-serif; font-size: 22px;"></div>
                         </div>
                         <div class="row">
-                            <!--Table of Previous Month & Year-->
+                            <div class="col-4 pt-3 pd-3 pr-3 pl-3"></div>
+                            <div class="col-4 pt-3 pd-3 pr-3 pl-3" data-container-for="LastYearMonthTable"></div>
+                            <div class="col-4 pt-3 pd-3 pr-3 pl-3"></div>
                         </div>                                  
                         <div class="row">
-                            <div class="col pr-3 pl-3"></div>
-                            <div class="col pr-3 pl-3"></div>
-                            <div class="col pr-3 pl-3"></div>
-                            <div class="col pr-3 pl-3"></div>
-                            <div class="col pr-3 pl-3"></div>
-                            <div class="col pr-3 pl-3"></div>
-                            <div class="col pr-3 pl-3"></div>
-                            <div class="col pr-3 pl-3"></div>
-                            <div class="col pr-3 pl-3"></div>
-                            <div class="col pr-3 pl-3" data-container-for="PRIssuerUserName"></div>
-                            <div class="col pr-3 pl-3" data-container-for="PRIssuerSig"></div>
+                            <div class="col-4 pt-3 pd-3 pr-3 pl-3"></div>
+                            <div class="col-4 pt-3 pd-3 pr-3 pl-3"></div>
+                            <div class="col-4 pt-3 pd-3 pr-3 pl-3" data-container-for="PRIssuerSignature"></div>
                         </div>
                         <div class="row">
-                            <div class="col pr-3 pl-3" data-container-for="PayReqTxt5"></div>
+                            <div class="col pt-3 pd-3 pr-3 pl-3" data-container-for="PayReqTxt5" style="font-family: Arial, Helvetica, sans-serif; font-size: 22px;"></div>
                         </div>
                         <div class="row">
-                            <div class="col pr-3 pl-3" data-container-for="PayReqTxt6"></div>
+                            <div class="col pt-3 pd-3 pr-3 pl-3" data-container-for="PayReqTxt6"></div>
                         </div>
                         <div class="row">
-                            <div class="col pr-3 pl-3" data-container-for="PayReqTxt7"></div>
+                            <div class="col pt-3 pd-3 pr-3 pl-3" data-container-for="PayReqTxt7"></div>
                         </div> 
                     </div>
                 </div>
 
                  <!-- Form_PenAdvPaymentOrder-Tab -->
                  <div class="tab-pane fade" id="nav-Form_PenAdvPaymentOrder" role="tabpanel" aria-labelledby="Form_PenAdvPaymentOrder-tab">
-                    <!-- the main container for all Form_PeriodicalLeave controls -->
+                    <!-- the main container for all Form_PenAdvPaymentOrder controls -->
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col p-3" data-container-for="Form_PenAdvPaymentOrder_title"></div>
                         </div>
                         <div class="row">
-                            <div class="col pr-3 pl-3" data-container-for="FileNo2"></div>
-                            <div class="col pr-3 pl-3" data-container-for="RequestDate2"></div>
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="FileNo"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3" data-container-for="RequestDate"></div>
                         </div>
                         <div class="row">
-                            <div class="col pr-3 pl-3" data-container-for="SSNo2"></div>
-                            <div class="col pr-3 pl-3" data-container-for="ExecutionDate"></div>
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="SSNo"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3" data-container-for="ExecutionDate"></div>
                         </div>
                         <div class="row">
-                            <div class="col pr-3 pl-3" data-container-for="CivilID2"></div>
-                            <div class="col pr-3 pl-3"></div>
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="CivilID"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3"></div>
                         </div>
                         <div class="row">
-                            <div class="col pr-3 pl-3" data-container-for="ClientName2"></div>
-                            <div class="col pr-3 pl-3"></div>
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="ClientName"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3"></div>
                         </div>
                         <div class="row">
-                            <div class="col pr-3 pl-3"></div>
-                            <div class="col pr-3 pl-3" data-container-for="NoOfMonthes"></div>
-                            <div class="col pr-3 pl-3"></div>
+                            <div class="col pt-3 pd-3 pr-3 pl-3"></div>
+                            <div class="col pt-3 pd-3 pr-3 pl-3" data-container-for="NoOfMonthes"></div>
+                            <div class="col pt-3 pd-3 pr-3 pl-3"></div>
                         </div> 
                         <div class="row">
-                            <div class="col pr-3 pl-3"></div>
-                            <div class="col pr-3 pl-3" data-container-for="PaymentMethod"></div>
-                            <div class="col pr-3 pl-3"></div>
+                            <div class="col pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col pt-1 pd-1 pr-3 pl-3" data-container-for="PaymentMethod"></div>
+                            <div class="col pt-1 pd-1 pr-3 pl-3"></div>
                         </div>                         
                         <div class="row">
-                            <div class="col pr-3 pl-3"></div>
-                            <div class="col pr-3 pl-3" data-container-for="PaidAmount"></div>
-                            <div class="col pr-3 pl-3"></div>
+                            <div class="col pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col pt-1 pd-1 pr-3 pl-3" data-container-for="PaidAmount"></div>
+                            <div class="col pt-1 pd-1 pr-3 pl-3"></div>
                         </div>
                         <div class="row">
-                            <div class="col pr-3 pl-3" data-container-for="MonthesDescription"></div>
-                            <div class="col pr-3 pl-3"></div>
+                            <div class="col pt-1 pd-1 pr-3 pl-3" data-container-for="MonthesDescription"></div>
+                            <div class="col pt-1 pd-1 pr-3 pl-3"></div>
                         </div>
                         <div class="row">
-                            <div class="col pr-3 pl-3" data-container-for="TransferTo"></div>
-                            <div class="col pr-3 pl-3"></div>
+                            <div class="col pt-1 pd-1 pr-3 pl-3" data-container-for="TransferTo"></div>
+                            <div class="col pt-1 pd-1 pr-3 pl-3"></div>
                         </div>                          
                         
                         <div class="row">
-                            <div class="col pr-3 pl-3" data-container-for="Bank"></div>
-                            <div class="col pr-3 pl-3"></div>
+                            <div class="col pt-1 pd-1 pr-3 pl-3" data-container-for="Bank"></div>
+                            <div class="col pt-1 pd-1 pr-3 pl-3"></div>
                         </div>
                         <div class="row">
-                            <div class="col pr-3 pl-3" data-container-for="AccountNo"></div>
-                            <div class="col pr-3 pl-3"></div>
+                            <div class="col pt-1 pd-1 pr-3 pl-3" data-container-for="AccountNo"></div>
+                            <div class="col pt-1 pd-1 pr-3 pl-3"></div>
                         </div>
                         <div class="row">
-                            <div class="col pr-3 pl-3" data-container-for="PONotes"></div>
+                            <div class="col pt-4 pd-4 pr-3 pl-3" data-container-for="PONotes"></div>
                         </div>  
                         <div class="row">
-                            <div class="col pr-3 pl-3"></div>
-                            <div class="col pr-3 pl-3" data-container-for="POIssuerName"></div>
-                            <div class="col pr-3 pl-3" data-container-for="POIssuerSig"></div>
-                            <div class="col pr-3 pl-3" data-container-for="POSupName"></div>
-                            <div class="col pr-3 pl-3" data-container-for="POSupSig"></div>
-                            <div class="col pr-3 pl-3" data-container-for="POMngName"></div>
-                            <div class="col pr-3 pl-3" data-container-for="POMngSig"></div>
-                            <div class="col pr-3 pl-3"></div>
+                            <div class="col pt-4 pd-4 pr-3 pl-3" data-container-for="POIssuerSignature"></div>
+                            <div class="col pt-4 pd-4 pr-3 pl-3" data-container-for="POSupSignature"></div>
+                            <div class="col pt-4 pd-4 pr-3 pl-3" data-container-for="POMngSignature"></div>
                         </div>
            
                     </div>

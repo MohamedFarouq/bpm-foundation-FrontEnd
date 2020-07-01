@@ -13,8 +13,8 @@
 		constructor(workFlowName,workflowID,subject,recieveDate){
 			this.workFlowName = workFlowName;
 			this.workflowID = (workflowID) ? workflowID : 0;
-			this.subject = (subject) ?subject : "";
-			this.recieveDate = (recieveDate) ? recieveDate : "'";
+			this.subject = (subject) ?subject : '';
+			this.recieveDate = (recieveDate) ? recieveDate : '';
 
 			this.stepNo = 0;
 			this.workFlowVersion = 1;
@@ -27,9 +27,23 @@
 			this.reciever = {};
 			this.branch = branchCatalog.Main;
 			this.isLastStep = false;
-			this.forms = [];
+			this.formsEntities = [];
 			this.attachments = [];
 			this.workObjectID = "";		
+		}
+	}
+
+	
+	class FormItem{
+		constructor(formTypeID,aName,eName){
+			this.formTypeID = formTypeID;
+			this.eName = eName;
+			this.aName = aName;
+			this.workFlowID = 0;
+			this.formID = 0;
+			this.formSubject = '';
+			this.originatorID = 0;
+			this.formEntity = {};
 		}
 	}
 
@@ -49,104 +63,6 @@
 			this.label = (app.isArabicLocale()) ? labelAra : labelEng;
 			this.value = value;
 		}
-	}
-
-	class TableColumn{
-		constructor(labelAra,labelEng,items,type){
-			this.name = name;
-			this.label = (app.isArabicLocale()) ? labelAra : labelEng;
-			this.items = (items) ? items : [''];
-			this.type = type;
-			this.colmID = '';
-		}
-
-		getHTML(){};
-
-		getValueAsArray(){
-			try{ 
-				let value = [];
-				let inputList = document.querySelectorAll(`#${this.colmID} input[type=${this.type}]`);
-				inputList.forEach(element=> { value.push(element.value); });
-				return value;
-			}
-			catch(error){ 
-				app.alertError(error.message);
-				throw error;	
-			}
-		}
-
-		keepItemsNotLessThan(itemsCount){
-			try{
-				for(let i=this.items.length;i<itemsCount;i++){
-					this.items.push('');
-				}
-			}
-			catch(error){ 
-				app.alertError(error.message);
-				throw error;	
-			}
-		};
-	}
-
-	class TableColTxt extends TableColumn{
-		constructor(labelAra,labelEng,items,txtMaxLength){
-			super(labelAra,labelEng,items,'text');
-			this.txtMaxLength = txtMaxLength;
-		}
-
-		getHTML(){
-			try {
-				let html = `<div class="container-fluid p-0" id="${this.colmID}" >	
-								<div class="form-row p-0">
-									<label class="col-sm col-form-label text-center text-nowrap bg-primary text-white border ">${this.label}</label>
-								</div>
-							`;
-				this.items.forEach( rowItem => {
-								html += `<div class="form-row p-0" >
-											<div class="col-sm text-center my-auto p-0">
-												<input value="${rowItem}" maxlength="${this.txtMaxLength}" class="form-control" type="text">
-											</div>
-							 			</div>`;
-				});				
-				html += `</div>`;
-				return html;
-			} catch (error) {
-				app.alertError(error.message);
-				throw error;	
-			}
-		};
-
-	}
-
-	class TableColDate extends TableColumn{
-		constructor(labelAra,labelEng,items,minDate,maxDate){
-			super(labelAra,labelEng,items,'date');
-			this.minDate = minDate;
-			this.maxDate = maxDate;
-		}
-
-		getHTML(){
-			try {
-				let html = `<div class="container-fluid p-0" id="${this.colmID}" >	
-								<div class="form-row p-0">
-									<label class="col-sm col-form-label text-center text-nowrap bg-primary text-white border ">${this.label}</label>
-								</div>
-							`;
-				this.items.forEach( rowItem => {
-								html += `<div class="form-row p-0" >
-											<div class="col-sm text-center my-auto p-0">
-												<input value="${rowItem}" min="${this.minDate}" max="${this.maxDate}" class="form-control" type="date" >	
-											</div>
-							 			</div>`;
-				});				
-				html += `</div>`;
-				return html;
-			} catch (error) {
-				app.alertError(error.message);
-				throw error;	
-			}
-		};
-
 	}
 
 	class Action{
@@ -174,7 +90,7 @@
 				this.dbTableName = dbTableName;
 				this.label = (app.isArabicLocale()) ? labelAra : labelEng;
 				this.components = {};
-				this.entity = {id:0, WorkFlowID : process.workItem.workflowID};
+				this.entity = {};//{id:0, WorkFlowID : process.workItem.workflowID};
 				this.addTab();
 				this.renderFormHeader();
 			}
@@ -229,7 +145,13 @@
 		hide(){ 
 			this.getTab().classList.add('d-none');	
 		};
-				
+		
+		changeFormTitle(labelAra,labelEng){
+			this.label = (app.isArabicLocale()) ? labelAra : labelEng;
+			this.changeTabLabel();
+			this.renderFormHeader();
+		};
+
 		setPrintable(isPrintable){ 
 			this.isPrintable = isPrintable
 		};
@@ -238,8 +160,8 @@
 			try{	
 				let container = util.querySelector('data-container-for',`${this.dbTableName}_title`);
 				let html = `<div class="form-row">
-								<div class="col-sm-1 p-0"><img src="./resources/images/banner/pifssLogo.jpg"  width="65" height="50" alt=""></div>
-								<div class="col-sm-11 p-0 text-center my-auto">
+								<div class="col-1 p-0"><img src="./resources/images/banner/pifssLogo.jpg"  width="65" height="50" alt=""></div>
+								<div class="col-11 p-0 text-center my-auto">
 									<h3>${this.label}</h3>
 								</div>
 							</div>
@@ -258,6 +180,10 @@
 			catch(error){ throw error;	}
 		};
 
+		changeTabLabel(){
+			document.getElementById(`${this.dbTableName}-tab`).innerHTML = this.label;
+		};
+
 		addTab(){
 			try{
 				let html = `<a id="${this.dbTableName}-tab" href="#nav-${this.dbTableName}" data-tab-form-name="${this.dbTableName}"  aria-controls="nav-${this.dbTableName}" aria-selected="false" role="tab" class="nav-item nav-link" data-toggle="tab">${this.label}</a>`;
@@ -268,10 +194,10 @@
 	}
 
 	class Component{
-		constructor(dbColName,labelAra,labelEng){
+		constructor(dbColName,labelAra,labelEng,labelSize){
 			this.dbColName = dbColName;
 			this.label = (app.isArabicLocale()) ? labelAra : labelEng;
-			this.labelSize = (this.label) ? 4 : 0;
+			this.labelSize = (this.label) ? (labelSize) ? labelSize : 4 : 0;
 			this.labelCss = 'bg-primary text-white ';
 			this.form = '';
 			this.id = '';
@@ -325,17 +251,17 @@
 	}
 
 	class TxtComponent extends Component{
-		constructor(dbColName,labelAra,labelEng,maxLength){
-			super(dbColName,labelAra,labelEng);
+		constructor(dbColName,labelAra,labelEng,maxLength,labelSize){
+			super(dbColName,labelAra,labelEng,labelSize);
 			this.maxLength = maxLength;
 		}
 		
 		render(){
 			try {
-				let labelHtml = (this.label) ? `<label for="${this.id}" class="col-sm-${this.labelSize} col-form-label border-bottom text-center text-nowrap ${this.labelCss}">${this.label}</label>` : ``;
+				let labelHtml = (this.label) ? `<label for="${this.id}" class="col-${this.labelSize} col-form-label border-bottom text-center text-nowrap ${this.labelCss}">${this.label}</label>` : ``;
 				let html = `<div class="form-row">
 								${labelHtml}
-								<div class="col-sm-${12-this.labelSize} p-0">
+								<div class="col-${12-this.labelSize} p-0">
 									<input type="text" id="${this.id}" maxlength="${this.maxLength}" class="form-control" >
 								</div>
 							</div>
@@ -345,17 +271,39 @@
 		};
 	}
 
+	class TxtBetweenPlainLabelsComponent extends Component{
+		constructor(dbColName,labelAraRight,labelEngRight,maxLength,labelAraLeft,labelEngLeft){
+			super(dbColName,labelAraRight,labelEngRight);
+			this.labelLeft =  (app.isArabicLocale()) ? labelAraLeft : labelEngLeft;
+			this.maxLength = maxLength;
+		}
+		
+		render(){
+			try {
+				let html = `<div class="form-row">
+								<label class="col-auto my-auto pr-2 text-center text-nowrap text-muted">${this.label}</label>	
+								<div class="col p-0">
+									<input type="text" id="${this.id}" maxlength="${this.maxLength}" class="form-control" >
+								</div>
+								<label class="col-auto my-auto pl-2 text-center text-nowrap text-muted">${this.labelLeft}</label>	
+							</div>
+							`;
+				this.getContainer().innerHTML = html;
+			} catch (error) {throw error;	}
+		};
+	}
+
 	class NumberComponent extends Component{
-		constructor(dbColName,labelAra,labelEng){
-			super(dbColName,labelAra,labelEng);
+		constructor(dbColName,labelAra,labelEng,labelSize){
+			super(dbColName,labelAra,labelEng,labelSize);
 		}
 		
 		render(){
 			try{
-				let labelHtml = (this.label) ? `<label for="${this.id}" class="col-sm-${this.labelSize} col-form-label border-bottom text-center text-nowrap ${this.labelCss}">${this.label}</label>` : ``;
+				let labelHtml = (this.label) ? `<label for="${this.id}" class="col-${this.labelSize} col-form-label border-bottom text-center text-nowrap ${this.labelCss}">${this.label}</label>` : ``;
 				let html = ` <div class=" form-row">
 							${labelHtml}
-							<div class="col-sm-${12-this.labelSize} p-0">
+							<div class="col-${12-this.labelSize} p-0">
 								<input type="number" id="${this.id}" class="form-control" >
 							</div>
 						</div>
@@ -368,16 +316,16 @@
 	}
 
 	class MoneyComponent extends Component{
-		constructor(dbColName,labelAra,labelEng){
-			super(dbColName,labelAra,labelEng);
+		constructor(dbColName,labelAra,labelEng,labelSize){
+			super(dbColName,labelAra,labelEng,labelSize);
 		}
 		
 		render(){
 			try{
-				let labelHtml = (this.label) ? `<label for="${this.id}" class="col-sm-${this.labelSize} col-form-label border-bottom text-center text-nowrap ${this.labelCss}">${this.label}</label>` : ``;
+				let labelHtml = (this.label) ? `<label for="${this.id}" class="col-${this.labelSize} col-form-label border-bottom text-center text-nowrap ${this.labelCss}">${this.label}</label>` : ``;
 				let html = ` <div class="form-row">
 							${labelHtml}
-							<div class="col-sm-${12-this.labelSize} p-0">
+							<div class="col-${12-this.labelSize} p-0">
 								<input type="number" id="${this.id}" step="0.001" class="form-control" >
 							</div>
 						</div>
@@ -416,18 +364,18 @@
 	}
 
 	class DateComponent extends Component{
-		constructor(dbColName,labelAra,labelEng,minDate,maxDate){
-			super(dbColName,labelAra,labelEng);
+		constructor(dbColName,labelAra,labelEng,minDate,maxDate,labelSize){
+			super(dbColName,labelAra,labelEng,labelSize);
 			this.minDate = minDate;
 			this.maxDate = maxDate;
 		}
 		
 		render(){
 			try{
-				let labelHtml = (this.label) ? `<label for="${this.id}" class="col-sm-${this.labelSize} col-form-label border-bottom text-center text-nowrap ${this.labelCss}">${this.label}</label>` : ``;
+				let labelHtml = (this.label) ? `<label for="${this.id}" class="col-${this.labelSize} col-form-label border-bottom text-center text-nowrap ${this.labelCss}">${this.label}</label>` : ``;
 				let html = ` <div class="form-row">
 							${labelHtml}
-							<div class="col-sm-${12-this.labelSize} p-0">
+							<div class="col-${12-this.labelSize} p-0">
 								<input id="${this.id}"  min="${this.minDate}" max="${this.maxDate}" class="form-control" type="date" >
 							</div>
 						</div>
@@ -447,20 +395,19 @@
 	}
 
 	class DropDownListComponent extends Component{
-		constructor(dbColName,labelAra,labelEng,initialOptionsList){
-			super(dbColName,labelAra,labelEng);
+		constructor(dbColName,labelAra,labelEng,initialOptionsList,labelSize){
+			super(dbColName,labelAra,labelEng,labelSize);
 			this.initialOptionsList = initialOptionsList;
 			// this.render(optionsList);
 		}
 		
 		render(){
 			try{
-				let labelHtml = (this.label) ? `<label for="${this.id}" class="col-sm-${this.labelSize} col-form-label border-bottom text-center text-nowrap ${this.labelCss}">${this.label}</label>` : ``;
+				let labelHtml = (this.label) ? `<label for="${this.id}" class="col-${this.labelSize} col-form-label border-bottom text-center text-nowrap ${this.labelCss}">${this.label}</label>` : ``;
 				let html = `<div class="form-row">
 							${labelHtml}
-							<div class="col-sm-${12-this.labelSize} p-0">
+							<div class="col-${12-this.labelSize} p-0">
 							<select id="${this.id}" class="form-control">`;
-							
 						for(let opt of this.initialOptionsList){
 							html += `<option value="${opt.value}">${opt.label}</option>`;
 						}	
@@ -508,8 +455,9 @@
 		
 		render(){
 			try{
+				let labelHtml = (this.label) ? `<label for="${this.id}" class="col col-form-label border-bottom text-center text-nowrap ${this.labelCss}">${this.label}</label>` : ``;
 				let html = `<div class="form-row p-0">
-							<label for="${this.id}" class="col-sm col-form-label text-center text-nowrap ${this.labelCss}">${this.label}</label>
+							${labelHtml}
 							</div>
 							<div class="form-row p-0">
 								<textarea type="text" id="${this.id}" maxlength="${this.maxLength}" rows="${this.rows}" class="form-control" style="resize: none;" ></textarea>
@@ -602,10 +550,11 @@
 	}
 
 	class TableComponent extends Component{
-		constructor(dbColName,colmList,minRowsCount){
+		constructor(dbColName,colmList,minRowsCount,colWidths){
 			super(dbColName,'','');
 			this.colmList = colmList;
 			this.rowsCount = minRowsCount;
+			this.colWidths = colWidths;
 			this.setRowsCount(minRowsCount);
 		}
 
@@ -614,12 +563,11 @@
 				let html = `<div class="container-fluid p-0"> 
 								<div class="form-row" >`;
 				for(let i=0;i<this.colmList.length;i++){
-					
 					let col = this.colmList[i];
-						
+					let colWidth = 	this.getColWidth(i);					
 					col.colmID = `${this.id}_${i}`;
 					col.keepItemsNotLessThan(this.rowsCount);
-					html += `<div class="col" > ${col.getHTML()}</div>`;				
+					html += `<div class="col${colWidth}" > ${col.getHTML()}</div>`;				
 				}
 				this.getContainer().innerHTML = html;
 			} catch (error) {throw error;	}
@@ -648,10 +596,156 @@
 			return count;
 		};
 
+		getColWidth(index){
+			if(this.colWidths && this.colWidths.length > 0)
+				return `-${this.colWidths[index]}`;
+			return "";	
+		}
+	}
+	
+	class TableColumn{
+		constructor(labelAra,labelEng,items,type){
+			this.name = name;
+			this.label = (app.isArabicLocale()) ? labelAra : labelEng;
+			this.items = (items) ? items : [''];
+			this.type = type;
+			this.colmID = '';
+		}
+
+		getHTML(){};
+
+		getValueAsArray(){
+			try{ 
+				let value = [];
+				let inputList = document.querySelectorAll(`#${this.colmID} input[type=${this.type}]`);
+				inputList.forEach(element=> { value.push(element.value); });
+				return value;
+			}
+			catch(error){ 
+				app.alertError(error.message);
+				throw error;	
+			}
+		}
+
+		keepItemsNotLessThan(itemsCount){
+			try{
+				for(let i=this.items.length;i<itemsCount;i++){
+					this.items.push('');
+				}
+			}
+			catch(error){ 
+				app.alertError(error.message);
+				throw error;	
+			}
+		};
 	}
 
+	class TableColTxt extends TableColumn{
+		constructor(labelAra,labelEng,items,txtMaxLength){
+			super(labelAra,labelEng,items,'text');
+			this.txtMaxLength = txtMaxLength;
+		}
 
+		getHTML(){
+			try {
+				let html = `<div class="container-fluid p-0" id="${this.colmID}" >	
+								<div class="form-row p-0">
+									<label class="col col-form-label text-center text-nowrap bg-primary text-white border ">${this.label}</label>
+								</div>
+							`;
+				this.items.forEach( rowItem => {
+								html += `<div class="form-row p-0" >
+											<div class="col text-center my-auto p-0">
+												<input value="${rowItem}" maxlength="${this.txtMaxLength}" class="form-control" type="text">
+											</div>
+							 			</div>`;
+				});				
+				html += `</div>`;
+				return html;
+			} catch (error) {
+				app.alertError(error.message);
+				throw error;	
+			}
+		};
 
+	}
+
+	class TableColDate extends TableColumn{
+		constructor(labelAra,labelEng,items,minDate,maxDate){
+			super(labelAra,labelEng,items,'date');
+			this.minDate = minDate;
+			this.maxDate = maxDate;
+		}
+
+		getHTML(){
+			try {
+				let html = `<div class="container-fluid p-0" id="${this.colmID}" >	
+								<div class="form-row p-0">
+									<label class="col col-form-label text-center text-nowrap bg-primary text-white border ">${this.label}</label>
+								</div>
+							`;
+				this.items.forEach( rowItem => {
+								html += `<div class="form-row p-0" >
+											<div class="col text-center my-auto p-0">
+												<input value="${rowItem}" min="${this.minDate}" max="${this.maxDate}" class="form-control" type="date" >	
+											</div>
+							 			</div>`;
+				});				
+				html += `</div>`;
+				return html;
+			} catch (error) {
+				app.alertError(error.message);
+				throw error;	
+			}
+		};
+
+	}
+
+	class TableColDropDownList extends TableColumn{
+		constructor(labelAra,labelEng,initialOptionsList,items){
+			super(labelAra,labelEng,items,'select');
+			this.initialOptionsList = initialOptionsList;
+		}
+
+		getHTML(){
+			try {
+				let optionsHTML = ``;
+				for(let opt of this.initialOptionsList)
+					optionsHTML += `<option value="${opt.value}">${opt.label}</option>`;
+				
+				let html = `<div class="container-fluid p-0" id="${this.colmID}" >	
+								<div class="form-row p-0">
+									<label class="col col-form-label text-center text-nowrap bg-primary text-white border ">${this.label}</label>
+								</div>`;
+				this.items.forEach( rowItem => {
+								html += `<div class="form-row p-0" >
+											<div class="col text-center my-auto p-0">
+												<select class="form-control">${optionsHTML}</select>
+											</div>
+							 			</div>`;
+				});				
+				html += `</div>`;
+				return html;
+			} catch (error) {
+				app.alertError(error.message);
+				throw error;	
+			}
+		};
+
+		getValueAsArray(){
+			try{ 
+				let value = [];
+				let inputList = document.querySelectorAll(`#${this.colmID} select`);
+				inputList.forEach(element=> { value.push(element.value); });
+				return value;
+			}
+			catch(error){ 
+				app.alertError(error.message);
+				throw error;	
+			}
+		}
+
+	}
 
 	class AttachmentsTableComponent extends Component{
 		constructor(dbColName,attachmentsList){
@@ -668,7 +762,7 @@
 									<input value="${att}" onclick="process.controller.forms.${this.form}.components.${this.dbColName}.calculateCheckedAttachments()" data-form-element-for="${this.dbColName}_checkBox" type="checkbox"  >
 								</div>
 								<div class="col-11 my-auto">
-									<label class="text-left text-nowrap ">${att}</label>			
+									<label class="text-left text-nowrap text-muted">${att}</label>			
 								</div>
 							</div>`;
 				}
@@ -737,9 +831,6 @@
 		}
 
 	}
-	
-
-
 
 
 
@@ -778,6 +869,7 @@
 			systemMsgs : 'System Messages',
 			logOff : "Log Off",
 			doneSuccessfully : "Done Successfully",
+			insufficientPrivileges : 'User does not have enough privileges to execute the operation',
 			mainPage: "Main",
 			newRequestGrid : "New Request",
 			notifications : "Notifications",
@@ -840,6 +932,7 @@
 			systemMsgs : 'رسائـل النظـام',
 			logOff : "Log Off",
 			doneSuccessfully : "تم تنفيذ العملية بنجاح",
+			insufficientPrivileges : 'المستخدم الحالي ليس لديه الصلاحيات الكافية لتنفيذ العملية',
 			mainPage: "الصفحة الرئيسية",
 			newRequestGrid : "طلب جديد",
 			notifications : "التنبيهـات",

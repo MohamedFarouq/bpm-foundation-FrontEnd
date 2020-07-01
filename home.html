@@ -73,10 +73,7 @@
                 <a onclick="process.close()" href="#"><i class="fas fa-window-close modalCloseBtn"></i></a>
                 <ul class="navbar-nav ml-auto">
                     <li class="my-auto p-1" >
-                        <button id="procInstructionsBtn" onclick="process.openUserGuide()" type="button" class="btn btn-sm btn-dark">
-                            <span data-label="userGuide"></span>
-                            <i class="fas fa-info-circle text-white"></i>
-                        </button> 
+                        <button id="procInstructionsBtn" onclick="process.openUserGuide()" type="button" class="btn btn-sm btn-dark"><span data-label="userGuide"></span><i class="fas fa-info-circle text-white"></i></button> 
                     </li>
                     <li class="my-auto p-1" >
                         <button id="procStepsBtn" onclick="process.openSteps()" type="button" class="btn btn-sm btn-dark"><span data-label="steps"></span><i class="fas fa-list-ol text-white"></i></button> 
@@ -120,6 +117,34 @@
                 </div>
             </div>
             <div id="processBody" class="col-9" style="min-height: 100vh !important;"></div>
+          </div>
+        </div>
+      </div>
+  </div>
+</div>
+
+
+<!-- Form Modal -->
+<div class="modal " id="formModal" data-backdrop="static"  tabindex="-1" role="dialog" aria-labelledby="formModalTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document" style=" min-width: 90%;">
+      <div class="modal-content" style="background-color: #EAEAEA !important;">
+        <!-- ToolBar Components -->
+        <div id="formToolBar" class="modal-header bg-light p-0 ">
+            <nav class="navbar navbar-expand-sm container-fluid bg-dark p-1" style=" box-shadow: none !important;">
+              <a onclick="formHandler.close()" href="#"><i class="fas fa-window-close modalCloseBtn"></i></a>
+              <ul class="navbar-nav ml-auto">
+                <li class="nav-item my-auto p-1" >
+                  <button id="formPrintBtn" onclick="alert(formHandler); formHandler.controller.print()" type="button" class="btn btn-sm btn-success text-white"><span data-label="print"></span><i class="fas fa-print text-white"></i></button> 
+                </li>  
+                <li class="my-auto p-1" >
+                      <button id="formInstructionsBtn" onclick="formHandler.openUserGuide()" type="button" class="btn btn-sm btn-dark"><span data-label="userGuide"></span><i class="fas fa-info-circle text-white"></i></button> 
+                </li>
+              </ul>
+            </nav>
+        </div>
+        <div class="modal-body overflow-auto pt-0">
+          <div class="row">
+            <div id="formBody" class="col" style="min-height: 100vh !important;"></div>
           </div>
         </div>
       </div>

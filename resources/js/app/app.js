@@ -3,7 +3,7 @@
 
 	const registery = {
 		mainPageController : undefined,
-
+		ssFormsGridController : undefined,
 	};
 
 	const validator = {		
@@ -375,7 +375,12 @@
 
 		goLogin(){ window.location.href = "./login.html"; },
 
-
+		getInsufficientPrivilegesLabel(){
+			return `<label class="text-danger "> 
+						<i class="fas fa-ban text-danger"></i> 
+						${this.getMessage('insufficientPrivileges') }
+					</label>`;
+		},
 		
 
 		alertError(msg){
@@ -399,7 +404,7 @@
 			app.openAlertModal();
 		},
 		alertSuccess(){
-			let msg = (this.isArabicLocale()) ? properties.arabic['doneSuccessfully'] : properties.english['doneSuccessfully'];
+			let msg = this.getMessage('doneSuccessfully');//  (this.isArabicLocale()) ? properties.arabic['doneSuccessfully'] : properties.english['doneSuccessfully'];
 			app.setAlertModalCssClass('alert-info');
 			app.setAlertBody(msg);
 			app.openAlertModal();
@@ -434,7 +439,14 @@
 		openAlertModal(){ util.showModal('alertModal'); },
 		closeAlertModal(){util.hideModal('alertModal');	},
 		
-		
+		getMessage(msgKey){
+			try{
+				return (this.isArabicLocale()) ? properties.arabic[msgKey] : properties.english[msgKey];
+			}
+			catch(error){
+				app.alertError(error.message)
+			}
+		},
 
 		renderLabels(){
 			let elements = document.querySelectorAll('[data-label]');
@@ -614,9 +626,7 @@
 		openProcessModal(){ util.showModal(this.processModalID); },
 		closeProcessModal(){ util.hideModal(this.processModalID);},
 
-		send(){
-
-		},
+		
 		print(){
 			pdfViewer.renderPDFByLink("./resources/pdf/forms.pdf",'نمـاذج المعاملـة','Process Forms');
 		},
@@ -661,6 +671,41 @@
 	};
 
 
+	const formHandler = {
+		controller : undefined,
+		formItem : undefined,	
+		formModalID : 'formModal',
+
+
+		launch(fi){
+			try{
+				this.formItem = fi;
+				let url =  `./pages/form/${this.formItem.eName.toLowerCase()}/form.html`;
+				util.loadHTML('formBody',url);
+			}
+			catch(eror){
+				app.alertError(error.message);
+			}
+		},
+
+		
+
+		openUserGuide(){
+			pdfViewer.renderPDFByLink("./resources/pdf/userGuide.pdf",'دليـل المستخـدم','User Guide');
+		},
+		close(){ 
+			this.controller = undefined; 
+			this.formItem = undefined;
+			this.closeFormModal(); 
+		},
+		// setWorkFlowIDLabel(){
+		// 	document.getElementById('workflowIDLabel').innerHTML = `مسلسل الاجراء : ${process.formtem.formID}`;
+		// },	
+
+		openFormModal(){ util.showModal(this.formModalID); },
+		closeFormModal(){ util.hideModal(this.formModalID);},
+
+	};
 
 
 

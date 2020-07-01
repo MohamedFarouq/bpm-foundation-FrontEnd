@@ -1,0 +1,112 @@
+
+<script>
+
+if(! registery.ssFormsGridController){
+    
+    registery.ssFormsGridController = {
+        deptGridID : 'deptsGrid',
+        formPackagesGridID : 'formPackagesGrid',
+        formGridID : 'formsLinksGrid',
+    
+        main(){
+           //check user priveleges and retrieve the allowed depts list and render the deptGrid
+           this.addForm(2,'Call_Memo','نموذج مذكرة إتصال');
+        },
+    
+
+        onSelectDept(deptCode,element){
+           util.clearInnerHTML(this.formPackagesGridID);
+            util.clearInnerHTML(this.formGridID);
+            util.toogleAmongSiblings(element);
+            //retrieve list of all formPackages for that dept
+            //if(list == 0)
+                //util.setInnerHTMLAsInsufficientPrivilegesLabel(this.formPackagesGridID) 
+            //else
+            this.addFormPackage(-20,'تسوية معاش');
+        },
+
+        onSelectFormPackage(packageID,element){
+            util.clearInnerHTML(this.formGridID);
+            util.toogleAmongSiblings(element);
+             //retrieve list of all formPackages for that dept
+            //if(list == 0)
+                //util.setInnerHTMLAsInsufficientPrivilegesLabel(this.formsGridID)  
+            //else
+            this.addForm(35,'نموذج تسوية معاش');
+        },
+
+
+
+       
+        addDept(packageID,araLabel){
+            let html = `<a id="list-profile-list" class="list-group-item list-group-item-action"  data-toggle="list" href="#list-profile" role="tab" aria-controls="profile">أصحاب المعاشات وحساب المدد</a>`;
+        },
+
+        addFormPackage(packageID,araLabel){
+            try{
+               let html = `
+                            <a onclick="registery.ssFormsGridController.onSelectFormPackage(-10,this)" class="list-group-item list-group-item-action"  href="#" >
+                                <i class="fas fa-grip-lines"></i> ${araLabel}
+                            </a>
+                            `;
+                util.appendToInnerHTML(this.formPackagesGridID,html);
+            }
+            catch(error){
+                app.alertError(error.message);
+            }
+        },
+        
+        addForm(formTypeID,eName,aName){
+            try{
+                let html = `<a onclick="formHandler.launch(new FormItem(${formTypeID},'${aName}','${eName}'));" class="list-group-item list-group-item-action"  href="#" >
+                                <i class="fas fa-grip-lines"></i> ${aName}
+                            </a>`;
+                util.appendToInnerHTML(this.formGridID,html);
+            }
+            catch(error){
+                app.alertError(error.message);
+            }
+        },
+
+       
+
+    }
+    
+    
+}
+
+$(document).ready( ()=>{ try{ registery.ssFormsGridController.main(); }catch(error){ app.alertError(error.message); }} );
+</script>
+    
+
+<div class="container-fluid">
+    <div class="row border p-2 bg-white shadow-sm">        
+        <div class="col-4 p-3 bg-white">
+            <div id="deptsGrid" class="list-group list-group-flush"  >
+                <a onclick="registery.ssFormsGridController.onSelectDept(352,this)" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"  href="#" >
+                    <span>
+                        <i class="fas fa-align-justify"></i>
+                        الخدمـة التأمينيـة - العاصمة
+                    </span>
+                    <span class="badge badge-success ">14</span>
+                </a>
+                <a onclick="registery.ssFormsGridController.onSelectDept(352,this)" class="list-group-item list-group-item-action "  href="#" >  
+                    <i class="fas fa-align-justify"></i>
+                    الخدمـة التأمينيـة - الجنوب</a>
+                <a onclick="registery.ssFormsGridController.onSelectDept(354,this)" class="list-group-item list-group-item-action"  href="#">أصحاب المعاشات وحساب المدد</a>
+                <a onclick="registery.ssFormsGridController.onSelectDept(360,this)" class="list-group-item list-group-item-action"  href="#">شئون المستحقين</a>
+                <a onclick="registery.ssFormsGridController.onSelectDept(366,this)" class="list-group-item list-group-item-action" href="#">الاشتراكات ومتابعة السداد</a>
+                <a onclick="registery.ssFormsGridController.onSelectDept(370,this)" class="list-group-item list-group-item-action" href="#">التسجيل والتفتيش</a>
+                <a onclick="registery.ssFormsGridController.onSelectDept(372,this)" class="list-group-item list-group-item-action" href="#">تأميـن الخليجيين</a>
+            </div>
+        </div>
+        <div class="col-4 bg-white p-3 border-left" style="min-height: 85vh !important;">
+            <div id="formPackagesGrid" class="list-group list-group-flush"  role="tablist">
+            </div>
+        </div>
+        <div class="col-4 bg-white p-3 border-left">
+            <div id="formsLinksGrid" class="list-group list-group-flush"  role="tablist">
+            </div>
+        </div>
+  </div>
+</div>

@@ -39,30 +39,55 @@ process.controller = {
         Form_PeriodicalLeave : new Form('Form_PeriodicalLeave', 'نموذج طلب اجازة دورية','Leave Form'),
         Form_WorkDeduction : new Form('Form_WorkDeduction', 'نموذج انقطاع عن العمل','Salary Deduction Form'),
         
+    
     },
 
     defineComponents(){    
+        //all components with labels like TxtComponents,DateComponent, DropDownListComponent can take the last number as label size in thier constructor
+        //and if we dropped that number the ratio is col-8 and col-4 
         this.forms.Form_PeriodicalLeave.addComponent(new TxtComponent('RequesterName','الاســم','Name',5) );
+        this.forms.Form_WorkDeduction.addComponent(new TxtComponent('RequesterName','','',5) );
+        
+        //this.forms.Form_WorkDeduction.changeFormTitle('تغيير عنوان النموذج','change form title');
+
+        
         this.forms.Form_PeriodicalLeave.addComponent(new DateComponent('FromDate','من التاريخ','From','','') );
         this.forms.Form_PeriodicalLeave.addComponent(new NumberComponent('Days','ايام الاجازة','Days') );
         this.forms.Form_PeriodicalLeave.addComponent(new DropDownListComponent('VactionType','نوع الاجازة','type',[new Option('','','0') ,new Option('دورية','Periodical','1') , new Option('مرضية','Sick Leave','2')]) );
+        // the last number which is 2 is the label size, it's optional so u just add it if u want to change the label size
+        this.forms.Form_PeriodicalLeave.addComponent(new TxtComponent('Department','الإدارة','Department',15,  2) );
+
+
         this.forms.Form_PeriodicalLeave.addComponent(new CheckBoxComponent('IsPaid','اجازة مصروفة','Paid Vacation') );
+
+        this.forms.Form_PeriodicalLeave.addComponent(new TxtBetweenPlainLabelsComponent('TxtWithPlainLabel','هذا هو عنوان الحقل','This is the plain label',20,'تكملة بعد الحقل ','text after component') );
+        
+
+
         this.forms.Form_PeriodicalLeave.addComponent(new NotesComponent('Notes','الملاحظـــــات','Notes',4,300) );
         this.forms.Form_PeriodicalLeave.addComponent(new AttachmentsTableComponent('Attachments',['مرفق 1','مرفق 2','مرفق 3']) );
         this.forms.Form_PeriodicalLeave.addComponent(new ParagraphComponent('Ekrar','اقر انا الموقع ادناه بانني مسئول عن ماتم ادخاله من بيانات ','I admit that I am responsible for the entered data','text-danger font-weight-bold') );
         
         this.forms.Form_PeriodicalLeave.addSignature(new Signature('reqDeptSupSig','SupName','SupSig','اعتمـــاد المراقــب المختــص','Supervisor Approval')  );
         this.forms.Form_PeriodicalLeave.addSignature(new Signature('reqDeptMngSig','MngName','MngSig','اعتمـــاد المراقــب المختــص','Supervisor Approval')  );
+        // this.forms.Form_ProgramInstallation.addComponent(new SignatureComponent('SysEng','SysEngSig','System Engineer','System Engineer') ); 
         
         
-        this.forms.Form_WorkDeduction.addComponent(new TxtComponent('RequesterName','','',5) );
-        this.forms.Form_WorkDeduction.addComponent(new TableComponent('WorkDedTable',[
-                                                                                        new TableColTxt('الأول','First',['A','B','','C','']),
-                                                                                        new TableColTxt('الثاني','Second',['D','E','F']),
-                                                                                        new TableColDate('الثالث','Third',['2020-01-01','2020-02-02'],'2020-01-01','2020-03-01'),
-                                                                                        
-                                                                                    ], 7
-                                                                                    ) );
+        var dropDownListOptions = [ new Option('','',''), 
+                                    new Option('اختيار1','option-1','opt1Value'), 
+                                    new Option('اختيار2','Option-2','opt2Value')
+                                ];
+        this.forms.Form_WorkDeduction.addComponent(new TableComponent('WorkDedTable',
+                                                                    [new TableColTxt('الأول','First',['','A'],2),
+                                                                     new TableColTxt('الثاني','Second',['D','E','F']),
+                                                                     new TableColDate('الثالث','Third',['2020-01-01','2020-02-02'],'2020-01-01','2020-03-01'), 
+                                                                     new TableColDropDownList('قائمة اختيار','Drop down list',dropDownListOptions)
+                                                                    ]
+                                                                    ,7
+                                                                    ,[3,3,2,4]
+
+                                                                                    ) 
+                                                    );
         
         
 
@@ -182,7 +207,7 @@ process.controller = {
 
 }
 
-$(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alertError(error.message); }} );
+$(document).ready( ()=>{ try{ process.controller.main(); }catch(error){ app.alertError(error.message); }} );
 </script>
 
 <style>
@@ -211,12 +236,15 @@ $(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alert
                             <div class="col pr-3 pl-3" data-container-for="Days"></div>       
                         </div>
                         <div class="row p-1">
-                            <div class="col pr-3 pl-3" data-container-for="VactionType"></div>
-                            <div class="col pr-3 pl-3"></div>
-                            <div class="col pr-3 pl-3"></div>
+                            <div class="col-4 pr-3 pl-3" data-container-for="VactionType"></div>
+                            <div class="col-8 pr-3 pl-3" data-container-for="Department"></div>
                         </div>
                         <div class="row p-1">
                             <div class="col pr-3 pl-3" data-container-for="IsPaid"></div>
+                        </div>
+                        <div class="row p-1">
+                            <div class="col-5 pr-3 pl-3" data-container-for="TxtWithPlainLabel"></div>
+                            <div class="col-7 " ></div>
                         </div>
                         <div class="row p-1">
                             <div class="col pr-3 pl-3" data-container-for="Notes"></div>
@@ -245,8 +273,8 @@ $(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alert
                         </div>
                         
                         <div class="row p-1">
-                            <div class="col pr-3 pl-3" data-container-for="WorkDedTable"></div>
-                            <div class="col p-3">
+                            <div class="col-8 pr-3 pl-3" data-container-for="WorkDedTable"></div>
+                            <div class="col-4 p-3">
                                 <button type="button" class="btn btn-primary" onclick="alert(process.controller.forms.Form_WorkDeduction.components.WorkDedTable.getValue());">get Table Value</button>
                             </div>
                         </div>

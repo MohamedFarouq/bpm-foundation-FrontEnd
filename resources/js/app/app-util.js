@@ -177,6 +177,15 @@ const util = {
 		}	
 	},
 
+	clearInnerHTML(id){
+		try{
+			document.getElementById(id).innerHTML = '';
+		}
+		catch(error){
+			app.alertError(error.message);
+		}	
+	},
+
 	show(id) { 
 		document.getElementById(id).classList.remove('d-none');
 	},
@@ -214,6 +223,11 @@ const util = {
 			$(`#${id}`).append(html);
 	},
 
+	appendToInnerHTML(id,html){
+		if(this.elementExists(id))
+			$(`#${id}`).append(html);
+	},
+
 	setInnerHTML(id,html){
 		if(this.elementExists(id))
 			$(`#${id}`).html(html);
@@ -232,6 +246,14 @@ const util = {
 			this.handlElementNotFound(` element attribute : ${compAttr} and value ${compAttrValue} `);	
 	},
 	
+	setInnerHTMLAsInsufficientPrivilegesLabel(element){
+		element.innerHTML = app.getInsufficientPrivilegesLabel();
+		 
+	 },
+
+
+
+
 	findThenAddCssClass(compAttr,compAttrValue,cssClass){
 		let component = this.querySelector(compAttr,compAttrValue);
 		if(component)
@@ -249,6 +271,16 @@ const util = {
 		
 	},
 	
+	toogleAmongSiblings(element){
+		try{
+			element.parentElement.querySelectorAll('a').forEach(item=>item.classList.remove('active'));
+			element.classList.add('active');
+		}
+		catch(error){
+			app.alertError(error.message);
+		}
+	},
+
 	querySelector(compAttr,compAttrValue){
 		let component = document.querySelector(`[${compAttr}="${compAttrValue}"]`);
 		if(!component)

@@ -1,0 +1,244 @@
+<script >
+    
+/**
+ * WorkItem{
+        workFlowName,workflowID,subject,recieveDate,stepNo,workFlowVersion,workFlowType,stepName,nextStepName,instructions,workObjectID,comments,action,
+        sender,reciever,branch,forms,attachments
+        isLastStep = false;
+}
+ */
+
+
+
+
+process.controller = {
+    errMsg : "",
+    groups : {  
+         //groupFollowUpTLs : ["FollowUp_TLs"],    // groupFollowUpEmps : ["FollowUp_Emps"],
+    },
+
+    steps : {
+        PerLeave_Launch : 'PerLeave_Launch',
+        PerLeave_TLApprove: 'PerLeave_TLApprove',
+        PerLeave_SupApprove: 'PerLeave_SupApprove',
+        PerLeave_DeptSec: 'PerLeave_DeptSec',
+        PerLeave_MngApprove: 'PerLeave_MngApprove',
+        PerLeave_Update: 'PerLeave_Update',
+        PerLeave_DDGApprove: 'PerLeave_DDGApprove',
+        PerLeave_DDGSec: 'PerLeave_DDGSec',
+        PerLeave_PersAdminSec : 'PerLeave_PersAdminSec',
+        PerLeave_PersAdminEmp : 'PerLeave_PersAdminEmp',
+        PerLeave_PersAdminTL : 'PerLeave_PersAdminTL',
+        PerLeave_PersAdminSup : 'PerLeave_PersAdminSup',
+        PerLeave_FinSec : 'PerLeave_FinSec',
+        PerLeave_FinSup : 'PerLeave_FinSup',
+        PerLeave_FinTL : 'PerLeave_FinTL',
+        PerLeave_FinEmp : 'PerLeave_FinEmp',
+    },
+
+    forms : {
+        Form_RACFSecutiyForm : new Form('Form_RACFSecutiyForm','RACF Secutiy Form','RACF Secutiy Form'),
+
+    },
+
+    defineComponents(){ 
+        this.forms.Form_RACFSecutiyForm.addComponent(new DateComponent('RequesterDate','Date','Date','','') );
+        this.forms.Form_RACFSecutiyForm.addComponent(new TxtComponent('SMRNo','SMR No','SMR No',6) );
+
+        this.forms.Form_RACFSecutiyForm.addComponent(new CheckBoxComponent('NEWprog','New Program','New Program') );
+        this.forms.Form_RACFSecutiyForm.addComponent(new DropDownListComponent('Forms','Form Name','Form Name',[new Option('','','0') ,new Option('RACF Security Form-CICS','RACF Security Form-CICS','1') ,
+        new Option('HR Permission Form-PER','HR Permission Form-PER','2'),new Option('ESignature Form-SCV','ESignature Form-SCV','3'),new Option('Optional Complementary Form-OPC','Optional Complementary Form-OPC','4'),
+        new Option('EGL System','EGL System','2')]) );
+
+
+        this.forms.Form_RACFSecutiyForm.addComponent(new TableComponent('ProgramTable',[
+                                                                                        new TableColTxt('Program Name','Program Name'),
+                                                                                        new TableColTxt('Screen Code','Screen Code'),
+                                                                                        new TableColTxt('Screen Name (Arbic)','Screen Name (Arbic)'),
+                                                                                        new TableColTxt('Program Transaction','Program Transaction'),
+                                                                                        new TableColTxt('Job Sequence','Job Sequence'),
+                                                                                        new TableColTxt('Program Type','Program Type'),
+                                                                                        new TableColTxt('UPD DEPID','UPD DEPID'),
+                                                                                        new TableColTxt('UPD ClerkID','UPD ClerkID'),
+                                                                                        new TableColTxt('INQ DepID','INQ DepID'),
+                                                                                        new TableColTxt('INQ ClerkID','INQ ClerkID'),                                                                                
+                                                                                    ], 2
+                                                                                    ) );
+
+        this.forms.Form_RACFSecutiyForm.addComponent(new TableComponent('FunctionTable',[
+                                                                                        new TableColTxt('Function Name','Function Name'),
+                                                                                        new TableColTxt('Screen Code','Screen Code'),
+                                                                                        new TableColTxt('Screen Name (Arbic)','Screen Name (Arbic)'),
+                                                                                        new TableColTxt('Program Transaction','Program Transaction'),
+                                                                                        new TableColTxt('Job Sequence','Job Sequence'),
+                                                                                        new TableColTxt('Program Type','Program Type'),
+                                                                                        new TableColTxt('UPD DEPID','UPD DEPID'),
+                                                                                        new TableColTxt('UPD ClerkID','UPD ClerkID'),
+                                                                                        new TableColTxt('INQ DepID','INQ DepID'),
+                                                                                        new TableColTxt('INQ ClerkID','INQ ClerkID'), 
+                                                                                    ], 9
+                                                                                    ) );                                                                           
+        
+        this.forms.Form_RACFSecutiyForm.addSignature(new Signature('SE','SEName','SESig','Responsible SE','Responsible SE') ); 
+        this.forms.Form_RACFSecutiyForm.addSignature(new Signature('TeamLeader','TeamLdName','TeamLeaderSig','Team Leader','Team Leader') );
+        this.forms.Form_RACFSecutiyForm.addSignature(new Signature('GroupLeader','GroupLeaderName','GroupLeaderSig','Group Leader','Group Leader') );
+
+        this.forms.Form_RACFSecutiyForm.addComponent(new NotesComponent('Note','Notes','Notes',4,300) );
+
+        this.forms.Form_RACFSecutiyForm.addSignature(new Signature('ImplementedBy','IMPName','IMPSig','Implemented By','Implemented By') ); 
+        
+    },
+
+    main(){
+        try{
+            this.defineComponents();
+            process.initialize();
+            let stepName = process.workItem.stepName;
+            process.recieversList.loadManager();
+
+            
+
+            if(stepName == this.steps.PerLeave_Launch){   
+            }
+            else if(stepName == this.steps.PerLeave_TLApprove){
+            }
+        
+            
+            /* component manipulation */ 
+                //this.forms.Form_RACFSecutiyForm.components.RequesterDate.setValue('ABC');
+                //this.forms.Form_RACFSecutiyForm.components.RequesterDate.disable();
+                
+                //this.forms.Form_RACFSecutiyForm.components.FromDate.setMinDate('2020-05-01');
+                //this.forms.Form_RACFSecutiyForm.components.FromDate.setMaxDate('2020-05-10');
+                
+                //this.forms.Form_RACFSecutiyForm.components.VactionType.setValue(2);//give it the value of the option object to be selected
+                //alert(this.forms.Form_RACFSecutiyForm.components.VactionType.getText()); // retrieves the shown selected text
+                //this.forms.Form_RACFSecutiyForm.components.VactionType.setOptions([new Option('','','')]); //load different options
+                //this.forms.Form_RACFSecutiyForm.components.VactionType.addOption( new Option('x','x','3') );
+                //this.forms.Form_RACFSecutiyForm.components.VactionType.addOption(new Option('y','y','4') );
+                //this.forms.Form_RACFSecutiyForm.components.VactionType.setValue('3');
+                //this.forms.Form_RACFSecutiyForm.components.VactionType.removeOptionByValue('4');
+                
+                //this.forms.Form_RACFSecutiyForm.components.IsPaid.disable();
+                //this.forms.Form_RACFSecutiyForm.components.IsPaid.setValue(true);
+                //this.forms.Form_RACFSecutiyForm.components.IsPaid.check();
+                //this.forms.Form_RACFSecutiyForm.components.IsPaid.uncheck();
+
+                //this.forms.Form_RACFSecutiyForm.components.SupSignature.enable();
+            
+
+
+
+            
+            /* form manipulation */
+                //this.forms.Form_RACFSecutiyForm.enable();
+                //this.forms.Form_RACFSecutiyForm.disable();
+                this.forms.Form_RACFSecutiyForm.select();
+                this.forms.Form_RACFSecutiyForm.updateComponentsFromEntity();
+                
+        
+
+
+
+
+            app.renderLabels();
+            process.openProcessModal();
+            process.setWorkFlowIDLabel();
+        }
+        catch(error){ throw error;}
+    },
+
+    validate(){
+        //validator.markAsInvalidField('myTxt');
+     },
+
+    send(){ },
+
+    
+    // testSignature(){
+    //     util.viewObjectContent(this.forms.Form_RACFSecutiyForm.components.SupSignature.getSigner()); 
+    // },
+
+
+}
+
+$(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alertError(error.message); }} );
+</script>
+
+<style>
+    .nav-pills .nav-link.active {
+    background-color: rgb(108, 117, 126) !important;
+}
+</style>
+
+<div class="container-fluid pr-1 pl-1" >
+    <div class="row">
+        <div class="col p-1 " >
+            <nav>
+                <div class="nav nav-pills mb-1 ml-auto" id="nav-tab" role="tablist"></div>
+            </nav>
+            <div class="tab-content shadow border border-secondary rounded p-2 bg-white" id="nav-tabContent">
+                <!-- Form_RACFSecutiyForm -->
+                <div class="tab-pane fade show active" id="nav-Form_RACFSecutiyForm" role="tabpanel" aria-labelledby="Form_RACFSecutiyForm-tab">
+                    <!-- the main container for all Form_RACFSecutiyForm controls -->
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col p-1 mb-4" data-container-for="Form_RACFSecutiyForm_title"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="SMRNo"></div>
+                            <div class="col pr-3 pl-3 pt-2"></div>
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RequesterDate"></div>
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="Forms"></div>
+                            <div class="col pr-3 pl-3 pt-2"></div>
+                            <div class="col pr-3 pl-3 pt-2 pb-3" style="text-align: left; font-weight:bolder;" data-container-for="NEWprog"></div>
+                        </div>
+
+                        <div style="text-align: left; font-weight:bolder;">Program Table</div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2 pb-3" style="direction:ltr;" data-container-for="ProgramTable"></div>
+                        </div>
+
+                        <div style="text-align: left; font-weight:bolder;">Function Table</div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="FunctionTable" ></div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2 pb-3" data-container-for="GroupLeader"></div>
+                            <div class="col pr-3 pl-3 pt-2 pb-3" data-container-for="TeamLeader"></div>
+                            <div class="col pr-3 pl-3 pt-2 pb-3" data-container-for="SE"></div>
+                        </div>
+
+                        <div style="text-align: left; font-weight: bold;">RACF Authorization</div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2" data-container-for="Note"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2"></div>
+                            <div class="col pr-3 pl-3 pt-2"></div>
+                            <div class="col pr-3 pl-3 pt-2" data-container-for="ImplementedBy"></div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+
+
+                <div class="text-right">
+                    <hr>
+                    <label id="workflowIDLabel" class="text-danger">مسلسل الاجراء</label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

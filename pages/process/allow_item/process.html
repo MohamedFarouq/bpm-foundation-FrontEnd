@@ -46,9 +46,9 @@
             this.forms.Form_AllowItem.addComponent(new TxtComponent('AllowItemNo','رقم طلب سماح البند','Allow Item Number') );
             this.forms.Form_AllowItem.addComponent(new NotesComponent('Notes','','',4,300) );
           
-            //this.forms.Form_AllowItem.addComponent(new SignatureComponent('HREmpName','HREmpSig','توقيع موظف إدارة الموارد البشرية','Employee Signature') ); //components.SupSignature = new SignatureComponent('SupName','SupSig','اعتمـــاد المراقــب المختــص','Supervisor Approval');
-            //this.forms.Form_AllowItem.addComponent(new SignatureComponent('HRSupName','HRSupSig','توقيع مراقب إدارة الموارد البشرية','Supervisor Approval') );
-            //this.forms.Form_AllowItem.addComponent(new SignatureComponent('HRMngName','HRMngSig','توقيع مدير إدارة الموارد البشرية','Manager Approval') );
+            this.forms.Form_AllowItem.addComponent(new SignatureComponent('HREmpName','HREmpSig','توقيع موظف إدارة الموارد البشرية','Employee Signature') ); //components.SupSignature = new SignatureComponent('SupName','SupSig','اعتمـــاد المراقــب المختــص','Supervisor Approval');
+            this.forms.Form_AllowItem.addComponent(new SignatureComponent('HRSupName','HRSupSig','توقيع مراقب إدارة الموارد البشرية','Supervisor Approval') );
+            this.forms.Form_AllowItem.addComponent(new SignatureComponent('HRMngName','HRMngSig','توقيع مدير إدارة الموارد البشرية','Manager Approval') );
 
             this.forms.Form_AllowItem.addComponent(new TxtComponent('ReqNo','رقم سماح البند','Allow Item Request No',5) );
             this.forms.Form_AllowItem.addComponent(new TxtComponent('Center1','305','305',5) );
@@ -66,9 +66,9 @@
             this.forms.Form_AllowItem.addComponent(new TxtComponent('Center5','340','340',5) );
          
                  
-            // this.forms.Form_AllowItem.addComponent(new SignatureComponent('FinEmpName','FinEmpSig','توقيع موظف الإدارة المالية','Employee Signature') ); //components.SupSignature = new SignatureComponent('SupName','SupSig','اعتمـــاد المراقــب المختــص','Supervisor Approval');
-            // this.forms.Form_AllowItem.addComponent(new SignatureComponent('FinSupName','FinSupSig','توقيع مراجع الإدارة المالية','Supervisor Approval') );
-            // this.forms.Form_AllowItem.addComponent(new SignatureComponent('FinMngName','FinMngSig','ع/ مدير الإدارة المالية','Manager Approval') );
+            this.forms.Form_AllowItem.addComponent(new SignatureComponent('FinEmpName','FinEmpSig','توقيع موظف الإدارة المالية','Employee Signature') ); //components.SupSignature = new SignatureComponent('SupName','SupSig','اعتمـــاد المراقــب المختــص','Supervisor Approval');
+            this.forms.Form_AllowItem.addComponent(new SignatureComponent('FinSupName','FinSupSig','توقيع مراجع الإدارة المالية','Supervisor Approval') );
+            this.forms.Form_AllowItem.addComponent(new SignatureComponent('FinMngName','FinMngSig','ع/ مدير الإدارة المالية','Manager Approval') );
 
             this.line1 = new ParagraphComponent('line1','السيد مدير الإدارة المالية المحترم<br> تحية طيبة و بعد, نرجو إفادتنا عن سماح البند المالي لـ','Mng of FinDept <br> allow item clarification','text-danger font-weight-bold');
             this.line3 = new ParagraphComponent('line3','دولار أمريكي<br> و تفضلوا بقبول فائق الإحترام ،،','US Dollar <br> Best Regards','text-danger font-weight-bold');
@@ -138,9 +138,9 @@
     
     
     
-            app.renderLabels();
-            process.openProcessModal();
-            process.setWorkFlowIDLabel();
+                app.renderLabels();
+                app.openProcessModal();
+                process.setWorkFlowIDLabel();
             }
             catch(error){ throw error;}
         },
