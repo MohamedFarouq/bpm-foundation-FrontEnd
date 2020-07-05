@@ -3,115 +3,149 @@
 
 if(! registery.mainPageController){
 
-registery.mainPageController = {
+    registery.mainPageController = {
+        myInboxGrid : {
+            id : 'myInboxGrid',
+            workItemsList : [],
 
-    main(){
-        app.renderLabels();
-        this.renderNewRequestsLinks();
-        this.renderMyInbox();
-    },
+            load(){
+                this.workItemsList = peService.fetchInboxWIs(loggedUser.userName);
+                menu.mainPage.setPadge(this.workItemsList.length);
+            },
+            render(){
+                this.workItemsList.forEach((wi,index)=>{ 
+                                    let html = `<div class="row p-1 ">
+                                                    <div class="col shadow-sm bg-white">
+                                                        <div class="row p-2">
+                                                            <div class="col-1 p-0 my-auto text-center">
+                                                                <span class="text-muted" >${wi.recieveDate}</span>
+                                                            </div>
+                                                            <div class="col-11 p-1 ">
+                                                                <div class="row">
+                                                                    <div class="col-9">
+                                                                        <div class="p-1">
+                                                                            <a onclick="process.launch(new WorkItem('${wi.workFlowName}',${wi.workflowID},'${wi.subject}','${wi.recieveDate}'))" class="simpleLink font-weight-bolder" href="#" title="">${wi.subject}</a>
+                                                                        </div>
+                                                                        <div class="p-1">
+                                                                            <label class="text-dimmed fontSize85">${app.chooseBasedOnLocale(wi.sender.deptNameAra,wi.sender.deptNameEng)  }</label>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-3 p-2">
+                                                                        <span class="bg-dimmed p-1 pl-2 pr-2 text-dimmed fontSize85 hand" onclick="alert('under sondtruction')" >${app.getPropertyValue('notes')}</span>
+                                                                        <span class="bg-dimmed p-1 pl-2 pr-2 text-dimmed fontSize85 hand" onclick="alert('under sondtruction')" >${app.getPropertyValue('steps')}</span>
+                                                                        <span class="bg-dimmed p-1 pl-2 pr-2 text-dimmed fontSize85 hand" onclick="alert('under sondtruction')" >${app.getPropertyValue('reassign')}</span>
+                                                                            
+                                                                    </div>    
+                                                                </div>
+                                                                
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>`;
+                                        util.append(this.id,html);
+                                    });
+            },
 
-    renderMyInbox(){
-        util.clear("myInboxList");
-        let myInboxItems = peService.fetchInboxWIs(loggedUser.userName);
+            refresh(){
+                this.load();
+                this.render();
+            },
+
+            clear(){ util.clearInnerHTML(this.id); },
+
+        },
+
+        newRequestGrid : {
+            hrReqListID : 'humanResourcesRequestsList',
+            itReqListID : 'informationTechRequestsList',
+            ssReqListID : 'socialSecurityRequestsList',
+            finReqListID : 'financeRequestsList',
+            adminReqListID : 'administrationRequestsList',
+            genReqListID : 'generalSectorRequestsList',
+
+            render(){                
+                // HR requests
+                this.addLink(this.hrReqListID,processCatalog.Personal_Execuse_Permission);
+                this.addLink(this.hrReqListID,processCatalog.Periodical_Leave);
+                this.addLink(this.hrReqListID,processCatalog.Return_Endorsement);
+                this.addLink(this.hrReqListID,processCatalog.Absence_Form);
+                this.addLink(this.hrReqListID,processCatalog.Bank_Transfer);
+                this.addLink(this.hrReqListID,processCatalog.Issue_Certificate);
+                this.addLink(this.hrReqListID,processCatalog.Salary_Ded_Hiers);
+                this.addLink(this.hrReqListID,processCatalog.Loan_Request);
+                //this.addNewReqLinkToHR(processCatalog.Sick_Leave);
+
+                // IT requests
+                this.addLink(this.itReqListID,processCatalog.User_Signon);
+                this.addLink(this.itReqListID,processCatalog.System_Modification_Request);
+                this.addLink(this.itReqListID,processCatalog.Program_Installation);
+                this.addLink(this.itReqListID,processCatalog.Operation_Support_Request_Forms);
+                this.addLink(this.itReqListID,processCatalog.TS_Service);
+                this.addLink(this.itReqListID,processCatalog.RACF_Security_Form);
+                //this.addNewReqLinkToIT(processCatalog.Exit_Permit);
+
+                // SSSector requests
+                this.addLink(this.ssReqListID,processCatalog.Process_Transfer);
+                this.addLink(this.ssReqListID,processCatalog.Outgoing_Correspondences);
+                this.addLink(this.ssReqListID,processCatalog.Payment_Order);
+                this.addLink(this.ssReqListID,processCatalog.Pension_Advanced);
+                this.addLink(this.ssReqListID,processCatalog.Pension_Replacement);
+                this.addLink(this.ssReqListID,processCatalog.Pension_Repayment);
+                this.addLink(this.ssReqListID,processCatalog.Pension_Calculation);
+                this.addLink(this.ssReqListID,processCatalog.Pension_Replacement_In_Employment);
+                this.addLink(this.ssReqListID,processCatalog.Share_Advanced);
+                this.addLink(this.ssReqListID,processCatalog.Unemployment_Compensation_Calculation);
+                this.addLink(this.ssReqListID,processCatalog.UCC_Payment);
+                this.addLink(this.ssReqListID,processCatalog.Refund_Memo);
+                this.addLink(this.ssReqListID,processCatalog.Medical_Committee_Memo);
+                this.addLink(this.ssReqListID,processCatalog.Process_Cancellation);
+                this.addLink(this.ssReqListID,processCatalog.File_Change);
+
+                this.addLink(this.finReqListID,processCatalog.Process_Transfer);
+                this.addLink(this.finReqListID,processCatalog.Allow_Item);
+                this.addLink(this.finReqListID,processCatalog.Amounts_Paid_In_Excess);
+                this.addLink(this.finReqListID,processCatalog.Recover_Undeserved_Amounts);
+                this.addLink(this.finReqListID,processCatalog.Refund_Memo);
+                this.addLink(this.finReqListID,processCatalog.Reply_About_RUA);
+                this.addLink(this.finReqListID,processCatalog.Process_Cancellation);
+
+                
+                this.addLink(this.genReqListID,processCatalog.File_Complaint);
+                this.addLink(this.genReqListID,processCatalog.Family_Certificate);
+
+                this.addLink(this.adminReqListID,processCatalog.Purchase);
+                this.addLink(this.adminReqListID,processCatalog.Service_Request);
+                this.addLink(this.adminReqListID,processCatalog.Task_Aassignment_Request);
+                this.addLink(this.adminReqListID,processCatalog.Extract_And_Receive_Files);
+                this.addLink(this.adminReqListID,processCatalog.Document_Retrieval_Suggestions);
+                this.addLink(this.adminReqListID,processCatalog.Modification_Request);
+
+            },	
+
+            addLink(containerID,process){
+                let html = `<li class="list-group-item p-2 ml-2"> 
+                                <i class="fas fa-file-alt text-secondary"></i> 
+                                <a onclick="process.launch(new WorkItem('${process.engName}'))" class="simpleLink text-secondary" href="#">
+                                    ${app.chooseBasedOnLocale(process.arabicName,process.engLabel)} </a>  
+                            </li>`;  
+                util.append(containerID,html);
+            },
+
+        },
+
+        main(){
+            app.renderLabels();
+            this.myInboxGrid.refresh();
+            this.newRequestGrid.render();
+        },
+
         
-        myInboxItems.forEach((wi,index)=>{
-        let html = `<li class="list-group-item"> 
-                        <div class="row">
-                            <div class="col-1 text-muted text-center"><span class="text-muted" >${wi.recieveDate}</span></div>
-                            <div class="col"><a onclick="process.launch(new WorkItem('${wi.workFlowName}',${wi.workflowID},'${wi.subject}','${wi.recieveDate}'))" class="simpleLink" href="#" title="">${wi.subject}</a>    
-                            </div>
-                        </div>
-                    </li>`;
-            util.append("myInboxList",html);
-        });
+    };
 
-    },
-    
-    
-    renderNewRequestsLinks(){
-        let hrReqListID = 'humanResourcesRequestsList';
-        let itReqListID = 'informationTechRequestsList';
-        let ssReqListID = 'socialSecurityRequestsList';
-        let finReqListID = 'financeRequestsList';
-        let adminReqListID = 'administrationRequestsList';
-        let genReqListID = 'generalSectorRequestsList';
-        
-        // HR requests
-        this.addNewRequestLink(hrReqListID,processCatalog.Personal_Execuse_Permission);
-        this.addNewRequestLink(hrReqListID,processCatalog.Periodical_Leave);
-        this.addNewRequestLink(hrReqListID,processCatalog.Return_Endorsement);
-        this.addNewRequestLink(hrReqListID,processCatalog.Absence_Form);
-        this.addNewRequestLink(hrReqListID,processCatalog.Bank_Transfer);
-        this.addNewRequestLink(hrReqListID,processCatalog.Issue_Certificate);
-        this.addNewRequestLink(hrReqListID,processCatalog.Salary_Ded_Hiers);
-        this.addNewRequestLink(hrReqListID,processCatalog.Loan_Request);
-        //this.addNewReqLinkToHR(processCatalog.Sick_Leave);
-
-        // IT requests
-        this.addNewRequestLink(itReqListID,processCatalog.User_Signon);
-        this.addNewRequestLink(itReqListID,processCatalog.System_Modification_Request);
-        this.addNewRequestLink(itReqListID,processCatalog.Program_Installation);
-        this.addNewRequestLink(itReqListID,processCatalog.Operation_Support_Request_Forms);
-        this.addNewRequestLink(itReqListID,processCatalog.TS_Service);
-        this.addNewRequestLink(itReqListID,processCatalog.RACF_Security_Form);
-        //this.addNewReqLinkToIT(processCatalog.Exit_Permit);
-
-        // SSSector requests
-        this.addNewRequestLink(ssReqListID,processCatalog.Process_Transfer);
-        this.addNewRequestLink(ssReqListID,processCatalog.Outgoing_Correspondences);
-        this.addNewRequestLink(ssReqListID,processCatalog.Payment_Order);
-        this.addNewRequestLink(ssReqListID,processCatalog.Pension_Advanced);
-        this.addNewRequestLink(ssReqListID,processCatalog.Pension_Replacement);
-        this.addNewRequestLink(ssReqListID,processCatalog.Pension_Repayment);
-        this.addNewRequestLink(ssReqListID,processCatalog.Pension_Calculation);
-        this.addNewRequestLink(ssReqListID,processCatalog.Pension_Replacement_In_Employment);
-        this.addNewRequestLink(ssReqListID,processCatalog.Share_Advanced);
-        this.addNewRequestLink(ssReqListID,processCatalog.Unemployment_Compensation_Calculation);
-        this.addNewRequestLink(ssReqListID,processCatalog.UCC_Payment);
-        this.addNewRequestLink(ssReqListID,processCatalog.Refund_Memo);
-        this.addNewRequestLink(ssReqListID,processCatalog.Medical_Committee_Memo);
-        this.addNewRequestLink(ssReqListID,processCatalog.Process_Cancellation);
-        this.addNewRequestLink(ssReqListID,processCatalog.File_Change);
-
-        this.addNewRequestLink(finReqListID,processCatalog.Process_Transfer);
-        this.addNewRequestLink(finReqListID,processCatalog.Allow_Item);
-        this.addNewRequestLink(finReqListID,processCatalog.Amounts_Paid_In_Excess);
-        this.addNewRequestLink(finReqListID,processCatalog.Recover_Undeserved_Amounts);
-        this.addNewRequestLink(finReqListID,processCatalog.Refund_Memo);
-        this.addNewRequestLink(finReqListID,processCatalog.Reply_About_RUA);
-        this.addNewRequestLink(finReqListID,processCatalog.Process_Cancellation);
-
-        
-        this.addNewRequestLink(genReqListID,processCatalog.File_Complaint);
-        this.addNewRequestLink(genReqListID,processCatalog.Family_Certificate);
-
-        this.addNewRequestLink(adminReqListID,processCatalog.Purchase);
-        this.addNewRequestLink(adminReqListID,processCatalog.Service_Request);
-        this.addNewRequestLink(adminReqListID,processCatalog.Task_Aassignment_Request);
-        this.addNewRequestLink(adminReqListID,processCatalog.Extract_And_Receive_Files);
-        this.addNewRequestLink(adminReqListID,processCatalog.Document_Retrieval_Suggestions);
-        this.addNewRequestLink(adminReqListID,processCatalog.Modification_Request);
-
-    },		
-
-    addNewRequestLink(containerID,process){
-        let title = (app.isArabicLocale()) ? process.arabicName : process.engLabel;
-        let html = `<li class="list-group-item p-2 ml-2"> 
-                        <i class="fas fa-file-alt text-secondary"></i> 
-                        <a onclick="process.launch(new WorkItem('${process.engName}'))" class="simpleLink text-secondary" href="#">
-                            ${title} </a>  
-                    </li>`;  
-        util.append(containerID,html);
-    },
-
-    
 }
 
+$(document).ready( ()=>{ try{registery.mainPageController.main(); }catch(error){ app.alertError(error.message); }} );
 
-}
-
-$(document).ready(registery.mainPageController.main());
 </script>
 
 
@@ -119,26 +153,26 @@ $(document).ready(registery.mainPageController.main());
 <div class="container-fluid ">
     <div class="row">
         <div class="col-9 pl-1">
-            <div class="bg-white p-2 shadow-sm">
-                <i class="fas fa-envelope text-muted"></i>
+            <div class="p-1">
+                <i class="fas fa-envelope text-muted fontSize175"></i>
                 <h5 class="text-muted font-weight-bold d-inline" data-label="personalInbox"></h5>
             </div>
-            <ul id="myInboxList" class="list-group list-group-flush shadow-sm p-3 overflow-auto bg-white" style="min-height: 80vh !important;"></ul>
+            <div id="myInboxGrid" class="container-fluid overflow-auto modal-body" style="min-height: 80vh !important;"></div>
         </div>
 
-        <div class="col-3 p-1 bg-white shadow-sm">
-            <div class="bg-white p-2">
-                <i class="fas fa-share-square text-muted"></i>
+        <div class="col-3 p-1 ">
+            <div class="p-2">
+                <i class="fab fa-whmcs text-muted fontSize175"></i>
                 <h5 class="text-muted font-weight-bold d-inline" data-label="newRequestGrid"></h5>
             </div>    
-            <div class="accordion pt-0 p-2 border-top " id="newRequestAccordion">
+            <div class="accordion shadow-sm pt-0 p-0 " id="newRequestAccordion">
                 <div class="card border-0">
                     <div class="card-header bg-white" id="headingHRRequests">
                         <i class="fas fa-folder text-warning"></i>
                         <a class="btn btn-white w-100 text-primary collapsed text-left d-inline"  data-label="humanResourcesRequests" data-target="#humanResourcesRequestsDiv" aria-controls="humanResourcesRequestsDiv" aria-expanded="false"  data-toggle="collapse"></a>
                     </div>
                     <div id="humanResourcesRequestsDiv" class="collapse" aria-labelledby="headingHRRequests" data-parent="#newRequestAccordion">
-                        <div class="card-body">
+                        <div class="card-body  overflow-auto modal-body" style="max-height: 40vh !important;">
                             <ul id="humanResourcesRequestsList" class="list-group list-group-flush"></ul>
                         </div>
                     </div>
@@ -160,7 +194,7 @@ $(document).ready(registery.mainPageController.main());
                         <a class="btn btn-white w-100 text-primary collapsed text-left d-inline" data-label="socialSecurityRequests" data-target="#socialSecurityRequestsDiv" aria-controls="socialSecurityRequestsDiv" aria-expanded="false"data-toggle="collapse"></a>
                     </div>
                     <div id="socialSecurityRequestsDiv" class="collapse" aria-labelledby="headingSSRequests" data-parent="#newRequestAccordion">
-                        <div class="card-body">
+                        <div class="card-body  overflow-auto modal-body" style="max-height: 40vh !important;">
                             <ul id="socialSecurityRequestsList" class="list-group list-group-flush"></ul>
                         </div>
                     </div>

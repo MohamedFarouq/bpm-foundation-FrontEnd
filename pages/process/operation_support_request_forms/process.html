@@ -330,14 +330,10 @@ process.controller = {
 
 }
 
-$(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alertError(error.message); }} );
+$(document).ready( ()=>{ try{ process.controller.main(); }catch(error){ app.alertError(error.message); }} );
 </script>
 
-<style>
-    .nav-pills .nav-link.active {
-    background-color: rgb(108, 117, 126) !important;
-}
-</style>
+
 
 <div class="container-fluid pr-1 pl-1" >
     <div class="row">

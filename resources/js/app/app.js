@@ -95,13 +95,13 @@
 		assertSigned(nameComp,signerComp){
 			try{
 				if(! nameComp.getValue()){
-					app.alertInvalid((app.isArabicLocale()) ? `اسم المستخدم غير متاح بالتوقيع` : `Missing logged User name in Signature`);
+					app.alertInvalid( app.chooseBasedOnLocale(`اسم المستخدم غير متاح بالتوقيع`,`Missing logged User name in Signature`) );
 					nameComp.getHTMLElement().parentElement.parentElement.classList.add('border-danger');
 					process.controller.forms[nameComp.form].select();
 					return false;
 				}
 				if(! signerComp.getValue()){
-					app.alertInvalid((app.isArabicLocale()) ? `الرجاء توقيع النموذج` : `Please Sign the form`);
+					app.alertInvalid( app.chooseBasedOnLocale(`الرجاء توقيع النموذج`,`Please Sign the form`) );
 					signerComp.getHTMLElement().parentElement.parentElement.classList.add('border-danger');
 					process.controller.forms[signerComp.form].select();
 					return false;
@@ -136,7 +136,7 @@
 
 
 		handleInvalid(comp,msgAra,msgEng){
-			app.alertInvalid( (app.isArabicLocale()) ? msgAra : msgEng);
+			app.alertInvalid( app.chooseBasedOnLocale( msgAra,msgEng) );
 			util.findThenAddCssClass('id',comp.id,'is-invalid');
 			process.controller.forms[comp.form].select();	
 		},
@@ -238,42 +238,42 @@
 	}
 
 	const menu = {
-		mainPage : new Page("mainPage","common","fa-home"),
+		mainPage : new Page('mainPage','common','fas fa-home'),
 		//newRequestGrid : new Page("newRequestGrid","common"),
-		formsGrid : new Page("formsGrid","sectorSS"),
-		inboxes : new Page("inboxes","common"),
-		deptPublicInbox : new Page("deptPublicInbox","sectorSS"),
-		secretaryInbox : new Page("secretaryInbox","common"),
-		g2gInbox : new Page("g2gInbox","common"),
-		memos : new Page("memos","common"),
-		circulars : new Page("circulars","common"),
-		imgDeptInboxes : new Page("imgDeptInboxes","sectorAdmin"),
-		teamTSD : new Page("teamTSD","sectorIT"),
-		teamL1A_Update : new Page("teamL1A_Update","sectorIT"),
-		teamL1A : new Page("teamL1A","sectorIT"),
-		teamLAN : new Page("teamLAN","sectorIT"),
-		teamOprSupport : new Page("teamOprSupport","sectorIT"),
+		formsGrid : new Page('formsGrid','sectorSS','far fa-copy'),
+		inboxes : new Page('inboxes','common'),
+		deptPublicInbox : new Page('deptPublicInbox','sectorSS','far fa-envelope'),
+		secretaryInbox : new Page("secretaryInbox","common",'far fa-envelope'),
+		g2gInbox : new Page("g2gInbox","common",'far fa-envelope'),
+		memos : new Page('memos','common','far fa-envelope'),
+		circulars : new Page('circulars','common','far fa-comments'),
+		imgDeptInboxes : new Page("imgDeptInboxes","sectorAdmin",'far fa-envelope'),
+		teamTSD : new Page("teamTSD","sectorIT",'far fa-envelope'),
+		teamL1A_Update : new Page("teamL1A_Update","sectorIT",'far fa-envelope'),
+		teamL1A : new Page("teamL1A","sectorIT",'far fa-envelope'),
+		teamLAN : new Page("teamLAN","sectorIT",'far fa-envelope'),
+		teamOprSupport : new Page("teamOprSupport","sectorIT",'far fa-envelope'),
 		familyCerttInbox : new Page("familyCerttInbox","sectorGD"),
 		payOrders : new Page("payOrders","sectorFin"),
 		outgoingCorrInbox : new Page("outgoingCorrInbox","sectorAdmin"),
 		myProfile : new Page("myProfile","common"),
-
+		
 		main(){
 			// chekc authorities here
 			this.addPage(this.mainPage);
 			//this.addPage(this.newRequestGrid);
-			this.addPage(this.formsGrid);
-			this.addPage(this.inboxes);
 			this.addPage(this.deptPublicInbox);
 			this.addPage(this.secretaryInbox);
-			this.addPage(this.g2gInbox);
 			this.addPage(this.memos);
-			this.addPage(this.circulars);
+			this.addPage(this.g2gInbox);
 			this.addPage(this.imgDeptInboxes);
 			this.addPage(this.teamTSD);
 			this.addPage(this.teamL1A_Update);
 			this.addPage(this.teamL1A);
 			this.addPage(this.teamLAN);
+			this.addPage(this.inboxes);
+			this.addPage(this.formsGrid);
+			this.addPage(this.circulars);
 			// this.addPage(this.teamOprSupport);
 			// this.addPage(this.familyCerttInbox);
 			// this.addPage(this.payOrders);
@@ -285,10 +285,12 @@
 
 		addPage(page){
 			let title = properties[session.fetchLanguage()][page.id];
-			let html = `<a id="${page.id}" onclick="menu.loadPage(menu.${page.id})" 
-						   class="list-group-item list-group-item-action list-group-item-light border-0" 
-						   data-toggle="list" href="#"  >
-							<i class="fas ${page.icon} text-dark" ></i><span class="display-5 font-weight-bolder">${title}</span>
+			let html = `<a id="${page.id}" onclick="menu.loadPage(menu.${page.id})" class="list-group-item list-group-item-action list-group-item-light  d-flex justify-content-between  border-0 " data-toggle="list" href="#"  >
+						   <span class="font-weight-bold" >	
+						   		<i class=" ${page.icon} text-dark fontSize125"></i>
+								${title}
+							</span>
+							<span id="${page.id}_badge" class="badge badge-pill my-auto fontSize85" style="min-width:3em !important;"></span>	
 						</a>`;
 			util.append("sideMenu",html);
 		},
@@ -323,7 +325,7 @@
 
 		renderPDFByLink(link,titleAra,titleEng){
 			let body = `<object data="${link}" style="width:100%;min-height:80vh;">`;
-			this.setModalTitle((app.isArabicLocale()) ? titleAra : titleEng);
+			this.setModalTitle( app.chooseBasedOnLocale(titleAra,titleEng));
 			this.setModalBody(body);
 			util.showModal(this.modalID);
 		},
@@ -347,6 +349,7 @@
 
 		main(){
 			menu.main();
+			this.refreshInboxesPadges();
 		},
 
 		logoff(){
@@ -364,7 +367,10 @@
 			}
 		},
 
-
+		refreshInboxesPadges(){
+			menu.g2gInbox.setPadge(250);
+			menu.secretaryInbox.setPadge(5);
+		},
 		
 		//isReciversAvilable,
 
@@ -439,15 +445,7 @@
 		openAlertModal(){ util.showModal('alertModal'); },
 		closeAlertModal(){util.hideModal('alertModal');	},
 		
-		getMessage(msgKey){
-			try{
-				return (this.isArabicLocale()) ? properties.arabic[msgKey] : properties.english[msgKey];
-			}
-			catch(error){
-				app.alertError(error.message)
-			}
-		},
-
+		
 		renderLabels(){
 			let elements = document.querySelectorAll('[data-label]');
 			elements.forEach((element)=>{ element.innerHTML = this.getPropertyValue(element.getAttribute('data-label')); } ); 
@@ -455,7 +453,18 @@
 		
 		getPropertyValue(propKey){
 			return properties[session.fetchLanguage()][propKey];
-		}
+		},
+		getMessage(msgKey){
+			try{
+				return app.chooseBasedOnLocale(properties.arabic[msgKey], properties.english[msgKey]);
+			}
+			catch(error){ app.alertError(error.message)}
+		},
+
+		chooseBasedOnLocale(araValue,engValue){
+			return app.isArabicLocale() ? araValue : (!engValue) ? araValue : engValue ;
+		},
+
 		
 
 		
@@ -479,13 +488,13 @@
 			loadManager(){
 				this.clearList();
 				this.add();
-				this.add(new participant(3000,12062003,"محمد محمد فاروق","Mohamed Farouk","إدارة الأنظمة والتطبيقات الذكية","maldeeb"));
+				this.add(new participant(3000,12062003,"محمد محمد فاروق","Mohamed Farouk","إدارة الأنظمة والتطبيقات الذكية","Smart System Department","maldeeb"));
 			},
 		
 			loadDeptManager(){
 				this.clearList();
 				this.add();
-				this.add(new participant(3000,12062003,"محمد محمد فاروق","Mohamed Farouk","إدارة الأنظمة والتطبيقات الذكية","maldeeb"));
+				this.add(new participant(3000,12062003,"محمد محمد فاروق","Mohamed Farouk","إدارة الأنظمة والتطبيقات الذكية",'Smart System Depaartment',"maldeeb"));
 			},
 		
 		
@@ -510,15 +519,15 @@
 			onSelect(selection){
 				util.clear('recieverDeptTxt');
 				util.append('recieverDeptTxt',selection.getAttribute('data-deptName'));
-				process.workItem.reciever = new participant(selection.getAttribute('trackerEmpID'),selection.getAttribute('empNo'),selection.getAttribute('name'),selection.getAttribute('engName'),selection.getAttribute('deptName'),selection.getAttribute('empLoginID'));
+				process.workItem.reciever = new participant(selection.getAttribute('trackerEmpID'),selection.getAttribute('empNo'),selection.getAttribute('name'),selection.getAttribute('engName'),selection.getAttribute('deptName'),'',selection.getAttribute('empLoginID'));
 			},
 		
 			add(participant){
 				let html = "";
 				if(participant){
-					let title = (app.isArabicLocale()) ? participant.name : participant.engName;
+					let title = app.chooseBasedOnLocale(participant.name,participant.engName);
 					html = `<option data-trackerEmpID="${participant.trackerEmpID}" data-empNo="${participant.empNo}" data-empLoginId="${participant.empLoginID}" 
-									data-deptName="${participant.deptName}" data-name="${participant.name}" >${title}</option>`;
+									data-deptName="${participant.deptNameAra}" data-name="${participant.name}" >${title}</option>`;
 				}
 				else{
 					html = `<option data-trackerEmpID="0" data-empNo="0" data-empLoginId=""	data-deptName="" data-name="" ></option>`;
@@ -583,7 +592,7 @@
 		
 			add(branch){
 				let html = "";
-				let title = (app.isArabicLocale()) ? branch.name : branch.engName;
+				let title = app.chooseBasedOnLocale(branch.name,branch.engName);
 				html = `<option data-branchID="${branch.id}" data-name="${branch.name}" data-engName="${branch.engName}">${title}</option>`;
 				util.append(this.id,html);
 			},
@@ -605,7 +614,7 @@
 
 		initialize(){
 			//dynamic fetch WI data
-			process.workItem.sender = new participant(3515,180603018, "ضياء المطر" ,"Dhyia Al-Mutar", "الانظمة الآلــية","scn505");
+			process.workItem.sender = new participant(3515,180603018, "ضياء المطر" ,"Dhyia Al-Mutar", "الانظمة الآلــية",'Smart Systems Department',"scn505");
 			process.workItem.comments = "الرجاء اعتماد الطلب";
 			process.workItem.instructions = "Kindly select action then click complete";
 
@@ -622,11 +631,6 @@
 
 		},
 
-
-		openProcessModal(){ util.showModal(this.processModalID); },
-		closeProcessModal(){ util.hideModal(this.processModalID);},
-
-		
 		print(){
 			pdfViewer.renderPDFByLink("./resources/pdf/forms.pdf",'نمـاذج المعاملـة','Process Forms');
 		},
@@ -644,6 +648,8 @@
 			this.workItem = undefined;
 			this.closeProcessModal(); 
 		},
+		
+		
 		setWorkFlowIDLabel(){
 			document.getElementById('workflowIDLabel').innerHTML = `مسلسل الاجراء : ${process.workItem.workflowID}`;
 		},
@@ -663,13 +669,13 @@
 		hideRecieverDiv(){ util.hide('recieverDiv')},
 		hideActionsDiv(){ util.hide('actionDiv')},
 		
-
 		renderSender(){ util.setValue('senderTxt',this.workItem.sender.deptName+' / '+this.workItem.sender.name); },
 		renderNotes(){	util.setValue('notesTxt',this.workItem.comments); },
 
+		openProcessModal(){ util.showModal(this.processModalID); },
+		closeProcessModal(){ util.hideModal(this.processModalID);},
 
 	};
-
 
 	const formHandler = {
 		controller : undefined,
@@ -689,18 +695,18 @@
 		},
 
 		
-
-		openUserGuide(){
-			pdfViewer.renderPDFByLink("./resources/pdf/userGuide.pdf",'دليـل المستخـدم','User Guide');
+		print(){
+			//set formItem ready to be sent to server and store on DB then call pdf rendere and get it back
+			pdfViewer.renderPDFByLink("./resources/pdf/forms.pdf",'النمـوذج','Form');
 		},
 		close(){ 
 			this.controller = undefined; 
 			this.formItem = undefined;
 			this.closeFormModal(); 
 		},
-		// setWorkFlowIDLabel(){
-		// 	document.getElementById('workflowIDLabel').innerHTML = `مسلسل الاجراء : ${process.formtem.formID}`;
-		// },	
+		setWorkFlowIDLabel(){
+			document.getElementById('formIDLabel').innerHTML = `مسلسل النموذج : ${formHandler.formItem.workFlowID}`;
+		},	
 
 		openFormModal(){ util.showModal(this.formModalID); },
 		closeFormModal(){ util.hideModal(this.formModalID);},

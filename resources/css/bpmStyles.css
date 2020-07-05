@@ -7,12 +7,24 @@ i{ font-size: 16px;  color:  rgb(62, 69, 77);  margin: 0px 8px 0px 8px; }
 .modalCloseBtn{font-size: 35px !important;color:darkgray;}
 /* .procRSBItem{ display: block; width:90% !important;margin: 10px 30px 10px 0px !important;} */
 
-.modal-dialog{
-    overflow-y: initial !important
-}
-.modal-body{
-    max-height: calc(100vh - 150px);
-    overflow-y: auto;
-}
+.modal-dialog{overflow-y: initial !important}
+.modal-body{max-height: calc(100vh - 150px); overflow-y: auto;}
 
+.nav-pills .nav-link.active {background-color: rgb(143, 160, 177) !important;}
 
+.bg-dimmed{background-color: rgb(237, 244, 251) !important;}
+
+.hand{cursor: pointer !important;}
+
+.text-dimmed{ color: rgb(143, 160, 177) !important;}
+.fontSize50{ font-size: 0.5em !important;}
+.fontSize75{font-size: 0.75em !important;}
+.fontSize85{font-size: 0.85em !important;}
+.fontSize125{font-size: 1.25em !important;}
+.fontSize150{font-size: 1.5em !important;}
+.fontSize175{font-size: 1.75em !important;}
+.fontSize200{font-size: 2em !important;}
+.fontSize225{font-size: 2.25em !important;}
+.fontSize250{font-size: 2.50em !important;}
+.fontSize275{font-size: 2.75em !important;}
+.fontSize300{font-size: 3em !important;}

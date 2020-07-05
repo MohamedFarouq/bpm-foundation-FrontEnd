@@ -5,7 +5,17 @@
 		constructor(id, location, icon) {
 			this.id = id;
 			this.location = location;
-			this.icon = (icon) ? icon : "fa-square"; 
+			this.icon = (icon) ? icon : "fas fa-square"; 
+		}
+
+		setPadge(value){
+			let css = (value > 20) ? 'badge-danger' : (value > 10) ? 'badge-warning' : 'badge-success';
+			this.getBadgeHTML().classList.add(css);
+			this.getBadgeHTML().innerHTML = value;
+		};
+
+		getBadgeHTML(){
+			return document.getElementById(`${this.id}_badge`);
 		}
 	}
 
@@ -13,7 +23,7 @@
 		constructor(workFlowName,workflowID,subject,recieveDate){
 			this.workFlowName = workFlowName;
 			this.workflowID = (workflowID) ? workflowID : 0;
-			this.subject = (subject) ?subject : '';
+			this.subject = (subject) ? subject : '';
 			this.recieveDate = (recieveDate) ? recieveDate : '';
 
 			this.stepNo = 0;
@@ -23,8 +33,8 @@
 			this.nextStepName = "";
 			this.comments = "";
 			this.action = "";
-			this.sender = {};
-			this.reciever = {};
+			this.sender = new participant(3000,12062003,"محمد محمد فاروق","Mohamed Farouk","إدارة الأنظمة والتطبيقات الذكية","Smart System Department","maldeeb")//{}; //Participant
+			this.reciever = new participant(3000,12062003,"محمد محمد فاروق","Mohamed Farouk","إدارة الأنظمة والتطبيقات الذكية","Smart System Department","maldeeb")//{}; //Participant
 			this.branch = branchCatalog.Main;
 			this.isLastStep = false;
 			this.formsEntities = [];
@@ -33,7 +43,6 @@
 		}
 	}
 
-	
 	class FormItem{
 		constructor(formTypeID,aName,eName){
 			this.formTypeID = formTypeID;
@@ -48,19 +57,20 @@
 	}
 
 	class participant{
-		constructor(trackerEmpID,empNo,name,engName,deptName,empLoginID){
+		constructor(trackerEmpID,empNo,name,engName,deptNameAra,deptNameEng,empLoginID){
 			this.trackerEmpID = trackerEmpID;
 			this.empNo = empNo;
 			this.name = name;
 			this.engName = engName;
-			this.deptName = deptName;
+			this.deptNameAra = deptNameAra;
+			this.deptNameEng = deptNameEng;
 			this.empLoginID = empLoginID;
 		}
 	}
 
 	class Option{
 		constructor(labelAra,labelEng,value){
-			this.label = (app.isArabicLocale()) ? labelAra : labelEng;
+			this.label = app.chooseBasedOnLocale(labelAra,labelEng);
 			this.value = value;
 		}
 	}
@@ -88,7 +98,7 @@
 			try{
 				this.isPrintable = true;
 				this.dbTableName = dbTableName;
-				this.label = (app.isArabicLocale()) ? labelAra : labelEng;
+				this.label = app.chooseBasedOnLocale(labelAra,labelEng);
 				this.components = {};
 				this.entity = {};//{id:0, WorkFlowID : process.workItem.workflowID};
 				this.addTab();
@@ -145,9 +155,13 @@
 		hide(){ 
 			this.getTab().classList.add('d-none');	
 		};
+
+		hideTab(){ 
+			this.hide();
+		};
 		
 		changeFormTitle(labelAra,labelEng){
-			this.label = (app.isArabicLocale()) ? labelAra : labelEng;
+			this.label = app.chooseBasedOnLocale(labelAra,labelEng);
 			this.changeTabLabel();
 			this.renderFormHeader();
 		};
@@ -196,7 +210,7 @@
 	class Component{
 		constructor(dbColName,labelAra,labelEng,labelSize){
 			this.dbColName = dbColName;
-			this.label = (app.isArabicLocale()) ? labelAra : labelEng;
+			this.label = app.chooseBasedOnLocale(labelAra,labelEng);
 			this.labelSize = (this.label) ? (labelSize) ? labelSize : 4 : 0;
 			this.labelCss = 'bg-primary text-white ';
 			this.form = '';
@@ -274,7 +288,7 @@
 	class TxtBetweenPlainLabelsComponent extends Component{
 		constructor(dbColName,labelAraRight,labelEngRight,maxLength,labelAraLeft,labelEngLeft){
 			super(dbColName,labelAraRight,labelEngRight);
-			this.labelLeft =  (app.isArabicLocale()) ? labelAraLeft : labelEngLeft;
+			this.labelLeft =  app.chooseBasedOnLocale(labelAraLeft, labelEngLeft);
 			this.maxLength = maxLength;
 		}
 		
@@ -286,11 +300,68 @@
 									<input type="text" id="${this.id}" maxlength="${this.maxLength}" class="form-control" >
 								</div>
 								<label class="col-auto my-auto pl-2 text-center text-nowrap text-muted">${this.labelLeft}</label>	
-							</div>
-							`;
+							</div>`;
 				this.getContainer().innerHTML = html;
-			} catch (error) {throw error;	}
+			} 
+			catch (error) {throw error;	}
 		};
+	}
+
+	class DateBetweenPlainLabelsComponent extends Component{
+		constructor(dbColName,labelAraRight,labelEngRight,minDate,maxDate,labelAraLeft,labelEngLeft){
+			super(dbColName,labelAraRight,labelEngRight);
+			this.labelLeft =   app.chooseBasedOnLocale(labelAraLeft,labelEngLeft); 
+			this.minDate = minDate;
+			this.maxDate = maxDate;
+		}
+		
+		render(){
+			try {
+				let html = `<div class="form-row">
+								<label class="col-auto my-auto pr-2 text-center text-nowrap text-muted">${this.label}</label>	
+								<div class="col p-0">
+									<input type="date" id="${this.id}"  min="${this.minDate}" max="${this.maxDate}" class="form-control" >
+								</div>
+								<label class="col-auto my-auto pl-2 text-center text-nowrap text-muted">${this.labelLeft}</label>	
+							</div>`;
+				this.getContainer().innerHTML = html;
+			} 
+			catch (error) {throw error;	}
+		};
+		
+		getValueAsDate(){
+			return new Date(this.getValue());
+		};
+
+	}
+
+	class DropDownListBetweenPlainLabelsComponent extends Component{
+		constructor(dbColName,labelAraRight,labelEngRight,initialOptionsList,labelAraLeft,labelEngLeft){
+			super(dbColName,labelAraRight,labelEngRight);
+			this.labelLeft =  app.chooseBasedOnLocale(labelAraLeft,labelEngLeft);
+			this.initialOptionsList = initialOptionsList;
+		}
+		
+		render(){
+			try {
+				let optionsHTML = ``;
+				this.initialOptionsList.forEach(opt=>optionsHTML += `<option value="${opt.value}">${opt.label}</option>`);
+				let html = `<div class="form-row">
+								<label class="col-auto my-auto pr-2 text-center text-nowrap text-muted">${this.label}</label>	
+								<div class="col p-0">
+									<select id="${this.id}" class="form-control">${optionsHTML}	</select> 
+								</div>
+								<label class="col-auto my-auto pl-2 text-center text-nowrap text-muted">${this.labelLeft}</label>	
+							</div>`;
+				this.getContainer().innerHTML = html;
+			} 
+			catch (error) {throw error;	}
+		};
+		
+		getValueAsDate(){
+			return new Date(this.getValue());
+		};
+
 	}
 
 	class NumberComponent extends Component{
@@ -398,20 +469,19 @@
 		constructor(dbColName,labelAra,labelEng,initialOptionsList,labelSize){
 			super(dbColName,labelAra,labelEng,labelSize);
 			this.initialOptionsList = initialOptionsList;
-			// this.render(optionsList);
 		}
 		
 		render(){
 			try{
 				let labelHtml = (this.label) ? `<label for="${this.id}" class="col-${this.labelSize} col-form-label border-bottom text-center text-nowrap ${this.labelCss}">${this.label}</label>` : ``;
+				let optionsHTML = ``;
+				this.initialOptionsList.forEach(opt=>optionsHTML += `<option value="${opt.value}">${opt.label}</option>`);
 				let html = `<div class="form-row">
-							${labelHtml}
-							<div class="col-${12-this.labelSize} p-0">
-							<select id="${this.id}" class="form-control">`;
-						for(let opt of this.initialOptionsList){
-							html += `<option value="${opt.value}">${opt.label}</option>`;
-						}	
-				html += `</select> </div> </div>`;
+								${labelHtml}
+								<div class="col-${12-this.labelSize} p-0">
+									<select id="${this.id}" class="form-control">${optionsHTML}	</select> 
+								</div> 
+							</div>`;
 				this.getContainer().innerHTML = html;
 			}catch(error){ throw error;}
 		};
@@ -475,7 +545,7 @@
 		
 		render(){
 			try{
-				this.labelCss += (app.isArabicLocale()) ? ' text-left ': ' text-right ';
+				this.labelCss +=  app.chooseBasedOnLocale(' text-left ',' text-right ');
 				let html = `<label id="${this.id}" class=" d-block ${this.labelCss}" >${this.label}</label>`;
 				this.getContainer().innerHTML = html;
 			}
@@ -500,8 +570,8 @@
 		
 		render(){
 			try {
-				let html = `<label id="${this.id}" class="text-muted text-center text-nowrap p-0" style="font-size:0.8em;"></label>
-							<a id="${this.id}_btn" onclick="process.controller.forms.${this.form}.components.${this.dbColName}.setValue(loggedUser.signature);" href="#" class="text-muted text-center d-none" style="font-size:0.8em;">Click here to sign</a>
+				let html = `<label id="${this.id}" class="text-muted text-center text-nowrap p-0 fontSize75"></label>
+							<a id="${this.id}_btn" onclick="process.controller.forms.${this.form}.components.${this.dbColName}.setValue(loggedUser.signature);" href="#" class="text-muted text-center d-none fontSize75">Click here to sign</a>
 							`;
 				this.getContainer().innerHTML = html;
 			} 
@@ -530,7 +600,7 @@
 		constructor(container,nameDBColName,sigDbColName,labelAra,labelEng){
 			this.nameComp = new ParagraphComponent(nameDBColName,'','','text-center');
 			this.sigComp = new SignerComponent(sigDbColName);
-			this.label = (app.isArabicLocale()) ? labelAra : labelEng;
+			this.label = app.chooseBasedOnLocale(labelAra, labelEng);
 			this.container = container;
 			this.render();
 		} 
@@ -538,7 +608,7 @@
 		render(){
 			try{
 				let html = `<div class="border rounded p-0 text-center" style="min-height:7em !important;" >
-								<h5 class="p-2 text-center text-nowrap bg-light"><i class="fas fa-file-signature text-muted" style="font-size: 18px;"></i>  ${this.label}</h5>
+								<h5 class="p-2 text-center text-nowrap bg-light"><i class="fas fa-file-signature text-muted fontSize85"></i>  ${this.label}</h5>
 								<div data-container-for="${this.nameComp.dbColName}" class="p-0"></div>
 								<div data-container-for="${this.sigComp.dbColName}" class="p-0" ></div>
 							</div>`;
@@ -606,7 +676,7 @@
 	class TableColumn{
 		constructor(labelAra,labelEng,items,type){
 			this.name = name;
-			this.label = (app.isArabicLocale()) ? labelAra : labelEng;
+			this.label = app.chooseBasedOnLocale(labelAra,labelEng);
 			this.items = (items) ? items : [''];
 			this.type = type;
 			this.colmID = '';
@@ -710,9 +780,7 @@
 		getHTML(){
 			try {
 				let optionsHTML = ``;
-				for(let opt of this.initialOptionsList)
-					optionsHTML += `<option value="${opt.value}">${opt.label}</option>`;
-				
+				this.initialOptionsList.forEach(opt=>optionsHTML += `<option value="${opt.value}">${opt.label}</option>`);				
 				let html = `<div class="container-fluid p-0" id="${this.colmID}" >	
 								<div class="form-row p-0">
 									<label class="col col-form-label text-center text-nowrap bg-primary text-white border ">${this.label}</label>
@@ -878,11 +946,11 @@
 			deptPublicInbox : "Dept. Public Inbox",
 			secretaryInbox : "Secretary Inbox",
 			g2gInbox : "G2G Inbox",
-			memos : "Memos",
+			memos : "Memos Inbox",
 			circulars : "Circulars",
 			imgDeptInboxes : "Image Processing Inbox",
 			teamTSD : "TSD-Team",
-			teamL1AUpdate : "L1A Group Update",
+			teamL1A_Update : "L1A Group Update",
 			teamL1A : "L1A Group",
 			teamLAN : "LAN Team",
 			teamOprSupport : "Operations Support Team",
@@ -912,6 +980,7 @@
 			attachments : "Attachments",
 			print : "Print",
 			steps : "Steps",
+			reassign:'Reassign',
 			sender : "Sender",
 			reciever : "Reciever",
 			instructions : "Instructions",
@@ -939,13 +1008,13 @@
 			formsGrid : "النمـــاذج",
 			inboxes : "الصادر والوارد",
 			deptPublicInbox : "صندوق الوارد العام",
-			secretaryInbox : "وارد السكرتارية",
+			secretaryInbox : "صندوق وارد السكرتارية",
 			g2gInbox : "صندوق وارد G2G",
-			memos : "المذكـرات الداخليـة",
+			memos : "صندوق المذكرات الداخلية",
 			circulars : "التعاميـم الداخليـة",
-			imgDeptInboxes : "وحدة معالجـة الوثائـق",
+			imgDeptInboxes : "صندوق وارد معالجة الوثائق",
 			teamTSD : "TSD-Team",
-			teamL1AUpdate : "L1A Group Update",
+			teamL1A_Update : "L1A Group Update",
 			teamL1A : "L1A Group",
 			teamLAN : "LAN Team",
 			teamOprSupport : "Operations Support Team",
@@ -975,6 +1044,7 @@
 			attachments : "المرفقـات",
 			print : "طباعـة",
 			steps : "الخطـوات",
+			reassign:'إعادة توجيه',
 			sender : "المرسـل",
 			reciever : "المرسـل إليه",
 			instructions : "التعليمـات",

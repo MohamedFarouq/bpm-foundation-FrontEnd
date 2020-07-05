@@ -152,14 +152,9 @@ process.controller = {
 
 }
 
-$(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alertError(error.message); }} );
+$(document).ready( ()=>{ try{ process.controller.main(); }catch(error){ app.alertError(error.message); }} );
 </script>
 
-<style>
-    .nav-pills .nav-link.active {
-    background-color: rgb(108, 117, 126) !important;
-}
-</style>
 
 <div class="container-fluid pr-1 pl-1" >
     <div class="row">
@@ -209,6 +204,12 @@ $(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alert
                         <div class="row">
                             <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="CrystalRepName" ></div>
                         </div>
+
+                        <div class="row pt-5">
+                            <div ></div>
+                        </div>
+
+
                         <div class="row">
                             <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="SrcDestination" ></div>
                         </div>

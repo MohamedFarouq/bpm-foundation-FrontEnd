@@ -40,17 +40,18 @@ process.controller = {
     },
 
     defineComponents(){    
-        this.forms.Form_TsService.addComponent(new DateComponent('RequesterDate','التاريخ','Date','','') );
-        this.forms.Form_TsService.addComponent(new DateComponent('StartDate','تاريخ البدء','Start Date','','') );
+        this.forms.Form_TsService.addComponent(new DateComponent('RequesterDate','التاريخ','Date','','',5) );
+        this.forms.Form_TsService.addComponent(new DateComponent('StartDate','تاريخ البدء','Start Date','','',5) );
 
         this.forms.Form_TsService.addComponent(new TxtComponent('Department','الإدارة','Department',100) );
-        this.forms.Form_TsService.addComponent(new DateComponent('EndDate','تاريخ الانتهاء','End Date','','') );
+        this.forms.Form_TsService.addComponent(new DateComponent('EndDate','تاريخ الانتهاء','End Date','','',5) );
 
         this.forms.Form_TsService.addComponent(new TxtComponent('ReportName','اسم الكشف','Report Name',20) );
-        this.forms.Form_TsService.addComponent(new TxtComponent('ReportNumber','رقم الكشف','Report Number',20) );
+        this.forms.Form_TsService.addComponent(new NumberComponent('ReportNumber','رقم الكشف','Report Number',5) );
 
-        this.forms.Form_TsService.addComponent(new TxtComponent('NoOfCopy','عدد النسخ','No. of Copy',10) );
- 
+
+        this.forms.Form_TsService.addComponent(new NumberComponent('NoOfCopy','عدد النسخ','No. of Copy') );
+
         this.forms.Form_TsService.addComponent(new NotesComponent('SpecialInstructions','تعليمات خاصة','Special Instructions',4,300) );
         
         this.forms.Form_TsService.addSignature(new Signature('SysEng','SysName','SysSig','مقدم الطلب','System Engineer')  );
@@ -175,21 +176,21 @@ $(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alert
                         </div>
 
                         <div class="row p-1">
-                            <div class="col pr-3 pl-3" data-container-for="Department"></div>
-                            <div class="col pr-3 pl-3"></div>
-                            <div class="col pr-3 pl-3" data-container-for="EndDate"></div>      
+                            <div class="col-5 pr-3 pl-3 pt-1" data-container-for="Department"></div>
+                            <div class="col-3 pr-3 pl-3 pt-1"></div>
+                            <div class="col-4 pr-3 pl-3 pt-1" data-container-for="EndDate"></div>      
                         </div>
 
                         <div class="row p-1">
-                            <div class="col pr-3 pl-3" data-container-for="ReportName"></div>
-                            <div class="col pr-3 pl-3"></div>
-                            <div class="col pr-3 pl-3" data-container-for="ReportNumber"></div>  
+                            <div class="col-5 pr-3 pl-3 pt-1" data-container-for="ReportName"></div>
+                            <div class="col-3 pr-3 pl-3 pt-1"></div>
+                            <div class="col-4 pr-3 pl-3 pt-1" data-container-for="ReportNumber"></div>  
                         </div>
 
                         <div class="row p-1">
-                            <div class="col pr-3 pl-3" data-container-for="NoOfCopy"></div>
-                            <div class="col pr-3 pl-3"></div>
-                            <div class="col pr-3 pl-3"></div>
+                            <div class="col-5 pr-3 pl-3 pt-1 pb-2" data-container-for="NoOfCopy"></div>
+                            <div class="col-3 pr-3 pl-3 pt-1 pb-2"></div>
+                            <div class="col-4 pr-3 pl-3 pt-1 pb-2"></div>
                         </div>
 
                         <div class="row p-1">
@@ -197,21 +198,21 @@ $(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alert
                         </div>
 
                         <div class="row p-1">
-                            <div class="col pr-3 pl-3 pt-2 pb-2" data-container-for="SysEng"></div>
-                            <div class="col pr-3 pl-3 pt-2 pb-2"></div>
-                            <div class="col pr-3 pl-3 pt-2 pb-2" data-container-for="Manager"></div>
+                            <div class="col-5 pr-2 pl-1 pt-2 pb-3" data-container-for="SysEng"></div>
+                            <div class="col-2 pr-2 pl-1 pt-2 pb-3"></div>
+                            <div class="col-5 pr-2 pl-1 pt-2 pb-3" data-container-for="Manager"></div>
                         </div>
 
-                        <div style="text-align: right; font-weight: bold;">إدارة التشغيــل</div>
+                        <div style="text-align: right; font-weight:bolder; font-size:1.2em; text-decoration: underline;">إدارة التشغيــل</div>
 
                         <div class="row p-1">
                             <div class="col pr-3 pl-3" data-container-for="Notes"></div>
                         </div>
 
                         <div class="row p-1">
-                            <div class="col pr-3 pl-3 pt-2" data-container-for="ImplementedBy"></div>
-                            <div class="col pr-3 pl-3 pt-2"></div>
-                            <div class="col pr-3 pl-3 pt-2" data-container-for="Approval"></div>
+                            <div class="col-5 pr-2 pl-1 pt-2" data-container-for="ImplementedBy"></div>
+                            <div class="col-2 pr-2 pl-1 pt-2"></div>
+                            <div class="col-5 pr-2 pl-1 pt-2" data-container-for="Approval"></div>
                         </div>
 
                     </div>
