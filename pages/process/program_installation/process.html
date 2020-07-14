@@ -45,25 +45,25 @@ process.controller = {
     defineComponents(){ 
         this.forms.Form_ProgramInstallation.addComponent(new DateComponent('RequesterDate','Request Date','Request Date','','') );
         this.forms.Form_ProgramInstallation.addComponent(new DropDownListComponent('Priority','Priority','Priority',[new Option('','','0') ,new Option('Urgent','Urgent','1') , new Option('Normal','Normal','2')]) );
-        this.forms.Form_ProgramInstallation.addComponent(new TxtComponent('MaximoNo','Maximo No','Maximo No',6) );
+        this.forms.Form_ProgramInstallation.addComponent(new NumberComponent('MaximoNo','Maximo No','Maximo No') );
 
         this.forms.Form_ProgramInstallation.addComponent(new DateComponent('MemoDate','Memo Date','Memo Date','','') );
-        this.forms.Form_ProgramInstallation.addComponent(new TxtComponent('SMRNO','SMRs No','SMRs No',35) );
+        this.forms.Form_ProgramInstallation.addComponent(new NumberComponent('SMRNO','SMRs No','SMRs No',2) );
 
         this.forms.Form_ProgramInstallation.addComponent(new DropDownListComponent('RequestType','RequestType','RequestType',[new Option('','','0') ,new Option('Install New','Install New','1') , new Option('Update','Update','2')]) );
-        this.forms.Form_ProgramInstallation.addComponent(new DropDownListComponent('To','To','To',[new Option('','','0') ,new Option('LAN Section','LAN Section','1') , new Option('.Computer Services Sup','.Computer Services Sup','2')]) );
+        this.forms.Form_ProgramInstallation.addComponent(new DropDownListComponent('To','To','To',[new Option('','','0') ,new Option('LAN Section','LAN Section','1') , new Option('Computer Services Sup','Computer Services Sup','2')],2) );
 
-        this.forms.Form_ProgramInstallation.addComponent(new TxtComponent('ProgName','Program/Package Names','Program/Package Names',20) );
-        this.forms.Form_ProgramInstallation.addComponent(new TxtComponent('SrcDes','Source Destination','Source Destination',22) );
-        this.forms.Form_ProgramInstallation.addComponent(new TxtComponent('InstallLocation','Install into location','Install into location',41) );
+        this.forms.Form_ProgramInstallation.addComponent(new TxtComponent('ProgName','Program/Package Names','Program/Package Names',100) );
+        this.forms.Form_ProgramInstallation.addComponent(new TxtComponent('SrcDes','Source Destination','Source Destination',100) );
+        this.forms.Form_ProgramInstallation.addComponent(new TxtComponent('InstallLocation','Install into location','Install into location',100) );
 
-        this.forms.Form_ProgramInstallation.addComponent(new TxtComponent('CrystalRepName','Crystal Report Names','Crystal Report Names',40) );
-        this.forms.Form_ProgramInstallation.addComponent(new TxtComponent('SourceDes','Source Destination','Source Destination',22) );
-        this.forms.Form_ProgramInstallation.addComponent(new TxtComponent('InstallLoc','Install into location','Install into location',41) );
+        this.forms.Form_ProgramInstallation.addComponent(new TxtComponent('CrystalRepName','Crystal Report Names','Crystal Report Names',100) );
+        this.forms.Form_ProgramInstallation.addComponent(new TxtComponent('SourceDes','Source Destination','Source Destination',100) );
+        this.forms.Form_ProgramInstallation.addComponent(new TxtComponent('InstallLoc','Install into location','Install into location',100) );
 
-        this.forms.Form_ProgramInstallation.addComponent(new TxtComponent('TxtFilesName','Text Files Names','Text Files Names',14) );
-        this.forms.Form_ProgramInstallation.addComponent(new TxtComponent('SrcDestination','Source Destination','Source Destination',22) );
-        this.forms.Form_ProgramInstallation.addComponent(new TxtComponent('Installocation','Install into location','Install into location',41) );
+        this.forms.Form_ProgramInstallation.addComponent(new TxtComponent('TxtFilesName','Text Files Names','Text Files Names',100) );
+        this.forms.Form_ProgramInstallation.addComponent(new TxtComponent('SrcDestination','Source Destination','Source Destination',100) );
+        this.forms.Form_ProgramInstallation.addComponent(new TxtComponent('Installocation','Install into location','Install into location',100) );
 
         this.forms.Form_ProgramInstallation.addComponent(new NotesComponent('InstallationRemarks','Installation Remarks','Installation Remarks',4,300) );
         
@@ -152,9 +152,14 @@ process.controller = {
 
 }
 
-$(document).ready( ()=>{ try{ process.controller.main(); }catch(error){ app.alertError(error.message); }} );
+$(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alertError(error.message); }} );
 </script>
 
+<style>
+    .nav-pills .nav-link.active {
+    background-color: rgb(108, 117, 126) !important;
+}
+</style>
 
 <div class="container-fluid pr-1 pl-1" >
     <div class="row">
@@ -171,7 +176,7 @@ $(document).ready( ()=>{ try{ process.controller.main(); }catch(error){ app.aler
                             <div class="col p-1 mb-4" data-container-for="Form_ProgramInstallation_title"></div>
                         </div>
 
-                        <div style="text-align: left; font-weight: bold;">Systems Section</div>
+                        <div style="text-align: left; font-weight:bolder; font-size:1.2em; text-decoration: underline;">Systems Section</div>
 
                         <div class="row">
                             <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="MaximoNo"></div>
@@ -180,15 +185,13 @@ $(document).ready( ()=>{ try{ process.controller.main(); }catch(error){ app.aler
                         </div>
 
                         <div class="row">
-                            <div class="col pr-3 pl-3 pt-2"></div>
-                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="SMRNO"></div>
-                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="MemoDate"></div>
+                            <div class="col-8 pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="SMRNO"></div>
+                            <div class="col-4 pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="MemoDate"></div>
                         </div>
 
                         <div class="row">
-                            <div class="col pr-3 pl-3 pt-2"></div>
-                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="To"></div>
-                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RequestType"></div>
+                            <div class="col-8 pr-3 pl-3 pt-2 pb-3" style="direction:ltr;" data-container-for="To"></div>
+                            <div class="col-4 pr-3 pl-3 pt-2 pb-3" style="direction:ltr;" data-container-for="RequestType"></div>
                         </div>
 
                         <div class="row">
@@ -198,23 +201,17 @@ $(document).ready( ()=>{ try{ process.controller.main(); }catch(error){ app.aler
                             <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="SrcDes" ></div>
                         </div>
                         <div class="row">
-                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="InstallLocation" ></div>
+                            <div class="col pr-3 pl-3 pt-2 pb-3" style="direction:ltr;" data-container-for="InstallLocation" ></div>
                         </div>
 
                         <div class="row">
                             <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="CrystalRepName" ></div>
                         </div>
-
-                        <div class="row pt-5">
-                            <div ></div>
-                        </div>
-
-
                         <div class="row">
                             <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="SrcDestination" ></div>
                         </div>
                         <div class="row">
-                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="InstallLoc" ></div>
+                            <div class="col pr-3 pl-3 pt-2 pb-3" style="direction:ltr;" data-container-for="InstallLoc" ></div>
                         </div>
 
                         <div class="row">
@@ -224,29 +221,29 @@ $(document).ready( ()=>{ try{ process.controller.main(); }catch(error){ app.aler
                             <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="SourceDes" ></div>
                         </div>
                         <div class="row">
-                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="Installocation" ></div>
+                            <div class="col pr-3 pl-3 pt-2 pb-2" style="direction:ltr;" data-container-for="Installocation" ></div>
                         </div>
 
                         <div class="row">
-                            <div class="col pr-3 pl-3 pt-2" data-container-for="InstallationRemarks"></div>
+                            <div class="col pr-3 pl-3 pt-2 pb-2" style="direction:ltr;" data-container-for="InstallationRemarks"></div>
                         </div>
                         
                         <div class="row">
-                            <div class="col pr-3 pl-3 pt-2 pb-2" data-container-for="Sup"></div>
-                            <div class="col pr-3 pl-3 pt-2 pb-2" data-container-for="TeamLeader"></div>
-                            <div class="col pr-3 pl-3 pt-2 pb-2" data-container-for="SysEng"></div>
+                            <div class="col pr-2 pl-1 pt-2 pb-3" data-container-for="Sup"></div>
+                            <div class="col pr-2 pl-1 pt-2 pb-3" data-container-for="TeamLeader"></div>
+                            <div class="col pr-2 pl-1 pt-2 pb-3" data-container-for="SysEng"></div>
                         </div>
 
-                        <div style="text-align: left; font-weight: bold;">Operations Section</div>
+                        <div style="text-align: left; font-weight:bolder; font-size:1.2em; text-decoration: underline;">Operations Section</div>
 
                         <div class="row">
-                            <div class="col pr-3 pl-3 pt-2" data-container-for="Notes"></div>
+                            <div class="col pr-3 pl-3 pt-2 pb-2" style="direction:ltr;" data-container-for="Notes"></div>
                         </div>
 
                         <div class="row">
-                            <div class="col pr-3 pl-3 pt-2" data-container-for="Approve"></div>
-                            <div class="col pr-3 pl-3 pt-2"></div>
-                            <div class="col pr-3 pl-3 pt-2" data-container-for="SystemEng"></div>
+                            <div class="col-5 pr-2 pl-1 pt-2 pb-2" data-container-for="Approve"></div>
+                            <div class="col-2 pr-2 pl-1 pt-2 pb-2"></div>
+                            <div class="col-5 pr-2 pl-1 pt-2 pb-2" data-container-for="SystemEng"></div>
                         </div>
 
                         <div class="row">

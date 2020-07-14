@@ -1,0 +1,410 @@
+<script >
+    
+/**
+ * WorkItem{
+        workFlowName,workflowID,subject,recieveDate,stepNo,workFlowVersion,workFlowType,stepName,nextStepName,instructions,workObjectID,comments,action,
+        sender,reciever,branch,forms,attachments
+        isLastStep = false;
+}
+ */
+
+
+
+process.controller = {
+    errMsg : "",
+    groups : {  
+         //groupFollowUpTLs : ["FollowUp_TLs"],    // groupFollowUpEmps : ["FollowUp_Emps"],
+    },
+
+    steps : {
+        PerLeave_Launch : 'PerLeave_Launch',
+        PerLeave_TLApprove: 'PerLeave_TLApprove',
+        PerLeave_SupApprove: 'PerLeave_SupApprove',
+        PerLeave_DeptSec: 'PerLeave_DeptSec',
+        PerLeave_MngApprove: 'PerLeave_MngApprove',
+        PerLeave_Update: 'PerLeave_Update',
+        PerLeave_DDGApprove: 'PerLeave_DDGApprove',
+        PerLeave_DDGSec: 'PerLeave_DDGSec',
+        PerLeave_PersAdminSec : 'PerLeave_PersAdminSec',
+        PerLeave_PersAdminEmp : 'PerLeave_PersAdminEmp',
+        PerLeave_PersAdminTL : 'PerLeave_PersAdminTL',
+        PerLeave_PersAdminSup : 'PerLeave_PersAdminSup',
+        PerLeave_FinSec : 'PerLeave_FinSec',
+        PerLeave_FinSup : 'PerLeave_FinSup',
+        PerLeave_FinTL : 'PerLeave_FinTL',
+        PerLeave_FinEmp : 'PerLeave_FinEmp',
+    },
+
+    forms : {
+
+       
+        Form_AttachmentsSheet : new Form('Form_AttachmentsSheet','نموذج المستندات المرفقة بالملف','Sample Documents Attachment Sheets'),
+        Form_ShrAdvPaymentRequest : new Form('Form_ShrAdvPaymentRequest', 'استمارة طلب صرف نصيب مقدم','Submission Request Form For Shared Payment'),      
+        Form_ShrAdvPaymentOrder : new Form('Form_ShrAdvPaymentOrder', 'نموذج طلب صرف معاش مقدم - أمر الدفع','Advance Pension Disbursment Request Form - Payment Order'),
+       
+    },
+
+    defineComponents(){ 
+        //completed_page_1-نموذج المستندات المرفقة بالملف
+        this.forms.Form_AttachmentsSheet.addComponent(new TxtComponent('From','من','من',50,3) );
+        this.forms.Form_AttachmentsSheet.addComponent(new TxtComponent('To','إلى','إلى',50,3) );
+        this.forms.Form_AttachmentsSheet.addComponent(new DateComponent('RequestDate','التاريخ','التاريخ','','') );
+        this.forms.Form_AttachmentsSheet.addComponent(new NumberComponent('CounterNo','رقم الكاونتر','رقم الكاونتر','') );
+        this.forms.Form_AttachmentsSheet.addComponent(new DateComponent('AppointmentDate','تاريخ المراجعة','تاريخ المراجعة','','') );
+        this.forms.Form_AttachmentsSheet.addComponent(new TxtComponent('ClientName','الاسم','الاسم',100,3) );
+        this.forms.Form_AttachmentsSheet.addComponent(new NumberComponent('CivilID','الرقم المدني','الرقم المدني',3) );
+        this.forms.Form_AttachmentsSheet.addComponent(new NumberComponent('FileNo','رقم الحفظ','رقم الحفظ',3) );
+        this.forms.Form_AttachmentsSheet.addComponent(new NumberComponent('SSNo','رقم الهوية','رقم الهوية',3) );
+        this.forms.Form_AttachmentsSheet.addComponent(new AttachmentsTableComponent('Attachments',['استمارة طلب صرف معاش مقدم','صورة البطاقة المدنية','إقرار بصحة جهة الصرف']) );
+        this.forms.Form_AttachmentsSheet.addComponent(new NotesComponent('Notes','الملاحظات','Notes',4,350) );
+        this.forms.Form_AttachmentsSheet.addComponent(new NotesComponent('MissingDocuments','نواقص في المستندات','نواقص في المستندات',4,200) );
+        this.forms.Form_AttachmentsSheet.addSignature(new Signature('AttachmentsIssuerSignature','AttachmentsIssuerUserName','AttachmentsIssuerSig','توقيع الباحثة التأمينية','توقيع الباحثة التأمينية'));
+
+
+        
+
+       //page2-استمارة طلب صرف نصيب مقدم
+        this.forms.Form_ShrAdvPaymentRequest.addComponent(new ParagraphComponent('PayReqTxt1','السيد / المدير العام المحترم','General Director  with Respect','text-body font-weight-bold font-size:6 em') );
+        this.forms.Form_ShrAdvPaymentRequest.addComponent(new DateComponent('RequestDate1','التاريخ','Date','','') );      
+        this.forms.Form_ShrAdvPaymentRequest.addComponent(new TxtComponent('ClientName1','انا الموقع أدناه /',' / I who signed',100,3) );
+        this.forms.Form_ShrAdvPaymentRequest.addComponent(new DateComponent('AppointmentDate1','تاريخ المراجعة','Apt. Date','','') );      
+        this.forms.Form_ShrAdvPaymentRequest.addComponent(new NumberComponent('SSNo1','رقم الهوية','SSNo',3) );
+        this.forms.Form_ShrAdvPaymentRequest.addComponent(new NumberComponent('PhoneNo','رقم الهاتف','PhoneNo','') );
+        this.forms.Form_ShrAdvPaymentRequest.addComponent(new NumberComponent('FileNo1','رقم الحفظ','FileNo ',3) );
+        this.forms.Form_ShrAdvPaymentRequest.addComponent(new DropDownListComponent('Gender','الجنس','Gender',[new Option('ذكر','Male','1') , new Option('أنثى','Female','2')],9) );      
+        this.forms.Form_ShrAdvPaymentRequest.addComponent(new NumberComponent('CivilID1','الرقم المدني','CivilID',3) );
+        this.forms.Form_ShrAdvPaymentRequest.addComponent(new TxtComponent('CareerStatus','حالتى الوضيفية','Career Stat.',100,3) );
+        this.forms.Form_ShrAdvPaymentRequest.addComponent(new TxtComponent('Email','البريد الإلكتروني','Email',80,3) );     
+        this.forms.Form_ShrAdvPaymentRequest.addComponent(new TxtComponent('SocialStatus','حالتي الاجتماعية','Social Stat',80,3) );           
+        this.forms.Form_ShrAdvPaymentRequest.addComponent(new TxtComponent('Address','العنوان','Address',200,2) );                   
+        this.forms.Form_ShrAdvPaymentRequest.addComponent(new ParagraphComponent('PayReqTxt2','يرجى التكرم بالموافقة على صرف معاش مقدم عن :','Agreement to exchange a pension provider','text-body font-weight-bold') );       
+        this.forms.Form_ShrAdvPaymentRequest.addComponent(new TableComponent('YearMonthTable',[new TableColTxt('الشهر','الشهر',[]),new TableColTxt('السنة','السنة',[]),], 2) );      
+        this.forms.Form_ShrAdvPaymentRequest.addComponent(new NotesComponent('Reasons','وذلك للأسباب التالية','وذلك للأسباب التالية',4,300) );      
+        this.forms.Form_ShrAdvPaymentRequest.addComponent(new ParagraphComponent('PayReqTxt3','وتفضلوا بقبول فائق الاحترام,,,',', , ,  Yours Sincerly','text-body font-weight-bold') );             
+        this.forms.Form_ShrAdvPaymentRequest.addComponent(new ParagraphComponent('ClientSig','توقيع صاحب العلاقة / الوكيل','Signature of concerned paerson / leagal gardian','text-body font-weight-bold') );            
+        this.forms.Form_ShrAdvPaymentRequest.addComponent(new DropDownListComponent('SMS','أوافق على إرسال رسالة SMS :','أوافق على إرسال رسالة SMS :',[new Option('نعم','نعم','1') , new Option('لا','لا','2')],9) );                 
+        this.forms.Form_ShrAdvPaymentRequest.addComponent(new ParagraphComponent('PayReqTxt4','المذكور سبق له صرف معاش مقدم :','المذكور سبق له صرف معاش مقدم :','text-danger font-weight-bold font-family: Arial, Helvetica, sans-serif; font-size: 17px;') );
+        this.forms.Form_ShrAdvPaymentRequest.addComponent(new TableComponent('LastYearMonthTable',[new TableColTxt('الشهر','LastMonth',[]),new TableColTxt('السنة','LastYear',[]),], 2) );      
+        this.forms.Form_ShrAdvPaymentRequest.addSignature(new Signature('PRIssuerSignature','PRIssuerUserName','PRIssuerSig','توقيع الباحثة التأمينية','Insurance Researcher Signature'));
+        this.forms.Form_ShrAdvPaymentRequest.addComponent(new ParagraphComponent('PayReqTxt5','رأي المدير العام :','Direct General Opinion','text-body font-weight-bold') );
+
+
+
+
+
+
+
+        //page_3-نموذج طلب صرف معاش مقدم - أمر الدفع
+        this.forms.Form_ShrAdvPaymentOrder.addComponent(new TxtComponent('ClientName3','الاسم','الاسم',100,3) );
+        this.forms.Form_ShrAdvPaymentOrder.addComponent(new NumberComponent('CivilID2','الرقم المدني','الرقم المدني',3) );
+        this.forms.Form_ShrAdvPaymentOrder.addComponent(new NumberComponent('FileNo2','رقم الحفظ','رقم الحفظ',3) );
+        this.forms.Form_ShrAdvPaymentOrder.addComponent(new NumberComponent('SSNo2','رقم الهوية','رقم الهوية',3) );
+        this.forms.Form_ShrAdvPaymentOrder.addComponent(new DateComponent('RequestDate2','التاريخ','التاريخ','','') );
+        this.forms.Form_ShrAdvPaymentOrder.addComponent(new DateComponent('ExecutionDate','تاريخ التنفيذ','تاريخ التنفيذ','','') );
+        this.forms.Form_ShrAdvPaymentOrder.addComponent(new NumberComponent('NoOfMonthes','الأشهر المدفوعة مقدما','الأشهر المدفوعة مقدما',6) );
+        this.forms.Form_ShrAdvPaymentOrder.addComponent(new NumberComponent('PaymentMethod','طريقة الدفع','طريقة الدفع',6) );
+        this.forms.Form_ShrAdvPaymentOrder.addComponent(new MoneyComponent('PaidAmount','المبلغ المدفوع','المبلغ المدفوع',6) );
+        this.forms.Form_ShrAdvPaymentOrder.addComponent(new ParagraphComponent('MonthesDescription','ذلك عن معاش شهر مارس لسنة 2020','ذلك عن معاش شهر مارس لسنة 2020','text-danger font-weight-bold') );
+        this.forms.Form_ShrAdvPaymentOrder.addComponent(new TxtComponent('TransferTo','يحول لحسابه إلى :','يحول لحسابه إلى :','') );
+        this.forms.Form_ShrAdvPaymentOrder.addComponent(new TxtComponent('Bank','البنك','البنك',50,'') );
+        this.forms.Form_ShrAdvPaymentOrder.addComponent(new TxtComponent('AccountNo','رقم الحساب','رقم الحساب',50,'') );
+        this.forms.Form_ShrAdvPaymentOrder.addComponent(new NotesComponent('PONotes','الملاحظات','Notes',4,300) );
+        this.forms.Form_ShrAdvPaymentOrder.addSignature(new Signature('POIssuerSignature','POIssuerName','POIssuerSig','توقيع الباحثة التأمينية','توقيع الباحثة التأمينية'));
+        this.forms.Form_ShrAdvPaymentOrder.addSignature(new Signature('POSupSignature','POSupName','POSupSig','توقيع المراجعة التأمينية','توقيع المراجعة التأمينية'));
+        this.forms.Form_ShrAdvPaymentOrder.addSignature(new Signature('POMngSignature','POMngName','POMngSig','توقيع رئيسة الباحثات','توقيع رئيسة الباحثات'));
+
+
+
+   
+
+        
+    },
+
+    main(){
+        try{
+            this.defineComponents();
+            process.initialize();
+            let stepName = process.workItem.stepName;
+            process.recieversList.loadManager();
+
+            if(stepName == this.steps.PenAdv_Launch){   
+            }
+            else if(stepName == this.steps.PenAdv_SSReviewer){
+            }
+        
+            
+            this.forms.Form_AttachmentsSheet.select();
+            this.forms.Form_AttachmentsSheet.updateComponentsFromEntity();
+            app.renderLabels();
+            process.openProcessModal();
+            process.setWorkFlowIDLabel();
+        }
+        catch(error){ throw error;}
+    },
+
+    validate(){
+        //validator.markAsInvalidField('myTxt');
+     },
+
+    send(){ },
+    
+}
+
+       
+$(document).ready( ()=>{ try{ process.controller.main(); }catch(error){ app.alertError(error.message); }} );
+</script>
+
+
+<div class="container-fluid pr-1 pl-1" >
+    <div class="row">
+        <div class="col p-1 " >
+            <nav>
+                <div class="nav nav-pills mb-1 ml-auto" id="nav-tab" role="tablist"></div>
+            </nav>
+            <div class="tab-content shadow border border-secondary rounded p-2 bg-white" id="nav-tabContent">
+                  <!-- Form_AttachmentsSheet-Tab -->
+                <div class="tab-pane fade show active" id="nav-Form_AttachmentsSheet" role="tabpanel" aria-labelledby="Form_AttachmentsSheet-tab">
+                    <!-- the main container for all Form_AttachmentsSheet controls -->
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col p-1 mb-4" data-container-for="Form_AttachmentsSheet_title"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="From"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3" data-container-for="RequestDate"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3"data-container-for="To"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3" data-container-for="AppointmentDate"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="FileNo"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3" data-container-for="CounterNo"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="SSNo"></div>
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="CivilID"></div>
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="CareerStatus"></div>
+                            
+
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="ClientName"></div>
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3"></div>
+                        </div> 
+                        <div class="row">
+                            <div class="col pt-3 pd-3 pr-3 pl-3"></div>
+                            <div class="col pt-3 pd-3 pr-3 pl-3" data-container-for="Attachments"></div>
+                            <div class="col pt-3 pd-3 pr-3 pl-3"></div>
+                        </div>                          
+                        <div class="row">
+                            <div class="col pt-3 pd-3 pr-3 pl-3" data-container-for="Notes"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pt-3 pd-3 pr-3 pl-3" data-container-for="MissingDocuments"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4 pr-3 pl-3"></div>
+                            <div class="col-4 pr-3 pl-3"></div>
+                            <div class="col-4 pt-3 pd-3 pr-3 pl-3" data-container-for="AttachmentsIssuerSignature"></div>
+                        </div>
+                    </div>
+                </div>
+
+
+                
+          
+
+       
+
+         <!-- Form_ShrAdvPaymentRequest-Tab -->
+         <div class="tab-pane fade" id="nav-Form_ShrAdvPaymentRequest" role="tabpanel" aria-labelledby="Form_ShrAdvPaymentRequest-tab">
+            <!-- the main container for all Form_ShrAdvPaymentRequest controls -->
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col p-3" data-container-for="Form_ShrAdvPaymentRequest_title"></div>
+                </div>
+                <div class="row">
+                    <div class="col pr-3 pl-3" data-container-for="PayReqTxt1"></div>
+                    <div class="col pr-3 pl-3" data-container-for="RequestDate1"></div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="ClientName1"></div>
+                    <div class="col-3 pt-1 pd-1 pr-3 pl-3"></div>
+                    <div class="col-3 pt-1 pd-1 pr-3 pl-3" data-container-for="AppointmentDate1"></div>
+                </div>
+
+                <div class="row">
+                    <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="SSNo1"></div>
+                    <div class="col-3 pt-1 pd-1 pr-3 pl-3"></div>
+                    <div class="col-3 pt-1 pd-1 pr-3 pl-3" data-container-for="PhoneNo"></div>
+                </div>
+
+                <div class="row">
+                    <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="FileNo1"></div>
+                    <div class="col-3 pt-1 pd-1 pr-3 pl-3"></div>
+                    <div class="col-3 pt-1 pd-1 pr-3 pl-3" data-container-for="Gender"></div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="CivilID1"></div>
+                    <div class="col-3 pt-1 pd-1 pr-3 pl-3"></div>
+                    <div class="col-3 pt-1 pd-1 pr-3 pl-3" data-container-for="CareerStatus"></div>
+                </div>
+    
+                <div class="row">
+                    <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="Email"></div>
+                    <div class="col-3 pt-1 pd-1 pr-3 pl-3"></div>
+                    <div class="col-3 pt-1 pd-1 pr-3 pl-3" data-container-for="SocialStatus"></div>
+                </div>
+    
+                <div class="row">
+                    <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="Address"></div>
+                </div>
+
+                <div class="row">
+                    <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="PayReqTxt2"></div>
+                </div>
+
+                <div class="row">
+                    <div class="col-4 pt-2 pd-2 pr-3 pl-3"></div>
+                    <div class="col-4 pt-2 pd-2 pr-3 pl-3" data-container-for="YearMonthTable"></div>
+                    <div class="col-4 pt-2 pd-2 pr-3 pl-3"></div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col pt-3 pd-3 pr-3 pl-3" data-container-for="Reasons"></div>
+                </div>
+
+
+
+
+
+
+                <div class="row">
+                    <div class="col pt-3 pd-3 pr-3 pl-3" data-container-for="PayReqTxt3"></div>
+                    <div class="col pt-3 pd-3 pr-3 pl-3"></div>
+                    <div class="col pt-3 pd-3 pr-3 pl-5" data-container-for="ClientSig"></div>
+                </div>  
+                
+
+                
+                <div class="row">
+                    <div class="col-3 pt-3 pd-3 pr-3 pl-3" data-container-for="SMS"></div>
+                </div>
+
+                <div class="row">
+                    <div class="col pt-3 pd-3 pr-3 pl-3" data-container-for="PayReqTxt4"></div>
+                </div>
+                <div class="row">
+                    <div class="col-4 pt-3 pd-3 pr-3 pl-3"></div>
+                    <div class="col-4 pt-3 pd-3 pr-3 pl-3" data-container-for="LastYearMonthTable"></div>
+                    <div class="col-4 pt-3 pd-3 pr-3 pl-3"></div>
+                </div>                                  
+
+
+                <div class="row">
+                    <div class="col-4 pt-3 pd-3 pr-3 pl-3"></div>
+                    <div class="col-4 pt-3 pd-3 pr-3 pl-3"></div>
+                    <div class="col-4 pt-3 pd-3 pr-3 pl-3" data-container-for="PRIssuerSignature"></div>
+                </div>
+                <div class="row">
+                    <div class="col pt-3 pd-3 pr-3 pl-3" data-container-for="PayReqTxt5"></div>
+                </div>
+            </div>
+        </div>
+
+
+                 <!-- Form_ShrAdvPaymentOrder-Tab -->
+                 <div class="tab-pane fade" id="nav-Form_ShrAdvPaymentOrder" role="tabpanel" aria-labelledby="Form_ShrAdvPaymentOrder-tab">
+                    <!-- the main container for all Form_ShrAdvPaymentOrder controls -->
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col p-3" data-container-for="Form_ShrAdvPaymentOrder_title"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="FileNo2"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3" data-container-for="RequestDate2"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="SSNo2"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3" data-container-for="ExecutionDate"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="CivilID2"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="ClientName3"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-3 pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pt-3 pd-3 pr-3 pl-3"></div>
+                            <div class="col pt-3 pd-3 pr-3 pl-3" data-container-for="NoOfMonthes"></div>
+                            <div class="col pt-3 pd-3 pr-3 pl-3"></div>
+                        </div> 
+                        <div class="row">
+                            <div class="col pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col pt-1 pd-1 pr-3 pl-3" data-container-for="PaymentMethod"></div>
+                            <div class="col pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>                         
+                        <div class="row">
+                            <div class="col pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col pt-1 pd-1 pr-3 pl-3" data-container-for="PaidAmount"></div>
+                            <div class="col pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pt-1 pd-1 pr-3 pl-3" data-container-for="MonthesDescription"></div>
+                            <div class="col pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pt-1 pd-1 pr-3 pl-3" data-container-for="TransferTo"></div>
+                            <div class="col pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>                          
+                        
+                        <div class="row">
+                            <div class="col pt-1 pd-1 pr-3 pl-3" data-container-for="Bank"></div>
+                            <div class="col pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pt-1 pd-1 pr-3 pl-3" data-container-for="AccountNo"></div>
+                            <div class="col pt-1 pd-1 pr-3 pl-3"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col pt-4 pd-4 pr-3 pl-3" data-container-for="PONotes"></div>
+                        </div>  
+                        <div class="row">
+                            <div class="col pt-4 pd-4 pr-3 pl-3" data-container-for="POIssuerSignature"></div>
+                            <div class="col pt-4 pd-4 pr-3 pl-3" data-container-for="POSupSignature"></div>
+                            <div class="col pt-4 pd-4 pr-3 pl-3" data-container-for="POMngSignature"></div>
+                        </div>
+
+           
+                    </div>
+                
+                </div>
+            
+
+                <div class="text-right">
+                    <hr>
+                    <label id="workflowIDLabel" class="text-danger">مسلسل الاجراء</label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

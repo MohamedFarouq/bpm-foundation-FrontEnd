@@ -60,108 +60,65 @@ process.controller = {
 
     forms : {
         Form_AttachmentsSheet : new Form('Form_AttachmentsSheet','نموذج المستندات المرفقة بالملف','نموذج المستندات المرفقة بالملف'),
-        Form_PenAdvPaymentRequest : new Form('Form_PenAdvPaymentRequest','ﺍﺳﺘﻤـــﺎﺭﺓ ﻃﻠـــﺐ ﺻـــﺮﻑ ﻣﻌـــﺎﺵ ﻣﻘـــﺪﻡ','ﺍﺳﺘﻤـــﺎﺭﺓ ﻃﻠـــﺐ ﺻـــﺮﻑ ﻣﻌـــﺎﺵ ﻣﻘـــﺪﻡ'),
-        Form_PenAdvPaymentOrder : new Form('Form_PenAdvPaymentOrder','ﺍﺳﺘﻤـــﺎﺭﺓ ﻃﻠـــﺐ ﺻـــﺮﻑ ﻣﻌـــﺎﺵ ﻣﻘـــﺪﻡ - ﺃﻣـــﺮ ﺍﻟﺪﻓـــﻊ','ﺍﺳﺘﻤـــﺎﺭﺓ ﻃﻠـــﺐ ﺻـــﺮﻑ ﻣﻌـــﺎﺵ ﻣﻘـــﺪﻡ - ﺃﻣـــﺮ ﺍﻟﺪﻓـــﻊ'),
+        Form_PenAdvPaymentRequest : new Form('Form_PenAdvPaymentRequest','ﺍﺳﺘﻤﺎﺭﺓ ﻃﻠﺐ ﺻﺮﻑ ﻣﻌﺎﺵ ﻣﻘﺪﻡ','ﺍﺳﺘﻤﺎﺭﺓ ﻃﻠﺐ ﺻﺮﻑ ﻣﻌﺎﺵ ﻣﻘﺪﻡ'),
+        Form_PenAdvPaymentOrder : new Form('Form_PenAdvPaymentOrder','ﺍﺳﺘﻤﺎﺭﺓ ﻃﻠﺐ ﺻﺮﻑ ﻣﻌﺎﺵ ﻣﻘﺪﻡ - ﺃﻣﺮ ﺍﻟﺪﻓﻊ','ﺍﺳﺘﻤﺎﺭﺓ ﻃﻠﺐ ﺻﺮﻑ ﻣﻌﺎﺵ ﻣﻘﺪﻡ - ﺃﻣﺮ ﺍﻟﺪﻓﻊ'),
         
     },
 
     defineComponents(){    
-        this.forms.Form_AttachmentsSheet.addComponent(new TxtComponent('From','من','من','') );
-        this.forms.Form_AttachmentsSheet.addComponent(new TxtComponent('To','إلى','إلى','') );
+        this.forms.Form_AttachmentsSheet.addComponent(new TxtComponent('From','من','من',50,3) );
+        this.forms.Form_AttachmentsSheet.addComponent(new TxtComponent('To','إلى','إلى',50,3) );
         this.forms.Form_AttachmentsSheet.addComponent(new DateComponent('RequestDate','التاريخ','التاريخ','','') );
-        this.forms.Form_AttachmentsSheet.addComponent(new TxtComponent('CounterNo','رقم الكاونتر','رقم الكاونتر','') );
+        this.forms.Form_AttachmentsSheet.addComponent(new NumberComponent('CounterNo','رقم الكاونتر','رقم الكاونتر','') );
         this.forms.Form_AttachmentsSheet.addComponent(new DateComponent('AppointmentDate','تاريخ المراجعة','تاريخ المراجعة','','') );
-        this.forms.Form_AttachmentsSheet.addComponent(new TxtComponent('ClientName','الاسم','الاسم','') );
-        this.forms.Form_AttachmentsSheet.addComponent(new TxtComponent('CivilID','الرقم المدني','الرقم المدني','') );
-        this.forms.Form_AttachmentsSheet.addComponent(new TxtComponent('FileNo','رقم الحفظ','رقم الحفظ','') );
-        this.forms.Form_AttachmentsSheet.addComponent(new TxtComponent('SSNo','رقم الهوية','رقم الهوية','') );
+        this.forms.Form_AttachmentsSheet.addComponent(new TxtComponent('ClientName','الاسم','الاسم',100,3) );
+        this.forms.Form_AttachmentsSheet.addComponent(new NumberComponent('CivilID','الرقم المدني','الرقم المدني',3) );
+        this.forms.Form_AttachmentsSheet.addComponent(new NumberComponent('FileNo','رقم الحفظ','رقم الحفظ',3) );
+        this.forms.Form_AttachmentsSheet.addComponent(new NumberComponent('SSNo','رقم الهوية','رقم الهوية',3) );
         this.forms.Form_AttachmentsSheet.addComponent(new AttachmentsTableComponent('Attachments',['استمارة طلب صرف معاش مقدم','صورة البطاقة المدنية','إقرار بصحة جهة الصرف']) );
-        this.forms.Form_AttachmentsSheet.addComponent(new NotesComponent('Notes','الملاحظـــــات','Notes',4,300) );
-        this.forms.Form_AttachmentsSheet.addComponent(new NotesComponent('MissingDocuments','نواقص في المستندات','نواقص في المستندات',4,300) );
+        this.forms.Form_AttachmentsSheet.addComponent(new NotesComponent('Notes','الملاحظات','الملاحظات',4,350) );
+        this.forms.Form_AttachmentsSheet.addComponent(new NotesComponent('MissingDocuments','نواقص في المستندات','نواقص في المستندات',4,200) );
         this.forms.Form_AttachmentsSheet.addSignature(new Signature('AttachmentsIssuerSignature','AttachmentsIssuerUserName','AttachmentsIssuerSig','توقيع الباحثة التأمينية','توقيع الباحثة التأمينية'));
-        this.forms.Form_AttachmentsSheet.components.From.labelSize = 3;
-        this.forms.Form_AttachmentsSheet.components.From.render();
-        this.forms.Form_AttachmentsSheet.components.To.labelSize = 3;
-        this.forms.Form_AttachmentsSheet.components.To.render();
-        this.forms.Form_AttachmentsSheet.components.SSNo.labelSize = 3;
-        this.forms.Form_AttachmentsSheet.components.SSNo.render();
-        this.forms.Form_AttachmentsSheet.components.FileNo.labelSize = 3;
-        this.forms.Form_AttachmentsSheet.components.FileNo.render();
-        this.forms.Form_AttachmentsSheet.components.CivilID.labelSize = 3;
-        this.forms.Form_AttachmentsSheet.components.CivilID.render();
-        this.forms.Form_AttachmentsSheet.components.ClientName.labelSize = 3;
-        this.forms.Form_AttachmentsSheet.components.ClientName.render();
 
-
-        this.forms.Form_PenAdvPaymentRequest.addComponent(new ParagraphComponent('PayReqTxt1','السيـــــد / المديـــــر العـــــام المحتـــــرم','السيـــــد / المديـــــر العـــــام المحتـــــرم','text-body font-weight-bold') );
-        this.forms.Form_PenAdvPaymentRequest.addComponent(new TxtComponent('ClientName','انا الموقع أدناه /','انا الموقع أدناه /','') );
-        this.forms.Form_PenAdvPaymentRequest.addComponent(new TxtComponent('CivilID','الرقم المدني','الرقم المدني','') );
-        this.forms.Form_PenAdvPaymentRequest.addComponent(new TxtComponent('FileNo','رقم الحفظ','رقم الحفظ','') );
-        this.forms.Form_PenAdvPaymentRequest.addComponent(new TxtComponent('SSNo','رقم الهوية','رقم الهوية','') );
+        this.forms.Form_PenAdvPaymentRequest.addComponent(new ParagraphComponent('PayReqTxt1','السيد / المدير العام المحترم','السيد / المدير العام المحترم','text-body font-weight-bold font-size:6 em') );
+        this.forms.Form_PenAdvPaymentRequest.addComponent(new TxtComponent('ClientName','انا الموقع أدناه /','انا الموقع أدناه /',100,4) );
+        this.forms.Form_PenAdvPaymentRequest.addComponent(new NumberComponent('CivilID','الرقم المدني','الرقم المدني',4) );
+        this.forms.Form_PenAdvPaymentRequest.addComponent(new NumberComponent('FileNo','رقم الحفظ','رقم الحفظ',4) );
+        this.forms.Form_PenAdvPaymentRequest.addComponent(new NumberComponent('SSNo','رقم الهوية','رقم الهوية',4) );
         this.forms.Form_PenAdvPaymentRequest.addComponent(new DateComponent('RequestDate','التاريخ','التاريخ','','') );
         this.forms.Form_PenAdvPaymentRequest.addComponent(new DateComponent('AppointmentDate','تاريخ المراجعة','تاريخ المراجعة','','') );
-        this.forms.Form_PenAdvPaymentRequest.addComponent(new TxtComponent('PhoneNo','رقم الهاتف','رقم الهاتف','') );
-        this.forms.Form_PenAdvPaymentRequest.addComponent(new TxtComponent('Email','البريد الإلكتروني','البريد الإلكتروني','') );
-        this.forms.Form_PenAdvPaymentRequest.addComponent(new TxtComponent('Address','العنوان','العنوان','') );
-        this.forms.Form_PenAdvPaymentRequest.addComponent(new ParagraphComponent('PayReqTxt2','يـرجـى التكـرم بالموافقـة علـى صـرف معـاش مقـدم عـن :','يـرجـى التكـرم بالموافقـة علـى صـرف معـاش مقـدم عـن :','text-body font-weight-bold') );
+        this.forms.Form_PenAdvPaymentRequest.addComponent(new NumberComponent('PhoneNo','رقم الهاتف','رقم الهاتف','') );
+        this.forms.Form_PenAdvPaymentRequest.addComponent(new TxtComponent('Email','البريد الإلكتروني','البريد الإلكتروني',80,4) );
+        this.forms.Form_PenAdvPaymentRequest.addComponent(new TxtComponent('Address','العنوان','العنوان',200,2) );
+        this.forms.Form_PenAdvPaymentRequest.addComponent(new ParagraphComponent('PayReqTxt2','يرجى التكرم بالموافقة على صرف معاش مقدم عن :','يرجى التكرم بالموافقة على صرف معاش مقدم عن :','text-body font-weight-bold') );
         this.forms.Form_PenAdvPaymentRequest.addComponent(new TableComponent('YearMonthTable',[new TableColTxt('الشهر','الشهر',[]),new TableColTxt('السنة','السنة',[]),], 2) );
-        this.forms.Form_PenAdvPaymentRequest.addComponent(new NotesComponent('Reasons','وذلـك للأسبـاب التاليــة','وذلـك للأسبـاب التاليــة',4,300) );
-        this.forms.Form_PenAdvPaymentRequest.addComponent(new ParagraphComponent('PayReqTxt3','وتفضلـــوا بقبـــول فائـــق الاحتـــرام,,,','وتفضلـــوا بقبـــول فائـــق الاحتـــرام,,,','text-body font-weight-bold') );
-        this.forms.Form_PenAdvPaymentRequest.addComponent(new ParagraphComponent('PayReqClientSigLabel','توقيـــع صاحـــب العلاقـــة / الوكيـــل','توقيـــع صاحـــب العلاقـــة / الوكيـــل','text-body font-weight-bold') );
-        this.forms.Form_PenAdvPaymentRequest.addComponent(new DropDownListComponent('SMS','أوافق على إرسال رسالة SMS :','أوافق على إرسال رسالة SMS :',[new Option('نعم','نعم','1') , new Option('لا','لا','2')]) );
-        this.forms.Form_PenAdvPaymentRequest.addComponent(new TxtComponent('ClientName1','','','') );
-        this.forms.Form_PenAdvPaymentRequest.addComponent(new ParagraphComponent('PayReqTxt4','المذكـور سبـق لـه صـرف معـاش مقـدم :','المذكـور سبـق لـه صـرف معـاش مقـدم :','text-danger font-weight-bold font-family: Arial, Helvetica, sans-serif; font-size: 17px;') );
+        this.forms.Form_PenAdvPaymentRequest.addComponent(new NotesComponent('Reasons','وذلك للأسباب التالية','وذلك للأسباب التالية',4,300) );
+        this.forms.Form_PenAdvPaymentRequest.addComponent(new ParagraphComponent('PayReqTxt3','وتفضلوا بقبول فائق الاحترام,,,','وتفضلوا بقبول فائق الاحترام,,,','text-body font-weight-bold') );
+        this.forms.Form_PenAdvPaymentRequest.addComponent(new ParagraphComponent('PayReqClientSigLabel','توقيع صاحب العلاقة / الوكيل','توقيع صاحب العلاقة / الوكيل','text-body font-weight-bold') );
+        this.forms.Form_PenAdvPaymentRequest.addComponent(new DropDownListComponent('SMS','أوافق على إرسال رسالة SMS :','أوافق على إرسال رسالة SMS :',[new Option('نعم','نعم','1') , new Option('لا','لا','2')],9) );
+        this.forms.Form_PenAdvPaymentRequest.addComponent(new TxtComponent('ClientName1','','',100,'') );
+        this.forms.Form_PenAdvPaymentRequest.addComponent(new ParagraphComponent('PayReqTxt4','المذكور سبق له صرف معاش مقدم :','المذكور سبق له صرف معاش مقدم :','text-danger font-weight-bold font-family: Arial, Helvetica, sans-serif; font-size: 17px;') );
         this.forms.Form_PenAdvPaymentRequest.addComponent(new TableComponent('LastYearMonthTable',[new TableColTxt('الشهر','الشهر',[]),new TableColTxt('السنة','السنة',[]),], 2) );
         this.forms.Form_PenAdvPaymentRequest.addSignature(new Signature('PRIssuerSignature','PRIssuerUserName','PRIssuerSig','توقيع الباحثة التأمينية','توقيع الباحثة التأمينية'));
-        this.forms.Form_PenAdvPaymentRequest.addComponent(new ParagraphComponent('PayReqTxt5','رأي المديـــر العـــام :','رأي المديـــر العـــام :','text-body font-weight-bold') );
-        this.forms.Form_PenAdvPaymentRequest.addComponent(new ParagraphComponent('PayReqTxt6','-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------','-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------','text-body font-weight-bold') );
-        this.forms.Form_PenAdvPaymentRequest.addComponent(new ParagraphComponent('PayReqTxt7','-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------','-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------','text-body font-weight-bold') );
-        this.forms.Form_PenAdvPaymentRequest.components.ClientName.labelSize = 3;
-        this.forms.Form_PenAdvPaymentRequest.components.ClientName.render();
-        this.forms.Form_PenAdvPaymentRequest.components.CivilID.labelSize = 3;
-        this.forms.Form_PenAdvPaymentRequest.components.CivilID.render();
-        this.forms.Form_PenAdvPaymentRequest.components.FileNo.labelSize = 3;
-        this.forms.Form_PenAdvPaymentRequest.components.FileNo.render();
-        this.forms.Form_PenAdvPaymentRequest.components.SSNo.labelSize = 3;
-        this.forms.Form_PenAdvPaymentRequest.components.SSNo.render();
-        this.forms.Form_PenAdvPaymentRequest.components.Email.labelSize = 3;
-        this.forms.Form_PenAdvPaymentRequest.components.Email.render();
-        this.forms.Form_PenAdvPaymentRequest.components.Address.labelSize = 2;
-        this.forms.Form_PenAdvPaymentRequest.components.Address.render();
-        this.forms.Form_PenAdvPaymentRequest.components.SMS.labelSize = 9;
-        this.forms.Form_PenAdvPaymentRequest.components.SMS.render();
+        this.forms.Form_PenAdvPaymentRequest.addComponent(new ParagraphComponent('PayReqTxt5','رأي المدير العام :','رأي المدير العام :','text-body font-weight-bold') );
 
-        this.forms.Form_PenAdvPaymentOrder.addComponent(new TxtComponent('ClientName','الاسم','الاسم','') );
-        this.forms.Form_PenAdvPaymentOrder.addComponent(new TxtComponent('CivilID','الرقم المدني','الرقم المدني','') );
-        this.forms.Form_PenAdvPaymentOrder.addComponent(new TxtComponent('FileNo','رقم الحفظ','رقم الحفظ','') );
-        this.forms.Form_PenAdvPaymentOrder.addComponent(new TxtComponent('SSNo','رقم الهوية','رقم الهوية','') );
+        this.forms.Form_PenAdvPaymentOrder.addComponent(new TxtComponent('ClientName','الاسم','الاسم',100,3) );
+        this.forms.Form_PenAdvPaymentOrder.addComponent(new NumberComponent('CivilID','الرقم المدني','الرقم المدني',3) );
+        this.forms.Form_PenAdvPaymentOrder.addComponent(new NumberComponent('FileNo','رقم الحفظ','رقم الحفظ',3) );
+        this.forms.Form_PenAdvPaymentOrder.addComponent(new NumberComponent('SSNo','رقم الهوية','رقم الهوية',3) );
         this.forms.Form_PenAdvPaymentOrder.addComponent(new DateComponent('RequestDate','التاريخ','التاريخ','','') );
         this.forms.Form_PenAdvPaymentOrder.addComponent(new DateComponent('ExecutionDate','تاريخ التنفيذ','تاريخ التنفيذ','','') );
-        this.forms.Form_PenAdvPaymentOrder.addComponent(new TxtComponent('NoOfMonthes','الأشهر المدفوعة مقدما','الأشهر المدفوعة مقدما','') );
-        this.forms.Form_PenAdvPaymentOrder.addComponent(new TxtComponent('PaymentMethod','طريقـة الدفــع','طريقـة الدفــع','') );
-        this.forms.Form_PenAdvPaymentOrder.addComponent(new TxtComponent('PaidAmount','المبلـغ المدفـوع','المبلـغ المدفـوع','') );
+        this.forms.Form_PenAdvPaymentOrder.addComponent(new NumberComponent('NoOfMonthes','الأشهر المدفوعة مقدما','الأشهر المدفوعة مقدما',6) );
+        this.forms.Form_PenAdvPaymentOrder.addComponent(new NumberComponent('PaymentMethod','طريقة الدفع','طريقة الدفع',6) );
+        this.forms.Form_PenAdvPaymentOrder.addComponent(new MoneyComponent('PaidAmount','المبلغ المدفوع','المبلغ المدفوع',6) );
         this.forms.Form_PenAdvPaymentOrder.addComponent(new ParagraphComponent('MonthesDescription','ذلك عن معاش شهر مارس لسنة 2020','ذلك عن معاش شهر مارس لسنة 2020','text-danger font-weight-bold') );
-        this.forms.Form_PenAdvPaymentOrder.addComponent(new TxtComponent('TransferTo','يحـــول لحسـابـــه إلـــى :','يحـــول لحسـابـــه إلـــى :','') );
-        this.forms.Form_PenAdvPaymentOrder.addComponent(new TxtComponent('Bank','البنـــك','البنـــك','') );
-        this.forms.Form_PenAdvPaymentOrder.addComponent(new TxtComponent('AccountNo','رقـم الحســاب','رقـم الحســاب','') );
-        this.forms.Form_PenAdvPaymentOrder.addComponent(new NotesComponent('PONotes','الملاحظـــــات','Notes',4,300) );
-        this.forms.Form_PenAdvPaymentOrder.components.ClientName.labelSize = 3;
-        this.forms.Form_PenAdvPaymentOrder.components.ClientName.render();
-        this.forms.Form_PenAdvPaymentOrder.components.CivilID.labelSize = 3;
-        this.forms.Form_PenAdvPaymentOrder.components.CivilID.render();
-        this.forms.Form_PenAdvPaymentOrder.components.FileNo.labelSize = 3;
-        this.forms.Form_PenAdvPaymentOrder.components.FileNo.render();
-        this.forms.Form_PenAdvPaymentOrder.components.SSNo.labelSize = 3;
-        this.forms.Form_PenAdvPaymentOrder.components.SSNo.render();
-        this.forms.Form_PenAdvPaymentOrder.components.NoOfMonthes.labelSize = 6;
-        this.forms.Form_PenAdvPaymentOrder.components.NoOfMonthes.render();
-        this.forms.Form_PenAdvPaymentOrder.components.PaymentMethod.labelSize = 6;
-        this.forms.Form_PenAdvPaymentOrder.components.PaymentMethod.render();
-        this.forms.Form_PenAdvPaymentOrder.components.PaidAmount.labelSize = 6;
-        this.forms.Form_PenAdvPaymentOrder.components.PaidAmount.render();
+        this.forms.Form_PenAdvPaymentOrder.addComponent(new TxtComponent('TransferTo','يحول لحسابه إلى :','يحول لحسابه إلى :','') );
+        this.forms.Form_PenAdvPaymentOrder.addComponent(new TxtComponent('Bank','البنك','البنك',50,'') );
+        this.forms.Form_PenAdvPaymentOrder.addComponent(new TxtComponent('AccountNo','رقم الحساب','رقم الحساب',50,'') );
+        this.forms.Form_PenAdvPaymentOrder.addComponent(new NotesComponent('PONotes','الملاحظات','Notes',4,300) );
         this.forms.Form_PenAdvPaymentOrder.addSignature(new Signature('POIssuerSignature','POIssuerName','POIssuerSig','توقيع الباحثة التأمينية','توقيع الباحثة التأمينية'));
-        this.forms.Form_PenAdvPaymentOrder.addSignature(new Signature('POSupSignature','POSupName','POSupSig','توقيع المراجعـــة التأمينية','توقيع المراجعـــة التأمينية'));
-        this.forms.Form_PenAdvPaymentOrder.addSignature(new Signature('POMngSignature','POMngName','POMngSig','توقيـــــع رئيســـة الباحثـــات','توقيـــــع رئيســـة الباحثـــات'));
+        this.forms.Form_PenAdvPaymentOrder.addSignature(new Signature('POSupSignature','POSupName','POSupSig','توقيع المراجعة التأمينية','توقيع المراجعة التأمينية'));
+        this.forms.Form_PenAdvPaymentOrder.addSignature(new Signature('POMngSignature','POMngName','POMngSig','توقيع رئيسة الباحثات','توقيع رئيسة الباحثات'));
     },
 
     main(){
@@ -194,9 +151,14 @@ process.controller = {
 
 }
 
-$(document).ready( ()=>{ try{ process.controller.main(); }catch(error){ app.alertError(error.message); }} );
+$(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alertError(error.message); }} );
 </script>
 
+<style>
+    .nav-pills .nav-link.active {
+    background-color: rgb(108, 117, 126) !important;
+}
+</style>
 
 <div class="container-fluid pr-1 pl-1" >
     <div class="row">
@@ -268,7 +230,7 @@ $(document).ready( ()=>{ try{ process.controller.main(); }catch(error){ app.aler
                             <div class="col p-3" data-container-for="Form_PenAdvPaymentRequest_title"></div>
                         </div>
                         <div class="row">
-                            <div class="col pr-3 pl-3" data-container-for="PayReqTxt1" style="font-family: Arial, Helvetica, sans-serif; font-size: 22px;"></div>
+                            <div class="col pr-3 pl-3" data-container-for="PayReqTxt1"></div>
                         </div>
                         <div class="row">
                             <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="ClientName"></div>
@@ -298,7 +260,7 @@ $(document).ready( ()=>{ try{ process.controller.main(); }catch(error){ app.aler
                             <div class="col pt-1 pd-1 pr-3 pl-3" data-container-for="Address"></div>
                         </div> 
                         <div class="row">
-                            <div class="col pt-2 pd-2 pr-3 pl-3" data-container-for="PayReqTxt2" style="font-family: Arial, Helvetica, sans-serif; font-size: 22px;"></div>
+                            <div class="col pt-2 pd-2 pr-3 pl-3" data-container-for="PayReqTxt2"></div>
                         </div>
                         <div class="row">
                             <div class="col-4 pt-2 pd-2 pr-3 pl-3"></div>
@@ -309,9 +271,9 @@ $(document).ready( ()=>{ try{ process.controller.main(); }catch(error){ app.aler
                             <div class="col pt-3 pd-3 pr-3 pl-3" data-container-for="Reasons"></div>
                         </div>
                         <div class="row">
-                            <div class="col pt-3 pd-3 pr-3 pl-3" data-container-for="PayReqTxt3" style="font-family: Arial, Helvetica, sans-serif; font-size: 22px;"></div>
+                            <div class="col pt-3 pd-3 pr-3 pl-3" data-container-for="PayReqTxt3"></div>
                             <div class="col pt-3 pd-3 pr-3 pl-3"></div>
-                            <div class="col pt-3 pd-3 pr-3 pl-5" data-container-for="PayReqClientSigLabel" style="font-family: Arial, Helvetica, sans-serif; font-size: 22px;"></div>
+                            <div class="col pt-3 pd-3 pr-3 pl-5" data-container-for="PayReqClientSigLabel"></div>
                         </div>                                
                         <div class="row">
                             <div class="col-3 pt-3 pd-3 pr-3 pl-3" data-container-for="SMS"></div>
@@ -319,7 +281,7 @@ $(document).ready( ()=>{ try{ process.controller.main(); }catch(error){ app.aler
                             <div class="col-5 pt-3 pd-3 pr-5 pl-3" data-container-for="ClientName1"></div>
                         </div>
                         <div class="row">
-                            <div class="col pt-3 pd-3 pr-3 pl-3" data-container-for="PayReqTxt4" style="font-family: Arial, Helvetica, sans-serif; font-size: 22px;"></div>
+                            <div class="col pt-3 pd-3 pr-3 pl-3" data-container-for="PayReqTxt4"></div>
                         </div>
                         <div class="row">
                             <div class="col-4 pt-3 pd-3 pr-3 pl-3"></div>
@@ -332,14 +294,8 @@ $(document).ready( ()=>{ try{ process.controller.main(); }catch(error){ app.aler
                             <div class="col-4 pt-3 pd-3 pr-3 pl-3" data-container-for="PRIssuerSignature"></div>
                         </div>
                         <div class="row">
-                            <div class="col pt-3 pd-3 pr-3 pl-3" data-container-for="PayReqTxt5" style="font-family: Arial, Helvetica, sans-serif; font-size: 22px;"></div>
+                            <div class="col pt-3 pd-3 pr-3 pl-3" data-container-for="PayReqTxt5"></div>
                         </div>
-                        <div class="row">
-                            <div class="col pt-3 pd-3 pr-3 pl-3" data-container-for="PayReqTxt6"></div>
-                        </div>
-                        <div class="row">
-                            <div class="col pt-3 pd-3 pr-3 pl-3" data-container-for="PayReqTxt7"></div>
-                        </div> 
                     </div>
                 </div>
 

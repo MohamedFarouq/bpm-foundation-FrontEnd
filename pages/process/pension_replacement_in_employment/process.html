@@ -92,8 +92,8 @@ process.controller = {
         Form_NotesMemoReg5th : new Form('Form_NotesMemoReg5th','مذكرة ملاحظات الباب الخامس-التسجيل','مذكرة ملاحظات الباب الخامس-التسجيل'),
         Form_NotesMemoRegEmployer : new Form('Form_NotesMemoRegEmployer','مذكرة ملاحظات أصحاب الأعمال-التسجيل','مذكرة ملاحظات أصحاب الأعمال-التسجيل'),
         Form_PenReplInEmpContributionPeriods : new Form('Form_PenReplInEmpContributionPeriods','نموذج مدد الاشتراك','نموذج مدد الاشتراك'),
-        /*Form_PenReplInEmpEstmPenLegCalc : new Form('Form_PenReplInEmpEstmPenLegCalc','نموذج تسوية معاش افتراضى-القانونيين','نموذج تسوية معاش افتراضى-القانونيين'),
-        Form_PenReplInEmpEstmPenAccCalc : new Form('Form_PenReplInEmpEstmPenAccCalc','نموذج تسوية معاش افتراضى-المحاسبين','نموذج تسوية معاش افتراضى-المحاسبين'),
+        Form_PenReplInEmpEstmPenLegCalc : new Form('Form_PenReplInEmpEstmPenLegCalc','نموذج تسوية معاش افتراضى-القانونيين','نموذج تسوية معاش افتراضى-القانونيين'),
+        /*Form_PenReplInEmpEstmPenAccCalc : new Form('Form_PenReplInEmpEstmPenAccCalc','نموذج تسوية معاش افتراضى-المحاسبين','نموذج تسوية معاش افتراضى-المحاسبين'),
         Form_PenReplInEmpPaymentOrder : new Form('Form_PenReplInEmpPaymentOrder','نموذج استبدال جزء من المعاش الافتراضي','نموذج استبدال جزء من المعاش الافتراضي'),
         Form_PenReplInEmpNotesMemoPens : new Form('Form_PenReplInEmpNotesMemoPens','مذكرة ملاحظات-أصحاب المعاشات','مذكرة ملاحظات-أصحاب المعاشات'),
         Form_PenReplInEmpFileChangePentoFin : new Form('Form_PenReplInEmpFileChangePentoFin','نموذج تحويل ملف لمتابعة السداد','نموذج تحويل ملف لمتابعة السداد'),
@@ -142,8 +142,6 @@ process.controller = {
         this.forms.Form_AttachmentsSheet.components.CivilID.render();
         this.forms.Form_AttachmentsSheet.components.ClientName.labelSize = 3;
         this.forms.Form_AttachmentsSheet.components.ClientName.render();
-
-
 
         this.forms.Form_NotesMemoRegLegal.addComponent(new DateComponent('NotesMemoRegLegalDate','التاريخ','التاريخ','','') );
         this.forms.Form_NotesMemoRegLegal.addComponent(new TxtComponent('NotesMemoRegLegalFrom','من','من','') );
@@ -260,9 +258,7 @@ process.controller = {
         this.forms.Form_PenReplInEmpContributionPeriods.addComponent(new TxtComponent('ContPeriodStopReason','سبب إنتهاء الخدمة','سبب إنتهاء الخدمة','') );
         this.forms.Form_PenReplInEmpContributionPeriods.addComponent(new TxtComponent('ContPeriodBasicSalary','الراتب الأساسي','الراتب الأساسي','') );
         this.forms.Form_PenReplInEmpContributionPeriods.addComponent(new TxtComponent('ContPeriodSocialBonus','علاوة اجتماعية','علاوة اجتماعية','') );
-        //----Multi columns makes sperations--------------------------------------------------
-        this.forms.Form_PenReplInEmpContributionPeriods.addComponent(new TableComponent('Serial',[new TableColTxt('م','م',['']),], 10) );
-        this.forms.Form_PenReplInEmpContributionPeriods.addComponent(new TableComponent('ContPeriodEmployer',[new TableColTxt('صاحب العمل \n سبب إنتهاء الخدمة','صاحب العمل \n سبب إنتهاء الخدمة',['']),], 10) );
+        this.forms.Form_PenReplInEmpContributionPeriods.addComponent(new TableComponent('ContPeriodEmployer',[new TableColTxt('صاحب العمل - سبب إنتهاء الخدمة','صاحب العمل - سبب إنتهاء الخدمة',['']),], 10) );
         this.forms.Form_PenReplInEmpContributionPeriods.addComponent(new TableComponent('ContPeriodContDate',[new TableColTxt('تاريخ الاشتراك','تاريخ الاشتراك',['']),], 10) );
         this.forms.Form_PenReplInEmpContributionPeriods.addComponent(new TableComponent('ContPeriodExcluDate',[new TableColTxt('مدة مستبعدة','مدة مستبعدة',['']),], 10) );
         this.forms.Form_PenReplInEmpContributionPeriods.addComponent(new TableComponent('ContPeriodRecruitEvasion',[new TableColTxt('مدة هروب من التجنيد','مدة هروب من التجنيد',['']),], 10) );
@@ -270,7 +266,6 @@ process.controller = {
         this.forms.Form_PenReplInEmpContributionPeriods.addComponent(new TableComponent('ContPeriodRewardPay',[new TableColTxt('صرف المكافأة','صرف المكافأة',['']),], 10) );
         this.forms.Form_PenReplInEmpContributionPeriods.addComponent(new TableComponent('ContPeriodActionCode',[new TableColTxt('النشاط','النشاط',['']),], 10) );
         this.forms.Form_PenReplInEmpContributionPeriods.addComponent(new TableComponent('ContPeriodPensionerNotes',[new TableColTxt('ملاحظات إدارة أصحاب المعاشات','ملاحظات إدارة أصحاب المعاشات',['']),], 10) );
-        //-------------------------------------------------------------------------------------
         this.forms.Form_PenReplInEmpContributionPeriods.addComponent(new NotesComponent('ContPeriodNotes','ملاحظــــــــــــــــــــــات','ملاحظــــــــــــــــــــــات',7,1200) );
         this.forms.Form_PenReplInEmpContributionPeriods.addSignature(new Signature('ContPeriodRegEmpSignature','ContPeriodRegEmpName','ContPeriodRegEmpSig','توقـيـــــع المدخل الآلي','توقـيـــــع المدخل الآلي'));
         this.forms.Form_PenReplInEmpContributionPeriods.addSignature(new Signature('ContPeriodRegTLSignature','ContPeriodRegTLName','ContPeriodRegTLSig','توقـيـــــع المراجع الآلي','توقـيـــــع المراجع الآلي'));
@@ -287,6 +282,20 @@ process.controller = {
         this.forms.Form_PenReplInEmpContributionPeriods.components.ContPeriodBasicSalary.render();
         this.forms.Form_PenReplInEmpContributionPeriods.components.ContPeriodSocialBonus.labelSize = 5;
         this.forms.Form_PenReplInEmpContributionPeriods.components.ContPeriodSocialBonus.render();
+
+        this.forms.Form_PenReplInEmpEstmPenLegCalc.addComponent(new ParagraphComponent('underTitle','مؤمن عليه / مسفيد','مؤمن عليه / مسفيد','text-center font-weight-bold') );
+        this.forms.Form_PenReplInEmpEstmPenLegCalc.addComponent(new TxtComponent('EstmPenLegCalcHeadStatement','','','') );
+        this.forms.Form_PenReplInEmpEstmPenLegCalc.addComponent(new TxtComponent('FileNo','رقم الحفظ','رقم الحفظ','') );
+        this.forms.Form_PenReplInEmpEstmPenLegCalc.addComponent(new TxtComponent('SSNo','رقم الهوية','رقم الهوية','') );
+        this.forms.Form_PenReplInEmpEstmPenLegCalc.addComponent(new TxtComponent('CivilID','الرقم المدني','الرقم المدني','') );
+        this.forms.Form_PenReplInEmpEstmPenLegCalc.addComponent(new TxtComponent('ClientName','الاسم','الاسم','') );
+        this.forms.Form_PenReplInEmpEstmPenLegCalc.addComponent(new TxtComponent('EstmPenLegCalcMaritalStatus','الحالة الاجتماعية','الحالة الاجتماعية','') );
+        this.forms.Form_PenReplInEmpEstmPenLegCalc.addComponent(new NumberComponent('EstmPenLegCalcNoOfChild','عدد الأولاد','عدد الأولاد','') );
+        this.forms.Form_PenReplInEmpEstmPenLegCalc.addComponent(new NumberComponent('EstmPenLegCalcNoOfHCChild','عدد الأولاد المعاقين','عدد الأولاد المعاقين','') );
+        this.forms.Form_PenReplInEmpEstmPenLegCalc.addComponent(new NumberComponent('EstmPenLegCalcTotalNoOfChild','إجمالي عدد الأولاد','إجمالي عدد الأولاد','') );
+        this.forms.Form_PenReplInEmpEstmPenLegCalc.addComponent(new DateComponent('EstmPenLegCalcRequestDate','التاريخ','التاريخ','','') );
+        this.forms.Form_PenReplInEmpEstmPenLegCalc.addComponent(new MoneyComponent('EstmPenLegCalcBasicPension','الراتب الأساسي','الراتب الأساسي','') );
+        this.forms.Form_PenReplInEmpEstmPenLegCalc.addComponent(new MoneyComponent('EstmPenLegCalcSocialBonus','علاوة اجتماعية','علاوة اجتماعية','') );
     },
 
     main(){
@@ -319,8 +328,14 @@ process.controller = {
 
 }
 
-$(document).ready( ()=>{ try{ process.controller.main(); }catch(error){ app.alertError(error.message); }} );
+$(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alertError(error.message); }} );
 </script>
+
+<style>
+    .nav-pills .nav-link.active {
+    background-color: rgb(108, 117, 126) !important;
+}
+</style>
 
 <div class="container-fluid pr-1 pl-1" >
     <div class="row">
@@ -589,6 +604,7 @@ $(document).ready( ()=>{ try{ process.controller.main(); }catch(error){ app.aler
                         </div>
                     </div>
                 </div>
+
                 <!-- Form_PenReplInEmpContributionPeriods-Tab -->
                 <div class="tab-pane fade" id="nav-Form_PenReplInEmpContributionPeriods" role="tabpanel" aria-labelledby="Form_PenReplInEmpContributionPeriods-tab">
                     <!-- the main container for all Form_PenReplInEmpContributionPeriods controls -->
@@ -626,15 +642,20 @@ $(document).ready( ()=>{ try{ process.controller.main(); }catch(error){ app.aler
                             <div class="col-8 pt-1 pd-1 pr-3 pl-3"></div>
                         </div>
                         <div class="row">
-                            <div class="col-1 pt-1 pd-1 pr-3 pl-3" data-container-for="Serial"></div>
-                            <div class="col-4 pt-1 pd-1 pr-3 pl-3" data-container-for="ContPeriodEmployer"></div>
-                            <div class="col-1 pt-1 pd-1 pr-3 pl-3" data-container-for="ContPeriodContDate"></div>
-                            <div class="col-1 pt-1 pd-1 pr-3 pl-3" data-container-for="ContPeriodExcluDate"></div>
-                            <div class="col-1 pt-1 pd-1 pr-3 pl-3" data-container-for="ContPeriodRecruitEvasion"></div>
-                            <div class="col-1 pt-1 pd-1 pr-3 pl-3" data-container-for="ContPeriodBenefit"></div>
-                            <div class="col-1 pt-1 pd-1 pr-3 pl-3" data-container-for="ContPeriodRewardPay"></div>
-                            <div class="col-1 pt-1 pd-1 pr-3 pl-3" data-container-for="ContPeriodActionCode"></div>
-                            <div class="col-1 pt-1 pd-1 pr-3 pl-3" data-container-for="ContPeriodPensionerNotes"></div>
+                            <div class="col pt-1 pd-1"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col col-form-label text-center bg-primary text-white">أولاً: المدد الفعلية</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4 p-0 pd-1" data-container-for="ContPeriodEmployer"></div>
+                            <div class="col-1 p-0 pd-1" data-container-for="ContPeriodContDate"></div>
+                            <div class="col-1 p-0 pd-1" data-container-for="ContPeriodExcluDate"></div>
+                            <div class="col-1 p-0 pd-1" data-container-for="ContPeriodRecruitEvasion"></div>
+                            <div class="col-1 p-0 pd-1" data-container-for="ContPeriodBenefit"></div>
+                            <div class="col-1 p-0 pd-1" data-container-for="ContPeriodRewardPay"></div>
+                            <div class="col-1 p-0 pd-1" data-container-for="ContPeriodActionCode"></div>
+                            <div class="col-2 p-0 pd-1" data-container-for="ContPeriodPensionerNotes"></div>
                         </div>
                         <div class="row">
                             <div class="col pt-3 pd-3 pr-3 pl-3" data-container-for="ContPeriodNotes"></div>
@@ -645,7 +666,24 @@ $(document).ready( ()=>{ try{ process.controller.main(); }catch(error){ app.aler
                             <div class="col-4 pt-3 pd-3 pr-3 pl-3" data-container-for="ContPeriodRegMngSignature"></div>
                         </div>
                     </div>
-                </div>                 
+                </div>
+                
+                 <!-- Form_PenReplInEmpEstmPenLegCalc-Tab -->
+                 <div class="tab-pane fade" id="nav-Form_PenReplInEmpEstmPenLegCalc" role="tabpanel" aria-labelledby="Form_PenReplInEmpEstmPenLegCalc-tab">
+                    <!-- the main container for all Form_PenReplInEmpEstmPenLegCalc controls -->
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col p-3" data-container-for="Form_PenReplInEmpEstmPenLegCalc_title"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col" data-container-for="underTitle"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col p-3" data-container-for="EstmPenLegCalcHeadStatement"></div>
+                        </div>
+                    </div>
+                </div>                
+
                 <div class="text-right">
                     <hr>
                     <label id="workflowIDLabel" class="text-danger">مسلسل الاجراء</label>

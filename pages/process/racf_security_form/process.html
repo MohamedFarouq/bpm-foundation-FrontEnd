@@ -43,41 +43,51 @@ process.controller = {
 
     defineComponents(){ 
         this.forms.Form_RACFSecutiyForm.addComponent(new DateComponent('RequesterDate','Date','Date','','') );
-        this.forms.Form_RACFSecutiyForm.addComponent(new TxtComponent('SMRNo','SMR No','SMR No',6) );
+        this.forms.Form_RACFSecutiyForm.addComponent(new NumberComponent('SMRNo','SMR No','SMR No',3) );
 
         this.forms.Form_RACFSecutiyForm.addComponent(new CheckBoxComponent('NEWprog','New Program','New Program') );
         this.forms.Form_RACFSecutiyForm.addComponent(new DropDownListComponent('Forms','Form Name','Form Name',[new Option('','','0') ,new Option('RACF Security Form-CICS','RACF Security Form-CICS','1') ,
         new Option('HR Permission Form-PER','HR Permission Form-PER','2'),new Option('ESignature Form-SCV','ESignature Form-SCV','3'),new Option('Optional Complementary Form-OPC','Optional Complementary Form-OPC','4'),
-        new Option('EGL System','EGL System','2')]) );
+        new Option('EGL System','EGL System','2')],3) );
 
 
-        this.forms.Form_RACFSecutiyForm.addComponent(new TableComponent('ProgramTable',[
-                                                                                        new TableColTxt('Program Name','Program Name'),
+        var dropDownListOptions = [ new Option('','',''), 
+                                    new Option('INQ(1)','INQ(1)','opt1Value'), 
+                                    new Option('UPD(2)','UPD(2)','opt2Value'),
+                                    new Option('INQ/UPD','INQ/UPD','opt3Value')
+                                ];
+
+        this.forms.Form_RACFSecutiyForm.addComponent(new TableComponent('ProgramTable',
+                                                                                    [   new TableColTxt('Program Name','Program Name'),
                                                                                         new TableColTxt('Screen Code','Screen Code'),
                                                                                         new TableColTxt('Screen Name (Arbic)','Screen Name (Arbic)'),
                                                                                         new TableColTxt('Program Transaction','Program Transaction'),
                                                                                         new TableColTxt('Job Sequence','Job Sequence'),
-                                                                                        new TableColTxt('Program Type','Program Type'),
+                                                                                        new TableColDropDownList('Program Type','Program Type',dropDownListOptions),
                                                                                         new TableColTxt('UPD DEPID','UPD DEPID'),
                                                                                         new TableColTxt('UPD ClerkID','UPD ClerkID'),
                                                                                         new TableColTxt('INQ DepID','INQ DepID'),
                                                                                         new TableColTxt('INQ ClerkID','INQ ClerkID'),                                                                                
-                                                                                    ], 2
+                                                                                    ]
+                                                                                    , 2
+                                                                                    ,[1,1,3,1,1,1,1,1,1,1]
                                                                                     ) );
 
-        this.forms.Form_RACFSecutiyForm.addComponent(new TableComponent('FunctionTable',[
-                                                                                        new TableColTxt('Function Name','Function Name'),
+        this.forms.Form_RACFSecutiyForm.addComponent(new TableComponent('FunctionTable',
+                                                                                    [   new TableColTxt('Function Name','Function Name'),
                                                                                         new TableColTxt('Screen Code','Screen Code'),
                                                                                         new TableColTxt('Screen Name (Arbic)','Screen Name (Arbic)'),
                                                                                         new TableColTxt('Program Transaction','Program Transaction'),
                                                                                         new TableColTxt('Job Sequence','Job Sequence'),
-                                                                                        new TableColTxt('Program Type','Program Type'),
+                                                                                        new TableColDropDownList('Program Type','Program Type',dropDownListOptions),
                                                                                         new TableColTxt('UPD DEPID','UPD DEPID'),
                                                                                         new TableColTxt('UPD ClerkID','UPD ClerkID'),
                                                                                         new TableColTxt('INQ DepID','INQ DepID'),
                                                                                         new TableColTxt('INQ ClerkID','INQ ClerkID'), 
-                                                                                    ], 9
-                                                                                    ) );                                                                           
+                                                                                    ]
+                                                                                    , 2
+                                                                                    ,[1,1,3,1,1,1,1,1,1,1]
+                                                                                    ) );                                                                         
         
         this.forms.Form_RACFSecutiyForm.addSignature(new Signature('SE','SEName','SESig','Responsible SE','Responsible SE') ); 
         this.forms.Form_RACFSecutiyForm.addSignature(new Signature('TeamLeader','TeamLdName','TeamLeaderSig','Team Leader','Team Leader') );
@@ -162,9 +172,14 @@ process.controller = {
 
 }
 
-$(document).ready( ()=>{ try{ process.controller.main(); }catch(error){ app.alertError(error.message); }} );
+$(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alertError(error.message); }} );
 </script>
 
+<style>
+    .nav-pills .nav-link.active {
+    background-color: rgb(108, 117, 126) !important;
+}
+</style>
 
 <div class="container-fluid pr-1 pl-1" >
     <div class="row">
@@ -181,46 +196,46 @@ $(document).ready( ()=>{ try{ process.controller.main(); }catch(error){ app.aler
                             <div class="col p-1 mb-4" data-container-for="Form_RACFSecutiyForm_title"></div>
                         </div>
 
-                        <div class="row">
-                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="SMRNo"></div>
-                            <div class="col pr-3 pl-3 pt-2"></div>
-                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RequesterDate"></div>
+                        <div class="row p-1">
+                            <div class="col-5 pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="SMRNo"></div>
+                            <div class="col-3 pr-3 pl-3 pt-2"></div>
+                            <div class="col-4 pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RequesterDate"></div>
                         </div>
 
                         <div class="row p-1">
-                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="Forms"></div>
-                            <div class="col pr-3 pl-3 pt-2"></div>
-                            <div class="col pr-3 pl-3 pt-2 pb-3" style="text-align: left; font-weight:bolder;" data-container-for="NEWprog"></div>
+                            <div class="col-5 pr-3 pl-3 pt-2 pb-4" style="direction:ltr;" data-container-for="Forms"></div>
+                            <div class="col-3 pr-3 pl-3 pt-2 pb-4"></div>
+                            <div class="col-4 pr-3 pl-3 pt-2 pb-4" style="text-align: left; font-weight:bolder;" data-container-for="NEWprog"></div>
                         </div>
 
-                        <div style="text-align: left; font-weight:bolder;">Program Table</div>
+                        <div style="text-align: left; font-weight:bolder; font-size:1.2em; text-decoration: underline;">Program Table</div>
 
                         <div class="row">
-                            <div class="col pr-3 pl-3 pt-2 pb-3" style="direction:ltr;" data-container-for="ProgramTable"></div>
+                            <div class="col pr-3 pl-3 pt-2 pb-4" style="direction:ltr;" data-container-for="ProgramTable"></div>
                         </div>
 
-                        <div style="text-align: left; font-weight:bolder;">Function Table</div>
+                        <div style="text-align: left; font-weight:bolder; font-size:1.2em; text-decoration: underline;">Function Table</div>
 
                         <div class="row">
-                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="FunctionTable" ></div>
+                            <div class="col pr-3 pl-3 pt-2 pb-3" style="direction:ltr;" data-container-for="FunctionTable" ></div>
                         </div>
                         
                         <div class="row">
-                            <div class="col pr-3 pl-3 pt-2 pb-3" data-container-for="GroupLeader"></div>
-                            <div class="col pr-3 pl-3 pt-2 pb-3" data-container-for="TeamLeader"></div>
-                            <div class="col pr-3 pl-3 pt-2 pb-3" data-container-for="SE"></div>
+                            <div class="col pr-2 pl-1 pt-2 pb-5" data-container-for="GroupLeader"></div>
+                            <div class="col pr-2 pl-1 pt-2 pb-5" data-container-for="TeamLeader"></div>
+                            <div class="col pr-2 pl-1 pt-2 pb-5" data-container-for="SE"></div>
                         </div>
 
-                        <div style="text-align: left; font-weight: bold;">RACF Authorization</div>
+                        <div style="text-align: left; font-weight:bolder; font-size:1.2em; text-decoration: underline;">RACF Authorization</div>
 
                         <div class="row">
-                            <div class="col pr-3 pl-3 pt-2" data-container-for="Note"></div>
+                            <div class="col pr-3 pl-3 pt-2 pb-3" style="direction: ltr;" data-container-for="Note"></div>
                         </div>
 
                         <div class="row">
-                            <div class="col pr-3 pl-3 pt-2"></div>
-                            <div class="col pr-3 pl-3 pt-2"></div>
-                            <div class="col pr-3 pl-3 pt-2" data-container-for="ImplementedBy"></div>
+                            <div class="col pr-2 pl-1 pt-2"></div>
+                            <div class="col pr-2 pl-1 pt-2"></div>
+                            <div class="col pr-2 pl-1 pt-2" data-container-for="ImplementedBy"></div>
                         </div>
 
                     </div>

@@ -8,7 +8,7 @@ i{ font-size: 16px;  color:  rgb(62, 69, 77);  margin: 0px 8px 0px 8px; }
 /* .procRSBItem{ display: block; width:90% !important;margin: 10px 30px 10px 0px !important;} */
 
 .modal-dialog{overflow-y: initial !important}
-.modal-body{max-height: calc(100vh - 150px); overflow-y: auto;}
+.modal-body{max-height: calc(100vh - 100px); overflow-y: auto;}
 
 .nav-pills .nav-link.active {background-color: rgb(143, 160, 177) !important;}
 
@@ -16,7 +16,10 @@ i{ font-size: 16px;  color:  rgb(62, 69, 77);  margin: 0px 8px 0px 8px; }
 
 .hand{cursor: pointer !important;}
 
-.text-dimmed{ color: rgb(143, 160, 177) !important;}
+.dirRight{direction: rtl !important;}
+.dirLeft{direction: ltr !important;}
+
+.text-dimmed{ color: rgb(145, 147, 148) !important;}
 .fontSize50{ font-size: 0.5em !important;}
 .fontSize75{font-size: 0.75em !important;}
 .fontSize85{font-size: 0.85em !important;}

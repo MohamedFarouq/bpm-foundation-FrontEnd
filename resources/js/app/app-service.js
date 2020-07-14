@@ -2,7 +2,9 @@
     const peService = {
         fetchInboxWIs(username){
             let list = [];
-            list.push(new WorkItem("Periodical_Leave",500, "طلب اجازة دورية" ,"12/5/2019") );
+            list.push(new WorkItem("Template",100, "إجراء توضيحي" ,"12/5/2019") );
+			
+			list.push(new WorkItem("Periodical_Leave",500, "طلب اجازة دورية - شريفة" ,"12/5/2019") );
             
             list.push(new WorkItem("Pension_Advanced",600, "طلب صرف معاش مقدم - أنس" ,"12/6/2019") );
             list.push(new WorkItem("Pension_Replacement_In_Employment",610, "طلب استبدال أثناء الخدمة - أنس" ,"12/6/2019") );

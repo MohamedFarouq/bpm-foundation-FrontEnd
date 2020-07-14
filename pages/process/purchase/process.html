@@ -1,0 +1,177 @@
+<script >
+    
+    /**
+     * WorkItem{
+            workFlowName,workflowID,subject,recieveDate,stepNo,workFlowVersion,workFlowType,stepName,nextStepName,instructions,workObjectID,comments,action,
+            sender,reciever,branch,forms,attachments
+            isLastStep = false;
+    }
+     */
+    
+    
+    
+    process.controller = {
+        errMsg : "",
+        groups : {  
+             //groupFollowUpTLs : ["FollowUp_TLs"],    // groupFollowUpEmps : ["FollowUp_Emps"],
+        },
+    
+        steps : {
+            Purchase_Launch : 'Purchase_Launch',
+            Pur_Req_MngApprove: 'Pur_Req_MngApprove',
+            Pur_Req_Update: 'Pur_Req_Update',
+            Pur_Req_AdminSec: 'Pur_Req_AdminSec',
+            Pur_Req_AdminMng: 'Pur_Req_AdminMng',
+            Pur_Req_AdminSup: 'Pur_Req_AdminSup',
+            Pur_Req_AdminEmp: 'Pur_Req_AdminEmp',
+            Pur_Req_Inquiry: 'Pur_Req_Inquiry',
+            Pur_Req_Finish : 'Pur_Req_Finish',
+            Pur_AI_AdminSup : 'Pur_AI_AdminSup',
+            Pur_AI_AdminSup2 : 'Pur_AI_AdminSup2',
+            Pur_AI_PASup : 'Pur_AI_PASup',
+            Pur_AI_AdminMng : 'Pur_AI_AdminMng',
+            Pur_AI_FinSec : 'Pur_AI_FinSec',
+            Pur_AI_FinSup : 'Pur_AI_FinSup',
+            Pur_AI_FinTL : 'Pur_AI_FinTL',
+            Pur_AI_FinEmp : 'Pur_AI_FinEmp',
+            Pur_AI_FinSupApprove : 'Pur_AI_FinSupApprove',
+            Pur_AI_FinEmpExe : 'Pur_AI_FinEmpExe',
+            Pur_AI_InvDeptSec : 'Pur_AI_InvDeptSec',
+            Pur_AdminSup_UpdateForms : 'Pur_AdminSup_UpdateForms',
+            Pur_UpdateAI_Sup : 'Pur_UpdateAI_Sup',
+            Pur_UpdateAI_Emp : 'Pur_UpdateAI_Emp',
+            Pur_UpdateAI_SupApprove : 'Pur_UpdateAI_SupApprove',
+            Pur_UpdateAI_Mng : 'Pur_UpdateAI_Mng',
+            Pur_AI_InvEmp : 'Pur_AI_InvEmp',
+            Pur_AI_AdminSecCopy : 'Pur_AI_AdminSecCopy',
+            Pur_Req_Originator : 'Pur_Req_Originator',
+            Pur_AI_AdminEmp : 'Pur_AI_AdminEmp',
+            Pur_AI_PAEmp : 'Pur_AI_PAEmp',
+            Pur_AI_PAEmp2 : 'Pur_AI_PAEmp2',
+            Pur_AI_PAMng : 'Pur_AI_PAMng',
+            Pur_AI_PAMng2 : 'Pur_AI_PAMng2',
+
+        },
+    
+        forms : {
+            Form_Purchase : new Form('Form_Purchase', 'نموذج طلب إحتياج','Leave Form'),
+        },
+    
+        defineComponents(){    
+            this.forms.Form_Purchase.addComponent(new DateComponent('FromDate',' التاريخ','From','','') );
+            this.forms.Form_Purchase.addComponent(new TxtComponent('ReqDept','الجهة الطالبة','Total Amount') );
+            this.forms.Form_Purchase.addComponent(new TxtComponent('EmpName','اسم الموظف','Name',5) );
+            this.forms.Form_Purchase.addComponent(new TxtComponent('Subject','الموضوع','Subject') );
+            this.forms.Form_Purchase.addComponent(new NotesComponent('Description','التفصيل','Description',9,300) );
+            this.forms.Form_Purchase.addComponent(new NotesComponent('Notes','ملاحظات الشؤون الإدارية','Notes',4,300) );
+      
+      
+            this.forms.Form_Purchase.addSignature(new Signature('AdminMngName','AdminMngSig','توقيع مدير إدارة الشئون الإدارية','Admin Manager Approval')  );
+            this.forms.Form_Purchase.addSignature(new Signature('ReqMngName','ReqMngSig','توقيع مدير الإدارة','Requested Dept Mng Approval') );
+         },
+    
+        main(){
+            try{
+                this.defineComponents();
+                process.initialize();
+                let stepName = process.workItem.stepName;
+                process.recieversList.loadManager();
+                //process.recieversList.loadDeptManager();
+                //process.branchesList.load()); //to load all branches
+                //process.branchesList.load([1,2,5]); // to load specific branches using branch id
+                //process.actionsList.load([process.actionsList.status, process.actionsList.approved]);
+    
+                
+    
+                if(stepName == this.steps.PerLeave_Launch){   
+                }
+                else if(stepName == this.steps.PerLeave_TLApprove){
+                }
+            
+                this.forms.Form_Purchase.select();
+                this.forms.Form_Purchase.updateComponentsFromEntity();
+    
+            app.renderLabels();
+            process.openProcessModal();
+            process.setWorkFlowIDLabel();
+            }
+            catch(error){ throw error;}
+        },
+    
+        validate(){
+            //validator.markAsInvalidField('myTxt');
+         },    
+    }
+    
+    $(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alertError(error.message); }} );
+    </script>
+    
+    <style>
+        .nav-pills .nav-link.active {
+        background-color: rgb(108, 117, 126) !important;
+    }
+    </style>
+
+    <div class="container-fluid pr-1 pl-1" >
+   
+        <div class="row">
+            <div class="col p-1">
+                <nav>
+                    <div class="nav nav-pills mb-1 ml-auto" id="nav-tab" role="tablist"></div>
+                </nav>
+                <div class="tab-content shadow border border-secondary rounded p-2 bg-white" id="nav-tabContent">
+                    <!-- Form_Purchase-Tab -->
+                    <div class="tab-pane fade show active" id="nav-Form_Purchase" role="tabpanel" aria-labelledby="Form_Purchase-tab">
+                        <!-- the main container for all Form_Purchase controls -->
+                        <div class="container-fluid">
+                  
+                                <div class="row">
+                                    <div class="col p-1 mb-4" data-container-for="Form_Purchase_title"></div>
+                                </div>
+                                <div class="row pt-2">
+                                    <div class="col pr-3 pl-3" data-container-for="FromDate"></div>
+                                    <div class="col pr-3 pl-3"></div>
+                                    <div class="col pr-3 pl-3"></div>
+                                </div>
+
+                            <div class="row pt-2">
+                                <div class="col pr-3 pl-3" data-container-for="ReqDept"></div>
+                                <div class="col pr-3 pl-3"></div>
+                            </div>
+
+                            <div class="row pt-2">
+                                <div class="col pr-3 pl-3" data-container-for="EmpName"></div>
+                                <div class="col pr-3 pl-3"></div>
+                            </div>
+
+                            <div class="row pt-2">
+                                <div class="col pr-3" data-container-for="Subject"></div>
+                            </div>
+
+                            <div class="row pt-2">
+                                <div class="col pr-3 pl-3" data-container-for="Description"></div>
+                            </div>
+
+
+                            <div class="row pt-3 p-1">
+                                <div class="col pr-3 pl-3" data-container-for="Notes"></div>
+                            </div>
+                          
+                            <div class="row pt-3">
+                                <div class="col pr-3 pl-3" data-container-for="ReqMngName"></div>
+                                <div class="col pr-3 pl-3"></div>
+                                <div class="col pr-3 pl-3" data-container-for="AdminMngName"></div>
+                            </div> 
+
+                       </div>
+                    </div>
+                    <div class="text-right">
+                        <hr>
+                        <label id="workflowIDLabel" class="text-danger">مسلسل الاجراء</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    

@@ -375,7 +375,7 @@
 				let html = ` <div class=" form-row">
 							${labelHtml}
 							<div class="col-${12-this.labelSize} p-0">
-								<input type="number" id="${this.id}" class="form-control" >
+								<input type="number" id="${this.id}" class="form-control">
 							</div>
 						</div>
 						`;
@@ -1063,6 +1063,7 @@
 
 	//dynamically
 	const processCatalog = {
+		Template : {id:150,	arabicName : "إجراء توضيحي",engName:"Template",engLabel : "Template Process"},
 		TS_Service : {id:1,	arabicName : "طلب خدمة تشغيل ألي",engName:"TS_Service",engLabel : "TS Service"},
 		Issue_Certificate : {id:2,	arabicName : "طلب استخراج شهادة ثبوتية",engName:"Issue_Certificate", engLabel : "Issue Certificate"},
 		Salary_Ded_Hiers : {id:3,	arabicName : "طلب استقطاع من المرتب لصالح الورثة", engName:"Salary_Ded_Hiers", engLabel : "Salary Deduction for Heirs"},

@@ -42,11 +42,11 @@ process.controller = {
     defineComponents(){    
         this.forms.Form_DocumentRetrievalSuggestions.addComponent(new DateComponent('RequesterDate','التاريخ','Date','','',6) );
 
-        this.forms.Form_DocumentRetrievalSuggestions.addComponent(new TxtComponent('FileNo','رقم الحفظ','FileNo',12) );
+        this.forms.Form_DocumentRetrievalSuggestions.addComponent(new NumberComponent('FileNo','رقم الحفظ','FileNo') );
 
-        this.forms.Form_DocumentRetrievalSuggestions.addComponent(new TxtComponent('SSNNo','رقم الهوية','SSNNo',12) );
+        this.forms.Form_DocumentRetrievalSuggestions.addComponent(new NumberComponent('SSNNo','رقم الهوية','SSNNo') );
 
-        this.forms.Form_DocumentRetrievalSuggestions.addComponent(new TxtComponent('RegNo','رقم التسجيل','RegNo',12) );
+        this.forms.Form_DocumentRetrievalSuggestions.addComponent(new NumberComponent('RegNo','رقم التسجيل','RegNo') );
 
         this.forms.Form_DocumentRetrievalSuggestions.addComponent(new TxtComponent('Department','الإدارة الطالبة للتعديل','Department',100) );
 

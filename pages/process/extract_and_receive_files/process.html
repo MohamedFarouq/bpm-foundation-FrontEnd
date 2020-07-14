@@ -1,0 +1,280 @@
+<script >
+    
+/**
+ * WorkItem{
+        workFlowName,workflowID,subject,recieveDate,stepNo,workFlowVersion,workFlowType,stepName,nextStepName,instructions,workObjectID,comments,action,
+        sender,reciever,branch,forms,attachments
+        isLastStep = false;
+}
+ */
+
+
+
+process.controller = {
+    errMsg : "",
+    groups : {  
+         //groupFollowUpTLs : ["FollowUp_TLs"],    // groupFollowUpEmps : ["FollowUp_Emps"],
+    },
+
+    steps : {
+        PerLeave_Launch : 'PerLeave_Launch',
+        PerLeave_TLApprove: 'PerLeave_TLApprove',
+        PerLeave_SupApprove: 'PerLeave_SupApprove',
+        PerLeave_DeptSec: 'PerLeave_DeptSec',
+        PerLeave_MngApprove: 'PerLeave_MngApprove',
+        PerLeave_Update: 'PerLeave_Update',
+        PerLeave_DDGApprove: 'PerLeave_DDGApprove',
+        PerLeave_DDGSec: 'PerLeave_DDGSec',
+        PerLeave_PersAdminSec : 'PerLeave_PersAdminSec',
+        PerLeave_PersAdminEmp : 'PerLeave_PersAdminEmp',
+        PerLeave_PersAdminTL : 'PerLeave_PersAdminTL',
+        PerLeave_PersAdminSup : 'PerLeave_PersAdminSup',
+        PerLeave_FinSec : 'PerLeave_FinSec',
+        PerLeave_FinSup : 'PerLeave_FinSup',
+        PerLeave_FinTL : 'PerLeave_FinTL',
+        PerLeave_FinEmp : 'PerLeave_FinEmp',
+    },
+
+    forms : {
+        Form_ExtractAndReceiveFiles : new Form('Form_ExtractAndReceiveFiles','نموذج استخراج واستلام ملفات','Extract And eceive Files'),
+    },
+
+    defineComponents(){    
+        this.forms.Form_ExtractAndReceiveFiles.addComponent(new DateComponent('RequesterDate','التاريخ','Date','','',6) );
+
+        this.forms.Form_ExtractAndReceiveFiles.addComponent(new TxtComponent('From','مـــن','From',150) );
+
+        this.forms.Form_ExtractAndReceiveFiles.addComponent(new TxtComponent('FileTo','إلــى','To',150) );
+
+        this.forms.Form_ExtractAndReceiveFiles.addComponent(new TxtComponent('MainEmp','الموظف المختص','MainEmp',80) );
+
+        this.forms.Form_ExtractAndReceiveFiles.addComponent(new DropDownListComponent('RequestType','نوع الطلب','Request Type',[new Option('','','0') ,new Option('حفظ ملفات','Save File','1'),new Option('مؤقتة ويتم ارجاعها','Temprory File','2')]) );
+
+        this.forms.Form_ExtractAndReceiveFiles.addComponent(new DropDownListComponent('Status','بصفتـه','Status',[new Option('','','0') ,new Option('استخراج ملفات','Extract File','1'),new Option('دائمة ويحتفظ بها','Permanent File','2')]) );
+
+        this.forms.Form_ExtractAndReceiveFiles.addComponent(new DateComponent('StatusDate','سيتم إرجاعها بتاريخ','Status Date','','',6) ),
+
+        this.forms.Form_ExtractAndReceiveFiles.addComponent(new TableComponent('RecieveTable',[
+                                                                                        new TableColTxt('المستلم','Recieve'),
+                                                                                    ], 6
+                                                                                    ) );
+
+        this.forms.Form_ExtractAndReceiveFiles.addComponent(new CheckBoxComponent('Document','مستندات','Documents') );
+
+        /*this.forms.Form_ExtractAndReceiveFiles.addComponent(new TxtComponent('DocumentNo','عدد المستندات','Document No',5) );*/
+
+        this.forms.Form_ExtractAndReceiveFiles.addComponent(new TxtBetweenPlainLabelsComponent('DocumentNo','عـدد','Number',20,'مستـنـد','Documents',1) );
+
+        this.forms.Form_ExtractAndReceiveFiles.addComponent(new CheckBoxComponent('BoxFile','بوكس فايل','Box File') );
+
+        /*this.forms.Form_ExtractAndReceiveFiles.addComponent(new TxtComponent('BoxFileNo','عدد بوكس فايل','Box File No',5) );*/
+
+        this.forms.Form_ExtractAndReceiveFiles.addComponent(new TxtBetweenPlainLabelsComponent('BoxFileNo','عـدد','Number',20,'بوكس فايل','Box files') );
+
+        this.forms.Form_ExtractAndReceiveFiles.addComponent(new CheckBoxComponent('FileCarton','كرتون ملفات','File Carton') );
+
+        /*this.forms.Form_ExtractAndReceiveFiles.addComponent(new TxtComponent('FileCartonNo','عدد الكرتون','File Carton No',5) );*/
+
+        this.forms.Form_ExtractAndReceiveFiles.addComponent(new TxtBetweenPlainLabelsComponent('FileCartonNo','عـدد','Number',20,'كرتون ','Carton') );
+
+        this.forms.Form_ExtractAndReceiveFiles.addComponent(new NotesComponent('Notes','المــلاحظــات','Notes',4,300) );
+
+        this.forms.Form_ExtractAndReceiveFiles.addSignature(new Signature('ReqDept','ReqName','ReqSig','اعتماد الإدارة الطالبة','Request Dept Approval')  );
+        this.forms.Form_ExtractAndReceiveFiles.addSignature(new Signature('OpsEmp','OpsName','OpsSig','اعتماد موظف الخدمات','OPS Emp Approval')  );
+        this.forms.Form_ExtractAndReceiveFiles.addSignature(new Signature('DeptMng','MngName','MngSig','اعتماد إدارة الشؤون الإدارية','Approval')  );
+
+    },
+
+    main(){
+        try{
+            this.defineComponents();
+            process.initialize();
+            let stepName = process.workItem.stepName;
+            process.recieversList.loadManager();
+
+
+            if(stepName == this.steps.PerLeave_Launch){   
+            }
+            else if(stepName == this.steps.PerLeave_TLApprove){
+            }
+        
+            
+            /* component manipulation */ 
+                //this.forms.Form_ExtractAndReceiveFiles.components.RequesterName.setValue('ABC');
+                //this.forms.Form_ExtractAndReceiveFiles.components.requesterName.disable();
+                
+                //this.forms.Form_ExtractAndReceiveFiles.components.FromDate.setMinDate('2020-05-01');
+                //this.forms.Form_ExtractAndReceiveFiles.components.FromDate.setMaxDate('2020-05-10');
+                
+                //this.forms.Form_ExtractAndReceiveFiles.components.VactionType.setValue(2);//give it the value of the option object to be selected
+                //alert(this.forms.Form_ExtractAndReceiveFiles.components.VactionType.getText()); // retrieves the shown selected text
+                //this.forms.Form_ExtractAndReceiveFiles.components.VactionType.setOptions([new Option('','','')]); //load different options
+                //this.forms.Form_ExtractAndReceiveFiles.components.VactionType.addOption( new Option('x','x','3') );
+                //this.forms.Form_ExtractAndReceiveFiles.components.VactionType.addOption(new Option('y','y','4') );
+                //this.forms.Form_ExtractAndReceiveFiles.components.VactionType.setValue('3');
+                //this.forms.Form_ExtractAndReceiveFiles.components.VactionType.removeOptionByValue('4');
+                
+                //this.forms.Form_ExtractAndReceiveFiles.components.IsPaid.disable();
+                //this.forms.Form_ExtractAndReceiveFiles.components.IsPaid.setValue(true);
+                //this.forms.Form_ExtractAndReceiveFiles.components.IsPaid.check();
+                //this.forms.Form_ExtractAndReceiveFiles.components.IsPaid.uncheck();
+                
+                //this.forms.Form_ExtractAndReceiveFiles.components.SupName.setValue('محمد فاروق');
+                // this.forms.Form_ExtractAndReceiveFiles.components.SupSig.enable();
+                
+
+                //this.forms.Form_ExtractAndReceiveFiles.components.Attachments.setValue('مرفق 1*مرفق 3*');
+                //this.forms.Form_ExtractAndReceiveFiles.components.Attachments.disable();
+                //this.forms.Form_ExtractAndReceiveFiles.components.Attachments.enable();
+                
+
+
+            
+            /* form manipulation */
+                //this.forms.Form_ExtractAndReceiveFiles.enable();
+                //this.forms.Form_ExtractAndReceiveFiles.disable();
+                this.forms.Form_ExtractAndReceiveFiles.select();
+                this.forms.Form_ExtractAndReceiveFiles.updateComponentsFromEntity();
+                
+        
+            
+
+
+            app.renderLabels();
+            process.openProcessModal();
+            process.setWorkFlowIDLabel();
+        }
+        catch(error){ throw error;}
+    },
+
+    validate(){
+        //validator.markAsInvalidField('myTxt');
+     },
+
+    send(){
+       
+    
+    // testSignature(){
+    //     util.viewObjectContent(this.forms.Form_RACFSecutiyForm.components.SupSignature.getSigner()); 
+    // },
+
+        
+     },
+
+
+
+}
+
+$(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alertError(error.message); }} );
+</script>
+
+<style>
+    .nav-pills .nav-link.active {
+    background-color: rgb(108, 117, 126) !important;
+}
+</style>
+
+<div class="container-fluid pr-1 pl-1" >
+    <div class="row">
+        <div class="col p-1 " >
+            <nav>
+                <div class="nav nav-pills mb-1 ml-auto" id="nav-tab" role="tablist"></div>
+            </nav>
+            <div class="tab-content shadow border border-secondary rounded p-2 bg-white" id="nav-tabContent">
+                <!-- Form_ExtractAndReceiveFiles-Tab -->
+                <div class="tab-pane show active" id="nav-Form_ExtractAndReceiveFiles" role="tabpanel" aria-labelledby="Form_ExtractAndReceiveFiles-tab">
+                    <!-- the main container for all Form_ExtractAndReceiveFiles controls -->
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col p-1 mb-4" data-container-for="Form_ExtractAndReceiveFiles_title"></div>
+                        </div>
+
+                        <!--<div class="row p-1">
+                            <div class="col-4 pr-3 pl-3" data-container-for="RequesterDate"></div>
+                            <div class="col-8 pr-3 pl-3"></div>
+                        </div>-->
+
+                        <div class="row p-1">
+                            <div class="col-6 pr-3 pl-3" data-container-for="From"></div>
+                            <div class="col-2 pr-3 pl-3"></div>
+                            <div class="col-4 pr-3 pl-3" data-container-for="RequesterDate"></div>
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" data-container-for="FileTo"></div>
+                            <div class="col pr-3 pl-3"></div>
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3 pb-4" data-container-for="MainEmp"></div>
+                            <div class="col pr-3 pl-3 pb-4"></div>
+                        </div>
+
+                        <div style="text-align: right; font-weight: bold;">تحية طيبة وبعــد</div>
+
+                        <div style="text-align: right; font-weight: bold;">يرجى التفضل بالعلم بأننا نفوض السادة التالية أسماؤهم لاستخراج واستلام الملفات المذكورة أدناه</div>
+
+                        <div class="row p-1">
+                            <div class="col-6 pr-3 pl-3 pt-3" data-container-for="RequestType"></div>
+                            <div class="col-2 pr-3 pl-3 pt-3"></div>
+                            <div class="col-4 pr-3 pl-3 pt-3"></div>
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col-6 pr-3 pl-3" data-container-for="Status"></div>
+                            <div class="col-2 pr-3 pl-3"></div>
+                            <div class="col-4 pr-3 pl-3" data-container-for="StatusDate"></div>
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3 pt-2 pb-3" data-container-for="RecieveTable"></div>
+                            <div class="col pr-3 pl-3 pt-2 pb-3"></div>
+                        </div>
+
+                        <div style="text-align: right; font-weight: bold;">نوع الملفــات</div>
+
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" data-container-for="Explain"></div>
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col-2 pr-3 pl-3" data-container-for="Document"></div>
+                            <div class="col-3 pr-3 pl-3" data-container-for="DocumentNo"></div>
+                            <div class="col-7 pr-3 pl-3"></div>
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col-2 pr-3 pl-3" data-container-for="BoxFile"></div>
+                            <div class="col-3 pr-3 pl-3" data-container-for="BoxFileNo"></div>
+                            <div class="col-7 pr-3 pl-3"></div>
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col-2 pr-3 pl-3 pt-2 pb-5" data-container-for="FileCarton"></div>
+                            <div class="col-3 pr-3 pl-3 pt-2 pb-5" data-container-for="FileCartonNo"></div>
+                            <div class="col-7 pr-3 pl-3 pt-2 pb-5"></div>
+                        </div>
+
+                        <div style="text-align: center; color: red; font-weight:bolder; font-size:1.2em; text-decoration: underline;">خاص بإدارة الشؤون الإدارية</div>
+
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3 pt-2" data-container-for="Notes"></div>
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col pr-2 pl-1 pt-2" data-container-for="ReqDept"></div>
+                            <div class="col pr-2 pl-1 pt-2" data-container-for="OpsEmp"></div>
+                            <div class="col pr-2 pl-1 pt-2" data-container-for="DeptMng"></div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="text-right">
+                    <hr>
+                    <label id="workflowIDLabel" class="text-danger">مسلسل الاجراء</label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
