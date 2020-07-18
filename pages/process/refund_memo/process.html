@@ -1,0 +1,447 @@
+<script >
+    
+/**
+ * WorkItem{
+        workFlowName,workflowID,subject,recieveDate,stepNo,workFlowVersion,workFlowType,stepName,nextStepName,instructions,workObjectID,comments,action,
+        sender,reciever,branch,forms,attachments
+        isLastStep = false;
+}
+ */
+
+
+
+
+process.controller = {
+    errMsg : "",
+    groups : {  
+         //groupFollowUpTLs : ["FollowUp_TLs"],    // groupFollowUpEmps : ["FollowUp_Emps"],
+    },
+
+    steps : {
+        PerLeave_Launch : 'PerLeave_Launch',
+        PerLeave_TLApprove: 'PerLeave_TLApprove',
+        PerLeave_SupApprove: 'PerLeave_SupApprove',
+        PerLeave_DeptSec: 'PerLeave_DeptSec',
+        PerLeave_MngApprove: 'PerLeave_MngApprove',
+        PerLeave_Update: 'PerLeave_Update',
+        PerLeave_DDGApprove: 'PerLeave_DDGApprove',
+        PerLeave_DDGSec: 'PerLeave_DDGSec',
+        PerLeave_PersAdminSec : 'PerLeave_PersAdminSec',
+        PerLeave_PersAdminEmp : 'PerLeave_PersAdminEmp',
+        PerLeave_PersAdminTL : 'PerLeave_PersAdminTL',
+        PerLeave_PersAdminSup : 'PerLeave_PersAdminSup',
+        PerLeave_FinSec : 'PerLeave_FinSec',
+        PerLeave_FinSup : 'PerLeave_FinSup',
+        PerLeave_FinTL : 'PerLeave_FinTL',
+        PerLeave_FinEmp : 'PerLeave_FinEmp',
+    },
+
+    forms : {
+        Form_RefundInqMemo: new Form('Form_RefundInqMemo','مذكرة مبالغ مرتجعة','Refund Inq Memo'),
+        Form_RefundMemo : new Form('Form_RefundMemo','مذكرة تصفية مبالغ مرتجعة','Refund Memo'),
+        Form_ConfirmPayForRefundMemo : new Form('Form_ConfirmPayForRefundMemo','نمـوذج تأكيـد عمليـة الصـرف','Confirm Payment For Refund Memo'),
+    },
+
+    defineComponents(){ 
+
+        var dropDownListOptions = [ new Option('','',''), 
+                                    new Option('25','25','opt1Value'), 
+                                    new Option('48','48','opt2Value')
+                                ];
+
+        var dropDown = [ new Option('','',''), 
+                                    new Option('شؤوون القصر','Minors Affairs','opt1Value'), 
+                                    new Option('وزارة العدل','Ministry of justice','opt2Value'),
+                                    new Option('الرعاية السكنية','Residential care','opt2Value'),
+                                    new Option('بنك الائتمان','Credit Bank','opt2Value'),
+                                    new Option('بنك الكويت المركزي','Central Bank of Kuwait','opt2Value'),
+                                    new Option('مؤسسة التأمينات الإجتماعية','The Public Instituution for Social Security','opt1Value'), 
+                                    new Option('بنك الكويت الوطني','National bank of kuwait','opt2Value'),
+                                    new Option('البنك التجاري الكويتي','Commerical Bank of Kuwait','opt2Value'),
+                                    new Option('بنك الخليج','Gulf Bank of kuwait','opt2Value'),
+                                    new Option('البنك الأهلي الكويتي','AlAhli Bank of Kuwait','opt2Value'),
+                                    new Option('البنك الأهلي المتحد','AlAhli United Bank','opt1Value'), 
+                                    new Option('بنك الكويت الدولي','Kuwait International Bank','opt2Value'),
+                                    new Option('بنك الائتمان الكويتي','Kuwait Credit Bank','opt2Value'),
+                                    new Option('تحويلات للخارج','Interantiona Transfer','opt2Value'),
+                                    new Option('بنك برقان','Burgan Bank','opt1Value'), 
+                                    new Option('بنك البحرين والكويت','Bahrain and Kuwait Bank','opt2Value'),
+                                    new Option('بيت التمويل الكويتي','Kuwait Finance House','opt2Value'),
+                                    new Option('بنك بوبيان','Boubyan Bank','opt2Value'),
+                                    new Option('بنك الكويت الصناعي','Industrial Bank Of Kuwait','opt1Value'), 
+                                    new Option('بنك أبوظبي الأول','First Abu Dhabi Bank','opt2Value'),
+                                    new Option('البنك الفرنسي','Fransi Bank','opt2Value'),
+                                    new Option('سـيتي بنـك','Citi Bank','opt2Value'),
+                                    new Option('بنك الدوحة','Doha Bank','opt1Value'), 
+                                    new Option('الهيئة العامة لشؤوون القصر','The Public Authority For Minor Affairs','opt2Value'),
+                                    new Option('مصرف الراجحي','Alrajhi Bank','opt2Value'),
+                                    new Option('HSBC','HSBC','opt2Value'),
+                                    new Option('بنك وربه','Warba Bank','opt1Value'), 
+                                    new Option('بنك قطر الوطني','Qatar Nationa Bank','opt2Value')
+                                ];
+
+         /*Form_RefundInqMemo*/
+        this.forms.Form_RefundInqMemo.addComponent(new DateComponent('RequesterDate','التـاريخ','Date','','') );
+        this.forms.Form_RefundInqMemo.addComponent(new TxtComponent('From','مــن','From',150) );
+
+        this.forms.Form_RefundInqMemo.addComponent(new DropDownListComponent('ToList','إلــى','From',[new Option('','','0') ,new Option('إدارة الاشتراكات','Contribution Dept','1') , 
+        new Option('إدارة شؤون المستحقين','Beneficiary Dept','2'),new Option('إدارة شؤون أصحاب المعاشات','Pensioners Dept','3'),new Option('مراقبة التأمين ضد البطالة','Unemployment Insurance dept','4')]) );
+
+        this.forms.Form_RefundInqMemo.addComponent(new TxtComponent('Topic','الموضـوع','Topic',150) );
+
+        this.forms.Form_RefundInqMemo.addComponent(new TxtComponent('CivilID','الرقم المدني','Civil ID',12) );
+
+        this.forms.Form_RefundInqMemo.addComponent(new TxtComponent('SSNNo','رقم الهوية','SSNNo',12) );
+
+        this.forms.Form_RefundInqMemo.addComponent(new TxtComponent('ClientName','الاســــم','Client Name',80) );
+
+        this.forms.Form_RefundInqMemo.addComponent(new TxtComponent('FileNo','رقم الحفظ','FileNo',12) );
+
+        this.forms.Form_RefundInqMemo.addComponent(new DropDownListBetweenPlainLabelsComponent('Amount','تم استلام مبالغ مرتجعة مـن:','Receive Refund amount',dropDown,' ','') );
+
+        this.forms.Form_RefundInqMemo.addComponent(new DropDownListBetweenPlainLabelsComponent('Account','وتم تعلية المبلغ بحساب معلق مميز','Raising the amount',dropDownListOptions,'','') );
+
+        this.forms.Form_RefundInqMemo.addComponent(new TxtBetweenPlainLabelsComponent('Value','بقيمة:','Value',20,'للمـذكور أعلاه.','Mentioned Above') );
+
+        this.forms.Form_RefundInqMemo.addComponent(new TxtComponent('RegulatoryFile','الملف الرقابي','Topic',13) );
+
+        this.forms.Form_RefundInqMemo.addComponent(new DateComponent('SuspensionDate','تاريخ التعليق','Civil ID','','') );
+
+        this.forms.Form_RefundInqMemo.addComponent(new NumberComponent('SerialRecord','مسلسل السجل','SSNNo') );
+        
+        this.forms.Form_RefundInqMemo.addSignature(new Signature('Accountnt','AccountantName','AccountantSig','توقيع المحاســب','Accountant') ); 
+        this.forms.Form_RefundInqMemo.addSignature(new Signature('Reviewr','ReciwerName','ReviwerSig','توقيع المراجــع','Reviwer') );
+        this.forms.Form_RefundInqMemo.addSignature(new Signature('Approv','AprrovalName','ApprovalSig','الاعتمـــاد','Approval') );
+
+
+
+        /*Form_RefundMemo*/
+        this.forms.Form_RefundMemo.addComponent(new DateComponent('RequesterDate','التاريخ','Date','','',6) );
+        this.forms.Form_RefundMemo.addComponent(new NumberComponent('CivilID','الـرقم المدني','Civil ID') );
+
+        this.forms.Form_RefundMemo.addComponent(new TxtComponent('From','مـــن','From',150) );
+        this.forms.Form_RefundMemo.addComponent(new NumberComponent('FileNo','رقـم الحفظ','FileNo') );
+
+        this.forms.Form_RefundMemo.addComponent(new TxtComponent('ToList','إلــى','To',150) );
+        this.forms.Form_RefundMemo.addComponent(new NumberComponent('SSNNo','رقـم الهوية','SSNNo') );
+
+        this.forms.Form_RefundMemo.addComponent(new TxtComponent('Subject','الموضوع','Subject',200) );
+        this.forms.Form_RefundMemo.addComponent(new TxtComponent('ClientName','الاســــم','Client Name',80) );
+
+        this.forms.Form_RefundMemo.addComponent(new TxtBetweenPlainLabelsComponent('WithDraw','يرجى سحب المبلغ الموجود في الحساب المعلق رقم','WithDraw the amount that suspend',20,'','') );
+        this.forms.Form_RefundMemo.addComponent(new TxtBetweenPlainLabelsComponent('Price','ومبلغه','Price',20,'','') );
+
+        this.forms.Form_RefundMemo.addComponent(new DropDownListComponent('DoList','وإجراء الآتي','',[new Option('','','0') ,new Option('صرف المبلغ','Amount Exchange','1') , 
+        new Option('سحب المبلغ وتسديده في سجل رد المبالغ','with draw amount and pay it','2'),new Option('سحب المبلغ ورده لبنوده لعدم الاستحقاق','with draw amount and return not merit','3'),
+        new Option('سحب المبلغ ورده لبنوده لحين مراجعة صاحب العلاقة وصرفه له مرة أخرى','Uwith draw amount until contact relevant owner','4'),new Option('يرجى سحب المبلغ تعليته لدى كل من','with draw amount because','5')],3));
+
+        this.forms.Form_RefundMemo.addComponent(new NotesComponent('Note','الملاحظـــــات','Note',4,300) );
+
+        this.forms.Form_RefundMemo.addComponent(new NumberComponent('Civil','الـرقم المدني','Civil ID') );
+        this.forms.Form_RefundMemo.addComponent(new NumberComponent('ExchangeAmount','مبلغ الصرف','Exchange Amount',7) );
+
+        this.forms.Form_RefundMemo.addComponent(new NumberComponent('SSN','رقــم الهوية','SSNNo') );
+        this.forms.Form_RefundMemo.addComponent(new TxtComponent('AccountNum','رقـم الحساب','Account Number',30) );
+
+        this.forms.Form_RefundMemo.addComponent(new TxtComponent('Name','الاســــم','Client Name',80) );
+
+        this.forms.Form_RefundMemo.addSignature(new Signature('Accountant','AccName','AccSig','توقيع المحاســب','Accountant') ); 
+        this.forms.Form_RefundMemo.addSignature(new Signature('Reviewer','ReviewName','ReviewSig','توقيع المراجــع','Reviwer') );
+        this.forms.Form_RefundMemo.addSignature(new Signature('Approval','ApprovalName','ApprovalSig','الاعتمـــاد','Approval') );
+
+        this.forms.Form_RefundMemo.addComponent(new NotesComponent('FinanceDept','خاص بالإدارة المـالية','Finance Department',4,300) );
+
+        this.forms.Form_RefundMemo.addSignature(new Signature('Accountan','AccName','AccSig','توقيع المحاســب','Accountant') ); 
+        this.forms.Form_RefundMemo.addSignature(new Signature('Review','ReviewName','ReviewSig','توقيع المراجــع','Reviwer') );
+        this.forms.Form_RefundMemo.addSignature(new Signature('Approve','ApprovalName','ApprovalSig','الاعتمـــاد','Approval') );
+
+        /*Form_ConfirmPayForRefundMemo*/
+        this.forms.Form_ConfirmPayForRefundMemo.addComponent(new NotesComponent('AccountantNotes','ملاحظـــات المحاســب','Accountant Notes',4,300) );
+        
+        this.forms.Form_ConfirmPayForRefundMemo.addComponent(new NotesComponent('ReviwerNotes','ملاحظـــات المراجــع','Reviwer Notes',4,300) );
+
+        this.forms.Form_ConfirmPayForRefundMemo.addSignature(new Signature('Acc','AccName','SESig','توقيع المحاســب','Accountant') ); 
+        this.forms.Form_ConfirmPayForRefundMemo.addSignature(new Signature('viewer','ReviwerName','ReviwerSig','توقيع المراجــع','Reviwer') );
+        
+    },
+
+    main(){
+        try{
+            this.defineComponents();
+            process.initialize();
+            let stepName = process.workItem.stepName
+            process.recieversList.loadManager();
+
+            
+
+            if(stepName == this.steps.PerLeave_Launch){   
+            }
+            else if(stepName == this.steps.PerLeave_TLApprove){
+            }
+        
+            
+            
+            /* form manipulation */
+                //this.forms.Form_RefundInqMemo.enable();
+                //this.forms.Form_RefundInqMemo.disable();
+                this.forms.Form_RefundInqMemo.select();
+                this.forms.Form_RefundInqMemo.updateComponentsFromEntity();
+                
+        
+
+
+
+
+            app.renderLabels();
+            process.openProcessModal();
+            process.setWorkFlowIDLabel();
+        }
+        catch(error){ throw error;}
+    },
+
+    validate(){
+        //validator.markAsInvalidField('myTxt');
+     },
+
+    send(){ },
+
+    
+    // testSignature(){
+    //     util.viewObjectContent(this.forms.Form_RefundInqMemo.components.SupSignature.getSigner()); 
+    // },
+
+
+}
+
+$(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alertError(error.message); }} );
+</script>
+
+<style>
+    .nav-pills .nav-link.active {
+    background-color: rgb(108, 117, 126) !important;
+}
+</style>
+
+<div class="container-fluid pr-1 pl-1" >
+    <div class="row">
+        <div class="col p-1 " >
+            <nav>
+                <div class="nav nav-pills mb-1 ml-auto" id="nav-tab" role="tablist"></div>
+            </nav>
+            <div class="tab-content shadow border border-secondary rounded p-2 bg-white" id="nav-tabContent">
+                <!-- Form_RefundInqMemo -->
+                <div class="tab-pane fade show active" id="nav-Form_RefundInqMemo" role="tabpanel" aria-labelledby="Form_RefundInqMemo-tab">
+                    <!-- the main container for all Form_RefundInqMemo controls -->
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col p-1 mb-4" data-container-for="Form_RefundInqMemo_title"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-6 pr-3 pl-3 pt-2" data-container-for="From"></div>
+                            <div class="col-2 pr-3 pl-3 pt-2"></div>
+                            <div class="col-4 pr-3 pl-3 pt-2" data-container-for="RequesterDate"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-6 pr-3 pl-3 pt-2" data-container-for="ToList"></div>
+                            <div class="col-2 pr-3 pl-3 pt-2"></div>
+                            <div class="col-4 pr-3 pl-3 pt-2"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-6 pr-3 pl-3 pt-2 pb-3" data-container-for="Topic"></div>
+                            <div class="col-2 pr-3 pl-3 pt-2 pb-3"></div>
+                            <div class="col-4 pr-3 pl-3 pt-2 pb-3"></div>
+                        </div>
+
+                        <div style="text-align: right; font-weight:bolder; font-size:1.2em; text-decoration: underline;">وفقـاً للبيانات:</div>
+
+                        <div class="row">
+                            <div class="col-6 pr-3 pl-3 pt-2" data-container-for="CivilID"></div>
+                            <div class="col-2 pr-3 pl-3 pt-2"></div>
+                            <div class="col-4 pr-3 pl-3 pt-2"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-6 pr-3 pl-3 pt-2" data-container-for="SSNNo"></div>
+                            <div class="col-2 pr-3 pl-3 pt-2"></div>
+                            <div class="col-4 pr-3 pl-3 pt-2"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-6 pr-3 pl-3 pt-2" data-container-for="ClientName"></div>
+                            <div class="col-2 pr-3 pl-3 pt-2"></div>
+                            <div class="col-4 pr-3 pl-3 pt-2"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-6 pr-3 pl-3 pt-2 pb-3" data-container-for="FileNo"></div>
+                            <div class="col-2 pr-3 pl-3 pt-2 pb-3"></div>
+                            <div class="col-4 pr-3 pl-3 pt-2 pb-3"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-8 pr-3 pl-3 pt-2" data-container-for="Amount"></div>
+                            <div class="col-4 pr-3 pl-3 pt-2"></div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-4 pr-3 pl-3 pt-2 pb-2" data-container-for="Account"></div>
+                            <div class="col-4 pr-3 pl-3 pt-2 pb-2" data-container-for="Value"></div>
+                            <div class="col-4 pr-3 pl-3 pt-2 pb-2"></div>
+                        </div>
+
+                        <div style="text-align: right; color:grey">يـرجى الإيعاز لمن يلزم بإفادتنا عما يتم في هذا الشأن.</div>
+
+                        <div class="row">
+                            <div class="col-6 pr-3 pl-3 pt-4" data-container-for="RegulatoryFile"></div>
+                            <div class="col-2 pr-3 pl-3 pt-4"></div>
+                            <div class="col-4 pr-3 pl-3 pt-4"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-6 pr-3 pl-3 pt-2" data-container-for="SuspensionDate"></div>
+                            <div class="col-2 pr-3 pl-3 pt-2"></div>
+                            <div class="col-4 pr-3 pl-3 pt-2"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-6 pr-3 pl-3 pt-2 pb-4" data-container-for="SerialRecord"></div>
+                            <div class="col-2 pr-3 pl-3 pt-2 pb-4"></div>
+                            <div class="col-4 pr-3 pl-3 pt-2 pb-4"></div>
+                        </div>
+
+                        <div style="text-align: right; font-weight:bolder; font-size:1.2em;">وتفضلو بقبول فائق الاحترام,,,</div>
+
+                        <div class="row">
+                            <div class="col pr-2 pl-1 pt-4" data-container-for="Accountnt"></div>
+                            <div class="col pr-2 pl-1 pt-4" data-container-for="Reviewr"></div>
+                            <div class="col pr-2 pl-1 pt-4" data-container-for="Approv"></div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Form_RefundMemo -->
+                <div class="tab-pane" id="nav-Form_RefundMemo" role="tabpanel" aria-labelledby="Form_RefundMemo-tab">
+                    <!-- the main container for all Form_RefundMemo controls -->
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col p-1 mb-4" data-container-for="Form_RefundMemo_title"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-4 pr-3 pl-3 pt-2" data-container-for="RequesterDate"></div>
+                            <div class="col-2 pr-3 pl-3 pt-2"></div>
+                            <div class="col-6 pr-3 pl-3 pt-2" data-container-for="CivilID"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2" data-container-for="From"></div>
+                            <div class="col pr-3 pl-3 pt-2" data-container-for="FileNo"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2" data-container-for="ToList"></div>
+                            <div class="col pr-3 pl-3 pt-2" data-container-for="SSNNo"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2 pb-3" data-container-for="Subject"></div>
+                            <div class="col pr-3 pl-3 pt-2 pb-3" data-container-for="ClientName"></div>
+                        </div>
+
+                        <div style="text-align: right; font-weight:bolder; font-size:1.2em;">تحـية طيبة وبعـد,,</div>
+                      
+                        <div class="row">
+                            <div class="col-1 pr-3 pl-3 pt-2"></div>
+                            <div class="col-7 pr-3 pl-3 pt-2" data-container-for="WithDraw"></div>
+                            <div class="col-3 pr-3 pl-3 pt-2" data-container-for="Price"></div>
+                            <div class="col-1 pr-3 pl-3 pt-2"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-1 pr-3 pl-3 pt-2"></div>
+                            <div class="col-10 pr-3 pl-3 pt-2" data-container-for="DoList"></div>
+                            <div class="col-1 pr-3 pl-3 pt-2"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-1 pr-3 pl-3 pt-2"></div>
+                            <div class="col-10 pr-3 pl-3 pt-2 pb-2" data-container-for="Note"></div>
+                            <div class="col-1 pr-3 pl-3 pt-2"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-5 pr-3 pl-3 pt-2" data-container-for="Civil"></div>
+                            <div class="col-4 pr-3 pl-3 pt-2" data-container-for="ExchangeAmount"></div>
+                            <div class="col-3 pr-3 pl-3 pt-2"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-5 pr-3 pl-3 pt-2" data-container-for="SSN"></div>
+                            <div class="col-7 pr-3 pl-3 pt-2" data-container-for="AccountNum"></div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-5 pr-3 pl-3 pt-2 pb-3" data-container-for="Name"></div>
+                            <div class="col-4 pr-3 pl-3 pt-2 pb-3"></div>
+                            <div class="col-3 pr-3 pl-3 pt-2 pb-3"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-2 pl-1 pt-2 pb-2 pb-4" data-container-for="Accountant"></div>
+                            <div class="col pr-2 pl-1 pt-2 pb-2 pb-4" data-container-for="Reviewer"></div>
+                            <div class="col pr-2 pl-1 pt-2 pb-2 pb-4" data-container-for="Approval"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2 pb-3" style="text-align: center;" data-container-for="FinanceDept"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-2 pl-1 pt-2 pb-2" data-container-for="Accountan"></div>
+                            <div class="col pr-2 pl-1 pt-2 pb-2" data-container-for="Review"></div>
+                            <div class="col pr-2 pl-1 pt-2 pb-2" data-container-for="Approve"></div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <!-- Form_ConfirmPayForRefundMemo -->
+                <div class="tab-pane" id="nav-Form_ConfirmPayForRefundMemo" role="tabpanel" aria-labelledby="Form_ConfirmPayForRefundMemo-tab">
+                    <!-- the main container for all Form_ConfirmPayForRefundMemo controls -->
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col p-1 mb-4" data-container-for="Form_ConfirmPayForRefundMemo_title"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-5 pb-5" data-container-for="AccountantNotes"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-5 pb-5" data-container-for="ReviwerNotes"></div>
+                        </div>
+                      
+                        <div class="row">
+                            <div class="col-5 pr-2 pl-1 pt-3" data-container-for="Acc"></div>
+                            <div class="col-2 pr-2 pl-1 pt-3"></div>
+                            <div class="col-5 pr-2 pl-1 pt-3" data-container-for="viewer"></div>
+                        </div>
+                        
+                    </div>
+                </div>
+
+
+                <div class="text-right">
+                    <hr>
+                    <label id="workflowIDLabel" class="text-danger">مسلسل الاجراء</label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

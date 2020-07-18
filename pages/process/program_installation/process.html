@@ -48,22 +48,22 @@ process.controller = {
         this.forms.Form_ProgramInstallation.addComponent(new NumberComponent('MaximoNo','Maximo No','Maximo No') );
 
         this.forms.Form_ProgramInstallation.addComponent(new DateComponent('MemoDate','Memo Date','Memo Date','','') );
-        this.forms.Form_ProgramInstallation.addComponent(new NumberComponent('SMRNO','SMRs No','SMRs No',2) );
+        this.forms.Form_ProgramInstallation.addComponent(new TxtComponent('SMRNO','SMRs No','SMRs No',40,2) );
 
         this.forms.Form_ProgramInstallation.addComponent(new DropDownListComponent('RequestType','RequestType','RequestType',[new Option('','','0') ,new Option('Install New','Install New','1') , new Option('Update','Update','2')]) );
         this.forms.Form_ProgramInstallation.addComponent(new DropDownListComponent('To','To','To',[new Option('','','0') ,new Option('LAN Section','LAN Section','1') , new Option('Computer Services Sup','Computer Services Sup','2')],2) );
 
-        this.forms.Form_ProgramInstallation.addComponent(new TxtComponent('ProgName','Program/Package Names','Program/Package Names',100) );
-        this.forms.Form_ProgramInstallation.addComponent(new TxtComponent('SrcDes','Source Destination','Source Destination',100) );
-        this.forms.Form_ProgramInstallation.addComponent(new TxtComponent('InstallLocation','Install into location','Install into location',100) );
+        this.forms.Form_ProgramInstallation.addComponent(new TxtComponent('ProgName','Program/Package Names','Program/Package Names',100,3) );
+        this.forms.Form_ProgramInstallation.addComponent(new TxtComponent('SrcDes','Source Destination','Source Destination',100,3) );
+        this.forms.Form_ProgramInstallation.addComponent(new TxtComponent('InstallLocation','Install into location','Install into location',100,3) );
 
-        this.forms.Form_ProgramInstallation.addComponent(new TxtComponent('CrystalRepName','Crystal Report Names','Crystal Report Names',100) );
-        this.forms.Form_ProgramInstallation.addComponent(new TxtComponent('SourceDes','Source Destination','Source Destination',100) );
-        this.forms.Form_ProgramInstallation.addComponent(new TxtComponent('InstallLoc','Install into location','Install into location',100) );
+        this.forms.Form_ProgramInstallation.addComponent(new TxtComponent('CrystalRepName','Crystal Report Names','Crystal Report Names',100,3) );
+        this.forms.Form_ProgramInstallation.addComponent(new TxtComponent('SourceDes','Source Destination','Source Destination',100,3) );
+        this.forms.Form_ProgramInstallation.addComponent(new TxtComponent('InstallLoc','Install into location','Install into location',100,3) );
 
-        this.forms.Form_ProgramInstallation.addComponent(new TxtComponent('TxtFilesName','Text Files Names','Text Files Names',100) );
-        this.forms.Form_ProgramInstallation.addComponent(new TxtComponent('SrcDestination','Source Destination','Source Destination',100) );
-        this.forms.Form_ProgramInstallation.addComponent(new TxtComponent('Installocation','Install into location','Install into location',100) );
+        this.forms.Form_ProgramInstallation.addComponent(new TxtComponent('TxtFilesName','Text Files Names','Text Files Names',100,3) );
+        this.forms.Form_ProgramInstallation.addComponent(new TxtComponent('SrcDestination','Source Destination','Source Destination',100,3) );
+        this.forms.Form_ProgramInstallation.addComponent(new TxtComponent('Installocation','Install into location','Install into location',100,3) );
 
         this.forms.Form_ProgramInstallation.addComponent(new NotesComponent('InstallationRemarks','Installation Remarks','Installation Remarks',4,300) );
         
@@ -198,30 +198,30 @@ $(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alert
                             <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="ProgName" ></div>
                         </div>
                         <div class="row">
-                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="SrcDes" ></div>
+                            <div class="col pr-3 pl-3 pt-1" style="direction:ltr;" data-container-for="SrcDes" ></div>
                         </div>
                         <div class="row">
-                            <div class="col pr-3 pl-3 pt-2 pb-3" style="direction:ltr;" data-container-for="InstallLocation" ></div>
+                            <div class="col pr-3 pl-3 pt-1 pb-1" style="direction:ltr;" data-container-for="InstallLocation" ></div>
                         </div>
 
                         <div class="row">
                             <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="CrystalRepName" ></div>
                         </div>
                         <div class="row">
-                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="SrcDestination" ></div>
+                            <div class="col pr-3 pl-3 pt-1" style="direction:ltr;" data-container-for="SrcDestination" ></div>
                         </div>
                         <div class="row">
-                            <div class="col pr-3 pl-3 pt-2 pb-3" style="direction:ltr;" data-container-for="InstallLoc" ></div>
+                            <div class="col pr-3 pl-3 pt-1 pb-1" style="direction:ltr;" data-container-for="InstallLoc" ></div>
                         </div>
 
                         <div class="row">
                             <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="TxtFilesName" ></div>
                         </div>
                         <div class="row">
-                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="SourceDes" ></div>
+                            <div class="col pr-3 pl-3 pt-1" style="direction:ltr;" data-container-for="SourceDes" ></div>
                         </div>
                         <div class="row">
-                            <div class="col pr-3 pl-3 pt-2 pb-2" style="direction:ltr;" data-container-for="Installocation" ></div>
+                            <div class="col pr-3 pl-3 pt-1 pb-1" style="direction:ltr;" data-container-for="Installocation" ></div>
                         </div>
 
                         <div class="row">

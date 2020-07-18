@@ -1,0 +1,291 @@
+<script >
+    
+/**
+ * WorkItem{
+        workFlowName,workflowID,subject,recieveDate,stepNo,workFlowVersion,workFlowType,stepName,nextStepName,instructions,workObjectID,comments,action,
+        sender,reciever,branch,forms,attachments
+        isLastStep = false;
+}
+ */
+
+
+
+
+process.controller = {
+    errMsg : "",
+    groups : {  
+         //groupFollowUpTLs : ["FollowUp_TLs"],    // groupFollowUpEmps : ["FollowUp_Emps"],
+    },
+
+    steps : {
+        PerLeave_Launch : 'PerLeave_Launch',
+        PerLeave_TLApprove: 'PerLeave_TLApprove',
+        PerLeave_SupApprove: 'PerLeave_SupApprove',
+        PerLeave_DeptSec: 'PerLeave_DeptSec',
+        PerLeave_MngApprove: 'PerLeave_MngApprove',
+        PerLeave_Update: 'PerLeave_Update',
+        PerLeave_DDGApprove: 'PerLeave_DDGApprove',
+        PerLeave_DDGSec: 'PerLeave_DDGSec',
+        PerLeave_PersAdminSec : 'PerLeave_PersAdminSec',
+        PerLeave_PersAdminEmp : 'PerLeave_PersAdminEmp',
+        PerLeave_PersAdminTL : 'PerLeave_PersAdminTL',
+        PerLeave_PersAdminSup : 'PerLeave_PersAdminSup',
+        PerLeave_FinSec : 'PerLeave_FinSec',
+        PerLeave_FinSup : 'PerLeave_FinSup',
+        PerLeave_FinTL : 'PerLeave_FinTL',
+        PerLeave_FinEmp : 'PerLeave_FinEmp',
+    },
+
+    forms : {
+        Form_ReturnEndorsement: new Form('Form_ReturnEndorsement','إقــرار عــــودة','Return Endorsement'),
+        Form_WorkDeduction : new Form('Form_WorkDeduction','نمــوذج انقطــاع عــن العمــل','Work Deduction'),
+    },
+
+    defineComponents(){ 
+        
+         /*Form_ReturnEndorsement*/
+        this.forms.Form_ReturnEndorsement.addComponent(new DateComponent('RequesterDate','التـاريخ','Date','','',6) );
+        this.forms.Form_ReturnEndorsement.addComponent(new DateComponent('StartDate','تاريخ بدء الإجازة','Start Date','','',6) );
+
+        this.forms.Form_ReturnEndorsement.addComponent(new TxtComponent('ClientName','الاســــم','Client Name',80) );
+        this.forms.Form_ReturnEndorsement.addComponent(new DateComponent('EndDate','تاريخ إنتهاء الإجازة','End Date','','',6) );
+
+        this.forms.Form_ReturnEndorsement.addComponent(new TxtComponent('Dept','الإدارة','Department',80) );
+        this.forms.Form_ReturnEndorsement.addComponent(new DateComponent('ReturnDate','تاريخ العودة','Return Date','','',6) );
+
+        this.forms.Form_ReturnEndorsement.addComponent(new NumberComponent('EmpNumber','رقـم الموظـف','Emp Number') );
+        this.forms.Form_ReturnEndorsement.addComponent(new DropDownListComponent('Status','الحالة','Status',[new Option('','','0') ,new Option('قبل الموعد','Before Vacation Date','1') , 
+        new Option('في الموعد','In the date','2'),new Option('بعد الموعد','After Vecation Date','3')],6) );
+
+        this.forms.Form_ReturnEndorsement.addComponent(new TxtComponent('EmpSignature','التـوقيع','Signature',80) );
+        this.forms.Form_ReturnEndorsement.addComponent(new DropDownListComponent('LeaveType','نوع الإجازة','Leave Type',[new Option('','','0') ,new Option('مصروفة','Pay','1') , 
+        new Option('غير مصروفة','Not Pay','2')],6) );
+
+        this.forms.Form_ReturnEndorsement.addComponent(new NotesComponent('Reasons','أسباب التأخر عن موعد الرجوع المقرر','Reasons for the delay from the date of return',4,300) );
+
+        this.forms.Form_ReturnEndorsement.addComponent(new NotesComponent('Notes','ملاحظات الرئيس المباشر','Manager Notes',4,300) );
+
+        this.forms.Form_ReturnEndorsement.addSignature(new Signature('Responsible','ResponsibleName','ResponsibleSig','توقيع الرئيس المباشر','Responsible') ); 
+        this.forms.Form_ReturnEndorsement.addSignature(new Signature('Approval','AprrovalName','ApprovalSig','يعتمـــــــد','Approval') );
+
+        this.forms.Form_ReturnEndorsement.addComponent(new NotesComponent('AdminNotes','ملاحظات إدارة الموارد البشرية','Personnel Admin Notes',4,300) );
+
+        this.forms.Form_ReturnEndorsement.addSignature(new Signature('RespEmp','RespEmpName','RespEmpSig','الموظـف المختــص','Responsible Emp') ); 
+        this.forms.Form_ReturnEndorsement.addSignature(new Signature('Manager','ManagerName','ManagerlSig','مدير إدارة الموارد البشرية','HR Manager') );
+
+
+        /*Form_WorkDeduction*/
+        this.forms.Form_WorkDeduction.addComponent(new DateComponent('RequesterDate','التـاريخ','Date','','',6) );
+
+        this.forms.Form_WorkDeduction.addComponent(new TxtComponent('ClientName','الاســــم','Client Name',80) );
+
+        this.forms.Form_WorkDeduction.addComponent(new TxtComponent('Dept','الإدارة','Department',80) );
+
+        this.forms.Form_WorkDeduction.addComponent(new NumberComponent('EmpNumber','رقـم الموظـف','Emp Number') );
+
+        this.forms.Form_WorkDeduction.addComponent(new TxtComponent('Salary','','',5) );
+
+        this.forms.Form_WorkDeduction.addComponent(new TableComponent('DateTable',[
+                                                                                        new TableColTxt('اليوم','Day'),
+                                                                                        new TableColTxt('التاريخ','Date'),
+                                                                                    ],5
+                                                                                    ,[6,6]
+                                                                                    ) );
+
+        this.forms.Form_WorkDeduction.addSignature(new Signature('ResponsibleEmp','RespEmpName','RespEmpSig','الموظـف المختــص','Responsible Emp') ); 
+        this.forms.Form_WorkDeduction.addSignature(new Signature('HRManager','ManagerName','ManagerlSig','مدير إدارة الموارد البشرية','HR Manager') );
+
+
+    },
+
+    main(){
+        try{
+            this.defineComponents();
+            process.initialize();
+            let stepName = process.workItem.stepName
+            process.recieversList.loadManager();
+
+            
+
+            if(stepName == this.steps.PerLeave_Launch){   
+            }
+            else if(stepName == this.steps.PerLeave_TLApprove){
+            }
+        
+            
+            
+            /* form manipulation */
+                //this.forms.Form_ReturnEndorsement.enable();
+                //this.forms.Form_ReturnEndorsement.disable();
+                this.forms.Form_ReturnEndorsement.select();
+                this.forms.Form_ReturnEndorsement.updateComponentsFromEntity();
+                
+        
+
+
+
+
+            app.renderLabels();
+            process.openProcessModal();
+            process.setWorkFlowIDLabel();
+        }
+        catch(error){ throw error;}
+    },
+
+    validate(){
+        //validator.markAsInvalidField('myTxt');
+     },
+
+    send(){ },
+
+    
+    // testSignature(){
+    //     util.viewObjectContent(this.forms.Form_ReturnEndorsement.components.SupSignature.getSigner()); 
+    // },
+
+
+}
+
+$(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alertError(error.message); }} );
+</script>
+
+<style>
+    .nav-pills .nav-link.active {
+    background-color: rgb(108, 117, 126) !important;
+}
+</style>
+
+<div class="container-fluid pr-1 pl-1" >
+    <div class="row">
+        <div class="col p-1 " >
+            <nav>
+                <div class="nav nav-pills mb-1 ml-auto" id="nav-tab" role="tablist"></div>
+            </nav>
+            <div class="tab-content shadow border border-secondary rounded p-2 bg-white" id="nav-tabContent">
+                <!-- Form_ReturnEndorsement -->
+                <div class="tab-pane fade show active" id="nav-Form_ReturnEndorsement" role="tabpanel" aria-labelledby="Form_ReturnEndorsement-tab">
+                    <!-- the main container for all Form_ReturnEndorsement controls -->
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col p-1 mb-4" data-container-for="Form_ReturnEndorsement_title"></div>
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col-4 pr-3 pl-3" data-container-for="RequesterDate"></div>
+                            <div class="col-3 pr-3 pl-3"></div>
+                            <div class="col-5 pr-3 pl-3" data-container-for="StartDate"></div>
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col-6 pr-3 pl-3" data-container-for="ClientName"></div>
+                            <div class="col-1 pr-3 pl-3"></div>
+                            <div class="col-5 pr-3 pl-3" data-container-for="EndDate"></div>
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col-6 pr-3 pl-3" data-container-for="Dept"></div>
+                            <div class="col-1 pr-3 pl-3"></div>
+                            <div class="col-5 pr-3 pl-3" data-container-for="ReturnDate"></div>
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col-6 pr-3 pl-3" data-container-for="EmpNumber"></div>
+                            <div class="col-1 pr-3 pl-3"></div>
+                            <div class="col-5 pr-3 pl-3" data-container-for="Status"></div>
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col-6 pr-3 pl-3" data-container-for="EmpSignature"></div>
+                            <div class="col-1 pr-3 pl-3"></div>
+                            <div class="col-5 pr-3 pl-3" data-container-for="LeaveType"></div>
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" data-container-for="Reasons"></div>
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" data-container-for="Notes"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-5 pr-2 pl-1 pt-4 pb-4" data-container-for="Responsible"></div>
+                            <div class="col-2 pr-3 pl-3 pt-4 pb-4"></div>
+                            <div class="col-5 pr-2 pl-1 pt-4 pb-4" data-container-for="Approval"></div>
+                        </div>
+
+                        <div style="text-align: right; font-weight:bolder; color: red; font-size:1.2em; text-decoration: underline;">خاص بإدارة الموارد البشرية</div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-4 pb-2" data-container-for="AdminNotes"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-5 pr-2 pl-1 pt-4" data-container-for="RespEmp"></div>
+                            <div class="col-2 pr-3 pl-3 pt-2"></div>
+                            <div class="col-5 pr-2 pl-1 pt-4" data-container-for="Manager"></div>
+                        </div>
+
+                       
+                    </div>
+                </div>
+
+
+                <!-- Form_WorkDeduction -->
+                <div class="tab-pane" id="nav-Form_WorkDeduction" role="tabpanel" aria-labelledby="Form_WorkDeduction-tab">
+                    <!-- the main container for all Form_WorkDeduction controls -->
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col p-1 mb-4" data-container-for="Form_WorkDeduction_title"></div>
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col-4 pr-3 pl-3" data-container-for="RequesterDate"></div>
+                            <div class="col-8 pr-3 pl-3"></div>
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col-6 pr-3 pl-3" data-container-for="ClientName"></div>
+                            <div class="col-6 pr-3 pl-3"></div>
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col-6 pr-3 pl-3" data-container-for="Dept"></div>
+                            <div class="col-6 pr-3 pl-3"></div>
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col-6 pr-3 pl-3 pb-4" data-container-for="EmpNumber"></div>
+                            <div class="col-6 pr-3 pl-3 pb-4"></div>
+                        </div>
+
+                        <div style="text-align: right;  font-size:1.2em;">يرجى الإحاطة بأنه نظرا لتغيبكم عن العمل دون إذن أو عذر مقبول، عليه يعتبر انقطاعا</div>
+                        <div style="text-align: right;  font-size:1.2em;">عن العمل لا يستحق لكم عنه أي راتــب.</div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2" data-container-for="Salary"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-3 pr-3 pl-3 pt-4"></div>
+                            <div class="col-6 pr-3 pl-3 pt-4" data-container-for="DateTable"></div>
+                            <div class="col-3 pr-3 pl-3 pt-4"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-5 pr-2 pl-1 pt-4" data-container-for="ResponsibleEmp"></div>
+                            <div class="col-2 pr-3 pl-3 pt-2"></div>
+                            <div class="col-5 pr-2 pl-1 pt-4" data-container-for="HRManager"></div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="text-right">
+                    <hr>
+                    <label id="workflowIDLabel" class="text-danger">مسلسل الاجراء</label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -63,7 +63,7 @@ process.controller = {
 
         /*this.forms.Form_ExtractAndReceiveFiles.addComponent(new TxtComponent('DocumentNo','عدد المستندات','Document No',5) );*/
 
-        this.forms.Form_ExtractAndReceiveFiles.addComponent(new TxtBetweenPlainLabelsComponent('DocumentNo','عـدد','Number',20,'مستـنـد','Documents',1) );
+        this.forms.Form_ExtractAndReceiveFiles.addComponent(new TxtBetweenPlainLabelsComponent('DocumentNo','عـدد','Number',20,'مستنــــــــد','Documents') );
 
         this.forms.Form_ExtractAndReceiveFiles.addComponent(new CheckBoxComponent('BoxFile','بوكس فايل','Box File') );
 
@@ -75,13 +75,13 @@ process.controller = {
 
         /*this.forms.Form_ExtractAndReceiveFiles.addComponent(new TxtComponent('FileCartonNo','عدد الكرتون','File Carton No',5) );*/
 
-        this.forms.Form_ExtractAndReceiveFiles.addComponent(new TxtBetweenPlainLabelsComponent('FileCartonNo','عـدد','Number',20,'كرتون ','Carton') );
+        this.forms.Form_ExtractAndReceiveFiles.addComponent(new TxtBetweenPlainLabelsComponent('FileCartonNo','عـدد','Number',20,'كرتـــــــون ','Carton') );
 
         this.forms.Form_ExtractAndReceiveFiles.addComponent(new NotesComponent('Notes','المــلاحظــات','Notes',4,300) );
 
         this.forms.Form_ExtractAndReceiveFiles.addSignature(new Signature('ReqDept','ReqName','ReqSig','اعتماد الإدارة الطالبة','Request Dept Approval')  );
         this.forms.Form_ExtractAndReceiveFiles.addSignature(new Signature('OpsEmp','OpsName','OpsSig','اعتماد موظف الخدمات','OPS Emp Approval')  );
-        this.forms.Form_ExtractAndReceiveFiles.addSignature(new Signature('DeptMng','MngName','MngSig','اعتماد إدارة الشؤون الإدارية','Approval')  );
+        this.forms.Form_ExtractAndReceiveFiles.addSignature(new Signature('DeptMng','MngName','MngSig','اعتماد إدارة المشتريات والمناقصات','Approval')  );
 
     },
 
@@ -250,12 +250,12 @@ $(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alert
                         </div>
 
                         <div class="row p-1">
-                            <div class="col-2 pr-3 pl-3 pt-2 pb-5" data-container-for="FileCarton"></div>
-                            <div class="col-3 pr-3 pl-3 pt-2 pb-5" data-container-for="FileCartonNo"></div>
-                            <div class="col-7 pr-3 pl-3 pt-2 pb-5"></div>
+                            <div class="col-2 pr-3 pl-3 " data-container-for="FileCarton"></div>
+                            <div class="col-3 pr-3 pl-3 " data-container-for="FileCartonNo"></div>
+                            <div class="col-7 pr-3 pl-3 "></div>
                         </div>
 
-                        <div style="text-align: center; color: red; font-weight:bolder; font-size:1.2em; text-decoration: underline;">خاص بإدارة الشؤون الإدارية</div>
+                        <div style="text-align: center; color: red; font-weight:bolder; font-size:1.2em; text-decoration: underline;">خاص بإدارة المشتريات والمناقصات</div>
 
                         <div class="row p-1">
                             <div class="col pr-3 pl-3 pt-2" data-container-for="Notes"></div>

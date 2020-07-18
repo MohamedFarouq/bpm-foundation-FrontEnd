@@ -43,11 +43,11 @@ process.controller = {
         this.forms.Form_ModificationRequest.addComponent(new DateComponent('RequesterDate','التاريخ','Date','','',6) );
         this.forms.Form_ModificationRequest.addComponent(new TxtComponent('Department','الإدارة الطالبة للتعديل','Department',100) );
 
-        this.forms.Form_ModificationRequest.addComponent(new NumberComponent('FileNo','رقم الحفظ','FileNo') );
+        this.forms.Form_ModificationRequest.addComponent(new TxtComponent('FileNo','رقم الحفظ','FileNo',12) );
 
-        this.forms.Form_ModificationRequest.addComponent(new NumberComponent('SSNNo','رقم الهوية','SSNNo') );
+        this.forms.Form_ModificationRequest.addComponent(new TxtComponent('SSNNo','رقم الهوية','SSNNo',12) );
 
-        this.forms.Form_ModificationRequest.addComponent(new NumberComponent('RegNo','رقم التسجيل','RegNo') );
+        this.forms.Form_ModificationRequest.addComponent(new TxtComponent('RegNo','رقم التسجيل','RegNo',12) );
 
         this.forms.Form_ModificationRequest.addComponent(new TxtComponent('ClientName','اسم المؤمن عليه','Client Name',80) );
 
@@ -218,21 +218,19 @@ $(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alert
                         </div>
 
                         <div class="row p-1">
-                            <div class="col-5 pr-3 pl-3 pt-2 pb-4" data-container-for="DeptEmp"></div>
-                            <div class="col-2 pr-3 pl-3 pt-2 pb-4"></div>
-                            <div class="col-5 pr-3 pl-3 pt-2 pb-4" data-container-for="DeptMng"></div>
+                            <div class="col-6 pr-3 pl-3 pt-2 pb-4" data-container-for="DeptEmp"></div>
+                            <div class="col-6 pr-3 pl-3 pt-2 pb-4" data-container-for="DeptMng"></div>
                         </div>
 
-                        <div style="text-align: right; font-weight:bolder; font-size:1.2em; text-decoration: underline;">خاص بإدارة معالجة الوثائق</div>
+                        <div style="text-align: center; color: red; font-weight:bolder; font-size:1.2em; text-decoration: underline;">خاص بإدارة معالجة الوثائق</div>
 
                         <div class="row p-1">
                             <div class="col pr-3 pl-3 pt-2" data-container-for="ActionTaken"></div>
                         </div>
 
                         <div class="row p-1">
-                            <div class="col-5 pr-3 pl-3 pt-2" data-container-for="ImpEmp"></div>
-                            <div class="col-2 pr-3 pl-3 pt-2"></div>
-                            <div class="col-5 pr-3 pl-3 pt-2" data-container-for="ImpDeptMng"></div>
+                            <div class="col-6 pr-3 pl-3 pt-2" data-container-for="ImpEmp"></div>
+                            <div class="col-6 pr-3 pl-3 pt-2" data-container-for="ImpDeptMng"></div>
                         </div>
 
                     </div>
