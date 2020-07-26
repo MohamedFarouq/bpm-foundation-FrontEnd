@@ -53,7 +53,7 @@ process.controller = {
         this.forms.Form_ReturnEndorsement.addComponent(new TxtComponent('Dept','الإدارة','Department',80) );
         this.forms.Form_ReturnEndorsement.addComponent(new DateComponent('ReturnDate','تاريخ العودة','Return Date','','',6) );
 
-        this.forms.Form_ReturnEndorsement.addComponent(new NumberComponent('EmpNumber','رقـم الموظـف','Emp Number') );
+        this.forms.Form_ReturnEndorsement.addComponent(new TxtComponent('EmpNumber','رقـم الموظـف','Emp Number',10) );
         this.forms.Form_ReturnEndorsement.addComponent(new DropDownListComponent('Status','الحالة','Status',[new Option('','','0') ,new Option('قبل الموعد','Before Vacation Date','1') , 
         new Option('في الموعد','In the date','2'),new Option('بعد الموعد','After Vecation Date','3')],6) );
 
@@ -67,6 +67,8 @@ process.controller = {
 
         this.forms.Form_ReturnEndorsement.addSignature(new Signature('Responsible','ResponsibleName','ResponsibleSig','توقيع الرئيس المباشر','Responsible') ); 
         this.forms.Form_ReturnEndorsement.addSignature(new Signature('Approval','AprrovalName','ApprovalSig','يعتمـــــــد','Approval') );
+
+        this.forms.Form_ReturnEndorsement.addComponent(new ParagraphComponent('HRDept','خاص بإدارة الموارد البشرية','Human Resource Department','text-danger text-center font-weight-bold') );
 
         this.forms.Form_ReturnEndorsement.addComponent(new NotesComponent('AdminNotes','ملاحظات إدارة الموارد البشرية','Personnel Admin Notes',4,300) );
 
@@ -83,11 +85,13 @@ process.controller = {
 
         this.forms.Form_WorkDeduction.addComponent(new NumberComponent('EmpNumber','رقـم الموظـف','Emp Number') );
 
+        this.forms.Form_WorkDeduction.addComponent(new ParagraphComponent('Notes','يرجى الإحاطة بأنه نظرا لتغيبكم عن العمل دون إذن أو عذر مقبول، عليه يعتبر انقطاعاً <br> عن العمل لا يستحق لكم عنه أي راتب.','Please note that due to your absence from work without permission or an acceptable excuse, it is considered a break <br> About work, you are not entitled to any salary.','font-weight-bold') );
+
         this.forms.Form_WorkDeduction.addComponent(new TxtComponent('Salary','','',5) );
 
         this.forms.Form_WorkDeduction.addComponent(new TableComponent('DateTable',[
                                                                                         new TableColTxt('اليوم','Day'),
-                                                                                        new TableColTxt('التاريخ','Date'),
+                                                                                        new TableColDate('التاريخ','Date',['2020-01-01','2020-02-02'],'2020-01-01','2020-03-01'),
                                                                                     ],5
                                                                                     ,[6,6]
                                                                                     ) );
@@ -170,54 +174,56 @@ $(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alert
                             <div class="col p-1 mb-4" data-container-for="Form_ReturnEndorsement_title"></div>
                         </div>
 
-                        <div class="row p-1">
-                            <div class="col-4 pr-3 pl-3" data-container-for="RequesterDate"></div>
-                            <div class="col-3 pr-3 pl-3"></div>
-                            <div class="col-5 pr-3 pl-3" data-container-for="StartDate"></div>
-                        </div>
-
-                        <div class="row p-1">
-                            <div class="col-6 pr-3 pl-3" data-container-for="ClientName"></div>
-                            <div class="col-1 pr-3 pl-3"></div>
-                            <div class="col-5 pr-3 pl-3" data-container-for="EndDate"></div>
-                        </div>
-
-                        <div class="row p-1">
-                            <div class="col-6 pr-3 pl-3" data-container-for="Dept"></div>
-                            <div class="col-1 pr-3 pl-3"></div>
-                            <div class="col-5 pr-3 pl-3" data-container-for="ReturnDate"></div>
-                        </div>
-
-                        <div class="row p-1">
-                            <div class="col-6 pr-3 pl-3" data-container-for="EmpNumber"></div>
-                            <div class="col-1 pr-3 pl-3"></div>
-                            <div class="col-5 pr-3 pl-3" data-container-for="Status"></div>
-                        </div>
-
-                        <div class="row p-1">
-                            <div class="col-6 pr-3 pl-3" data-container-for="EmpSignature"></div>
-                            <div class="col-1 pr-3 pl-3"></div>
-                            <div class="col-5 pr-3 pl-3" data-container-for="LeaveType"></div>
-                        </div>
-
-                        <div class="row p-1">
-                            <div class="col pr-3 pl-3" data-container-for="Reasons"></div>
-                        </div>
-
-                        <div class="row p-1">
-                            <div class="col pr-3 pl-3" data-container-for="Notes"></div>
+                        <div class="row">
+                            <div class="col-4 pr-3 pl-3 pt-2" data-container-for="RequesterDate"></div>
+                            <div class="col-3 pr-3 pl-3 pt-2"></div>
+                            <div class="col-5 pr-3 pl-3 pt-2" data-container-for="StartDate"></div>
                         </div>
 
                         <div class="row">
-                            <div class="col-5 pr-2 pl-1 pt-4 pb-4" data-container-for="Responsible"></div>
-                            <div class="col-2 pr-3 pl-3 pt-4 pb-4"></div>
-                            <div class="col-5 pr-2 pl-1 pt-4 pb-4" data-container-for="Approval"></div>
+                            <div class="col-6 pr-3 pl-3 pt-2" data-container-for="ClientName"></div>
+                            <div class="col-1 pr-3 pl-3 pt-2"></div>
+                            <div class="col-5 pr-3 pl-3 pt-2" data-container-for="EndDate"></div>
                         </div>
 
-                        <div style="text-align: right; font-weight:bolder; color: red; font-size:1.2em; text-decoration: underline;">خاص بإدارة الموارد البشرية</div>
+                        <div class="row">
+                            <div class="col-6 pr-3 pl-3 pt-2" data-container-for="Dept"></div>
+                            <div class="col-1 pr-3 pl-3 pt-2"></div>
+                            <div class="col-5 pr-3 pl-3 pt-2" data-container-for="ReturnDate"></div>
+                        </div>
 
                         <div class="row">
-                            <div class="col pr-3 pl-3 pt-4 pb-2" data-container-for="AdminNotes"></div>
+                            <div class="col-6 pr-3 pl-3 pt-2" data-container-for="EmpNumber"></div>
+                            <div class="col-1 pr-3 pl-3 pt-2"></div>
+                            <div class="col-5 pr-3 pl-3 pt-2" data-container-for="Status"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-6 pr-3 pl-3 pt-2" data-container-for="EmpSignature"></div>
+                            <div class="col-1 pr-3 pl-3 pt-2"></div>
+                            <div class="col-5 pr-3 pl-3 pt-2" data-container-for="LeaveType"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-3 pb-2" data-container-for="Reasons"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2 pb-2" data-container-for="Notes"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-5 pr-2 pl-1 pt-4 pb-5" data-container-for="Responsible"></div>
+                            <div class="col-2 pr-3 pl-3 pt-4 pb-5"></div>
+                            <div class="col-5 pr-2 pl-1 pt-4 pb-5" data-container-for="Approval"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2" data-container-for="HRDept"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-3 pb-2" data-container-for="AdminNotes"></div>
                         </div>
 
                         <div class="row">
@@ -239,37 +245,42 @@ $(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alert
                             <div class="col p-1 mb-4" data-container-for="Form_WorkDeduction_title"></div>
                         </div>
 
-                        <div class="row p-1">
-                            <div class="col-4 pr-3 pl-3" data-container-for="RequesterDate"></div>
-                            <div class="col-8 pr-3 pl-3"></div>
+                        <div class="row">
+                            <div class="col-4 pr-3 pl-3 pt-2" data-container-for="RequesterDate"></div>
+                            <div class="col-2 pr-3 pl-3 pt-2"></div>
+                            <div class="col-6 pr-3 pl-3 pt-2"></div>
                         </div>
 
-                        <div class="row p-1">
-                            <div class="col-6 pr-3 pl-3" data-container-for="ClientName"></div>
-                            <div class="col-6 pr-3 pl-3"></div>
+                        <div class="row">
+                            <div class="col-6 pr-3 pl-3 pt-2" data-container-for="ClientName"></div>
+                            <div class="col-2 pr-3 pl-3 pt-2"></div>
+                            <div class="col-4 pr-3 pl-3 pt-2"></div>
                         </div>
 
-                        <div class="row p-1">
-                            <div class="col-6 pr-3 pl-3" data-container-for="Dept"></div>
-                            <div class="col-6 pr-3 pl-3"></div>
+                        <div class="row">
+                            <div class="col-6 pr-3 pl-3 pt-2" data-container-for="Dept"></div>
+                            <div class="col-2 pr-3 pl-3 pt-2"></div>
+                            <div class="col-4 pr-3 pl-3 pt-2"></div>
                         </div>
 
-                        <div class="row p-1">
-                            <div class="col-6 pr-3 pl-3 pb-4" data-container-for="EmpNumber"></div>
-                            <div class="col-6 pr-3 pl-3 pb-4"></div>
+                        <div class="row">
+                            <div class="col-6 pr-3 pl-3 pt-2 pb-4" data-container-for="EmpNumber"></div>
+                            <div class="col-2 pr-3 pl-3 pt-2 pb-4"></div>
+                            <div class="col-4 pr-3 pl-3 pt-2 pb-4"></div>
                         </div>
 
-                        <div style="text-align: right;  font-size:1.2em;">يرجى الإحاطة بأنه نظرا لتغيبكم عن العمل دون إذن أو عذر مقبول، عليه يعتبر انقطاعا</div>
-                        <div style="text-align: right;  font-size:1.2em;">عن العمل لا يستحق لكم عنه أي راتــب.</div>
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2" data-container-for="Notes"></div>
+                        </div>
 
                         <div class="row">
                             <div class="col pr-3 pl-3 pt-2" data-container-for="Salary"></div>
                         </div>
 
                         <div class="row">
-                            <div class="col-3 pr-3 pl-3 pt-4"></div>
-                            <div class="col-6 pr-3 pl-3 pt-4" data-container-for="DateTable"></div>
-                            <div class="col-3 pr-3 pl-3 pt-4"></div>
+                            <div class="col-2 pr-3 pl-3 pt-4"></div>
+                            <div class="col-8 pr-3 pl-3 pt-4" data-container-for="DateTable"></div>
+                            <div class="col-2 pr-3 pl-3 pt-4"></div>
                         </div>
 
                         <div class="row">

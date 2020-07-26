@@ -42,7 +42,7 @@
         defineComponents(){    
             
 
-            this.forms.Form_CertRequest.addComponent(new ParagraphComponent('Line','الأدارة العامة','Public Administration',' font-weight-bold') );
+           // this.forms.Form_CertRequest.addComponent(new ParagraphComponent('Line','الأدارة العامة','Public Administration',' font-weight-bold') );
         
            
             this.forms.Form_CertRequest.addComponent(new TxtComponent('RequesterName','اسم الموظف','Name',5) );
@@ -52,7 +52,11 @@
             this.forms.Form_CertRequest.addComponent(new TxtComponent('CivilID','رقم البطاقة المدنية','CivilID',12) );
             this.forms.Form_CertRequest.addComponent(new TxtComponent('CertType','نوع الشهادة','Cert. Type',150) );
             this.forms.Form_CertRequest.addComponent(new DropDownListComponent('Relationship',' صلة القرابة','Relationship',[new Option('','','0') ,new Option('الأم','Mother','1') , new Option('الآب','Father','2'), new Option('الجد والجدة','Grand Parents','3')]) );                            
-            this.forms.Form_CertRequest.addComponent(new TxtComponent('EmpSignature','توقيع الموظف','Emp Signature') );
+           
+           
+             this.forms.Form_CertRequest.addSignature(new Signature('EmpSignature','EmpSign','EmpSig','توقيع الموظف','Employee Signature')  );
+        
+           
             this.forms.Form_CertRequest.addComponent(new DateComponent('RequestDate',' التاريخ','Date','','') );           
             this.forms.Form_CertRequest.addComponent(new ParagraphComponent('Line_1','ملاحظة : <br> لا تعطي الشهادة إلا لصلة القرابة من الدرجة الأولى',': Note<br> The testimony is given only for the relationship of kinship of the first degree','text-danger font-weight-bold') );
         
@@ -137,48 +141,47 @@
                                 </div>
 
 
-
-                                
                                 <br>
-                                <div class="row">
-                                    <div class="col pr-2 pl-3" data-container-for="Line"></div>
+
+                                <div class="row p-1">
+                                    <div class="pr-6 pl-3" data-container-for="RequestDate"></div>
                                 </div>
-                                
-                                <br>
 
-                                <div class="row">
+                             
+                                <div class="row p-1">
                                     <div class="col-7 pr-2 pl-3" data-container-for="RequesterName"></div>
                                 </div>
-                                <div class="row">
+                                <div class="row p-1">
                                     <div class="col-7 pr-2 pl-3" data-container-for="PhoneNo"></div>
                                 </div>
-                                <div class="row">
+                                <div class="row p-1">
                                     <div class="col-7 pr-2 pl-3" data-container-for="RequesterDept"></div>
                                 </div>
-                                <div class="row">
+                                <div class="row p-1">
                                     <div class="col-7 pr-2 pl-3" data-container-for="CertRequesterName"></div>
                                 </div>
-                                <div class="row">
+                                <div class="row p-1">
                                     <div class="col-7 pr-2 pl-3" data-container-for="CivilID"></div>
                                 </div>
-                                <div class="row">
+                                <div class="row p-1">
                                     <div class="col-7 pr-2 pl-3" data-container-for="CertType"></div>
                                 </div>
 
-                                <div class="row">
+                                <div class="row p-1">
                                     <div class="col-7 pr-2 pl-3" data-container-for="Relationship"></div>
                                 </div>
+                                <br>
 
-                                <div class="row">
-                                    <div class="col-7 pr-2 pl-3" data-container-for="EmpSignature"></div>
+                                <div class="row ">
+                                    <div class="col p-3"> </div>
+                                    <div class="col-4 pr-4 pl-4" data-container-for="EmpSignature"></div>
                                 </div>
 
-                                <div class="row">
-                                    <div class="col-7 pr-2 pl-3" data-container-for="RequestDate"></div>
-                                </div>
-                                    <br>
+                          
+                                    <br> 
                             <div class="row">
                                 <div class="col pr-3 pl-3" data-container-for="Line_1"></div>
+
                             </div>
 
                 

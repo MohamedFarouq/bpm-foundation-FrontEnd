@@ -1,3 +1,86 @@
+"use strict";
+
+
+    const isLocally = true;
+    
+    async function fetchGeneric(returnDataType,url,options,resolve,reject){
+        /*
+            options = {
+                method: 'POST', // *GET, POST, PUT, DELETE, etc.
+                mode: 'cors', // no-cors, *cors, same-origin
+                cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+                credentials: 'same-origin', // include, *same-origin, omit
+                headers: {
+                'Content-Type': 'application/json'
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                redirect: 'follow', // manual, *follow, error
+                referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+                body: JSON.stringify(data) // body data type must match "Content-Type" header
+            }
+        */
+        try{
+            if(isLocally){
+                reject();
+                return;
+            }
+            
+            
+            app.openLoadingModal();
+            let data = {};
+            let errDetails = null;
+            let response = await fetch(`http://localhost:8080${url}`, options);//(url, options);
+            if(response.ok){
+                if(!returnDataType)
+                    data = '';
+                else if(returnDataType == 'json')
+                    data = await response.json();
+                else if(returnDataType == 'text')    
+                    data = await response.text();
+                else if(returnDataType == 'blob')
+                    data = await response.blob();
+                else if(returnDataType == 'objectURL'){
+                    data = await response.blob();
+                    data = URL.createObjectURL(data);
+                }
+                
+                app.closeLoadingModal();
+                resolve(data);
+            }
+            else if(response.status == 400){ //handle bad request
+                data = await response.json();
+                errDetails = new ErrorDetails(data.msg, data.stack);
+                app.closeLoadingModal();
+                reject();
+                app.alertError(errDetails);
+            }
+        }
+        catch(error){
+            errDetails = new ErrorDetails(error.message, ['check (resolve/reject) body',`check url : ${url}`,,'check service is not down'] );
+            app.closeLoadingModal();
+            app.alertError(errDetails);
+            reject();
+        }
+    }
+    function fetchNothing(url,options,resolve,reject){
+        fetchGeneric('',url,options,resolve,reject);
+    }
+    function fetchJSON(url,options,resolve,reject){
+        fetchGeneric('json',url,options,resolve,reject);
+    }
+    function fetchText(url,options,resolve,reject){
+        fetchGeneric('text',url,options,resolve,reject);
+    }
+    function fetchBLOB(url,options,resolve,reject){
+        fetchGeneric('blob',url,options,resolve,reject);
+    }
+    function fetchObjectURL(url,options,resolve,reject){
+        fetchGeneric('objectURL',url,options,resolve,reject);
+    }
+
+
+
+
 
     const peService = {
         fetchInboxWIs(username){
@@ -46,6 +129,7 @@
     }
 
     const ssFormsService = {
+        
         fetchDeptsList(){
             try{
                 let deptList = [
@@ -65,190 +149,346 @@
         },
 
         fetchPackasList(deptCode){
+            const url = `/ssforms/depts/${deptCode}/packages`;
+            const options = {method: 'GET'};
+            const resolve = (data) => {
+                                        registery.ssFormsGridController.packagesGrid.selectedPackageID = '';
+                                        registery.ssFormsGridController.packagesGrid.packageList = data.list;
+                                        registery.ssFormsGridController.packagesGrid.render();
+                                      };
+            const reject = () => {
+                                // registery.ssFormsGridController.packagesGrid.selectedPackageID = '';
+                                // registery.ssFormsGridController.packagesGrid.packageList = [];
+                                // registery.ssFormsGridController.packagesGrid.render();
+                                ssFormsService.fetchPackasListLocally(deptCode);
+                                };
+            
+            fetchJSON(url,options,resolve,reject);
+        },
+    // @Deprecated 
+        fetchPackasListLocally(deptCode){
             try{
-                let allPackagesList = [
-                    {id:'-22', aName:'التأمين التكميلي باب خامس', formsCount:0,invDeptCode: [610,611,612,632]},
-                    {id:'-5', aName:'الجمع بين المعاش والمرتب', formsCount:0,invDeptCode: [610,611,612,621]},
-                    {id:'-21', aName:'إقرار وطلب صرف النصيب بشيك', formsCount:0,invDeptCode: [610,611,612,622]},
-                    {id:'-9', aName:'إقرار صاحب معاش غير كويتي', formsCount:0,invDeptCode: [610,611,612,621]},
-                    {id:'-20', aName:'تسوية المعاش + المكافأة-المعاشات', formsCount:0,invDeptCode: [621]},
-                    {id:'-1', aName:'تسوية المعاش + المكافأة-الخدمة التأمينية', formsCount:0,invDeptCode: [610,611,612,621]},
-                    {id:'-23', aName:'تسوية مكافأة', formsCount:0,invDeptCode: [621]},
-                    {id:'-17', aName:'تسجيل باب خامس', formsCount:0,invDeptCode: [610,611,612,631]},
-                    {id:'-18', aName:'تعديل شريحة', formsCount:0,invDeptCode: [610,611,612,632]},
-                    {id:'-15', aName:'تحديد مستحق منحة الوفاة', formsCount:0,invDeptCode: [610,611,612,622]},
-                    {id:'-14', aName:'حالة انتقال الوصاية', formsCount:0,invDeptCode: [610,611,612,622]},
-                    {id:'-3', aName:'رد الاستبــدال', formsCount:0,invDeptCode: [610,611,612,621,632]},
-                    {id:'-8', aName:'زيادة الحد الأدنى', formsCount:0,invDeptCode: [610,611,612,621]},
-                    {id:'-4', aName:'زيادة الأبناء أو الزواج', formsCount:0,invDeptCode: [610,611,612,621]},
-                    {id:'-12', aName:'صرف نصيب وإعادة صرف نصيب', formsCount:0,invDeptCode: [610,611,612,622]},
-                    {id:'-2', aName:'صرف رصيد المكافأة', formsCount:0,invDeptCode: [610,611,612,621]},
-                    {id:'-7', aName:'طلب التجاوز عن التمسك في طلب صرف المستحقات', formsCount:0,invDeptCode: [610,611,612,621]},
-                    {id:'-16', aName:'عسكري غير كويتي', formsCount:0,invDeptCode: [610,611,612,622]},
-                    {id:'-11', aName:'منحـة زواج', formsCount:0,invDeptCode: [610,611,612,622]},
-                    {id:'-10', aName:'معاملـة الوفــاة', formsCount:0,invDeptCode: [610,611,612,622]},
-                    {id:'-19', aName:'نماذج حساب مدد التأمين', formsCount:0,invDeptCode: [610,611,612,621]},
-                    {id:'general', aName:'نماذج عامة', formsCount:0,invDeptCode: [610,611,612,621,622,631,632]},
-                ];
+                let allPackagesList = [];
                 let packagesList = [];
-                allPackagesList.filter(item => item.invDeptCode.includes(deptCode)).forEach(item=>packagesList.push(item));
-                return packagesList;
+
+                allPackagesList.push( new FormType(-24,'إعادة تسوية المعاش', '',  '621' , '0' ) );
+                allPackagesList.push( new FormType(-9,'إقرار صاحب معاش غير كويتي', '',  '610-611-612-621' , '0' ) );
+                allPackagesList.push( new FormType(-21,'إقرار وطلب صرف النصيب بشيك', '',  '610-611-612-622' , '0' ) );
+                allPackagesList.push( new FormType(-25,'استبدال أثناء الخدمة', '',  '621' , '0' ) );
+                allPackagesList.push( new FormType(-22,'التأمين التكميلي باب خامس', '',  '610-611-612-632' , '0' ) );
+                allPackagesList.push( new FormType(-5,'الجمع بين المعاش والمرتب', '',  '610-611-612-621' , '0' ) );
+                allPackagesList.push( new FormType(-15,'تحديد مستحق منحة الوفاة', '',  '610-611-612-622' , '0' ) );
+                allPackagesList.push( new FormType(-17,'تسجيل باب خامس', '',  '610-611-612-631' , '0' ) );
+                allPackagesList.push( new FormType(-1,'تسوية المعاش + المكافأة-الخدمة التأمينية', '',  '610-611-612-621' , '0' ) );
+                allPackagesList.push( new FormType(-20,'تسوية المعاش + المكافأة-المعاشات', '',  '621' , '0' ) );
+                allPackagesList.push( new FormType(-23,'تسوية مكافأة', '',  '621' , '0' ) );
+                allPackagesList.push( new FormType(-18,'تعديل شريحة', '',  '610-611-612-632' , '0' ) );
+                allPackagesList.push( new FormType(-14,'حالة انتقال الوصاية', '',  '610-611-612-622' , '0' ) );
+                allPackagesList.push( new FormType(-3,'رد الاستبــدال', '',  '610-611-612-621' , '0' ) );
+                allPackagesList.push( new FormType(-4,'زيادة الأبناء أو الزواج', '',  '610-611-612-621' , '0' ) );
+                allPackagesList.push( new FormType(-8,'زيادة الحد الأدنى', '',  '610-611-612-621' , '0' ) );
+                allPackagesList.push( new FormType(-2,'صرف رصيد المكافأة', '',  '610-611-612-621' , '0' ) );
+                allPackagesList.push( new FormType(-12,'صرف نصيب وإعادة صرف نصيب', '',  '610-611-612-622' , '0' ) );
+                allPackagesList.push( new FormType(-7,'طلب التجاوز عن التمسك في طلب صرف المستحقات', '',  '610-611-612-621' , '0' ) );
+                allPackagesList.push( new FormType(-16,'عسكري غير كويتي', '',  '610-611-612-622' , '0' ) );
+                allPackagesList.push( new FormType(-10,'معاملـة الوفــاة', '',  '610-611-612-622' , '0' ) );
+                allPackagesList.push( new FormType(-11,'منحـة زواج', '',  '610-611-612-622' , '0' ) );
+                allPackagesList.push( new FormType(-19,'نماذج حساب مدد التأمين', '',  '610-611-612-621' , '0' ) );
+                allPackagesList.push( new FormType(-1000,'نماذج عامـة', 'general',  '' , '0' ) );
+                
+                allPackagesList.filter(item => (item.invDeptCodes.includes(deptCode) || item.id == -1000)  ).forEach(item=>packagesList.push(item));
+        
+
+                registery.ssFormsGridController.packagesGrid.selectedPackageID = '';
+                registery.ssFormsGridController.packagesGrid.packageList = packagesList;
+                registery.ssFormsGridController.packagesGrid.render();
             }
             catch(error){ app.alertError(error.message);}
+
         },
 
-        fetchFormsList(packageID){
+        fetchFormsList(deptCode,packageID){
+            const url = `/ssforms/depts/${deptCode}/packages/${packageID}/forms`;
+            const options = {method: 'GET'};
+            const resolve = (data) => {
+                                        registery.ssFormsGridController.formsGrid.formsList = data.list;
+                                        registery.ssFormsGridController.formsGrid.render();
+                                      };
+            const reject = () => {
+                                    // registery.ssFormsGridController.formsGrid.formsList = [];
+                                    // registery.ssFormsGridController.formsGrid.render();
+                                    ssFormsService.fetchFormsListLocally(deptCode,packageID);
+                                };
+
+            fetchJSON(url,options,resolve,reject);
+        },
+    // @Deprecated
+        fetchFormsListLocally(deptCode,packageID){
             try {
-                let allFormsList = [
-                    {id:1, eName:'Pension_Stop', aName:'نموذج إيقاف معاش',processIDs:'general'},
-                    {id:42, eName:'PenRecalc_Modified_Periods', aName:'إعادة تسوية المعاش التقاعدي بتعديل مدد الاشتراك',processIDs:'general'},
-                    {id:43, eName:'Pension_Update', aName:'نموذج تعديل المعاش التقاعدي (المرتب) - الباحثين',processIDs:'general'},
-                    {id:44, eName:'Beneficiary_Ending_Statement', aName:'اقرار وطلب صرف نثيب او استقالة او التقاعد',processIDs:'general'},
-                    {id:52, eName:'Pensioner_Marital_Statement', aName:'إقرار الحالة الاجتماعية لصاحب المعاش',processIDs:'general'},
-                    {id:55, eName:'Beneficiary_Heirs_Schedule', aName:'جدول نموذج بحث حالة ورثة',processIDs:'general'},
-                    {id:70, eName:'not Assigned', aName:'Not Assigned',processIDs:'general'},
-                    {id:2, eName:'Call_Memo', aName:'نموذج مذكرة إتصال',processIDs:'general'},
-                    {id:3, eName:'Reset_Pension', aName:'نموذج إعادة تسوية حالات إستحقاق المعاش',processIDs:'general'},
-                    {id:4, eName:'Finance_Reward_62', aName:'نموذج مكافأة مالية للخاضعين لقانون التأمينات 62',processIDs:'general'},
-                    {id:5, eName:'Save_File', aName:'نموذج حفظ ملف',processIDs:'general'},
-                    {id:6, eName:'Indebtedness_Installment', aName:'مذكرة عرض تقسيط مديونية',processIDs:'general'},
-                    {id:7, eName:'Save_Memo', aName:'مذكرة حفظ',processIDs:'general'},
-                    {id:8, eName:'In_Translation_Request', aName:'مذكرة داخلية للسيد المحاسب',processIDs:'general'},
-                    {id:9, eName:'Out_Translation_Request', aName:'مذكرة ترجمة خارجية',processIDs:'general'},
-                    {id:10, eName:'Pen_Sal_Req_Per_Note_Mem', aName:'مذكرة ملاحظات للمدة اللازمة لاستحقاق المعاش التقاعدي',processIDs:'general'},
-                    {id:11, eName:'Pen_Recal_Without_Periods_Before95', aName:'مذكرة اعادة تسوية بعدم ضم المدد',processIDs:'general'},
-                    {id:12, eName:'Book_Executive_Record', aName:'محضر حجز تنفيذي',processIDs:'general'},
-                    {id:13, eName:'Reservation_Release', aName:'نموذج رفع حجز',processIDs:'general'},
-                    {id:14, eName:'Reservation_Update', aName:'نموذج تعديل حجز',processIDs:'general'},
-                    {id:15, eName:'Alimony_Update', aName:'نموذج تغيير نفقة',processIDs:'general'},
-                    {id:16, eName:'Certificate_Whome_It_May_Concern', aName:'شهادة لمن يهمه الأمر',processIDs:'general'},
-                    {id:17, eName:'Recal_Pen_After_Ded_Period_Before95', aName:'إعادة تسوية المعاش التكميلي بعد خصم المدة السابقة 1995/1/1',processIDs:'general'},
-                    {id:18, eName:'Note_Memo', aName:'مذكرة ملاحظات',processIDs:'general'},
-                    {id:19, eName:'Children_Increace_After_Retir', aName:'مذكرة بحث بشأن زيادة الأولاد بعد التقاعد',processIDs:'general'},
-                    {id:20, eName:'Civilians_Pension_Update', aName:'نموذج تعديل معاش-مكافأة-المدنيين',processIDs:'general'},
-                    {id:22, eName:'Pension_Temporarily_Suspend', aName:'إيقاف المعاش مؤقتا',processIDs:'general'},
-                    {id:23, eName:'Bonus_Suspend', aName:'إيقاف بما يعادل المكافاة',processIDs:'general'},
-                    {id:24, eName:'Pension_ReCalculation', aName:'إعادة تسوية المعاش التقاعدي',processIDs:'general'},
-                    {id:100, eName:'Pension_Calculation_Attachment_Sheet', aName:'نموذج المستندات المرفقة بإجراء تسوية المعاش',processIDs:',-1,'},
-                    {id:126, eName:'Medical_Reason_Pensioner_Statement', aName:'إقرار تسوية المعاش التقاعدي لأسباب صحية',processIDs:',-1,'},
-                    {id:25, eName:'Benefits_Payment', aName:'استمارة طلب صرف الحقوق التأمينية رقم 201',processIDs:',-1,'},
-                    {id:26, eName:'Pensioner_Marital_Status', aName:'إقرار الحالة الاجتماعية لصاحب المعاش',processIDs:',-1,'},
-                    {id:27, eName:'Deductions', aName:'استمارة استقطاع',processIDs:',-1,'},
-                    {id:28, eName:'Pension_Replacement', aName:'استمارة طلب صرف استبدال جزء من معاش تقاعدي',processIDs:',-1,'},
-                    {id:45, eName:'Retirement_Share_Request', aName:'استمارة طلب صرف الحقوق التأمينية (صرف نصيب عند التقاعد)تابع 201',processIDs:',-1,'},
-                    {id:38, eName:'Disabled_Children_Declaration', aName:'إقرار عن الأبناء المعاقين تطبيقاً لأحكام القانون رقم (8) لسنة 2010',processIDs:',-1,'},
-                    {id:57, eName:'Death_Document', aName:'المستندات المطلوبة في معاملات الوفاة',processIDs:',-10,'},
-                    {id:115, eName:'Heirs_Status_Memo', aName:'مذكرة بشأن حالة المرحوم',processIDs:',-10,'},
-                    {id:113, eName:'Pension_Resettlement_BaiscData_Memo', aName:'مذكرة البيانات الأساسية لتسوية (معاش-مكافأة) لمن انتهت خدمته بالوفاة',processIDs:',-10,'},
-                    {id:48, eName:'Death_Grant_Demand', aName:'طلب صرف منحة وفاة',processIDs:',-10,'},
-                    {id:40, eName:'Beneficiary_Heirs_Check', aName:'نموذج بحث حالة ورثة',processIDs:',-10,'},
-                    {id:46, eName:'Family_Approval', aName:'اقرار بشأن الاعتماد للاب والاخوة والاخوات',processIDs:',-10,'},
-                    {id:47, eName:'Beneficiary_Demand_Type', aName:'استمارة طلب ايقاف وانهاء نصيب او معاش',processIDs:',-10,'},
-                    {id:41, eName:'Beneficiary_Marriage_Grant', aName:'طلب وإقرار لصرف منحة الزواج',processIDs:',-11,'},
-                    {id:30, eName:'Share_Demand_Approval', aName:'استمارة إقرار وطلب صرف نصيب',processIDs:',-12,'},
-                    {id:32, eName:'Beneficiary_Gardianship_Statement', aName:'طلب صرف وإقرار بالحالة الوظيفية والاجتماعية عند الولاية والوصاية والقوامة',processIDs:',-14,'},
-                    {id:31, eName:'Death_Grant', aName:'اقرار بتحديد مستحق منحة الوفاة',processIDs:',-15,'},
-                    {id:114, eName:'Beneficiaries_Status_On_Pension', aName:'مذكرة بحالة المستحقين في المعاش',processIDs:',-15,'},
-                    {id:101, eName:'Update_Beneficiaries_Military_NonKuwaiti', aName:'إقرار وتحديث بيانات للمستحقين عسكري غير كويتي',processIDs:',-16,'},
-                    {id:79, eName:'Pension_Category_Selection_5th', aName:'اختيار الشريحة الخاصة بأصحاب المعاشات التقاعدية المصروفة أو المؤجلة الصرف',processIDs:',-17,'},
-                    {id:76, eName:'Disable_Registration_Endorsement_5th', aName:'إقرار معاق للتسجيل طبقا لأحكام الباب الخامس',processIDs:',-17,'},
-                    {id:77, eName:'Pensioner_Endorsement_5th', aName:'نموذج الإقرار الخاص بأصحاب المعاشات التقاعدية المصروفة أو المؤجلة الصرف والمستحقين لصرفها',processIDs:',-17,'},
-                    {id:118, eName:'Subscription_Notify_Details_SSS', aName:'بيانات الاشتراك للفئة الخاضعة لأحكام الباب الخامس',processIDs:',-17,'},
-                    {id:21, eName:'Subscription_Notify_SSS', aName:'اشعار اشتراك-انهاء اشتراك مؤمن عليه ( باب خامس)',processIDs:',-17,'},
-                    {id:74, eName:'Permit_Owners_Endorsement_5th', aName:'إقرار لأصحاب تراخيص الشركات أو التراخيص والتصاريح الفردية',processIDs:',-17,'},
-                    {id:68, eName:'Signature_Form', aName:'نموذج التوقيعات (باب خامس)',processIDs:',-17,'},
-                    {id:69, eName:'Service_Activities_Period', aName:'بيان الأنشطة الأخرى ومدد الخدمة السابقة (باب خامس)',processIDs:',-17,'},
-                    {id:72, eName:'Income_Contribution_Share', aName:'طلب تعديل الشريحة التي تؤدي على أساسها الاشتراكات للمخاطبين باب خامس',processIDs:',-18,'},
-                    {id:73, eName:'Contribution_Share_start', aName:'تعديل شريحة بدء الاشتراك',processIDs:',-18,'},
-                    {id:119, eName:'Subscription_3Updates_SSS', aName:'طلب تعديل شريحة (1250 د.ك) فأكثر وفقا للمادة 7 من القرار (2) لسنة 2019 (3 تعديلات)',processIDs:',-18,'},
-                    {id:120, eName:'Subscription_10Promotion_SSS', aName:'طلب تعديل شريحة بدء الاشتراك بتعديل أحكام القرار رقم (4) لسنة 1993 وفقا لأحكام القرار رقم (3) لسنة 2019 (10 قفزات)',processIDs:',-18,'},
-                    {id:87, eName:'Calculate_CurrentValue', aName:'استمارة حساب القيمة الحالية',processIDs:',-19,'},
-                    {id:83, eName:'Previous_ServicePeriod_Payment_Type', aName:'نموذج اختيار طريقة سداد ضم الخدمة السابقة',processIDs:',-19,'},
-                    {id:75, eName:'Add_ServicePeriods_Before_KW_Nationality', aName:'طلب ضم مدد الخدمة السابقة على الحصول على الجنسية الكويتية',processIDs:',-19,'},
-                    {id:84, eName:'Add_ServicePeriod_BeforeKW_Pension_Beneficiary', aName:'طلب ضم مدة خدمة سابقة على الجنسية الكويتية لأصحاب المعاشات أو المستحقين',processIDs:',-19,'},
-                    {id:78, eName:'Add_Nominal_Period_After_Service', aName:'طلب ضم مدة اشتراك اعتبارية (بعد انتهــاء الخدمـــة)',processIDs:',-19,'},
-                    {id:80, eName:'Add_Nominal_Period_During_Service', aName:'طلب ضم مدة اشتراك اعتبارية (أثنــاء الخدمــة)',processIDs:',-19,'},
-                    {id:81, eName:'Add_Actual_ServicePeriod_Before1995', aName:'طلب ضم مدة الخدمة الفعلية السابقة على 1-1-1995 في التأمين التكميلي',processIDs:',-19,'},
-                    {id:82, eName:'Add_ServicePeriod_Private_Oil_Before1977', aName:'طلب ضم مدد الخدمة السابقة في القطاعين الأهلي والنفطي (التي انتهت قبل 01-10-1977)',processIDs:',-19,'},
-                    {id:85, eName:'Calculate_Unpaid_ServicePeriods', aName:'طلب حساب مدد الخدمة التي لا يتقاضى المؤمن عليه أو المستفيد مرتبه عنها  وفقا للقرار رقم  4 لسنة 1994',processIDs:',-19,'},
-                    {id:86, eName:'Add_RetrirementGrant_ServicePeriod', aName:'طلب ضم مدة الخدمة الفعلية السابقة (يصرف-لايصرف) عنها مكافأة تقاعد (عسكري-مدني)',processIDs:',-19,'},
-                    {id:97, eName:'Reward_Balance_Payment', aName:'نموذج صرف رصيد المكافأة',processIDs:',-2,'},
-                    {id:106, eName:'Pension_Recalculation_Rule_41_42', aName:'إعادة تسوية المعاش طبقا لأحكام المادة 41-42',processIDs:',-20,'},
-                    {id:67, eName:'PensionRecalculation_Item36_Rule8_Year2010_Accountant', aName:'مذكرة إعادة تسوية المعاش التقاعدي طبقاً للمادة 36 من القانون 8 لسنة 2010-المحاسب',processIDs:',-20,'},
-                    {id:65, eName:'Children_Increment_After_Retirement_Accountant', aName:'مذكرة زيادة الأولاد بعد التقاعد-المحاسب',processIDs:',-20,'},
-                    {id:61, eName:'Pension_Modification_Marriage_Increment_Retirement', aName:'نموذج تعديل معاش زيادة زواج بعد التقاعد',processIDs:',-20,'},
-                    {id:62, eName:'PensionRecalculation_Item36_Rule8_Year2010_Researcher', aName:'مذكرة إعادة تسوية المعاش التقاعدي طبقاً للمادة 36 من القانون 8 لسنة 2010-الباحث القانوني',processIDs:',-20,'},
-                    {id:63, eName:'Differences_Decision2_Year2003', aName:'الفروق المستحقة من تطبيق قرار الحد الأدنى رقم 2 لسنة 2003',processIDs:',-20,'},
-                    {id:50, eName:'Pension_Calculation_Accountant', aName:'نموذج تسوية معاش - المحاسب',processIDs:',-20,'},
-                    {id:51, eName:'Children_Increment_After_Retirement_Researcher', aName:'مذكرة زيادة الأولاد بعد التقاعد-الباحث القانوني',processIDs:',-20,'},
-                    {id:53, eName:'Pension_Calculation_BasicData_Memo', aName:'مذكرة البيانات الأساسية لتسوية المعاش',processIDs:',-20,'},
-                    {id:64, eName:'Pension_Calculation_NotesMemo_Accountant', aName:'مذكرة ملاحظات تسوية المعاش - المحاسب',processIDs:',-20,'},
-                    {id:98, eName:'Share_Payment_By_Check', aName:'إقرار وطلب صرف النصيب بشيـــــك',processIDs:',-21,'},
-                    {id:121, eName:'Optional_Supplement_Insurance', aName:'نموذج التأمين التكميلي باب خامس',processIDs:',-22,'},
-                    {id:128, eName:'Reward_Calculation_BasicData_Memo', aName:'مذكرة البيانات الأساسية لتسوية المكافأة',processIDs:',-23,'},
-                    {id:129, eName:'Reward_Calculation_Accountant', aName:'نموذج تسوية المكافأة',processIDs:',-23,'},
-                    {id:130, eName:'Pension_Slice_Average_Calculation_Draft', aName:'مسودة حساب متوسط المرتب أو الشرائح',processIDs:',-23,'},
-                    {id:131, eName:'Reward_Calculation_Accountant_Draft', aName:'نموذج حساب مكافأة - مدني - عسكري - باب خامس',processIDs:',-23,'},
-                    {id:132, eName:'PensionRecalculation_Item41_Researcher', aName:'إعادة تسوية المعاش التقاعدي طبقاً للمادة 41-الباحث القانوني',processIDs:',-24,'},
-                    {id:133, eName:'PensionRecalculation_Item42_Researcher', aName:'إعادة تسوية المعاش التقاعدي طبقاً للمادة 42-الباحث القانوني',processIDs:',-24,'},
-                    {id:134, eName:'PensionRecalculation_Pension_Modification', aName:'إعادة تسوية المعاش بتعديل بيانات المرتب',processIDs:',-24,'},
-                    {id:135, eName:'PensionRecalculation_Items6Mil_Item10Civ', aName:'مذكرة إعادة تسوية حالات استحقاق المعاشات مادة 6 عسكريين مادة 10 مدنيين',processIDs:',-24,'},
-                    {id:136, eName:'Pension_Reward_Modification_Military', aName:'نموذج تعديل معاش / مكافأة / عسكريين',processIDs:',-24,'},
-                    {id:137, eName:'Pension_Reward_Modification_Civilian', aName:'نموذج تعديل معاش / مكافأة / مدنيين',processIDs:',-24,'},
-                    {id:138, eName:'PensionRecalculation_Items4142_Rule8_Year2010', aName:'إعادة تسوية المعاش التقاعدي طبقاً للمادة رقم 41 ، 42 لقانون رقم 8 لسنة 2010',processIDs:',-24,'},
-                    {id:139, eName:'PensionRecalculation_Items4142_Rule110_Year2015', aName:'إعادة تسوية المعاش التقاعدي طبقاً للمادة رقم 41 ، 42 لقانون رقم 110 لسنة 2015',processIDs:',-24,'},
-                    {id:140, eName:'Estimated_Pension_Legal_Calculation', aName:'تسوية معاش افتراضي للمؤمن عليه - القانونيين',processIDs:',-25,'},
-                    {id:141, eName:'Estimated_Pension_Accountant_Calculation', aName:'تسوية معاش افتراضي للمؤمن عليه - المحاسبين',processIDs:',-25,'},
-                    {id:58, eName:'Pension_Replacement_PayBack', aName:'استمارة رد استبدال اثناء الخدمة - متقاعد',processIDs:',-3,'},
-                    {id:37, eName:'Increment_Decision_1_2001', aName:'نموذج استيفاء زيادة القرار رقم (1) لسنة 2001 المعدل بالقرار رقم (5) لسنة 2005',processIDs:',-4,'},
-                    {id:36, eName:'Merge_Pension_And_Salary', aName:'استمارة طلب الجمع بين المعاش والمرتب',processIDs:',-5,'},
-                    {id:39, eName:'Ignore_Benefits_Delaying', aName:'طلب التجاوز عن التمسك بالتقادم في طلب صرف المستحقات التأمينية',processIDs:',-7,'},
-                    {id:54, eName:'Pensioner_Marital_Statement_2003', aName:'نموذج بشأن الحد الأدنى للمعاش التقاعدي',processIDs:',-8,'},
-                    {id:59, eName:'NonKuwaiti_Pensioner_Statement', aName:'إقرار صاحب المعاش الغير كويتي',processIDs:',-9,'},
-                    {id:127, eName:'Add_RetirementReward_BasicAndComplementary', aName:'طلب ضم مدد الخدمة السابقة (صرف / لم يصرف) عنها مكافأة تقاعد (الأساسي / التكميلي) (مدنية / عسكرية)',processIDs:',-19,'},
-                    {id:116, eName:'Share_Suspended', aName:'نموذج إيقاف نصيب',processIDs:'general'},
-                    {id:117, eName:'Contribution_Periods', aName:'نموذج مدد الاشتراك',processIDs:'general'},
-                    {id:122, eName:'PensionResettlement_OrEndOfServiceReward', aName:'نموذج تسوية المعـاش أو مكافأة نهاية الخدمة',processIDs:'general'},
-                    {id:123, eName:'Add_RetirementReward_BasicAndComplementary', aName:'طلب ضم مدد الخدمة السابقة (صرف / لم يصرف) عنها مكافأة تقاعد (الأساسي / التكميلي) (مدنية / عسكرية)',processIDs:'general'},
-                    {id:124, eName:'Increments_Modification_After_Death', aName:'نموذج تعديل الزيادات بعد الوفاة',processIDs:'general'},
-                    {id:125, eName:'Update_Beneficiary_Data_Reaching_Age85', aName:'نموذج تحديث بيانات المستحقين عند بلوغ سن 85',processIDs:'general'},
-                    {id:107, eName:'Accountant_Notes_Form', aName:'نموذج ملاحظات القانوني',processIDs:'general'},
-                    {id:108, eName:'Acknowledgement_Request', aName:'إقـرار وطلـب',processIDs:'general'},
-                    {id:109, eName:'Unemployment_Compensation_Stop_101', aName:'إيقاف صرف تعويض التأمين ضد البطالة طبقا للقانون رقم ,101 لسنة 2013',processIDs:'general'},
-                    {id:110, eName:'Unemployement_Compensation_Payment_MOCI', aName:'نموذج صرف تعويض التأمين ضد البطالة بعد الاطلاع على شهادة وزارة التجارة والصناعة',processIDs:'general'},
-                    {id:111, eName:'Unemployment_Compensation_Rule4', aName:'حجز تنفيذى طبقاً للأحكام  المدة 4 من القانون رقم 101 لسنة 2013 بشأن تعويض التأمين ضد البطالة',processIDs:'general'},
-                    {id:112, eName:'Recovered_Payments_MOJ', aName:'بشأن المبالغ المسترجعة من وزارة العدل لصالح النفقة',processIDs:'general'},
-                    {id:102, eName:'ServicesComputation_Fle_Transfer', aName:'نموذج تحويل ملف_حساب المدد',processIDs:'general'},
-                    {id:103, eName:'ServicesComputation_Memo', aName:'مذكرة إدارة حساب مدد التأمين',processIDs:'general'},
-                    {id:104, eName:'ServicesTranslation_Memo', aName:'نموذج طلب ترجمة شهادة لمن يهمه الأمر',processIDs:'general'},
-                    {id:105, eName:'Pension_In_Employment_Bank_Endorsement', aName:'نموذج إقرار بصحة جهة الصرف',processIDs:'general'},
-                    {id:96, eName:'File_Request', aName:'نموذج طلب ملف',processIDs:'general'},
-                    {id:49, eName:'Beneficiary_Refund_Request', aName:'استمارة طلب صرف المرتجعات والمستحقات',processIDs:'general'},
-                    {id:33, eName:'SpecialNeeds_PensionResettlement', aName:'إعادة تسوية المعاش في شأن حقوق الأشخاص ذوي الإعاقة',processIDs:'general'},
-                    {id:34, eName:'PensionResettlement_After_Death', aName:'إعادة إعادة تسوية المعاش التقاعدي بعد الوفاة',processIDs:'general'},
-                    {id:35, eName:'InsuranceRights_Deduction_Request', aName:'نموذج استقطــــاع من حقوق تأمينيـــة',processIDs:'general'},
-                    {id:94, eName:'File_Transfer', aName:'نموذج تحويل ملف',processIDs:'general'},
-                    {id:93, eName:'Employeer_Forwarding', aName:'نموذج تحويل ملف أصحاب أعمال',processIDs:'general'},
-                    {id:95, eName:'Make_Payments', aName:'نموذج تسديد مبالغ',processIDs:'general'},
-                    {id:56, eName:'Change_Bank_Details', aName:'استمارة طلب تغيير جهة الصرف',processIDs:'general'},
-                    {id:60, eName:'Delegation_Activation', aName:'استمارة إدخال- إلغاء وكالة',processIDs:'general'},
-                    {id:88, eName:'SSSMemo', aName:'مذكرة',processIDs:'general'},
-                    {id:91, eName:'Process_Achievment_Statistics', aName:'الإحصائية اليومية لإنجاز معاملات المراجعين',processIDs:'general'},
-                    {id:90, eName:'Certificates_Reviewers_Statistics', aName:'إحصائية استقبال مراجعي الشهادات',processIDs:'general'},
-                    {id:89, eName:'Phone_Calls_Statistics', aName:'الإحصائية اليومية للاستفسارات الهاتفية',processIDs:'general'},
-                    {id:92, eName:'Client_Forwarding', aName:'نموذج تحويل مراجع',processIDs:'general'},
-                    {id:99, eName:'Exceptional_Advanced_Pension', aName:'معاش مقدم إستثنائي للإدارة العامة',processIDs:'general'},
-                    {id:29, eName:'Update_Client_Data', aName:'نموذج تحديث بيانات المؤمن عليهم',processIDs:'general'},   
-
-                ];
-
+                let allFormsList = [];
                 let formsList = [];
-                allFormsList.filter(item => item.processIDs.includes(','+packageID+',') || ( (item.processIDs == packageID) && (packageID == 'general') ) ).forEach(item=> formsList.push(item));
-                return formsList;
+                
+                allFormsList.push( new FormType(70,'Not Assigned', 'not Assigned',  '' , '' ) );
+                allFormsList.push( new FormType(90,'إحصائية استقبال مراجعي الشهادات', 'Certificates_Reviewers_Statistics',  '610-611-612' , ',-1000,' ) );
+                allFormsList.push( new FormType(34,'إعادة إعادة تسوية المعاش التقاعدي بعد الوفاة', 'PensionResettlement_After_Death',  '622' , ',-1000,' ) );
+                allFormsList.push( new FormType(24,'إعادة تسوية المعاش التقاعدي', 'Pension_ReCalculation',  '' , '' ) );
+                allFormsList.push( new FormType(42,'إعادة تسوية المعاش التقاعدي بتعديل مدد الاشتراك', 'PenRecalc_Modified_Periods',  '' , '' ) );
+                allFormsList.push( new FormType(132,'إعادة تسوية المعاش التقاعدي طبقاً للمادة 41-الباحث القانوني', 'PensionRecalculation_Item41_Researcher',  '621' , ',-24,' ) );
+                allFormsList.push( new FormType(133,'إعادة تسوية المعاش التقاعدي طبقاً للمادة 42-الباحث القانوني', 'PensionRecalculation_Item42_Researcher',  '621' , ',-24,' ) );
+                allFormsList.push( new FormType(139,'إعادة تسوية المعاش التقاعدي طبقاً للمادة رقم 41 ، 42 لقانون رقم 110 لسنة 2015', 'PensionRecalculation_Items4142_Rule110_Year2015',  '621' , ',-24,' ) );
+                allFormsList.push( new FormType(138,'إعادة تسوية المعاش التقاعدي طبقاً للمادة رقم 41 ، 42 لقانون رقم 8 لسنة 2010', 'PensionRecalculation_Items4142_Rule8_Year2010',  '621' , ',-24,' ) );
+                allFormsList.push( new FormType(17,'إعادة تسوية المعاش التكميلي بعد خصم المدة السابقة 1995/1/1', 'Recal_Pen_After_Ded_Period_Before95',  '' , '' ) );
+                allFormsList.push( new FormType(134,'إعادة تسوية المعاش بتعديل بيانات المرتب', 'PensionRecalculation_Pension_Modification',  '621' , ',-24,' ) );
+                allFormsList.push( new FormType(106,'إعادة تسوية المعاش طبقا لأحكام المادة 41-42', 'Pension_Recalculation_Rule_41_42',  '621' , ',-20,' ) );
+                allFormsList.push( new FormType(33,'إعادة تسوية المعاش في شأن حقوق الأشخاص ذوي الإعاقة', 'SpecialNeeds_PensionResettlement',  '622' , ',-1000,' ) );
+                allFormsList.push( new FormType(26,'إقرار الحالة الاجتماعية لصاحب المعاش', 'Pensioner_Marital_Status',  '610-611-612-621' , ',-1,' ) );
+                allFormsList.push( new FormType(52,'إقرار الحالة الاجتماعية لصاحب المعاش', 'Pensioner_Marital_Statement',  '' , '' ) );
+                allFormsList.push( new FormType(66,'إقرار المرأة المتزوجة بدون أبناء', 'MarriedLady_NoChildren',  '610-611-612-621' , 'not active' ) );
+                allFormsList.push( new FormType(126,'إقرار تسوية المعاش التقاعدي لأسباب صحية', 'Medical_Reason_Pensioner_Statement',  '610-611-612-621' , ',-1,' ) );
+                allFormsList.push( new FormType(59,'إقرار صاحب المعاش الغير كويتي', 'NonKuwaiti_Pensioner_Statement',  '610-611-612-621' , ',-9,' ) );
+                allFormsList.push( new FormType(38,'إقرار عن الأبناء المعاقين تطبيقاً لأحكام القانون رقم (8) لسنة 2010', 'Disabled_Children_Declaration',  '610-611-612-621' , ',-1,' ) );
+                allFormsList.push( new FormType(74,'إقرار لأصحاب تراخيص الشركات أو التراخيص والتصاريح الفردية', 'Permit_Owners_Endorsement_5th',  '610-611-612-631' , ',-17,' ) );
+                allFormsList.push( new FormType(76,'إقرار معاق للتسجيل طبقا لأحكام الباب الخامس', 'Disable_Registration_Endorsement_5th',  '610-611-612-631' , ',-17,' ) );
+                allFormsList.push( new FormType(101,'إقرار وتحديث بيانات للمستحقين عسكري غير كويتي', 'Update_Beneficiaries_Military_NonKuwaiti',  '610-611-612-622' , ',-16,' ) );
+                allFormsList.push( new FormType(108,'إقـرار وطلـب', 'Acknowledgement_Request',  '610-611-612' , ',-1000,' ) );
+                allFormsList.push( new FormType(98,'إقرار وطلب صرف النصيب بشيـــــك', 'Share_Payment_By_Check',  '610-611-612-622' , ',-21,' ) );
+                allFormsList.push( new FormType(22,'إيقاف المعاش مؤقتا', 'Pension_Temporarily_Suspend',  '' , '' ) );
+                allFormsList.push( new FormType(23,'إيقاف بما يعادل المكافاة', 'Bonus_Suspend',  '' , '' ) );
+                allFormsList.push( new FormType(109,'إيقاف صرف تعويض التأمين ضد البطالة طبقا للقانون رقم ,101 لسنة 2013', 'Unemployment_Compensation_Stop_101',  '621' , ',-1000,' ) );
+                allFormsList.push( new FormType(79,'اختيار الشريحة الخاصة بأصحاب المعاشات التقاعدية المصروفة أو المؤجلة الصرف', 'Pension_Category_Selection_5th',  '610-611-612-631' , ',-17,' ) );
+                allFormsList.push( new FormType(60,'استمارة إدخال- إلغاء وكالة', 'Delegation_Activation',  '610-611-612' , ',-1000,' ) );
+                allFormsList.push( new FormType(30,'استمارة إقرار وطلب صرف نصيب', 'Share_Demand_Approval',  '610-611-612-622' , ',-12,' ) );
+                allFormsList.push( new FormType(27,'استمارة استقطاع', 'Deductions',  '610-611-612-621' , ',-1,' ) );
+                allFormsList.push( new FormType(87,'استمارة حساب القيمة الحالية', 'Calculate_CurrentValue',  '610-611-612-621' , ',-19,' ) );
+                allFormsList.push( new FormType(58,'استمارة رد استبدال اثناء الخدمة - متقاعد', 'Pension_Replacement_PayBack',  '610-611-612-621' , ',-3,' ) );
+                allFormsList.push( new FormType(36,'استمارة طلب الجمع بين المعاش والمرتب', 'Merge_Pension_And_Salary',  '610-611-612-621' , ',-5,' ) );
+                allFormsList.push( new FormType(47,'استمارة طلب ايقاف وانهاء نصيب او معاش', 'Beneficiary_Demand_Type',  '610-611-612-622' , ',-10,' ) );
+                allFormsList.push( new FormType(56,'استمارة طلب تغيير جهة الصرف', 'Change_Bank_Details',  '610-611-612' , ',-1000,' ) );
+                allFormsList.push( new FormType(28,'استمارة طلب صرف استبدال جزء من معاش تقاعدي', 'Pension_Replacement',  '610-611-612-621' , ',-1,' ) );
+                allFormsList.push( new FormType(45,'استمارة طلب صرف الحقوق التأمينية (صرف نصيب عند التقاعد)تابع 201', 'Retirement_Share_Request',  '610-611-612-621' , ',-1,' ) );
+                allFormsList.push( new FormType(25,'استمارة طلب صرف الحقوق التأمينية رقم 201', 'Benefits_Payment',  '610-611-612-621' , ',-1,' ) );
+                allFormsList.push( new FormType(49,'استمارة طلب صرف المرتجعات والمستحقات', 'Beneficiary_Refund_Request',  '610-611-612-621-622' , ',-1000,' ) );
+                allFormsList.push( new FormType(21,'اشعار اشتراك-انهاء اشتراك مؤمن عليه ( باب خامس)', 'Subscription_Notify_SSS',  '610-611-612-631' , ',-17,' ) );
+                allFormsList.push( new FormType(31,'اقرار بتحديد مستحق منحة الوفاة', 'Death_Grant',  '610-611-612-622' , ',-15,' ) );
+                allFormsList.push( new FormType(46,'اقرار بشأن الاعتماد للاب والاخوة والاخوات', 'Family_Approval',  '610-611-612-622' , ',-10,' ) );
+                allFormsList.push( new FormType(44,'اقرار وطلب صرف نثيب او استقالة او التقاعد', 'Beneficiary_Ending_Statement',  '' , '' ) );
+                allFormsList.push( new FormType(91,'الإحصائية اليومية لإنجاز معاملات المراجعين', 'Process_Achievment_Statistics',  '610-611-612' , ',-1000,' ) );
+                allFormsList.push( new FormType(89,'الإحصائية اليومية للاستفسارات الهاتفية', 'Phone_Calls_Statistics',  '610-611-612' , ',-1000,' ) );
+                allFormsList.push( new FormType(63,'الفروق المستحقة من تطبيق قرار الحد الأدنى رقم 2 لسنة 2003', 'Differences_Decision2_Year2003',  '621' , ',-20,' ) );
+                allFormsList.push( new FormType(57,'المستندات المطلوبة في معاملات الوفاة', 'Death_Document',  '610-611-612-622' , ',-10,' ) );
+                allFormsList.push( new FormType(112,'بشأن المبالغ المسترجعة من وزارة العدل لصالح النفقة', 'Recovered_Payments_MOJ',  '621' , ',-1000,' ) );
+                allFormsList.push( new FormType(69,'بيان الأنشطة الأخرى ومدد الخدمة السابقة (باب خامس)', 'Service_Activities_Period',  '610-611-612-631' , ',-17,' ) );
+                allFormsList.push( new FormType(118,'بيانات الاشتراك للفئة الخاضعة لأحكام الباب الخامس', 'Subscription_Notify_Details_SSS',  '631' , ',-17,' ) );
+                allFormsList.push( new FormType(140,'تسوية معاش افتراضي للمؤمن عليه - القانونيين', 'Estimated_Pension_Legal_Calculation',  '621' , ',-25,' ) );
+                allFormsList.push( new FormType(141,'تسوية معاش افتراضي للمؤمن عليه - المحاسبين', 'Estimated_Pension_Accountant_Calculation',  '621' , ',-25,' ) );
+                allFormsList.push( new FormType(73,'تعديل شريحة بدء الاشتراك', 'Contribution_Share_start',  '610-611-612-632' , ',-18,' ) );
+                allFormsList.push( new FormType(55,'جدول نموذج بحث حالة ورثة', 'Beneficiary_Heirs_Schedule',  '' , '' ) );
+                allFormsList.push( new FormType(111,'حجز تنفيذى طبقاً للأحكام  المدة 4 من القانون رقم 101 لسنة 2013 بشأن تعويض التأمين ضد البطالة', 'Unemployment_Compensation_Rule4',  '621' , ',-1000,' ) );
+                allFormsList.push( new FormType(16,'شهادة لمن يهمه الأمر', 'Certificate_Whome_It_May_Concern',  '' , '' ) );
+                allFormsList.push( new FormType(39,'طلب التجاوز عن التمسك بالتقادم في طلب صرف المستحقات التأمينية', 'Ignore_Benefits_Delaying',  '610-611-612-621' , ',-7,' ) );
+                allFormsList.push( new FormType(72,'طلب تعديل الشريحة التي تؤدي على أساسها الاشتراكات للمخاطبين باب خامس', 'Income_Contribution_Share',  '610-611-612-632' , ',-18,' ) );
+                allFormsList.push( new FormType(119,'طلب تعديل شريحة (1250 د.ك) فأكثر وفقا للمادة 7 من القرار (2) لسنة 2019 (3 تعديلات)', 'Subscription_3Updates_SSS',  '610-611-612-632' , ',-18,' ) );
+                allFormsList.push( new FormType(120,'طلب تعديل شريحة بدء الاشتراك بتعديل أحكام القرار رقم (4) لسنة 1993 وفقا لأحكام القرار رقم (3) لسنة 2019 (10 قفزات)', 'Subscription_10Promotion_SSS',  '610-611-612-632' , ',-18,' ) );
+                allFormsList.push( new FormType(85,'طلب حساب مدد الخدمة التي لا يتقاضى المؤمن عليه أو المستفيد مرتبه عنها  وفقا للقرار رقم  4 لسنة 1994', 'Calculate_Unpaid_ServicePeriods',  '610-611-612-621' , ',-19,' ) );
+                allFormsList.push( new FormType(48,'طلب صرف منحة وفاة', 'Death_Grant_Demand',  '610-611-612-622' , ',-10,' ) );
+                allFormsList.push( new FormType(32,'طلب صرف وإقرار بالحالة الوظيفية والاجتماعية عند الولاية والوصاية والقوامة', 'Beneficiary_Gardianship_Statement',  '610-611-612-622' , ',-14,' ) );
+                allFormsList.push( new FormType(80,'طلب ضم مدة اشتراك اعتبارية (أثنــاء الخدمــة)', 'Add_Nominal_Period_During_Service',  '610-611-612-621' , ',-19,' ) );
+                allFormsList.push( new FormType(78,'طلب ضم مدة اشتراك اعتبارية (بعد انتهــاء الخدمـــة)', 'Add_Nominal_Period_After_Service',  '610-611-612-621' , ',-19,' ) );
+                allFormsList.push( new FormType(86,'طلب ضم مدة الخدمة الفعلية السابقة (يصرف-لايصرف) عنها مكافأة تقاعد (عسكري-مدني)', 'Add_RetrirementGrant_ServicePeriod',  '610-611-612-621' , ',-19,' ) );
+                allFormsList.push( new FormType(81,'طلب ضم مدة الخدمة الفعلية السابقة على 1-1-1995 في التأمين التكميلي', 'Add_Actual_ServicePeriod_Before1995',  '610-611-612-621' , ',-19,' ) );
+                allFormsList.push( new FormType(84,'طلب ضم مدة خدمة سابقة على الجنسية الكويتية لأصحاب المعاشات أو المستحقين', 'Add_ServicePeriod_BeforeKW_Pension_Beneficiary',  '610-611-612-621' , ',-19,' ) );
+                allFormsList.push( new FormType(123,'طلب ضم مدد الخدمة السابقة (صرف / لم يصرف) عنها مكافأة تقاعد (الأساسي / التكميلي) (مدنية / عسكرية)', 'Add_RetirementReward_BasicAndComplementary',  '610-611-612-622' , ',-1000,' ) );
+                allFormsList.push( new FormType(127,'طلب ضم مدد الخدمة السابقة (صرف / لم يصرف) عنها مكافأة تقاعد (الأساسي / التكميلي) (مدنية / عسكرية)', 'Add_RetirementReward_BasicAndComplementary',  '610-611-612-621' , '-19' ) );
+                allFormsList.push( new FormType(75,'طلب ضم مدد الخدمة السابقة على الحصول على الجنسية الكويتية', 'Add_ServicePeriods_Before_KW_Nationality',  '610-611-612-621' , ',-19,' ) );
+                allFormsList.push( new FormType(82,'طلب ضم مدد الخدمة السابقة في القطاعين الأهلي والنفطي (التي انتهت قبل 01-10-1977)', 'Add_ServicePeriod_Private_Oil_Before1977',  '610-611-612-621' , ',-19,' ) );
+                allFormsList.push( new FormType(41,'طلب وإقرار لصرف منحة الزواج', 'Beneficiary_Marriage_Grant',  '610-611-612-622' , ',-11,' ) );
+                allFormsList.push( new FormType(12,'محضر حجز تنفيذي', 'Book_Executive_Record',  '' , '' ) );
+                allFormsList.push( new FormType(88,'مذكرة', 'SSSMemo',  '610-611-612' , ',-1000,' ) );
+                allFormsList.push( new FormType(103,'مذكرة إدارة حساب مدد التأمين', 'ServicesComputation_Memo',  '621' , ',-1000,' ) );
+                allFormsList.push( new FormType(62,'مذكرة إعادة تسوية المعاش التقاعدي طبقاً للمادة 36 من القانون 8 لسنة 2010-الباحث القانوني', 'PensionRecalculation_Item36_Rule8_Year2010_Researcher',  '621' , ',-20,' ) );
+                allFormsList.push( new FormType(67,'مذكرة إعادة تسوية المعاش التقاعدي طبقاً للمادة 36 من القانون 8 لسنة 2010-المحاسب', 'PensionRecalculation_Item36_Rule8_Year2010_Accountant',  '621' , ',-20,' ) );
+                allFormsList.push( new FormType(135,'مذكرة إعادة تسوية حالات استحقاق المعاشات مادة 6 عسكريين مادة 10 مدنيين', 'PensionRecalculation_Items6Mil_Item10Civ',  '621' , ',-24,' ) );
+                allFormsList.push( new FormType(11,'مذكرة اعادة تسوية بعدم ضم المدد', 'Pen_Recal_Without_Periods_Before95',  '' , '' ) );
+                allFormsList.push( new FormType(113,'مذكرة البيانات الأساسية لتسوية (معاش-مكافأة) لمن انتهت خدمته بالوفاة', 'Pension_Resettlement_BaiscData_Memo',  '622' , ',-10,' ) );
+                allFormsList.push( new FormType(53,'مذكرة البيانات الأساسية لتسوية المعاش', 'Pension_Calculation_BasicData_Memo',  '621' , ',-20,' ) );
+                allFormsList.push( new FormType(128,'مذكرة البيانات الأساسية لتسوية المكافأة', 'Reward_Calculation_BasicData_Memo',  '621' , ',-23,' ) );
+                allFormsList.push( new FormType(114,'مذكرة بحالة المستحقين في المعاش', 'Beneficiaries_Status_On_Pension',  '622' , ',-15,' ) );
+                allFormsList.push( new FormType(19,'مذكرة بحث بشأن زيادة الأولاد بعد التقاعد', 'Children_Increace_After_Retir',  '' , '' ) );
+                allFormsList.push( new FormType(115,'مذكرة بشأن حالة المرحوم', 'Heirs_Status_Memo',  '622' , ',-10,' ) );
+                allFormsList.push( new FormType(9,'مذكرة ترجمة خارجية', 'Out_Translation_Request',  '' , '' ) );
+                allFormsList.push( new FormType(7,'مذكرة حفظ', 'Save_Memo',  '' , '' ) );
+                allFormsList.push( new FormType(8,'مذكرة داخلية للسيد المحاسب', 'In_Translation_Request',  '' , '' ) );
+                allFormsList.push( new FormType(51,'مذكرة زيادة الأولاد بعد التقاعد-الباحث القانوني', 'Children_Increment_After_Retirement_Researcher',  '621' , ',-20,' ) );
+                allFormsList.push( new FormType(65,'مذكرة زيادة الأولاد بعد التقاعد-المحاسب', 'Children_Increment_After_Retirement_Accountant',  '621' , ',-20,' ) );
+                allFormsList.push( new FormType(6,'مذكرة عرض تقسيط مديونية', 'Indebtedness_Installment',  '' , '' ) );
+                allFormsList.push( new FormType(18,'مذكرة ملاحظات', 'Note_Memo',  '' , '' ) );
+                allFormsList.push( new FormType(64,'مذكرة ملاحظات تسوية المعاش - المحاسب', 'Pension_Calculation_NotesMemo_Accountant',  '621' , ',-20,' ) );
+                allFormsList.push( new FormType(10,'مذكرة ملاحظات للمدة اللازمة لاستحقاق المعاش التقاعدي', 'Pen_Sal_Req_Per_Note_Mem',  '' , '' ) );
+                allFormsList.push( new FormType(130,'مسودة حساب متوسط المرتب أو الشرائح', 'Pension_Slice_Average_Calculation_Draft',  '621' , ',-23,' ) );
+                allFormsList.push( new FormType(99,'معاش مقدم إستثنائي للإدارة العامة', 'Exceptional_Advanced_Pension',  '610-611-612' , ',-1000,' ) );
+                allFormsList.push( new FormType(3,'نموذج إعادة تسوية حالات إستحقاق المعاش', 'Reset_Pension',  '' , '' ) );
+                allFormsList.push( new FormType(105,'نموذج إقرار بصحة جهة الصرف', 'Pension_In_Employment_Bank_Endorsement',  '610-611-612' , ',-1000,' ) );
+                allFormsList.push( new FormType(1,'نموذج إيقاف معاش', 'Pension_Stop',  '' , '' ) );
+                allFormsList.push( new FormType(116,'نموذج إيقاف نصيب', 'Share_Suspended',  '622' , ',-1000,' ) );
+                allFormsList.push( new FormType(83,'نموذج اختيار طريقة سداد ضم الخدمة السابقة', 'Previous_ServicePeriod_Payment_Type',  '610-611-612-621' , ',-19,' ) );
+                allFormsList.push( new FormType(35,'نموذج استقطــــاع من حقوق تأمينيـــة', 'InsuranceRights_Deduction_Request',  '622' , ',-1000,' ) );
+                allFormsList.push( new FormType(37,'نموذج استيفاء زيادة القرار رقم (1) لسنة 2001 المعدل بالقرار رقم (5) لسنة 2005', 'Increment_Decision_1_2001',  '610-611-612-621' , ',-4,' ) );
+                allFormsList.push( new FormType(77,'نموذج الإقرار الخاص بأصحاب المعاشات التقاعدية المصروفة أو المؤجلة الصرف والمستحقين لصرفها', 'Pensioner_Endorsement_5th',  '610-611-612-631' , ',-17,' ) );
+                allFormsList.push( new FormType(121,'نموذج التأمين التكميلي باب خامس', 'Optional_Supplement_Insurance',  '610-611-612-632' , ',-22,' ) );
+                allFormsList.push( new FormType(68,'نموذج التوقيعات (باب خامس)', 'Signature_Form',  '610-611-612-631' , ',-17,' ) );
+                allFormsList.push( new FormType(100,'نموذج المستندات المرفقة بإجراء تسوية المعاش', 'Pension_Calculation_Attachment_Sheet',  '610-611-612-621' , ',-1,' ) );
+                allFormsList.push( new FormType(40,'نموذج بحث حالة ورثة', 'Beneficiary_Heirs_Check',  '610-611-612-622' , ',-10,' ) );
+                allFormsList.push( new FormType(54,'نموذج بشأن الحد الأدنى للمعاش التقاعدي', 'Pensioner_Marital_Statement_2003',  '610-611-612-621' , ',-8,' ) );
+                allFormsList.push( new FormType(29,'نموذج تحديث بيانات المؤمن عليهم', 'Update_Client_Data',  '610-611-612-621' , ',-1000,' ) );
+                allFormsList.push( new FormType(125,'نموذج تحديث بيانات المستحقين عند بلوغ سن 85', 'Update_Beneficiary_Data_Reaching_Age85',  '610-611-612-622' , ',-1000,' ) );
+                allFormsList.push( new FormType(92,'نموذج تحويل مراجع', 'Client_Forwarding',  '610-611-612' , ',-1000,' ) );
+                allFormsList.push( new FormType(94,'نموذج تحويل ملف', 'File_Transfer',  '610-611-612' , ',-1000,' ) );
+                allFormsList.push( new FormType(93,'نموذج تحويل ملف أصحاب أعمال', 'Employeer_Forwarding',  '610-611-612' , ',-1000,' ) );
+                allFormsList.push( new FormType(102,'نموذج تحويل ملف_حساب المدد', 'ServicesComputation_Fle_Transfer',  '621' , ',-1000,' ) );
+                allFormsList.push( new FormType(95,'نموذج تسديد مبالغ', 'Make_Payments',  '610-611-612' , ',-1000,' ) );
+                allFormsList.push( new FormType(122,'نموذج تسوية المعـاش أو مكافأة نهاية الخدمة', 'PensionResettlement_OrEndOfServiceReward',  '622' , ',-1000,' ) );
+                allFormsList.push( new FormType(129,'نموذج تسوية المكافأة', 'Reward_Calculation_Accountant',  '621' , ',-23,' ) );
+                allFormsList.push( new FormType(50,'نموذج تسوية معاش - المحاسب', 'Pension_Calculation_Accountant',  '621' , ',-20,' ) );
+                allFormsList.push( new FormType(124,'نموذج تعديل الزيادات بعد الوفاة', 'Increments_Modification_After_Death',  '622' , ',-1000,' ) );
+                allFormsList.push( new FormType(43,'نموذج تعديل المعاش التقاعدي (المرتب) - الباحثين', 'Pension_Update',  '' , '' ) );
+                allFormsList.push( new FormType(14,'نموذج تعديل حجز', 'Reservation_Update',  '' , '' ) );
+                allFormsList.push( new FormType(136,'نموذج تعديل معاش / مكافأة / عسكريين', 'Pension_Reward_Modification_Military',  '621' , ',-24,' ) );
+                allFormsList.push( new FormType(137,'نموذج تعديل معاش / مكافأة / مدنيين', 'Pension_Reward_Modification_Civilian',  '621' , ',-24,' ) );
+                allFormsList.push( new FormType(61,'نموذج تعديل معاش زيادة زواج بعد التقاعد', 'Pension_Modification_Marriage_Increment_Retirement',  '621' , ',-20,' ) );
+                allFormsList.push( new FormType(20,'نموذج تعديل معاش-مكافأة-المدنيين', 'Civilians_Pension_Update',  '' , '' ) );
+                allFormsList.push( new FormType(15,'نموذج تغيير نفقة', 'Alimony_Update',  '' , '' ) );
+                allFormsList.push( new FormType(131,'نموذج حساب مكافأة - مدني - عسكري - باب خامس', 'Reward_Calculation_Accountant_Draft',  '621' , ',-23,' ) );
+                allFormsList.push( new FormType(5,'نموذج حفظ ملف', 'Save_File',  '' , '' ) );
+                allFormsList.push( new FormType(13,'نموذج رفع حجز', 'Reservation_Release',  '' , '' ) );
+                allFormsList.push( new FormType(110,'نموذج صرف تعويض التأمين ضد البطالة بعد الاطلاع على شهادة وزارة التجارة والصناعة', 'Unemployement_Compensation_Payment_MOCI',  '621' , ',-1000,' ) );
+                allFormsList.push( new FormType(97,'نموذج صرف رصيد المكافأة', 'Reward_Balance_Payment',  '610-611-612-621' , ',-2,' ) );
+                allFormsList.push( new FormType(104,'نموذج طلب ترجمة شهادة لمن يهمه الأمر', 'ServicesTranslation_Memo',  '610-611-612' , ',-1000,' ) );
+                allFormsList.push( new FormType(96,'نموذج طلب ملف', 'File_Request',  '610-611-612' , ',-1000,' ) );
+                allFormsList.push( new FormType(117,'نموذج مدد الاشتراك', 'Contribution_Periods',  '631' , ',-1000,' ) );
+                allFormsList.push( new FormType(2,'نموذج مذكرة إتصال', 'Call_Memo',  '' , '' ) );
+                allFormsList.push( new FormType(4,'نموذج مكافأة مالية للخاضعين لقانون التأمينات 62', 'Finance_Reward_62',  '' , '' ) );
+                allFormsList.push( new FormType(107,'نموذج ملاحظات القانوني', 'Accountant_Notes_Form',  '621' , ',-1000,' ) );
+                
+                allFormsList.filter(item => (item.processIDs.includes(','+packageID+',') && item.invDeptCodes.includes(deptCode) ) ).forEach(item=> formsList.push(item));
+                registery.ssFormsGridController.formsGrid.formsList = formsList;
+                registery.ssFormsGridController.formsGrid.render();
+                
 
             } 
             catch (error) { app.alertError(error.message) }
-        }
+        },
+
+
+        fetchInitialFormItem(){
+            const url = `/ssforms/formItem/initial/${formHandler.formType.id}`;
+            const options = {method: 'GET'};
+            const resolve = (data)=>{
+                                formHandler.formItem = data;
+                                formHandler.formItem.formEntity.originator = loggedUser.trackerEmpID;
+                                util.loadHTML('formBody', `./pages/form/${formHandler.formType.ename.toLowerCase()}/form.html`  );
+                            };
+            const reject = ()=>{ ssFormsService.fetchInitialFormItemLocally();};
+
+            fetchJSON(url,options, resolve,reject);
+        },
+    // @Deprecated
+        fetchInitialFormItemLocally(){
+            formHandler.formItem = new FormItem(formHandler.formType.id, formHandler.formType.aname, formHandler.formType.ename);
+            let url =  `./pages/form/${formHandler.formType.ename.toLowerCase()}/form.html`;
+            util.loadHTML('formBody',url);
+        },
+
+        insertFormItem(){
+            const url = `/ssforms/formItem`;
+            const options = {method: 'POST', body: JSON.stringify(formHandler.formItem) ,cache: 'no-cache', headers: {'Content-Type': 'application/json'}};
+            const resolve = (data)=>{
+                                    formHandler.formItem = data;
+                                    formHandler.setWorkFlowIDLabel();
+                                    ssFormsService.printFormItem();
+                                };
+            const reject = ()=>{};
+            fetchJSON(url, options, resolve, reject);
+        },
+   
+        updateFormItem(){
+            const url = `/ssforms/formItem`;
+            const options = {method: 'PUT', body: JSON.stringify(formHandler.formItem) ,cache: 'no-cache', headers: {'Content-Type': 'application/json'}};
+            const resolve = (data)=>{ ssFormsService.printFormItem(); };
+            const reject = ()=>{};
+            fetchNothing(url, options, resolve, reject);
+        },
+   
+        deleteFormItem(){
+            const url = `/ssforms/formItem`;
+            const options = {method: 'DELETE', body: JSON.stringify(formHandler.formItem) ,cache: 'no-cache', headers: {'Content-Type': 'application/json'}};
+            const resolve = (data)=>{
+                                formHandler.formItem = data;
+                                formHandler.formItem.formEntity.originator = loggedUser.trackerEmpID;
+                                formHandler.controller.read();
+                                formHandler.setWorkFlowIDLabel();
+                                app.alertSuccess();
+                            };
+            const reject = ()=>{};
+            fetchJSON(url, options, resolve, reject);
+        },
+        
+        saveFormItem(){
+            if(!formHandler.formItem.formEntity.id){
+                ssFormsService.insertFormItem();
+            }
+            else{
+                ssFormsService.updateFormItem();
+            }   
+        },
+       
+        printFormItem(){
+            const url = `/ssforms/formItem/pdf`;
+            const options = {method: 'PUT', body: JSON.stringify(formHandler.formItem) ,cache: 'no-cache', headers: {'Content-Type': 'application/json'}};
+            const resolve = (data)=>{
+                let reader = new FileReader();
+                reader.onload = ()=> { pdfViewer.renderPDFByData(reader.result, formHandler.formType.aname,formHandler.formType.ename); };
+                reader.readAsDataURL(data);
+            };
+            const reject = ()=>{};
+            fetchBLOB(url, options, resolve, reject);
+        },
+
+        printRedundant(){
+            const url = `/ssforms/formItem/redundant?formTypeID=${formHandler.formType.id}
+                        &civilID=${formHandler.formItem.formEntity.clientCivilID}
+                        &ssNo=${formHandler.formItem.formEntity.clientSSNo}`;
+            const options = {method: 'GET', cache: 'no-cache'};
+            const resolve = (data)=>{
+                                    if(!data || !data.size || data.size < 10)
+                                        app.alertInfo('لا توجد نماذج سابقة');
+                                    else{
+                                        let reader = new FileReader();
+                                        reader.onload = ()=> { pdfViewer.renderPDFByData(reader.result, formHandler.formType.aname,formHandler.formType.ename); };
+                                        reader.readAsDataURL(data);
+                                    }    
+                                };
+            const reject = ()=>{};
+            fetchBLOB(url, options, resolve, reject);
+        },
+
+        checkIfThereAreRedundantForms(){
+            const url = `/ssforms/formItem/redundant/count?formTypeID=${formHandler.formType.id}
+                        &civilID=${formHandler.formItem.formEntity.clientCivilID}
+                        &ssNo=${formHandler.formItem.formEntity.clientSSNo}`;
+            const options = {method: 'GET', cache: 'no-cache'};
+            const resolve = (data)=>{
+                                    if(data > 0){
+                                        if(confirm(`هناك نماذج سابقة للعميل، هل ترغب في الاطلاع على جميع النماذج السابقة ؟ `))
+                                            ssFormsService.printRedundant();
+                                    }
+                                };
+            const reject = ()=>{};
+            fetchText(url, options, resolve, reject);
+        },
+
+       
+
+       
 
 
     }

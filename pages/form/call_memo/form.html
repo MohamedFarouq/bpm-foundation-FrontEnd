@@ -6,8 +6,8 @@ formHandler.controller = {
     },
     
     defineComponents(){    
-        this.forms.Form_CallMemo.addComponent(new TxtComponent('RequesterName','الاســم','Name',5) );
         this.forms.Form_CallMemo.hideTab();
+        this.forms.Form_CallMemo.addComponent(new TxtComponent('RequesterName','الاســم','Name',5) );
         
         
     },
@@ -37,9 +37,18 @@ formHandler.controller = {
         catch(error){
             app.alertError(error.message);
         }
-    }
+    },
+
+    read(){
+
+    },
+
+    write(){
+
+    },
 
     /*************************** Business Logic methods here **************************/
+
 
 
 }

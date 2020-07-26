@@ -37,289 +37,416 @@ process.controller = {
 
     forms : {
         Form_PeriodicalLeave : new Form('Form_PeriodicalLeave', 'نموذج طلب اجازة دورية','Leave Form'),
-        Form_WorkDeduction : new Form('Form_WorkDeduction', 'نموذج انقطاع عن العمل','Salary Deduction Form'),
+        Form_PeriodicalLeavePay : new Form('Form_PeriodicalLeavePay', 'نموذج تسوية صرف راتب','Salary Deduction Form'),
         
     
     },
 
-    defineComponents(){    
-        var dropDownListOptions = [ new Option('','',''), 
-                                    new Option('اختيار1','option-1','opt1Value'), 
-                                    new Option('اختيار2','Option-2','opt2Value')
-                                ];
-        //all components with labels like TxtComponents,DateComponent, DropDownListComponent can take the last number as label size in thier constructor
-        //and if we dropped that number the ratio is col-8 and col-4 
-        this.forms.Form_PeriodicalLeave.addComponent(new TxtComponent('RequesterName','الاســم','Name',5) );
-        this.forms.Form_WorkDeduction.addComponent(new TxtComponent('RequesterName','','',5) );
+    defineComponents(){ 
         
-        //this.forms.Form_WorkDeduction.changeFormTitle('تغيير عنوان النموذج','change form title');
+        /*Form_PeriodicalLeave*/
+       this.forms.Form_PeriodicalLeave.addComponent(new DateComponent('RequesterDate','التـاريخ','Date','','',6) );
+
+       this.forms.Form_PeriodicalLeave.addComponent(new TxtComponent('ClientName','الاســــم','Client Name',80) );
+       this.forms.Form_PeriodicalLeave.addComponent(new DateComponent('HiringDate','تاريخ التعيين','Hiring Date','','',6) );
+
+       this.forms.Form_PeriodicalLeave.addComponent(new TxtComponent('Dept','الإدارة','Department',80) );
+       this.forms.Form_PeriodicalLeave.addComponent(new DateComponent('StartDate','تاريخ بدء الإجازة','Start Date','','',6) );
+       
+       this.forms.Form_PeriodicalLeave.addComponent(new TxtComponent('Title','الوظيفة','Title',80) );
+       this.forms.Form_PeriodicalLeave.addComponent(new DateComponent('EndDate','تاريخ إنتهاء الإجازة','End Date','','',6) );
+
+       this.forms.Form_PeriodicalLeave.addComponent(new NumberComponent('EmpNumber','رقـم الموظـف','Emp Number') );
+       this.forms.Form_PeriodicalLeave.addComponent(new DropDownListComponent('Salary','راتب الإجازة','Salary',[new Option('','','0') ,new Option('لا يصرف','Not paied','1') , 
+       new Option('يصرف مقدما','Paid In Advance','2')],6) );
+
+       this.forms.Form_PeriodicalLeave.addComponent(new TxtComponent('EmpSignature','التـوقيع','Signature',100) );
+       this.forms.Form_PeriodicalLeave.addComponent(new NumberComponent('VacationDuration','مدة الإجازة','Vacation Duration',6) );
+
+       this.forms.Form_PeriodicalLeave.addComponent(new NotesComponent('Address','العنوان ورقم الهاتف أثناء الإجازة','Address and Phone Number During the Vacation',4,300) );
+
+       this.forms.Form_PeriodicalLeave.addSignature(new Signature('Responsible','ResponsibleName','ResponsibleSig','توقيع الرئيس المباشر','Responsible') ); 
+       this.forms.Form_PeriodicalLeave.addSignature(new Signature('Approval','AprrovalName','ApprovalSig','يعتمـــــــد','Approval') );
 
         
-        this.forms.Form_PeriodicalLeave.addComponent(new DateComponent('FromDate','من التاريخ','From','','') );
-        this.forms.Form_PeriodicalLeave.addComponent(new NumberComponent('Days','ايام الاجازة','Days',0,30) );
-        this.forms.Form_PeriodicalLeave.addComponent(new DropDownListComponent('VactionType','نوع الاجازة','type',[new Option('','','0') ,new Option('دورية','Periodical','1') , new Option('مرضية','Sick Leave','2')]) );
-        // the last number which is 2 is the label size, it's optional so u just add it if u want to change the label size
-        this.forms.Form_PeriodicalLeave.addComponent(new TxtComponent('Department','الإدارة','Department',15,2) );
+       this.forms.Form_PeriodicalLeave.addComponent(new ParagraphComponent('Note-1','ملاحظـــات:','Notes','text-danger font-weight-bold') );
+       this.forms.Form_PeriodicalLeave.addComponent(new ParagraphComponent('Note-2','يجب مراعاة استيفاء كافة البيانات المطلوبة في هذا النموذج.<br> لا يصرف راتب الإجازة مقدما الا في حالة الإجازات التي لا تقل مدتها عن خمسة عشر يوما. <br> يقدم هذا النموذج إلى إدارةالموارد البشرية قبل موعد بدء الإجازة بخمسة عشر يوما على الأقل. <br> في حالة طلب صرف مرتبها مقدما وبفترة لا تقل عن ثلاثة أيام في حالة عدم طلب صرف مرتبها.','All the data required in this form are fulfilled. - <br> The leave salary not be paied in advance except the vacation period not less than fifteen days -   <br> This form must submitted to HR Department at least fifteen days before the leave start. - <br> In case paied in advanced and not less than three days in case the salary not paid - ','text-danger font-weight-bold') );
+       
+       /*Form_PeriodicalLeavePay*/
+       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('RequesterName','الاســــم','Requester Name',80) );
+       this.forms.Form_PeriodicalLeavePay.addComponent(new DateComponent('SalarySettlementDate','التـاريخ','Salary Settlement Date','','',6) );
+
+       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('Dept','إدارة/مكتب','Department',80) );
+       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('OperationSrc','مصدر العملية','Department',15,6) );
+
+       this.forms.Form_PeriodicalLeavePay.addComponent(new NumberComponent('EmpNumber','رقـم الموظـف','Emp Number') );
+
+       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('BasicSalary','الراتب الأساسي','Basic Salary',15,5) );
+       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('PIFSSContr','اشتراك التأمينات','PIFSS Contr',15,5) );
+
+       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('SocialBonus','العلاوة الإجتماعية','Social Bonus',15,5) );
+       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('PIFSSLoan','قرض المؤسسة','PIFSS Loan',15,5) );
+
+       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('TecActAmount','بدل طبيعة عمل','TecActAmount',15,5) );
+       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('PIFSSHousing','مقابل سكن','PIFSS Housing',15,5) );
+
+       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('TelAmount','مكافأة تشجيعية','TelAmount',15,5) );
+       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('SocialLoan','أقساط تسليف-الإسكان','Socia lLoan',15,5) );
+
+       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('BonusAmount','مكافأة مالية','Bonus Amount',15,5) );
+       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('Commutation','استبدال أثناء الخدمة','Commutation',15,5) );
+
+       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('SpecialRaise','علاوة خاصة','Special Raise',15,5) );
+       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('TeleCalls','هواتف - تلكس','Tele Calls',15,5) );
+
+       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('BonusOvertime','زيادة خاصة','Bonus Over time',15,5) );
+       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('Penalties','جزاءات','Penalties',15,5) );
+
+       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('OtherPayment','غلاء معيشة + دعم مالي','Other Payment',15,5) );
+       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('OtherDED','استقطاعات أخرى','Other DED',15,5) );
+
+       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('SpecialBonus','مكافأة خاصة','Special Bonus',15,5) );
+       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('CompleteContr','اشتراك تكميلي','Complete Contr',15,5) );
+
+       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('UnfairDED','رد مبالغ مخصومة','Unfair DED',15,5) );
+       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('BasicContr','صندوق زيادة المتقاعدين','Basic Contr',15,5) );
+
+       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('Scholarship','مقابل بعثات / جدورات','Scholar ship',15,5) );
+       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('IDMContr','صندوق المكافأة','IDM Contr',15,5) );
+
+       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('Coptin','التأمين التكميلي الاختياري','Coptin',15,5) );
+       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('FundCont','اشتراك الصندوق','FundCont',15,5) );
+
+       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('FundInst','قسط ضم الصندوق','FundInst',15,5) );
 
 
-        this.forms.Form_PeriodicalLeave.addComponent(new CheckBoxComponent('IsPaid','اجازة مصروفة','Paid Vacation') );
+       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('TotalPayment','إجمالي المبلغ المدفوع','TotalPayment',15,5) );
+       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('TotalDED','إجمالي الملغ المستقطع','TotalDED',15,5) );
 
-        this.forms.Form_PeriodicalLeave.addComponent(new TxtBetweenPlainLabelsComponent('TxtWithPlainLabel','هذا هو عنوان الحقل','This is the plain label',20,'تكملة بعد الحقل ','text after component') );
-        this.forms.Form_PeriodicalLeave.addComponent(new DateBetweenPlainLabelsComponent('DateWithPlainLabel','هذا هو عنوان الحقل','This is the plain label','2020-05-01','2020-10-01','تكملة بعد الحقل ','text after component') );
-        this.forms.Form_PeriodicalLeave.addComponent(new DropDownListBetweenPlainLabelsComponent('DropDownWithPlainLabel','هذا هو عنوان الحقل','This is the plain label',dropDownListOptions,'تكملة بعد الحقل ','text after component') );
-        
+       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('NetPaid','صافي المبلغ المستحق','NetPaid',15,5) );
+       this.forms.Form_PeriodicalLeavePay.addComponent(new DateComponent('LastPaymentDate','تاريخ آخر عملية دفع','Last Payment Date','','',5) );
+
+       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('BasicSalary1','الراتب الأساسي','Basic Salary1',15) );
+       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('TecActAmount1','بدل طبيعة عمل','TecActAmount1',15) );
+       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('FinBonus','مكافأة مالية','FinBonus',15) );
+
+       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('SocialRaise','علاوة إجتماعية','Social Raise',15) );
+       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('OvrRaise','مكافأة تشجيعية','Ovr Raise',15) );
+       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('SpecialRaise1','علاوة خاصة','Special Raise1',15) );
+
+       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('FinSupport','دعم مالي','FinSupport',15) );
+       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('OverAmount','غلاء معيشة','OverAmount',15) );
+       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('SpecialIncrease','زيادة خاصة','Special Increase',15) );
+
+       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('Raise_50','مكافأة خاصة ','Raise_50',15) );
+       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('TotalItems','إجمالي البنود','TotalItems',15) );
+
+       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('Bank','البنـك/الفرع','Bank',60,2) );
+
+       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('AccNum','رقم الحساب','Account Number',30) );
+       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('AccType','نوع الحساب ','Account Type',20) );
+       
+       this.forms.Form_PeriodicalLeavePay.addSignature(new Signature('PersAdminEmp','PersAdminEmpName','PersAdminEmpSig','المنفــــذ','PersAdminEmp') ); 
+       this.forms.Form_PeriodicalLeavePay.addSignature(new Signature('PersAdminTL','PersAdminTLName','PersAdminTLSig','المدقــــق','PersAdminTL') );
+       this.forms.Form_PeriodicalLeavePay.addSignature(new Signature('PersAdminSup','PersAdminSupName','PersAdminSuplSig','يعتمـــــد','PersAdminSupName') );
 
 
-        this.forms.Form_PeriodicalLeave.addComponent(new NotesComponent('Notes','الملاحظـــــات','Notes',4,300) );
-        this.forms.Form_PeriodicalLeave.addComponent(new AttachmentsTableComponent('Attachments',['مرفق 1','مرفق 2','مرفق 3']) );
-        this.forms.Form_PeriodicalLeave.addComponent(new ParagraphComponent('Ekrar','اقر انا الموقع ادناه بانني مسئول عن ماتم ادخاله من بيانات ','I admit that I am responsible for the entered data','text-danger font-weight-bold') );
-        
-        this.forms.Form_PeriodicalLeave.addSignature(new Signature('reqDeptSupSig','SupName','SupSig','اعتمـــاد المراقــب المختــص','Supervisor Approval')  );
-        this.forms.Form_PeriodicalLeave.addSignature(new Signature('reqDeptMngSig','MngName','MngSig','اعتمـــاد المراقــب المختــص','Supervisor Approval')  );
-        // this.forms.Form_ProgramInstallation.addComponent(new SignatureComponent('SysEng','SysEngSig','System Engineer','System Engineer') ); 
-        
-        
-        
-        this.forms.Form_WorkDeduction.addComponent(new TableComponent('WorkDedTable',
-                                                                    [new TableColTxt('الأول','First',['','A'],2),
-                                                                     new TableColTxt('الثاني','Second',['D','E','F']),
-                                                                     new TableColDate('الثالث','Third',['2020-01-01','2020-02-02'],'2020-01-01','2020-03-01'), 
-                                                                     new TableColDropDownList('قائمة اختيار','Drop down list',dropDownListOptions)
-                                                                    ]
-                                                                    ,7
-                                                                    ,[3,3,2,4]
+   },
 
-                                                                                    ) 
-                                                    );
-        
-        
+   main(){
+       try{
+           this.defineComponents();
+           process.initialize();
+           let stepName = process.workItem.stepName
+           process.recieversList.loadManager();
 
-        
+           
+
+           if(stepName == this.steps.PerLeave_Launch){   
+           }
+           else if(stepName == this.steps.PerLeave_TLApprove){
+           }
+       
+           
+           
+           /* form manipulation */
+               //this.forms.Form_PeriodicalLeave.enable();
+               //this.forms.Form_PeriodicalLeave.disable();
+               this.forms.Form_PeriodicalLeave.select();
+               this.forms.Form_PeriodicalLeave.updateComponentsFromEntity();
+               
+       
+
+
+
+
+           app.renderLabels();
+           process.openProcessModal();
+           process.setWorkFlowIDLabel();
+       }
+       catch(error){ throw error;}
+   },
+
+   validate(){
+       //validator.markAsInvalidField('myTxt');
     },
 
-    main(){
-        try{
-            this.defineComponents();
-            process.initialize();
-            let stepName = process.workItem.stepName;
-            process.recieversList.loadManager();
-            //process.recieversList.loadDeptManager();
-            //process.branchesList.load()); //to load all branches
-            //process.branchesList.load([1,2,5]); // to load specific branches using branch id
-            //process.actionsList.load([process.actionsList.status, process.actionsList.approved]);
+   send(){ },
 
-                 
-
-            if(stepName == this.steps.PerLeave_Launch){   
-            }
-            else if(stepName == this.steps.PerLeave_TLApprove){
-            }
-        
-            
-            /* component manipulation */ 
-                //this.forms.Form_PeriodicalLeave.components.RequesterName.setValue('ABC');
-                //this.forms.Form_PeriodicalLeave.components.requesterName.disable();
-                
-                //this.forms.Form_PeriodicalLeave.components.FromDate.setMinDate('2020-05-01');
-                //this.forms.Form_PeriodicalLeave.components.FromDate.setMaxDate('2020-05-10');
-                
-                //this.forms.Form_PeriodicalLeave.components.VactionType.setValue(2);//give it the value of the option object to be selected
-                //alert(this.forms.Form_PeriodicalLeave.components.VactionType.getText()); // retrieves the shown selected text
-                //this.forms.Form_PeriodicalLeave.components.VactionType.setOptions([new Option('','','')]); //load different options
-                //this.forms.Form_PeriodicalLeave.components.VactionType.addOption( new Option('x','x','3') );
-                //this.forms.Form_PeriodicalLeave.components.VactionType.addOption(new Option('y','y','4') );
-                //this.forms.Form_PeriodicalLeave.components.VactionType.setValue('3');
-                //this.forms.Form_PeriodicalLeave.components.VactionType.removeOptionByValue('4');
-                
-                //this.forms.Form_PeriodicalLeave.components.IsPaid.disable();
-                //this.forms.Form_PeriodicalLeave.components.IsPaid.setValue(true);
-                //this.forms.Form_PeriodicalLeave.components.IsPaid.check();
-                //this.forms.Form_PeriodicalLeave.components.IsPaid.uncheck();
-                
-                this.forms.Form_PeriodicalLeave.components.SupName.setValue('محمد فاروق');
-                 this.forms.Form_PeriodicalLeave.components.SupSig.enable();
-                
-
-                //this.forms.Form_PeriodicalLeave.components.Attachments.setValue('مرفق 1*مرفق 3*');
-                //this.forms.Form_PeriodicalLeave.components.Attachments.disable();
-                //this.forms.Form_PeriodicalLeave.components.Attachments.enable();
-                
-
-
-            
-            /* form manipulation */
-                //this.forms.Form_PeriodicalLeave.enable();
-                //this.forms.Form_PeriodicalLeave.disable();
-                //this.forms.Form_WorkDeduction.hide();
-                //this.forms.Form_WorkDeduction.select();
-                this.forms.Form_PeriodicalLeave.select();
-                this.forms.Form_PeriodicalLeave.updateComponentsFromEntity();
-                
-        
-            
-
-
-            app.renderLabels();
-            process.openProcessModal();
-            process.setWorkFlowIDLabel();
-        }
-        catch(error){ throw error;}
-    },
-
-    validate(){
-      
-        if(!validator.assertHasValue(this.forms.Form_PeriodicalLeave.components.FromDate))
-            return false;
-        //if(!validator.assertEquals(this.forms.Form_PeriodicalLeave.components.FromDate,'2020-05-02'))
-           // return false;    
-        if(!validator.assertGreaterThanOrEquals(this.forms.Form_PeriodicalLeave.components.FromDate,'2020-05-02'))
-            return false;        
-        if(!validator.assertGreaterThanOrEquals(this.forms.Form_PeriodicalLeave.components.Days,5))
-            return false;        
-        if(!validator.assertValidIBAN(this.forms.Form_PeriodicalLeave.components.RequesterName,'20'))
-            return false;        
-           
-            
-            
-            
-        if(!validator.assertSigned(this.forms.Form_PeriodicalLeave.components.SupName,this.forms.Form_PeriodicalLeave.components.SupSig))
-            return false;
-         
-
-
-
-        return true;
-     },
-
-    send(){
-        try{
-            let isValid = this.validate();
-            if(isValid)
-                app.alertSuccess();
-
-                
-           
-        }
-        catch(error){
-            app.alertError(error.message);
-        }
-        
-     },
-
+   
+   // testSignature(){
+   //     util.viewObjectContent(this.forms.Form_PeriodicalLeave.components.SupSignature.getSigner()); 
+   // },
 
 
 }
 
-$(document).ready( ()=>{ try{ process.controller.main(); }catch(error){ app.alertError(error.message); }} );
+$(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alertError(error.message); }} );
 </script>
 
+<style>
+   .nav-pills .nav-link.active {
+   background-color: rgb(108, 117, 126) !important;
+}
+</style>
 
 <div class="container-fluid pr-1 pl-1" >
-    <div class="row">
-        <div class="col p-1 " >
-            <nav>
-                <div class="nav nav-pills mb-1 ml-auto" id="nav-tab" role="tablist"></div>
-            </nav>
-            <div class="tab-content shadow border border-secondary rounded p-2 bg-white" id="nav-tabContent">
-                <!-- Form-PeriodicalLeave-Tab -->
-                <div class="tab-pane show active" id="nav-Form_PeriodicalLeave" role="tabpanel" aria-labelledby="Form_PeriodicalLeave-tab">
-                    <!-- the main container for all Form_PeriodicalLeave controls -->
-                    <div class="container-fluid">
+   <div class="row">
+       <div class="col p-1 " >
+           <nav>
+               <div class="nav nav-pills mb-1 ml-auto" id="nav-tab" role="tablist"></div>
+           </nav>
+           <div class="tab-content shadow border border-secondary rounded p-2 bg-white" id="nav-tabContent">
+               <!-- Form_PeriodicalLeave -->
+               <div class="tab-pane fade show active" id="nav-Form_PeriodicalLeave" role="tabpanel" aria-labelledby="Form_PeriodicalLeave-tab">
+                   <!-- the main container for all Form_PeriodicalLeave controls -->
+                   <div class="container-fluid">
+                       <div class="row">
+                           <div class="col p-1 mb-4" data-container-for="Form_PeriodicalLeave_title"></div>
+                       </div>
+
+                       <div class="row">
+                           <div class="col-4 pr-3 pl-3 pt-2" data-container-for="RequesterDate"></div>
+                           <div class="col-3 pr-3 pl-3 pt-2"></div>
+                       </div>
+
+                       <div class="row">
+                           <div class="col-6 pr-3 pl-3 pt-1" data-container-for="ClientName"></div>
+                           <div class="col-2 pr-3 pl-3 pt-1"></div>
+                           <div class="col-4 pr-3 pl-3 pt-1" data-container-for="HiringDate"></div>
+                       </div>
+
+                       <div class="row">
+                           <div class="col-6 pr-3 pl-3 pt-1" data-container-for="Dept"></div>
+                           <div class="col-2 pr-3 pl-3 pt-1"></div>
+                           <div class="col-4 pr-3 pl-3 pt-1" data-container-for="StartDate"></div>
+                       </div>
+
+                       <div class="row">
+                           <div class="col-6 pr-3 pl-3 pt-1" data-container-for="Title"></div>
+                           <div class="col-2 pr-3 pl-3 pt-1"></div>
+                           <div class="col-4 pr-3 pl-3 pt-1" data-container-for="EndDate"></div>
+                       </div>
+
+                       <div class="row">
+                           <div class="col-6 pr-3 pl-3 pt-1" data-container-for="EmpNumber"></div>
+                           <div class="col-2 pr-3 pl-3 pt-1"></div>
+                           <div class="col-4 pr-3 pl-3 pt-1" data-container-for="Salary"></div>
+                       </div>
+
+                       <div class="row">
+                           <div class="col-6 pr-3 pl-3 pt-1" data-container-for="EmpSignature"></div>
+                           <div class="col-2 pr-3 pl-3 pt-1"></div>
+                           <div class="col-4 pr-3 pl-3 pt-1" data-container-for="VacationDuration"></div>
+                       </div>
+
+                       <div class="row">
+                           <div class="col pr-3 pl-3 pt-4 pb-4" data-container-for="Address"></div>
+                       </div>
+
+                       <div class="row">
+                           <div class="col-5 pr-2 pl-1 pt-4 pb-5" data-container-for="Responsible"></div>
+                           <div class="col-2 pr-3 pl-3 pt-2"></div>
+                           <div class="col-5 pr-2 pl-1 pt-4 pb-5" data-container-for="Approval"></div>
+                       </div>
+
+                       <div class="row">
+                             <div class="col pr-3 pl-3" data-container-for="Note-1"></div>
+                        </div>
+
                         <div class="row">
-                            <div class="col p-1 mb-4" data-container-for="Form_PeriodicalLeave_title"></div>
+                            <div class="col pr-3 pl-3" data-container-for="Note-2"></div>
                         </div>
-                        <div class="row p-1">
-                            <div class="col pr-3 pl-3" data-container-for="RequesterName"></div>
-                            <div class="col pr-3 pl-3" data-container-for="FromDate"></div>
-                            <div class="col pr-3 pl-3" data-container-for="Days"></div>       
-                        </div>
-                        <div class="row p-1">
-                            <div class="col-4 pr-3 pl-3" data-container-for="VactionType"></div>
-                            <div class="col-8 pr-3 pl-3" data-container-for="Department"></div>
-                        </div>
-                        <div class="row pt-4">
-                        </div>
-                        <div class="row p-1">
-                            <div class="col pr-3 pl-3" data-container-for="IsPaid"></div>
-                        </div>
-                        <div class="row p-1">
-                            <div class="col-3 pr-3 pl-3" data-container-for="TxtWithPlainLabel"></div>
-                            <div class="col-9 " ></div>
-                        </div>
-                        <div class="row p-1">
-                            <div class="col-4 pr-3 pl-3" data-container-for="DateWithPlainLabel"></div>
-                            <div class="col-8 " ></div>
-                        </div>
-                        <div class="row p-1">
-                            <div class="col-4 pr-3 pl-3" data-container-for="DropDownWithPlainLabel"></div>
-                            <div class="col-8 " ></div>
-                        </div>
-                        <div class="row pt-4">
-                        </div>                     
-                        <div class="row p-1">
-                            <div class="col pr-3 pl-3" data-container-for="Notes"></div>
-                        </div>
-                        <div class="row p-1">
-                            <div class="col pr-3 pl-3" data-container-for="Attachments"></div>
-                        </div>
-                        <div class="row p-1">
-                            <div class="col pr-3 pl-3" data-container-for="Ekrar"></div>
-                        </div>
-                        <div class="row p-1">
-                            <div class="col pr-3 pl-3" data-container-for="reqDeptSupSig"></div>
-                            <div class="col pr-3 pl-3" data-container-for="reqDeptMngSig"></div>
-                        </div>
-                    </div>
-                </div>
+                   </div>
+               </div>
 
 
+               <!-- Form_PeriodicalLeavePay -->
+               <div class="tab-pane" id="nav-Form_PeriodicalLeavePay" role="tabpanel" aria-labelledby="Form_PeriodicalLeavePay-tab">
+                   <!-- the main container for all Form_PeriodicalLeavePay controls -->
+                   <div class="container-fluid">
+                       <div class="row">
+                           <div class="col p-1 mb-4" data-container-for="Form_PeriodicalLeavePay_title"></div>
+                       </div>
 
-                 <!-- Form-WorkDeduction-Tab -->
-                <div class="tab-pane" id="nav-Form_WorkDeduction" role="tabpanel" aria-labelledby="Form_WorkDeduction-tab">
-                    <!-- the main container for all Form_PeriodicalLeave controls -->
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col p-1 mb-4" data-container-for="Form_WorkDeduction_title"></div>
-                        </div>
-                        
-                        <div class="row p-1">
-                            <div class="col-8 pr-3 pl-3" data-container-for="WorkDedTable"></div>
-                            <div class="col-4 p-3">
-                                <button type="button" class="btn btn-primary" onclick="alert(process.controller.forms.Form_WorkDeduction.components.WorkDedTable.getValue());">get Table Value</button>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col p-3">
-                                <!-- <input placeholder="Your Date"  class="form-control" type="text" onfocus="(this.type='date')" onblur="(this.type='text')" id="date" min="2018-01-01" max="2018-12-31"> -->
-                                <button type="button" class="btn btn-primary" onclick="process.controller.forms.Form_PeriodicalLeave.disable()">disable نموذج اجازة دورية</button>
-                            </div>
-                            <div class="col p-3">
-                                <button type="button" class="btn btn-primary" onclick="process.controller.forms.Form_PeriodicalLeave.enable()">enable نموذج اجازة دورية</button>
-                            </div>
-                            <div class="col p-3">
-                                <button type="button" class="btn btn-secondary" onclick="process.controller.forms.Form_WorkDeduction.show();">show نموذج انقطاع عن العمل</button>
-                            </div>
-                            <div class="col p-3">
-                                <button type="button" class="btn btn-secondary" onclick="process.controller.forms.Form_WorkDeduction.hide();">hide نموذج انقطاع عن العمل</button>
-                            </div>
-                            <div class="col p-3">
-                                <button type="button" class="btn btn-secondary" onclick="process.controller.forms.Form_PeriodicalLeave.select();">goto نموذج اجازة دورية</button>
-                            </div>
-                            <div class="col p-3">
-                                <button type="button" class="btn btn-secondary" onclick="alert(process.controller.forms.Form_PeriodicalLeave.components.RequesterName.getValue()); alert(process.controller.forms.Form_WorkDeduction.components.RequesterName.getValue()) ">goto نموذج اجازة دورية</button>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col pr-3 pl-3" data-container-for="RequesterName"></div>
-                        </div>
-                        
-                    </div>
-                </div>
+                       <div class="row">
+                           <div class="col-6 pr-3 pl-3 pt-2" data-container-for="RequesterName"></div>
+                           <div class="col-2 pr-3 pl-3 pt-2"></div>
+                           <div class="col-4 pr-3 pl-3 pt-2" data-container-for="SalarySettlementDate"></div>
+                       </div>
 
-                <div class="text-right">
-                    <hr><label id="workflowIDLabel" class="text-danger">مسلسل الاجراء</label>
-                </div>
-            </div>
-        </div>
-    </div>
+                       <div class="row">
+                           <div class="col-6 pr-3 pl-3" data-container-for="Dept"></div>
+                           <div class="col-2 pr-3 pl-3"></div>
+                           <div class="col-4 pr-3 pl-3" data-container-for="OperationSrc"></div>
+                       </div>
+
+                       <div class="row">
+                           <div class="col-6 pr-3 pl-3" data-container-for="EmpNumber"></div>
+                           <div class="col-2 pr-3 pl-3"></div>
+                           <div class="col-4 pr-3 pl-3"></div>
+                       </div>
+
+                       <div class="row">
+                           <div class="col-4 pr-3 pl-3 pt-3" data-container-for="BasicSalary"></div>
+                           <div class="col-4 pr-3 pl-3 pt-3"></div>
+                           <div class="col-4 pr-3 pl-3 pt-3" data-container-for="PIFSSContr"></div>
+                       </div>
+
+                       <div class="row">
+                           <div class="col-4 pr-3 pl-3" data-container-for="SocialBonus"></div>
+                           <div class="col-4 pr-3 pl-3"></div>
+                           <div class="col-4 pr-3 pl-3" data-container-for="PIFSSLoan"></div>
+                       </div>
+
+                       <div class="row">
+                           <div class="col-4 pr-3 pl-3" data-container-for="TecActAmount"></div>
+                           <div class="col-4 pr-3 pl-3"></div>
+                           <div class="col-4 pr-3 pl-3" data-container-for="PIFSSHousing"></div>
+                       </div>
+
+                       <div class="row">
+                           <div class="col-4 pr-3 pl-3" data-container-for="TelAmount"></div>
+                           <div class="col-4 pr-3 pl-3"></div>
+                           <div class="col-4 pr-3 pl-3" data-container-for="SocialLoan"></div>
+                       </div>
+
+                       <div class="row">
+                           <div class="col-4 pr-3 pl-3" data-container-for="BonusAmount"></div>
+                           <div class="col-4 pr-3 pl-3"></div>
+                           <div class="col-4 pr-3 pl-3" data-container-for="Commutation"></div>
+                       </div>
+
+                       <div class="row">
+                           <div class="col-4 pr-3 pl-3" data-container-for="SpecialRaise"></div>
+                           <div class="col-4 pr-3 pl-3"></div>
+                           <div class="col-4 pr-3 pl-3" data-container-for="TeleCalls"></div>
+                       </div>
+
+                       <div class="row">
+                           <div class="col-4 pr-3 pl-3" data-container-for="BonusOvertime"></div>
+                           <div class="col-4 pr-3 pl-3"></div>
+                           <div class="col-4 pr-3 pl-3" data-container-for="Penalties"></div>
+                       </div>
+
+                       <div class="row">
+                           <div class="col-4 pr-3 pl-3" data-container-for="OtherPayment"></div>
+                           <div class="col-4 pr-3 pl-3"></div>
+                           <div class="col-4 pr-3 pl-3" data-container-for="OtherDED"></div>
+                       </div>
+
+                       <div class="row">
+                           <div class="col-4 pr-3 pl-3" data-container-for="SpecialBonus"></div>
+                           <div class="col-4 pr-3 pl-3"></div>
+                           <div class="col-4 pr-3 pl-3" data-container-for="CompleteContr"></div>
+                       </div>
+
+                       <div class="row">
+                           <div class="col-4 pr-3 pl-3" data-container-for="UnfairDED"></div>
+                           <div class="col-4 pr-3 pl-3"></div>
+                           <div class="col-4 pr-3 pl-3" data-container-for="BasicContr"></div>
+                       </div>
+
+                        <div class="row">
+                           <div class="col-4 pr-3 pl-3" data-container-for="Scholarship"></div>
+                           <div class="col-4 pr-3 pl-3"></div>
+                           <div class="col-4 pr-3 pl-3" data-container-for="IDMContr"></div>
+                       </div>
+
+                        <div class="row">
+                           <div class="col-4 pr-3 pl-3" data-container-for="Coptin"></div>
+                           <div class="col-4 pr-3 pl-3"></div>
+                           <div class="col-4 pr-3 pl-3" data-container-for="FundCont"></div>
+                       </div>
+
+                        <div class="row">
+                           <div class="col-4 pr-3 pl-3"></div>
+                           <div class="col-4 pr-3 pl-3"></div>
+                           <div class="col-4 pr-3 pl-3" data-container-for="FundInst"></div>
+                       </div>
+
+                       <div>______________________________________________________________________________________________________________________________________________________________________________________________</div>
+
+                       <div class="row">
+                           <div class="col-4 pr-3 pl-3 pt-4" data-container-for="TotalPayment"></div>
+                           <div class="col-4 pr-3 pl-3 pt-4"></div>
+                           <div class="col-4 pr-3 pl-3 pt-4" data-container-for="TotalDED"></div>
+                       </div>
+
+                       <div class="row">
+                           <div class="col-4 pr-3 pl-3" data-container-for="NetPaid"></div>
+                           <div class="col-4 pr-3 pl-3"></div>
+                           <div class="col-4 pr-3 pl-3" data-container-for="LastPaymentDate"></div>
+                       </div>
+
+                       <div class="row">
+                           <div class="col-4 pr-3 pl-3 pt-3" data-container-for="BasicSalary1"></div>
+                           <div class="col-4 pr-4 pl-4 pt-3" data-container-for="TecActAmount1"></div>
+                           <div class="col-4 pr-3 pl-3 pt-3" data-container-for="FinBonus"></div>
+                       </div>
+
+                       <div class="row">
+                           <div class="col-4 pr-3 pl-3" data-container-for="SocialRaise"></div>
+                           <div class="col-4 pr-4 pl-4" data-container-for="OvrRaise"></div>
+                           <div class="col-4 pr-3 pl-3" data-container-for="SpecialRaise1"></div>
+                       </div>
+
+                       <div class="row">
+                           <div class="col-4 pr-3 pl-3" data-container-for="FinSupport"></div>
+                           <div class="col-4 pr-4 pl-4" data-container-for="OverAmount"></div>
+                           <div class="col-4 pr-3 pl-3" data-container-for="SpecialIncrease"></div>
+                       </div>
+
+                       <div class="row">
+                           <div class="col-4 pr-3 pl-3" data-container-for="Raise_50"></div>
+                           <div class="col-4 pr-3 pl-3"></div>
+                           <div class="col-4 pr-3 pl-3" data-container-for="TotalItems"></div>
+                       </div>
+
+                       <div class="row">
+                           <div class="col pr-3 pl-3 pt-3" data-container-for="Bank"></div>
+                       </div>
+
+                       <div class="row">
+                           <div class="col-6 pr-3 pl-3 pt-2" data-container-for="AccNum"></div>
+                           <div class="col-1 pr-3 pl-3 pt-2"></div>
+                           <div class="col-5 pr-3 pl-3 pt-2" data-container-for="AccType"></div>
+                       </div>
+
+                       <div class="row">
+                           <div class="col-4 pr-2 pl-1 pt-5" data-container-for="PersAdminEmp"></div>
+                           <div class="col-4 pr-2 pl-1 pt-5" data-container-for="PersAdminTL"></div>
+                           <div class="col-4 pr-2 pl-1 pt-5" data-container-for="PersAdminSup"></div>
+                       </div>
+
+                   </div>
+               </div>
+
+               <div class="text-right">
+                   <hr>
+                   <label id="workflowIDLabel" class="text-danger">مسلسل الاجراء</label>
+               </div>
+           </div>
+       </div>
+   </div>
 </div>

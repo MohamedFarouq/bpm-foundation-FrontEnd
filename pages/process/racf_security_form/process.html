@@ -50,12 +50,13 @@ process.controller = {
         new Option('HR Permission Form-PER','HR Permission Form-PER','2'),new Option('ESignature Form-SCV','ESignature Form-SCV','3'),new Option('Optional Complementary Form-OPC','Optional Complementary Form-OPC','4'),
         new Option('EGL System','EGL System','2')],3) );
 
+        this.forms.Form_RACFSecutiyForm.addComponent(new ParagraphComponent('Program','جدول البرامج','Program Table','font-weight-bold') );
 
         var dropDownListOptions = [ new Option('','',''), 
                                     new Option('INQ(1)','INQ(1)','opt1Value'), 
                                     new Option('UPD(2)','UPD(2)','opt2Value'),
                                     new Option('INQ/UPD','INQ/UPD','opt3Value')
-                                ];
+                                ];                      
 
         this.forms.Form_RACFSecutiyForm.addComponent(new TableComponent('ProgramTable',
                                                                                     [   new TableColTxt('Program Name','Program Name'),
@@ -73,6 +74,9 @@ process.controller = {
                                                                                     ,[1,1,3,1,1,1,1,1,1,1]
                                                                                     ) );
 
+        
+        this.forms.Form_RACFSecutiyForm.addComponent(new ParagraphComponent('Function','جدول الوظائف','Function Table','font-weight-bold') ); 
+       
         this.forms.Form_RACFSecutiyForm.addComponent(new TableComponent('FunctionTable',
                                                                                     [   new TableColTxt('Function Name','Function Name'),
                                                                                         new TableColTxt('Screen Code','Screen Code'),
@@ -93,6 +97,8 @@ process.controller = {
         this.forms.Form_RACFSecutiyForm.addSignature(new Signature('TeamLeader','TeamLdName','TeamLeaderSig','Team Leader','Team Leader') );
         this.forms.Form_RACFSecutiyForm.addSignature(new Signature('GroupLeader','GroupLeaderName','GroupLeaderSig','Group Leader','Group Leader') );
 
+        this.forms.Form_RACFSecutiyForm.addComponent(new ParagraphComponent('RACFAuthorization','تفويض','RACFAuthorization','text-danger font-weight-bold') );
+        
         this.forms.Form_RACFSecutiyForm.addComponent(new NotesComponent('Note','Notes','Notes',4,300) );
 
         this.forms.Form_RACFSecutiyForm.addSignature(new Signature('ImplementedBy','IMPName','IMPSig','Implemented By','Implemented By') ); 
@@ -208,17 +214,22 @@ $(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alert
                             <div class="col-4 pr-3 pl-3 pt-2 pb-4" style="text-align: left; font-weight:bolder;" data-container-for="NEWprog"></div>
                         </div>
 
-                        <div style="text-align: left; font-weight:bolder; font-size:1.2em; text-decoration: underline;">Program Table</div>
-
                         <div class="row">
-                            <div class="col pr-3 pl-3 pt-2 pb-4" style="direction:ltr;" data-container-for="ProgramTable"></div>
+                            <div class="col pr-3 pl-3 pt-2" data-container-for="Program"></div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-1 pb-4" data-container-for="ProgramTable"></div>
                         </div>
 
-                        <div style="text-align: left; font-weight:bolder; font-size:1.2em; text-decoration: underline;">Function Table</div>
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-1" data-container-for="Function"></div>
+                        </div>
 
                         <div class="row">
-                            <div class="col pr-3 pl-3 pt-2 pb-3" style="direction:ltr;" data-container-for="FunctionTable" ></div>
+                            <div class="col pr-3 pl-3 pt-2 pb-4" data-container-for="FunctionTable"></div>
                         </div>
+
                         
                         <div class="row">
                             <div class="col pr-2 pl-1 pt-2 pb-5" data-container-for="GroupLeader"></div>
@@ -226,7 +237,9 @@ $(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alert
                             <div class="col pr-2 pl-1 pt-2 pb-5" data-container-for="SE"></div>
                         </div>
 
-                        <div style="text-align: left; font-weight:bolder; font-size:1.2em; text-decoration: underline;">RACF Authorization</div>
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3 pt-2" data-container-for="RACFAuthorization"></div>
+                        </div>
 
                         <div class="row">
                             <div class="col pr-3 pl-3 pt-2 pb-3" style="direction: ltr;" data-container-for="Note"></div>

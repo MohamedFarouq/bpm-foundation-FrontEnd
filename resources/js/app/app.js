@@ -1,4 +1,4 @@
-﻿	"use strict";
+﻿"use strict";
 
 
 	const registery = {
@@ -167,8 +167,8 @@
 	}
 
 	const loggedUser = {
-		empNo : 0,
-		trackerEmpID : 0,
+		empNo : 120628003,
+		trackerEmpID : 3600,
 		userName : "",
 		arabicName:"محمد محمد فاروق",
 		engName : "Mohamed Mohamed Farouk",
@@ -322,11 +322,25 @@
 		modalID : 'pdfModal',
 		modalBodyID : 'pdfViewerDiv',
 		modalTitleID : 'pdfModalTitle',
+		objectURL : undefined,
 
 		renderPDFByLink(link,titleAra,titleEng){
-			let body = `<object data="${link}" style="width:100%;min-height:80vh;">`;
+			this.viewePDF(link,titleAra,titleEng);
+		},
+		
+		renderPDFByData(data,titleAra,titleEng){
+			this.viewePDF(data,titleAra,titleEng);
+		},
+
+		renderByObjectURL(objectURL,titleAra,titleEng){
+			this.objectURL = objectURL;
+			this.viewePDF(objectURL,titleAra,titleEng);
+		},
+
+		viewePDF(data,titleAra,titleEng){
+			let viewerTag = `<object data="${data}"  style="width:100%;min-height:80vh;" type="application/pdf" >`;
 			this.setModalTitle( app.chooseBasedOnLocale(titleAra,titleEng));
-			this.setModalBody(body);
+			this.setModalBody(viewerTag);
 			util.showModal(this.modalID);
 		},
 		
@@ -340,6 +354,9 @@
 
 		closeModal(){ 
 			util.hideModal(this.modalID);
+			this.setModalBody('');
+			if(this.objectURL)
+				URL.revokeObjectURL(this.objectURL);
 		},
 	}
 
@@ -384,15 +401,32 @@
 		getInsufficientPrivilegesLabel(){
 			return `<label class="text-danger "> 
 						<i class="fas fa-ban text-danger"></i> 
-						${this.getMessage('insufficientPrivileges') }
+						${this.getPropertyValue('insufficientPrivileges') }
 					</label>`;
 		},
 		
 
-		alertError(msg){
-			app.setAlertModalCssClass('alert-danger');
-			app.setAlertBody(msg);
-			app.openAlertModal();
+
+
+		alertError(err){
+			try {
+				let align = app.chooseBasedOnLocale('text-left','text-right');
+				let body = `<label class="d-block ${align} fontSize110 font-weight-bold" >${app.getPropertyValue('somethingWentWrong')}</label>`;
+				if(err instanceof ErrorDetails){
+					body += `<div class="container-fluid text-right overflow-auto " style="direction:ltr;"> 
+								<label class="d-block " >${err.msg}</label>`;
+					err.stack.forEach(se=> body += `<label class="d-block fontSize75 " >${se}</label>`);
+					body += '</div>';
+				}
+				else
+					body += `<label class="d-block text-right" >${err}</label>`;	
+				
+				app.setAlertModalCssClass('alert-danger');
+				app.setAlertBody(body);
+				app.openAlertModal();
+			} catch (error) { 
+				alert(error.message);
+			}
 		},
 		alertInvalid(msg){
 			app.setAlertModalCssClass('alert-danger');
@@ -410,18 +444,25 @@
 			app.openAlertModal();
 		},
 		alertSuccess(){
-			let msg = this.getMessage('doneSuccessfully');//  (this.isArabicLocale()) ? properties.arabic['doneSuccessfully'] : properties.english['doneSuccessfully'];
-			app.setAlertModalCssClass('alert-info');
-			app.setAlertBody(msg);
-			app.openAlertModal();
+			try {
+				let msg = this.getPropertyValue('doneSuccessfully');
+				app.setAlertModalCssClass('alert-success');
+				app.setAlertBody(msg);
+				app.openAlertModal();
+				
+			} catch (error) {
+				alert(error.message);
+			}
 		},
 		setAlertModalCssClass(cssClass){
-			util.findThenRemoveCssClass('id','alertDiv',['alert-danger','alert-danger','alert-info','alert-success','alert-warning']);
+			util.findThenRemoveCssClass('id','alertDiv',['alert-danger','alert-info','alert-success','alert-warning']);
 			util.findThenAddCssClass('id','alertDiv',cssClass);
 		},
 		setAlertBody(html){
 			util.setInnerHTML('alertBody',html);
 		},
+
+
 
 
 		openGeneralForm(formPolicyName,values){
@@ -445,6 +486,9 @@
 		openAlertModal(){ util.showModal('alertModal'); },
 		closeAlertModal(){util.hideModal('alertModal');	},
 		
+		openLoadingModal(){ util.showModal('loadingModal'); },
+		closeLoadingModal(){util.hideModal('loadingModal'); },
+		
 		
 		renderLabels(){
 			let elements = document.querySelectorAll('[data-label]');
@@ -452,15 +496,12 @@
 		},
 		
 		getPropertyValue(propKey){
-			return properties[session.fetchLanguage()][propKey];
-		},
-		getMessage(msgKey){
 			try{
-				return app.chooseBasedOnLocale(properties.arabic[msgKey], properties.english[msgKey]);
+				return app.chooseBasedOnLocale(properties.arabic[propKey], properties.english[propKey]);
 			}
 			catch(error){ app.alertError(error.message)}
 		},
-
+		
 		chooseBasedOnLocale(araValue,engValue){
 			return app.isArabicLocale() ? araValue : (!engValue) ? araValue : engValue ;
 		},
@@ -678,34 +719,69 @@
 	};
 
 	const formHandler = {
-		controller : undefined,
-		formItem : undefined,	
 		formModalID : 'formModal',
+		formType : undefined,
+		formItem : undefined,
+		controller : undefined,
 
-
-		launch(fi){
+		launch(formTypeEncodedJson){
 			try{
-				this.formItem = fi;
-				let url =  `./pages/form/${this.formItem.eName.toLowerCase()}/form.html`;
-				util.loadHTML('formBody',url);
+				this.formType = util.mapEncodedJsonToObject(formTypeEncodedJson);
+				ssFormsService.fetchInitialFormItem();
 			}
 			catch(eror){
-				app.alertError(error.message);
+				app.alertError(new ErrorDetails(`error @formHandler.launch`,[error.message]));
 			}
 		},
 
-		
 		print(){
-			//set formItem ready to be sent to server and store on DB then call pdf rendere and get it back
-			pdfViewer.renderPDFByLink("./resources/pdf/forms.pdf",'النمـوذج','Form');
+			try {
+				this.controller.beforePrint();
+				if(isLocally)
+					pdfViewer.renderPDFByLink('./resources/pdf/forms.pdf', formHandler.formType.aname,formHandler.formType.ename);
+				else
+					ssFormsService.saveFormItem();
+				
+			} catch (error) {
+				app.alertError(new ErrorDetails('error @formHandler.print',[error.message]))
+			}
 		},
+
+		checkIfThereAreRedundantForms(){
+			if(!formHandler.formItem.formEntity.clientCivilID && !formHandler.formItem.formEntity.clientSSNo)
+				app.alertInvalid('الرجاء تعبئة الرقم المدني ورقم الهوية أولا');
+			else{
+				ssFormsService.checkIfThereAreRedundantForms();
+			}	
+		},
+
+		printRedundant(){
+			if(!formHandler.formItem.formEntity.clientCivilID && !formHandler.formItem.formEntity.clientSSNo)
+				app.alertInvalid('الرجاء تعبئة الرقم المدني ورقم الهوية أولا');
+			else{
+				ssFormsService.printRedundant();
+			}	
+		},
+
+		deleteForm(){
+			let ok = confirm('هل أنت متأكد من تنفيذ الالغاء ؟');
+			if (ok) {
+				if(formHandler.formItem.formEntity.id)
+					ssFormsService.deleteFormItem();
+				else
+					formHandler.controller.read();	
+			}
+		},
+
 		close(){ 
 			this.controller = undefined; 
+			this.formType = undefined;
 			this.formItem = undefined;
 			this.closeFormModal(); 
 		},
+
 		setWorkFlowIDLabel(){
-			document.getElementById('formIDLabel').innerHTML = `مسلسل النموذج : ${formHandler.formItem.workFlowID}`;
+			document.getElementById('formIDLabel').innerHTML = `مسلسل النموذج : ${formHandler.formItem.formEntity.id}`;
 		},	
 
 		openFormModal(){ util.showModal(this.formModalID); },

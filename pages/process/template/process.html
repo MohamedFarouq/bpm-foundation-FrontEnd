@@ -72,7 +72,7 @@ process.controller = {
 
         this.forms.Form_PeriodicalLeave.addComponent(new NotesComponent('Notes','الملاحظـــــات','Notes',4,300) );
         this.forms.Form_PeriodicalLeave.addComponent(new AttachmentsTableComponent('Attachments',['مرفق 1','مرفق 2','مرفق 3']) );
-        this.forms.Form_PeriodicalLeave.addComponent(new ParagraphComponent('Ekrar','اقر انا الموقع ادناه بانني مسئول عن ماتم ادخاله من بيانات ','I admit that I am responsible for the entered data','text-danger font-weight-bold') );
+        this.forms.Form_PeriodicalLeave.addComponent(new ParagraphComponent('Ekrar','اقر انا الموقع ادناه بانني مسئول عن ماتم ادخاله من بيانات ','I admit that I am responsible for the entered data','text-muted fontSize300 font-weight-bold') );
         
         this.forms.Form_PeriodicalLeave.addSignature(new Signature('reqDeptSupSig','SupName','SupSig','اعتمـــاد المراقــب المختــص','Supervisor Approval')  );
         this.forms.Form_PeriodicalLeave.addSignature(new Signature('reqDeptMngSig','MngName','MngSig','اعتمـــاد المراقــب المختــص','Supervisor Approval')  );
@@ -242,6 +242,7 @@ $(document).ready( ()=>{ try{ process.controller.main(); }catch(error){ app.aler
                         <div class="row p-1">
                             <div class="col pr-3 pl-3" data-container-for="IsPaid"></div>
                         </div>
+
                         <div class="row p-1">
                             <div class="col-3 pr-3 pl-3" data-container-for="TxtWithPlainLabel"></div>
                             <div class="col-9 " ></div>

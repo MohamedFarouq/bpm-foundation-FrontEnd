@@ -181,6 +181,8 @@ process.controller = {
                                                                                     [3,4,2,3]
                                                                                     ) );
 
+        this.forms.Form_BatchJob.addComponent(new ParagraphComponent('DB2Table','نسخ احتياطية لقاعدة البيانات قبل التشغيل','DB2 Tables to backup Before Run','font-weight-bold') );
+
         this.forms.Form_BatchJob.addComponent(new TableComponent('RunProgTable',[
                                                                                         new TableColTxt('Before Run Program','Before Run Program'),
                                                                                         new TableColTxt('Table Name','Table Name'),
@@ -550,10 +552,12 @@ $(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alert
                             <div class="col pr-3 pl-3 pb-3" style="direction:ltr;" data-container-for="ReportTable"></div>
                         </div>
 
-                        <div style="text-align: left; font-weight:bolder; font-size:1.2em; text-decoration: underline;">DB2 Tables to backup Before Run</div>
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3 pt-2" data-container-for="DB2Table"></div>
+                        </div>
 
                         <div class="row p-1">
-                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RunProgTable"></div>
+                            <div class="col pr-3 pl-3 pt-1" style="direction:ltr;" data-container-for="RunProgTable"></div>
                         </div>
 
                         <div class="row">

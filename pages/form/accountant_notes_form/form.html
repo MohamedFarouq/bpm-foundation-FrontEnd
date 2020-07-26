@@ -1,0 +1,99 @@
+<script >
+
+formHandler.controller = {
+    forms : {
+        Form_AccountantNotesForm : new Form('Form_AccountantNotesForm', 'نموذج ملاحظات القانوني'), 
+    },
+    
+    defineComponents(){    
+        this.forms.Form_AccountantNotesForm.hideTab();
+        this.forms.Form_AccountantNotesForm.addComponent(new TxtComponent('AccNote_Accountant','المحاسـب','Accountant',5) );
+        
+        
+    },
+
+    main(){
+        try{
+            this.defineComponents();
+                
+            //add initialization and events here 
+            // addEventListener(checkIfThereAreRedundantForms) to the method that retrieves client info
+            
+            app.renderLabels();
+            formHandler.openFormModal();
+            formHandler.setWorkFlowIDLabel();
+        }
+        catch(error){ throw error;}
+    },
+
+    read(){
+    },
+
+    write(){
+        //set formItem values before send them to be saved
+        formHandler.formItem.formEntity.formSubject = 'this is test form subject';
+        formHandler.formItem.formEntity.clientCivilID = '';
+        formHandler.formItem.formEntity.clientSSNo = '';
+
+
+
+
+    },
+    
+    validate(){
+      
+        return true;
+    },
+
+
+
+    beforePrint(){
+        try{
+            //do form-specific business here like calling web service or whatever
+            if(this.validate()){
+                this.write();
+                
+            }
+        }
+        catch(error){
+            app.alertError(new ErrorDetails( `error @${formHandler.formType.ename}.print()`,[error.message]));
+        }
+    },
+
+
+   
+
+    /*************************** Business Logic methods here **************************/
+
+
+
+}
+
+$(document).ready( ()=>{ try{ formHandler.controller.main(); }catch(error){ app.alertError(new ErrorDetails( `error @${formHandler.formType.ename}.main()`,[error.message])); }} );
+</script>
+
+
+<div class="container-fluid pr-1 pl-1" >
+    <div class="row">
+        <div class="col p-1 " >
+            <nav><div class="nav nav-pills mb-1 ml-auto" id="nav-tab" role="tablist"></div></nav>
+            <div class="tab-content shadow border border-secondary rounded p-2 bg-white" id="nav-tabContent">
+                <!-- Form-Form_AccountantNotesForm-Tab -->
+                <div class="tab-pane show active" id="nav-Form_AccountantNotesForm" role="tabpanel" aria-labelledby="Form_AccountantNotesForm-tab">
+                    <!-- the main container for all Form_AccountantNotesForm controls -->
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col p-1 mb-4" data-container-for="Form_AccountantNotesForm_title"></div>
+                        </div>
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" data-container-for="AccNote_Accountant"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <hr><label id="formIDLabel" class="text-danger">مسلسل النموذج</label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

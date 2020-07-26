@@ -57,6 +57,8 @@ process.controller = {
         this.forms.Form_TsService.addSignature(new Signature('SysEng','SysName','SysSig','مقدم الطلب','System Engineer')  );
         this.forms.Form_TsService.addSignature(new Signature('Manager','MngName','MngSig','اعتمــاد المدير','Manager Approval')  );
         
+        this.forms.Form_TsService.addComponent(new ParagraphComponent('OperationsDepartment','خاص بإدارة التشغيل','Operations Department','text-danger text-center font-weight-bold') );
+
         this.forms.Form_TsService.addComponent(new NotesComponent('Notes','الملاحظـــــات','Notes',4,300) );
 
         this.forms.Form_TsService.addSignature(new Signature('ImplementedBy','IMPName','IMPSig','الموظف','OPS Employee')  );
@@ -168,29 +170,33 @@ $(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alert
                         <div class="row">
                             <div class="col p-1 mb-4" data-container-for="Form_TsService_title"></div>
                         </div>
+
                         <div class="row p-1">
                             <div class="col pr-3 pl-3" data-container-for="RequesterDate"></div>
                             <div class="col pr-3 pl-3"></div>
                             <div class="col pr-3 pl-3" data-container-for="StartDate"></div>       
                         </div>
+
                         <div class="row p-1">
-                            <div class="col-6 pr-3 pl-3" data-container-for="Department"></div>
-                            <div class="col-2 pr-3 pl-3"></div>
-                            <div class="col-4 pr-3 pl-3" data-container-for="EndDate"></div>      
-                        </div>
-                        <div class="row p-1">
-                            <div class="col-6 pr-3 pl-3" data-container-for="ReportName"></div>
-                            <div class="col-2 pr-3 pl-3"></div>
-                            <div class="col-4 pr-3 pl-3" data-container-for="ReportNumber"></div>  
-                        </div>
-                        <div class="row p-1">
-                            <div class="col-6 pr-3 pl-3" data-container-for="NoOfCopy"></div>
-                            <div class="col-2 pr-3 pl-3"></div>
-                            <div class="col-4 pr-3 pl-3"></div>
+                            <div class="col-6 pr-3 pl-3 pt-1" data-container-for="Department"></div>
+                            <div class="col-2 pr-3 pl-3 pt-1"></div>
+                            <div class="col-4 pr-3 pl-3 pt-1" data-container-for="EndDate"></div>      
                         </div>
 
                         <div class="row p-1">
-                            <div class="col pr-3 pl-3  pt-3" data-container-for="SpecialInstructions"></div>
+                            <div class="col-6 pr-3 pl-3 pt-1" data-container-for="ReportName"></div>
+                            <div class="col-2 pr-3 pl-3 pt-1"></div>
+                            <div class="col-4 pr-3 pl-3 pt-1" data-container-for="ReportNumber"></div>  
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col-6 pr-3 pl-3 pt-1 pb-2" data-container-for="NoOfCopy"></div>
+                            <div class="col-2 pr-3 pl-3 pt-1 pb-2"></div>
+                            <div class="col-4 pr-3 pl-3 pt-1 pb-2"></div>
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" data-container-for="SpecialInstructions"></div>
                         </div>
 
                         <div class="row p-1">
@@ -199,7 +205,9 @@ $(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alert
                             <div class="col-5 pr-2 pl-1 pt-2 pb-3" data-container-for="Manager"></div>
                         </div>
 
-                        <div style="text-align: right; font-weight:bolder; font-size:1.2em; text-decoration: underline;">إدارة التشغيــل</div>
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3 pt-2" data-container-for="OperationsDepartment"></div>
+                        </div>
 
                         <div class="row p-1">
                             <div class="col pr-3 pl-3" data-container-for="Notes"></div>

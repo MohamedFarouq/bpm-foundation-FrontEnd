@@ -89,6 +89,8 @@ process.controller = {
 
         this.forms.Form_RefundInqMemo.addComponent(new TxtComponent('Topic','الموضـوع','Topic',150) );
 
+        this.forms.Form_RefundInqMemo.addComponent(new ParagraphComponent('Data','وفقاً للبيانات:','According to the Data','font-weight-bold') );
+
         this.forms.Form_RefundInqMemo.addComponent(new TxtComponent('CivilID','الرقم المدني','Civil ID',12) );
 
         this.forms.Form_RefundInqMemo.addComponent(new TxtComponent('SSNNo','رقم الهوية','SSNNo',12) );
@@ -97,9 +99,11 @@ process.controller = {
 
         this.forms.Form_RefundInqMemo.addComponent(new TxtComponent('FileNo','رقم الحفظ','FileNo',12) );
 
-        this.forms.Form_RefundInqMemo.addComponent(new DropDownListBetweenPlainLabelsComponent('Amount','تم استلام مبالغ مرتجعة مـن:','Receive Refund amount',dropDown,' ','') );
+        this.forms.Form_RefundInqMemo.addComponent(new DropDownListBetweenPlainLabelsComponent('Amount','تم استلام مبالغ مرتجعة مـن:','Receive Refund amount',dropDown,'','') );
 
         this.forms.Form_RefundInqMemo.addComponent(new DropDownListBetweenPlainLabelsComponent('Account','وتم تعلية المبلغ بحساب معلق مميز','Raising the amount',dropDownListOptions,'','') );
+        
+        this.forms.Form_RefundInqMemo.addComponent(new ParagraphComponent('FeedBack','يرجى الإيعاز لمن يلزم بإفادتنا عما يتم في هذا الشأن.','Please inform those who are required to inform us of what is being done in this regard',) );
 
         this.forms.Form_RefundInqMemo.addComponent(new TxtBetweenPlainLabelsComponent('Value','بقيمة:','Value',20,'للمـذكور أعلاه.','Mentioned Above') );
 
@@ -108,6 +112,8 @@ process.controller = {
         this.forms.Form_RefundInqMemo.addComponent(new DateComponent('SuspensionDate','تاريخ التعليق','Civil ID','','') );
 
         this.forms.Form_RefundInqMemo.addComponent(new NumberComponent('SerialRecord','مسلسل السجل','SSNNo') );
+
+        this.forms.Form_RefundInqMemo.addComponent(new ParagraphComponent('Welcome','وتفضلو بقبول فائق الاحترام,,,','welcome','font-weight-bold') );
         
         this.forms.Form_RefundInqMemo.addSignature(new Signature('Accountnt','AccountantName','AccountantSig','توقيع المحاســب','Accountant') ); 
         this.forms.Form_RefundInqMemo.addSignature(new Signature('Reviewr','ReciwerName','ReviwerSig','توقيع المراجــع','Reviwer') );
@@ -117,16 +123,18 @@ process.controller = {
 
         /*Form_RefundMemo*/
         this.forms.Form_RefundMemo.addComponent(new DateComponent('RequesterDate','التاريخ','Date','','',6) );
-        this.forms.Form_RefundMemo.addComponent(new NumberComponent('CivilID','الـرقم المدني','Civil ID') );
+        this.forms.Form_RefundMemo.addComponent(new TxtComponent('CivilID','الـرقم المدني','Civil ID',12) );
 
         this.forms.Form_RefundMemo.addComponent(new TxtComponent('From','مـــن','From',150) );
-        this.forms.Form_RefundMemo.addComponent(new NumberComponent('FileNo','رقـم الحفظ','FileNo') );
+        this.forms.Form_RefundMemo.addComponent(new TxtComponent('FileNo','رقـم الحفظ','FileNo',12) );
 
         this.forms.Form_RefundMemo.addComponent(new TxtComponent('ToList','إلــى','To',150) );
-        this.forms.Form_RefundMemo.addComponent(new NumberComponent('SSNNo','رقـم الهوية','SSNNo') );
+        this.forms.Form_RefundMemo.addComponent(new TxtComponent('SSNNo','رقـم الهوية','SSNNo',12) );
 
         this.forms.Form_RefundMemo.addComponent(new TxtComponent('Subject','الموضوع','Subject',200) );
         this.forms.Form_RefundMemo.addComponent(new TxtComponent('ClientName','الاســــم','Client Name',80) );
+
+        this.forms.Form_RefundMemo.addComponent(new ParagraphComponent('Welcome','تحية طيبة وبعد,,,','welcome','font-weight-bold') );
 
         this.forms.Form_RefundMemo.addComponent(new TxtBetweenPlainLabelsComponent('WithDraw','يرجى سحب المبلغ الموجود في الحساب المعلق رقم','WithDraw the amount that suspend',20,'','') );
         this.forms.Form_RefundMemo.addComponent(new TxtBetweenPlainLabelsComponent('Price','ومبلغه','Price',20,'','') );
@@ -255,7 +263,9 @@ $(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alert
                             <div class="col-4 pr-3 pl-3 pt-2 pb-3"></div>
                         </div>
 
-                        <div style="text-align: right; font-weight:bolder; font-size:1.2em; text-decoration: underline;">وفقـاً للبيانات:</div>
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2" data-container-for="Data"></div>
+                        </div>
 
                         <div class="row">
                             <div class="col-6 pr-3 pl-3 pt-2" data-container-for="CivilID"></div>
@@ -292,7 +302,9 @@ $(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alert
                             <div class="col-4 pr-3 pl-3 pt-2 pb-2"></div>
                         </div>
 
-                        <div style="text-align: right; color:grey">يـرجى الإيعاز لمن يلزم بإفادتنا عما يتم في هذا الشأن.</div>
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2" style="color: gray;" data-container-for="FeedBack"></div>
+                        </div>
 
                         <div class="row">
                             <div class="col-6 pr-3 pl-3 pt-4" data-container-for="RegulatoryFile"></div>
@@ -312,7 +324,9 @@ $(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alert
                             <div class="col-4 pr-3 pl-3 pt-2 pb-4"></div>
                         </div>
 
-                        <div style="text-align: right; font-weight:bolder; font-size:1.2em;">وتفضلو بقبول فائق الاحترام,,,</div>
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2" data-container-for="Welcome"></div>
+                        </div>
 
                         <div class="row">
                             <div class="col pr-2 pl-1 pt-4" data-container-for="Accountnt"></div>
@@ -352,8 +366,10 @@ $(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alert
                             <div class="col pr-3 pl-3 pt-2 pb-3" data-container-for="ClientName"></div>
                         </div>
 
-                        <div style="text-align: right; font-weight:bolder; font-size:1.2em;">تحـية طيبة وبعـد,,</div>
-                      
+                        <div class="row">
+                            <div class="col pr-3 pl-3 pt-2" data-container-for="Welcome"></div>
+                        </div>
+
                         <div class="row">
                             <div class="col-1 pr-3 pl-3 pt-2"></div>
                             <div class="col-7 pr-3 pl-3 pt-2" data-container-for="WithDraw"></div>

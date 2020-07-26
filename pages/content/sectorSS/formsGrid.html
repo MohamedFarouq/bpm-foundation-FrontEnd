@@ -19,7 +19,7 @@ if(! registery.ssFormsGridController){
                                     let active = (this.selectedDeptCode == item.deptCode) ? 'active' : '';
                                     let html = `<a id="deptLink_${item.deptCode}" onclick="registery.ssFormsGridController.deptsGrid.onSelect(${item.deptCode})" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center ${active}"  href="#" >
                                                     <span>
-                                                        <i class="fas fa-align-justify text-warning"></i>
+                                                        <i class="fas fa-align-justify text-dark"></i>
                                                         ${item.deptName}
                                                     </span>
                                                 </a>`;
@@ -28,11 +28,11 @@ if(! registery.ssFormsGridController){
             },
 
             onSelect(deptCode){
-                this.selectedDeptCode = deptCode;
-                registery.ssFormsGridController.packagesGrid.load(deptCode);
-                registery.ssFormsGridController.packagesGrid.render();
-                util.toogleAmongSiblings( this.getHTMLElement(deptCode) );
-                util.clearInnerHTML('formsLinksGrid');
+                if(this.selectedDeptCode != deptCode){
+                    this.selectedDeptCode = deptCode;
+                    ssFormsService.fetchPackasList(deptCode);
+                    util.toggleAmongSiblings( this.getHTMLElement(deptCode) );
+                }
             },
             
             clear(){ util.clearInnerHTML(this.id); },
@@ -44,27 +44,24 @@ if(! registery.ssFormsGridController){
             selectedPackageID : '',
             packageList : [],
             
-            load(deptCode){
-               this.selectedPackageID = '';
-               this.packageList =  ssFormsService.fetchPackasList(deptCode);
-            }, 
-
             render(){
                 this.clear();
+                registery.ssFormsGridController.formsGrid.clear();
                 this.packageList.forEach(item=>{
                                 let active = (this.selectedPackageID == item.id) ? 'active' : '';
                                 let html = `<a id="packageLink_${item.id}" onclick="registery.ssFormsGridController.packagesGrid.onSelect('${item.id}')" class="list-group-item list-group-item-action ${active}"  href="#" >
-                                                <i class="fas fa-folder-open text-warning"></i> ${item.aName}
+                                                <i class="fas fa-folder-open text-warning"></i> ${item.aname}
                                             </a>`;
                                 util.appendToInnerHTML(this.id,html);            
                 }); 
             },
 
             onSelect(packageID){
-                registery.ssFormsGridController.formsGrid.load(packageID);
-                registery.ssFormsGridController.formsGrid.render();
-                this.selectedPackageID = packageID;
-                util.toogleAmongSiblings( this.getHTMLElement(packageID) );
+                if(this.selectedPackageID != packageID){
+                    this.selectedPackageID = packageID;
+                    ssFormsService.fetchFormsList(registery.ssFormsGridController.deptsGrid.selectedDeptCode, packageID);
+                    util.toggleAmongSiblings( this.getHTMLElement(packageID) );
+                }
             },
             
             clear(){ util.clearInnerHTML(this.id); },
@@ -75,15 +72,11 @@ if(! registery.ssFormsGridController){
             id : 'formsLinksGrid',
             formsList : [],
 
-            load(packageID){
-               this.formsList =  ssFormsService.fetchFormsList(packageID);
-            },
-
             render(){
                 this.clear();
                 this.formsList.forEach(item=>{
-                                let html = `<a id="formLink_${item.id}" onclick="formHandler.launch(new FormItem(${item.id},'${item.aName}','${item.eName}'));" class="list-group-item list-group-item-action"  href="#" >
-                                    <i class="far fa-file-alt"></i> ${item.aName}
+                                let html = `<a id="formLink_${item.id}" onclick="formHandler.launch('${util.mapObjectToEncodedJson(item)}')" class="list-group-item list-group-item-action"  href="#" >
+                                    <i class="far fa-file-alt"></i> ${item.aname}
                                             </a>`;
                                 util.appendToInnerHTML(this.id,html);            
                 });                         
@@ -113,10 +106,10 @@ $(document).ready( ()=>{ try{registery.ssFormsGridController.main(); }catch(erro
         <div class="col-3 p-3 bg-white">
             <div id="deptsGrid" class="list-group list-group-flush"></div>
         </div>
-        <div class="col-4 overflow-auto modal-body bg-white p-3 border-left" style="min-height: 85vh !important;">
+        <div class="col-4 overflow-auto modal-body bg-white p-3 border-left" style="min-height: 88vh !important;">
             <div id="formPackagesGrid" class="list-group list-group-flush"  role="tablist"></div>
         </div>
-        <div class="col-5 overflow-auto modal-body bg-white p-3 border-left" style="min-height: 85vh !important;">
+        <div class="col-5 overflow-auto modal-body bg-white p-3 border-left" style="min-height: 88vh !important;">
             <div id="formsLinksGrid" class="list-group list-group-flush"  role="tablist"></div>
         </div>
   </div>

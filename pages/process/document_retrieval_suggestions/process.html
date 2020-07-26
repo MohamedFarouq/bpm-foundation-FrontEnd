@@ -61,6 +61,8 @@ process.controller = {
         this.forms.Form_DocumentRetrievalSuggestions.addSignature(new Signature('DeptEmp','EmpName','EmpSig','الموظف المختص','OPS Employee')  );
         this.forms.Form_DocumentRetrievalSuggestions.addSignature(new Signature('DeptMng','MngName','MngSig','اعتماد مدير الإدارة','Approval')  );
         
+        this.forms.Form_DocumentRetrievalSuggestions.addComponent(new ParagraphComponent('IMGDept','خاص بإدارة معالجة الوثائق','Imaging Department','text-danger text-center font-weight-bold') );
+
         this.forms.Form_DocumentRetrievalSuggestions.addComponent(new NotesComponent('Notes','المــلاحظــات','Notes',4,300) );
 
         this.forms.Form_DocumentRetrievalSuggestions.addSignature(new Signature('ImpEmp','IMPEmpName','IMPEmpSig','الموظف المسؤول','Implemented By')  );
@@ -215,21 +217,23 @@ $(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alert
                         </div>
 
                         <div class="row">
-                            <div class="col-5 pr-2 pl-1 pt-2 pb-4" data-container-for="DeptEmp"></div>
-                            <div class="col-2 pr-2 pl-1 pt-2 pb-4"></div>
-                            <div class="col-5 pr-2 pl-1 pt-2 pb-4" data-container-for="DeptMng"></div>
+                            <div class="col pr-2 pl-1 pt-2 pb-4" data-container-for="DeptEmp"></div>
+                            <div class="col pr-2 pl-1 pt-2 pb-4"></div>
+                            <div class="col pr-2 pl-1 pt-2 pb-4" data-container-for="DeptMng"></div>
                         </div>
 
-                        <div style="text-align: center; color: red; font-weight:bolder; font-size:1.2em; text-decoration: underline;">خاص بإدارة معالجة الوثائق</div>
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3 pt-2" data-container-for="IMGDept"></div>
+                        </div>
 
                         <div class="row">
                             <div class="col pr-3 pl-3 pt-3" data-container-for="Notes"></div>
                         </div>
 
                         <div class="row">
-                            <div class="col-5 pr-2 pl-1 pt-2" data-container-for="ImpEmp"></div>
-                            <div class="col-2 pr-2 pl-1 pt-2"></div>
-                            <div class="col-5 pr-2 pl-1 pt-2" data-container-for="ImpDeptMng"></div>
+                            <div class="col pr-2 pl-1 pt-2" data-container-for="ImpEmp"></div>
+                            <div class="col pr-2 pl-1 pt-2"></div>
+                            <div class="col pr-2 pl-1 pt-2" data-container-for="ImpDeptMng"></div>
                         </div>
 
                     </div>

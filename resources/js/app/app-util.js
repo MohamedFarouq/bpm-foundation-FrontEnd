@@ -1,5 +1,22 @@
 const util = {
 	
+	mapObjectToEncodedJson(object){
+		try{
+			return encodeURIComponent(JSON.stringify(object));
+		}
+		catch(error){
+			app.alertError(new ErrorDetails('error @mapObjectToEncodedJson',[error.message]));
+		}
+	},
+
+	mapEncodedJsonToObject(encodedJsonStr){
+		try{
+			return JSON.parse(decodeURIComponent(encodedJsonStr));
+		}
+		catch(error){
+			app.alertError(new ErrorDetails('error @mapEncodedJsonToObject',[error.message]));
+		}
+	},
 
 	arrangeTextForDB(text){
 		let cleanText = "";
@@ -271,7 +288,7 @@ const util = {
 		
 	},
 	
-	toogleAmongSiblings(element){
+	toggleAmongSiblings(element){
 		try{
 			element.parentElement.querySelectorAll('a').forEach(item=>item.classList.remove('active'));
 			element.classList.add('active');
@@ -299,8 +316,11 @@ const util = {
 		let data = (dataObject) ? dataObject : '';
 		$(`#${divID}`).empty();
 		$(`#${divID}`).load(htmlURL,data,(response,status,xhr)=>{
-											if ( status == "error" )
-												app.alertError(`Sorry there was an error: ${xhr.status} - ${xhr.statusText}`);
+												if ( status == "error" ){
+													let stack = [`url: ${htmlURL}`, `status: ${xhr.status}`,`status msg : ${xhr.statusText}`];
+													let err = new ErrorDetails('Can not find the requested html page',stack);
+													app.alertError(err);
+												}
 											});	
 										
 	},

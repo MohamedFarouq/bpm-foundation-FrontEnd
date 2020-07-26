@@ -42,10 +42,10 @@
         defineComponents(){    
 
 
-        this.forms.Form_SalaryDed.addComponent(new TxtBetweenPlainLabelsComponent('TxtWithPlainLabel','السيد / مدير ادارة شئون العاملين','Mr / Mrs  Director of Personnel Affairs',20,'المحترم','With respect') );
+        this.forms.Form_SalaryDed.addComponent(new TxtBetweenPlainLabelsComponent('TxtWithPlainLabel','السيد / مدير ادارة عمليات المـوارد الــبــشريـه','Mr / Mrs  Director of Personnel Affairs',20,'المحترم','With respect') );
         this.forms.Form_SalaryDed.addComponent(new ParagraphComponent('Line_1','تحية طيبة وبعد ، ','Greetings') );
        
-        this.forms.Form_SalaryDed.addComponent(new ParagraphComponent('Line_2','أوافق على الاشتراك في النظام المعمول به لمواجهة حالات الوفاة التي تحدث بين العاملين بالمؤسسة <br> باستقطاع مرتب يوم واحد شامل لصالح الورثة وذلك إعتباراً من تاريخه.','I agree to part take in the system placing to meet the deaths that occur <br> amongst employees of the institution by deducting one comprehensive <br> salary per day for the beinfit of the heirs as of its date') );
+        this.forms.Form_SalaryDed.addComponent(new ParagraphComponent('Line_2','أوافق على الاشتراك في النظام المعمول به لمواجهة حالات الوفاة التي تحدث بين العاملين بالمؤسسة  باستقطاع مرتب يوم واحد شامل لصالح الورثة وذلك إعتباراً من تاريخه.','I agree to part take in the system placing to meet the deaths that occur <br> amongst employees of the institution by deducting one comprehensive <br> salary per day for the beinfit of the heirs as of its date') );
 
         
 
@@ -53,14 +53,15 @@
             this.forms.Form_SalaryDed.addComponent(new TxtComponent('RequesterName','اسم الموظف :','Name :',5) );
             
             this.forms.Form_SalaryDed.addComponent(new TxtComponent('RequesterDept','اسم الإدارة :','Department Name :',25) );
-            
-            this.forms.Form_SalaryDed.addComponent(new TxtComponent('RequesterSig','التوقيع :','Employee Signature :',20) );
-            
+   
+            this.forms.Form_SalaryDed.addSignature(new Signature('RequesterSig','ReqstSign','ReqstSign','توقيع صاحب الطلب  :','Employee Signature :',20) );
+       
+
 
             this.forms.Form_SalaryDed.addComponent(new DateComponent('RequestDate','التاريخ :','Date :','','') );
 
  
-            this.forms.Form_SalaryDed.addSignature(new Signature('PersSign','PersAdminEmp','PersAdminEmpSig','توقيع الموظف المختص','Signature of the concerned employee')  );
+            this.forms.Form_SalaryDed.addSignature(new Signature('PersSign','PersAdminEmp','PersAdminEmpSig','توقيع الموظف المختص  :','Signature of the concerned employee')  );
        
             this.forms.Form_SalaryDed.addComponent(new ParagraphComponent('Line_3','إيضاحات:','Clarifications','text-danger font-weight-bold ') );
             this.forms.Form_SalaryDed.addComponent(new ParagraphComponent('Line_4','1- ان الاشتراك في هذا النظام اختياري <br> 2- يصرف لورثة الموظف المتوفي مرتب يوم من مرتبات كافة المشتركين <br> 3- لا يستفيد من هذا النظام سوى ورثة الموظف المشترك بالنظام الذي يتوفى أثناء الخدمة','Prticipation in the system is optional -   <br> The heirs of the deceased emplpoyee are paid a days salary from all the polytheists -   <br> Only the heirs of the co-employee of the system who died during the service will benefit from the system - ','text-danger') );
@@ -174,51 +175,51 @@
                                     <div class="col p-1 mb-4" data-container-for="Form_SalaryDed_title"></div>
                                 </div>
 
+                                <br><br>
+                          
+                                <div class="row p-1">
+                           
+                                    <div class="col-4 pr-3 pl-3" data-container-for="RequestDate"></div>
+                                </div>
+                                
+                                <div class="row p-1"> 
+                                    <div class="col-6 pr-3 pl-3"data-container-for="RequesterName"></div>
+                                </div>
 
+                                <div class="row p-1"> 
+                                    <div class="col-6 pr-3 pl-3" data-container-for="RequesterDept"></div>
+                                </div>
+
+                                    <br>
+                                    <br>
                                 <div class="row">
                                     <div class="col-8 pr-2 pl-2" data-container-for="TxtWithPlainLabel"></div>
-                               
                                 </div>
                                 
                                 <div class="row">
                                     <div class="col pr-3 pl-3" data-container-for="Line_1"></div>
-                               
                                 </div>
-
-                                     
                                 <div class="row">
                                     <div class="col pr-3 pl-3" data-container-for="Line_2"></div>
                                 </div>
 
-            <br> 
+            <br> <br>
 
-                                <div class="row "> 
-                                    <div class="col pr-3 pl-3" data-container-for=""></div>
-                                    <div class="col pr-3 pl-3"data-container-for="RequesterName"></div>
-                                </div>
+                         
 
-                                <div class="row"> 
-                                    <div class="col pr-3 pl-3" data-container-for=""></div>
-                                    <div class="col pr-3 pl-3" data-container-for="RequesterDept"></div>
-                                </div>
 
                                 <div class="row">
                                     <div class="col pr-3 pl-3" data-container-for=""></div>
                                     <div class="col pr-3 pl-3" data-container-for="RequesterSig"></div>
                                 </div>
                                 
-                                <div class="row">
-                                    <div class="col pr-3 pl-3" data-container-for=""></div>
-                                    <div class="col pr-3 pl-3" data-container-for="RequestDate"></div>
-                                </div>
+                           <br><br>
 
                                 <div class="row p-1">
                                     <div class="col pr-3 pl-3" data-container-for=""></div>
                                     <div class="col pr-3 pl-3" data-container-for="PersSign"></div>
                                 </div>
-
-                                <br>
-                                
+<br>
                                 <div class="row">
                                     <div class="col pr-3 pl-3" data-container-for="Line_3"></div>
                                 </div>

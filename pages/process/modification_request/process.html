@@ -63,6 +63,8 @@ process.controller = {
         this.forms.Form_ModificationRequest.addSignature(new Signature('DeptEmp','EmpName','EmpSig','الموظف المختص','OPS Employee')  );
         this.forms.Form_ModificationRequest.addSignature(new Signature('DeptMng','MngName','MngSig','اعتماد مدير الإدارة','Approval')  );
         
+        this.forms.Form_ModificationRequest.addComponent(new ParagraphComponent('IMGDept','خاص بإدارة معالجة الوثائق','Imaging Department','text-danger text-center font-weight-bold') );
+
         this.forms.Form_ModificationRequest.addComponent(new NotesComponent('ActionTaken','الإجراء الذي تم اتخاذه','Action Taken',4,300) );
 
         this.forms.Form_ModificationRequest.addSignature(new Signature('ImpEmp','IMPEmpName','IMPEmpSig','الموظف المسؤول على إتمام التعديل','Implemented By')  );
@@ -222,7 +224,9 @@ $(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alert
                             <div class="col-6 pr-3 pl-3 pt-2 pb-4" data-container-for="DeptMng"></div>
                         </div>
 
-                        <div style="text-align: center; color: red; font-weight:bolder; font-size:1.2em; text-decoration: underline;">خاص بإدارة معالجة الوثائق</div>
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3 pt-2" data-container-for="IMGDept"></div>
+                        </div>
 
                         <div class="row p-1">
                             <div class="col pr-3 pl-3 pt-2" data-container-for="ActionTaken"></div>

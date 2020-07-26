@@ -7,8 +7,9 @@ i{ font-size: 16px;  color:  rgb(62, 69, 77);  margin: 0px 8px 0px 8px; }
 .modalCloseBtn{font-size: 35px !important;color:darkgray;}
 /* .procRSBItem{ display: block; width:90% !important;margin: 10px 30px 10px 0px !important;} */
 
-.modal-dialog{overflow-y: initial !important}
-.modal-body{max-height: calc(100vh - 100px); overflow-y: auto;}
+.modal-dialog{overflow-y: initial !important;}
+.modal-body{max-height: calc(100vh - 125px); overflow-y: auto;}
+.menu{min-height: calc(100vh - 60px) !important;}
 
 .nav-pills .nav-link.active {background-color: rgb(143, 160, 177) !important;}
 
@@ -23,6 +24,7 @@ i{ font-size: 16px;  color:  rgb(62, 69, 77);  margin: 0px 8px 0px 8px; }
 .fontSize50{ font-size: 0.5em !important;}
 .fontSize75{font-size: 0.75em !important;}
 .fontSize85{font-size: 0.85em !important;}
+.fontSize110{font-size: 1.1em !important;}
 .fontSize125{font-size: 1.25em !important;}
 .fontSize150{font-size: 1.5em !important;}
 .fontSize175{font-size: 1.75em !important;}

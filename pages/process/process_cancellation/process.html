@@ -48,23 +48,27 @@
           
           this.forms.Form_ProcessCancellation.addComponent(new TxtComponent('CanceledWFName','الإجـــــــراء','CanceledWFName',5) );
           
-          this.forms.Form_ProcessCancellation.addComponent(new TxtComponent('RequesterDept','الجهالجهة الطالبة','RequesterDept',20) );
+          this.forms.Form_ProcessCancellation.addComponent(new TxtComponent('RequesterDept','الجهة الطالبة','RequesterDept',20) );
           
-          this.forms.Form_ProcessCancellation.addComponent(new TxtComponent('Requester','اسم الموظف','EmployeeName',15) );
+
           
-          this.forms.Form_ProcessCancellation.addComponent(new TxtComponent('RequesterSig','التوقيـــــــع','EmployeeSign',5) );
+
+
+          this.forms.Form_ProcessCancellation.addSignature(new Signature('Requester','EmpName','Empsign','اسم الموظف','EmployeeName',15) );
+          
+          this.forms.Form_ProcessCancellation.addSignature(new Signature('RequesterSig','ReqstSign','ReqstNme','التوقيـــــــع','EmployeeSign',5) );
           
           
       this.forms.Form_ProcessCancellation.addComponent(new ParagraphComponent('Line_2','السيــد مديـــر الإدارة الماليـــة  ','Director of Financial Management',' font-weight-bold') );
       this.forms.Form_ProcessCancellation.addComponent(new ParagraphComponent('Line_3','المحترم','with respect',' font-weight-bold') );
-      this.forms.Form_ProcessCancellation.addComponent(new ParagraphComponent('Line_4',' تحيـة طيبـــة و بعـــد ,,, <br> الرجــاء إلغــاء الإجــراد المشــار إلــه','Greetings',' font-weight-bold') );
+      this.forms.Form_ProcessCancellation.addComponent(new ParagraphComponent('Line_4',' تحيـة طيبـــة و بعـــد ,,, <br> الرجــاء إلغــاء الإجــرء المشــار إلــه','Greetings',' font-weight-bold') );
       
       
       
 
       
 
-      this.forms.Form_ProcessCancellation.addComponent(new NotesComponent('DeptNotes','الملاحظــــــات','Notes',4,300) );
+      this.forms.Form_ProcessCancellation.addComponent(new NotesComponent('DeptNotes','الملاحظــــــات','Notes',7,600) );
          
       this.forms.Form_ProcessCancellation.addSignature(new Signature('DeptMngr','DeptMng','DeptMngSig','يعتمـــــد','Manager Approval')  );
           
@@ -174,53 +178,60 @@
                         <!-- the main container for all Form_ProcessCancellation controls -->
                         <div class="container-fluid">
                   
-                                <div class="row">
+                            <div class="row p-1">
                                     <div class="col p-1 mb-4" data-container-for="Form_ProcessCancellation_title"></div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-7 pr-2 pl-3" data-container-for="RequestDate"></div>
-                                </div>
 
-                                <div class="row">
+                                <div class="row p-1">
+                                    <div class="col-5 pr-2 pl-3" data-container-for="RequestDate"></div>
+                                </div>
+                             
+
+                             
+
+                                <div class="row p-1">
                                   
-                                    <div class="col-7 pr-2 pl-3" data-container-for="CanceledWFID"></div>
+                                    <div class="col-5 pr-1 pl-3" data-container-for="CanceledWFID"></div>
                                     <div class="col-3 pr-3 p-6">
-                                        <button type="button" class="btn btn-primary" onclick="alert(process.controller.forms.Form_WorkDeduction.components.WorkDedTable.getValue());">نموذج الإجراء / procedure </button>
+                                        <button type="button" class="btn btn-secondary" onclick="alert(process.controller.forms.Form_WorkDeduction.components.WorkDedTable.getValue());">نموذج الإجراء</button>
                                     </div>
                                 </div>
 
-                                <div class="row">
-                                    <div class="col-7 pr-2 pl-3" data-container-for="CanceledWFName"></div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-7 pr-2 pl-3" data-container-for="RequesterDept"></div>
+                                <div class="row p-1">
+                                    <div class="col-5 pr-1 pl-3" data-container-for="CanceledWFName"></div>
                                 </div>
 
-                                <div class="row">
-                                    <div class="col-7 pr-2 pl-3" data-container-for="Requester"></div>
+                                <div class="row p-1"> 
+                                    <div class="col-5 pr-1 pl-3" data-container-for="RequesterDept"></div>       
                                 </div>
-                             
-                                
-                                <div class="row">
-                                    <div class="col-7 pr-2 pl-3" data-container-for="RequesterSig"></div>
+
+                                    <br><br><br>  
+
+                                <div class="row p-1">
+                                    <div class="col p-3"> </div>
+                                    <div class="col pr-3 pl-3" data-container-for="Requester"></div>
+                                    <div class="col pr-3 pl-3" data-container-for="RequesterSig"></div>
                                 </div>
+
+
+
                                         <br>
-                            <div class="row">
+                                        <div class="row p-1">
                                 <div class="col-3 pr-3 pl-6" data-container-for="Line_2"></div>
                                 <div class="col-6 pr-3 pl-3" data-container-for="Line_3"></div>
                             </div>
                           
-                            <div class="row">
+                            <div class="row p-1">
                                 <div class="col pr-3 pl-3" data-container-for="Line_4"></div>
                             </div>
 
                             <br>
 
-                            <div class="row">
+                            <div class="row p-1">
                                 <div class="col pr-3 pl-3" data-container-for="DeptNotes"></div>
                             </div>
 <br>
-                            <div class="row">
+                            <div class="row p-1">   
                                 <div class="col pr-6 pl-6" data-container-for=""></div>
                                 <div class="col-5 pr-2 pl-5" data-container-for="DeptMngr"></div>
                             </div>

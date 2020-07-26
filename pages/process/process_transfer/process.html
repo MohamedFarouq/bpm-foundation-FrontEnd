@@ -100,36 +100,26 @@ process.controller = {
     },
 
     defineComponents(){    
-        this.forms.Form_ProcessTransfer.addComponent(new DateComponent('RequestDate','التاريخ','التاريخ','','') );
-        this.forms.Form_ProcessTransfer.addComponent(new TxtComponent('From','من','من','') );
-        this.forms.Form_ProcessTransfer.addComponent(new TxtComponent('To','إلى','إلى','') );
-        this.forms.Form_ProcessTransfer.addComponent(new TxtComponent('ClientName','الاسم','الاسم','') );
-        this.forms.Form_ProcessTransfer.addComponent(new TxtComponent('CivilID','الرقم المدني','الرقم المدني','') );
-        this.forms.Form_ProcessTransfer.addComponent(new TxtComponent('FileNo','رقم الحفظ','رقم الحفظ','') );
-        this.forms.Form_ProcessTransfer.addComponent(new TxtComponent('SSNo','رقم الهوية','رقم الهوية','') );
-        this.forms.Form_ProcessTransfer.addComponent(new TxtComponent('RegistrationNo','رقم التسجيل','رقم التسجيل','') );
-        this.forms.Form_ProcessTransfer.addComponent(new TxtComponent('EmployerName','صاحب العمل','صاحب العمل','') );
-        this.forms.Form_ProcessTransfer.addComponent(new TxtComponent('IBAN','IBAN','IBAN','') );
-        this.forms.Form_ProcessTransfer.addComponent(new NotesComponent('Subject','المــوضــــــوع','المــوضــــــوع',15,3000) );
+        this.forms.Form_ProcessTransfer.addComponent(new DateComponent('RequestDate','التاريخ','التاريخ','','',4) );
+        var fromList = [new Option('','','0')];
+        this.forms.Form_ProcessTransfer.addComponent(new DropDownListComponent('From','من','من',fromList,3));
+        var toList = [new Option('','','0')];
+        this.forms.Form_ProcessTransfer.addComponent(new DropDownListComponent('To','إلى','إلى',toList,3));
+        this.forms.Form_ProcessTransfer.addComponent(new TxtComponent('ClientName','الاسم','الاسم',80,3,'') );
+        this.forms.Form_ProcessTransfer.addComponent(new TxtComponent('CivilID','الرقم المدني','الرقم المدني',12,3,'') );
+        this.forms.Form_ProcessTransfer.addComponent(new TxtComponent('FileNo','رقم الحفظ','رقم الحفظ',12,3,'') );
+        this.forms.Form_ProcessTransfer.addComponent(new TxtComponent('SSNo','رقم الهوية','رقم الهوية',12,3,'') );
+        this.forms.Form_ProcessTransfer.addComponent(new TxtComponent('RegistrationNo','رقم التسجيل','رقم التسجيل',12,3,'') );
+        this.forms.Form_ProcessTransfer.addComponent(new TxtComponent('EmployerName','صاحب العمل','صاحب العمل',100,3,'') );
+        this.forms.Form_ProcessTransfer.addComponent(new TxtComponent('IBAN','IBAN','IBAN',30,3) );
+        this.forms.Form_ProcessTransfer.addComponent(new NotesComponent('Subject','المــوضــــــوع','المــوضــــــوع',15,1500) );
         this.forms.Form_ProcessTransfer.addSignature(new Signature('DeptEmpSignature','DeptEmp','DeptEmpSig','الموظـــف المختـــص','الموظـــف المختـــص'));
         this.forms.Form_ProcessTransfer.addSignature(new Signature('DeptTLSignature','DeptTL','DeptTLSig','الـــمـــراجـــــــــع','الـــمـــراجـــــــــع'));
         this.forms.Form_ProcessTransfer.addSignature(new Signature('DeptMngSignature','DeptMng','DeptMngSig','الاعـــــــــــتــــــــــــمـــاد','الاعـــــــــــتــــــــــــمـــاد'));
-        this.forms.Form_ProcessTransfer.addComponent(new NotesComponent('FinResponse','رد الإدارة المعنيــــــــــــة','رد الإدارة المعنيــــــــــــة',15,3000) );
+        this.forms.Form_ProcessTransfer.addComponent(new NotesComponent('FinResponse','رد الإدارة المعنيــــــــــــة','رد الإدارة المعنيــــــــــــة',15,600) );
         this.forms.Form_ProcessTransfer.addSignature(new Signature('FinEmpSignature','FinEmp','FinEmpSig','الموظـــف المختـــص','الموظـــف المختـــص'));
         this.forms.Form_ProcessTransfer.addSignature(new Signature('FinTLSignature','FinTL','FinTLSig','الـــمـــراجـــــــــع','الـــمـــراجـــــــــع'));
         this.forms.Form_ProcessTransfer.addSignature(new Signature('FinSupSignature','FinSup','FinSupSig','الاعـــــــــــتــــــــــــمـــاد','الاعـــــــــــتــــــــــــمـــاد'));
-        this.forms.Form_ProcessTransfer.components.RequestDate.labelSize = 5;
-        this.forms.Form_ProcessTransfer.components.RequestDate.render();
-        /*this.forms.Form_ProcessTransfer.components.To.labelSize = 3;
-        this.forms.Form_ProcessTransfer.components.To.render();
-        this.forms.Form_ProcessTransfer.components.SSNo.labelSize = 3;
-        this.forms.Form_ProcessTransfer.components.SSNo.render();
-        this.forms.Form_ProcessTransfer.components.FileNo.labelSize = 3;
-        this.forms.Form_ProcessTransfer.components.FileNo.render();
-        this.forms.Form_ProcessTransfer.components.CivilID.labelSize = 3;
-        this.forms.Form_ProcessTransfer.components.CivilID.render();
-        this.forms.Form_ProcessTransfer.components.ClientName.labelSize = 3;
-        this.forms.Form_ProcessTransfer.components.ClientName.render();*/
     },
 
     main(){
@@ -186,28 +176,28 @@ $(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alert
                             <div class="col p-1 mb-4" data-container-for="Form_ProcessTransfer_title"></div>
                         </div>
                         <div class="row">
-                            <div class="col-4 pt-1 pd-1 pr-3 pl-3" data-container-for="RequestDate"></div>
+                            <div class="col-4 pt-1 pd-1 pr-0 pl-3" data-container-for="RequestDate"></div>
                             <div class="col-3 pt-1 pd-1 pr-3 pl-3"></div>
                             <div class="col-5 pt-1 pd-1 pr-3 pl-3" data-container-for="FileNo"></div>
                         </div>
                         <div class="row">
-                            <div class="col-5 pt-1 pd-1 pr-3 pl-3" data-container-for="From"></div>
-                            <div class="col-2 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="From"></div>
+                            <div class="col-1 pt-1 pd-1 pr-3 pl-3"></div>
                             <div class="col-5 pt-1 pd-1 pr-3 pl-3" data-container-for="SSNo"></div>
                         </div>
                         <div class="row">
-                            <div class="col-5 pt-1 pd-1 pr-3 pl-3" data-container-for="To"></div>
-                            <div class="col-2 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="To"></div>
+                            <div class="col-1 pt-1 pd-1 pr-3 pl-3"></div>
                             <div class="col-5 pt-1 pd-1 pr-3 pl-3" data-container-for="CivilID"></div>
                         </div>
                         <div class="row">
-                            <div class="col-5 pt-1 pd-1 pr-3 pl-3" data-container-for="ClientName"></div>
-                            <div class="col-2 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="ClientName"></div>
+                            <div class="col-1 pt-1 pd-1 pr-3 pl-3"></div>
                             <div class="col-5 pt-1 pd-1 pr-3 pl-3" data-container-for="IBAN"></div>
                         </div>
                         <div class="row">
-                            <div class="col-5 pt-1 pd-1 pr-3 pl-3" data-container-for="EmployerName"></div>
-                            <div class="col-2 pt-1 pd-1 pr-3 pl-3"></div>
+                            <div class="col-6 pt-1 pd-1 pr-3 pl-3" data-container-for="EmployerName"></div>
+                            <div class="col-1 pt-1 pd-1 pr-3 pl-3"></div>
                             <div class="col-5 pt-1 pd-1 pr-3 pl-3" data-container-for="RegistrationNo"></div>
                         </div>                          
                         <div class="row">

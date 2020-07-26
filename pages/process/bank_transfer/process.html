@@ -48,10 +48,10 @@
         
 
 //How can i add a cell intease of a plain lable coomponent
-        this.forms.Form_BankTransfer.addComponent(new TxtBetweenPlainLabelsComponent('RequestDate','تحويل المرتب إعتبارا من ','Salary Transfer as of','','') ); 
-        
+       
+            
 
-
+            this.forms.Form_BankTransfer.addComponent(new DateComponent('RequestDate','تحويل المرتب إعتبارا من','Salary Transfer as of','','') );
             this.forms.Form_BankTransfer.addComponent(new TxtComponent('RequesterName','اسم الموظف','Name',5) );
             this.forms.Form_BankTransfer.addComponent(new TxtComponent('RequesterDept','اسم الإدارة','Dept.',5) );
 
@@ -62,15 +62,17 @@
    
             this.forms.Form_BankTransfer.addComponent(new DropDownListComponent('AccType','نوع الحساب','Account Type',[new Option('','','0') ,new Option('توفير','Saving Account','1') , new Option('جاري','Current Account','2')]) );
 
-           
-
-            this.forms.Form_BankTransfer.addComponent(new TxtComponent('EmpSign','التوقيع','Signature')  );
-           
-            this.forms.Form_BankTransfer.addComponent(new ParagraphComponent('Endorsment','اقرار في حالة تغيير الحسابب من بنك إلى آخر','Acknowledgment if the bank account is changed to another','text-danger font-weight-bold text-cemter'));
+            this.forms.Form_BankTransfer.addComponent(new ParagraphComponent('Endorsment','اقر أنا في حالة  تغيير الحساب البنكي الخاص لي من  بنك إلى  بنك آخر',' I acknowledgment the change of my personal bank account to another bank','text-danger font-weight-bold'));
      
-            this.forms.Form_BankTransfer.addComponent(new ParagraphComponent('Commitment','اقر بأن لا يوجد علي أي التزام تجاه آخر بنك تم تحويل مرتبي الشهري إليه،،،','I certify that i have no obligation to the last bank which my monthly salary was transferred','text font-weight-bold'));
+            this.forms.Form_BankTransfer.addComponent(new ParagraphComponent('Commitment','أقر بأنه ليس لدي أي التزام تجاه البنك الذي يتم تحويل راتبي الشهري إليه،،،','I certify that I have no obligation to the bank to which my monthly salary is transferred','text-danger text font-weight-bold'));
            
-            this.forms.Form_BankTransfer.addComponent(new ParagraphComponent('HRproperty','لاستعمال إدارة شئون العاملين','To be used under the Personnel Affairs Department','text font-weight-bold'));
+             this.forms.Form_BankTransfer.addSignature(new Signature('EmpSign','EmpeSign','EmpeName','التوقيع','Signature')  );
+        
+
+          //  this.forms.Form_BankTransfer.addComponent(new TxtComponent('EmpSign','التوقيع','Signature')  );
+           
+           
+            this.forms.Form_BankTransfer.addComponent(new ParagraphComponent('HRproperty','ادارة عمليات المـوارد الــبــشريـه','To be used under the Personnel Affairs Department','text-danger text font-weight-bold'));
     
 
         //this.forms.Form_PeriodicalLeave.addComponent(new ParagraphComponent('Ekrar','اقر انا الموقع ادناه بانني مسئول عن ماتم ادخاله من بيانات ','I admit that I am responsible for the entered data','text-danger font-weight-bold') );
@@ -168,51 +170,44 @@
                                 
 
 
-                                <div class="row p-1">
-                                    <div class="col pr pl"></div>
-                            <div class="col-5 pr-3 pl-3" data-container-for="RequestDate"></div>
-                            <div class="col pr pl"></div>
-                            <div class="col-7 " ></div>
-                        </div>
                             
                         <br>
-
-                                <div class="row">
+                        <div class="row p-1">
+                            <div class="col-7 pr-2 pl-3" data-container-for="RequestDate"></div>
+                        </div>
+                        <div class="row p-1">
                                     <div class="col-7 pr-2 pl-3" data-container-for="RequesterName"></div>
                                 </div>
-                                <div class="row">
+                                <div class="row p-1">
                                    <div class="col-7 pr-2 pl-3" data-container-for="RequesterDept"></div>
                                  </div>
-                                <div class="row">
+                                 <div class="row p-1">
                                         <div class="col-7 pr-2 pl-3" data-container-for="Bank"></div>
                                  </div>
-                                 <div class="row">
+                                 <div class="row p-1">
                                         <div class="col-7 pr-2 pl-3" data-container-for="Branch"></div>
                                 </div>
-                                <div class="row">
+                                <div class="row p-1">
                                         <div class="col-7 pr-2 pl-3" data-container-for="AccNo"></div>
                                 </div>
-                                <div class="row">
+                                <div class="row p-1">
                                         <div class="col-7 pr-2 pl-3" data-container-for="AccType"></div>
                                  </div>
-                                 <div class="row">
-                                         <div class="col-7 pr-2 pl-3" data-container-for="EmpSign"></div>
-                                </div>
+                              
 
                                 <br>
                                           
                                             <div class="row">
-                                                <div class="col pr pl"></div>
                                                 <div class="col pr-6 pl-6" data-container-for="Endorsment"></div>
-                                                <div class="col pr pl"></div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col pr-6 pl-6" data-container-for="Commitment"></div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-7 pr-2 pl-3" data-container-for="EmpSign"></div>
                                             </div>
 
-                                            <div class="row">
-                                                <div class="col pr pl"></div>
-                                                <div class="col-6 pr-1 pl-5" data-container-for="Commitment"></div>
-                                                <div class="col pr pl"></div>
-                                            </div>
-                                            
+                                       <br>
 <br><br>
 
                                             <div class="row">

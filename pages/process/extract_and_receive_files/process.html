@@ -48,6 +48,8 @@ process.controller = {
 
         this.forms.Form_ExtractAndReceiveFiles.addComponent(new TxtComponent('MainEmp','الموظف المختص','MainEmp',80) );
 
+        this.forms.Form_ExtractAndReceiveFiles.addComponent(new ParagraphComponent('WelcomeLine','تحية طيبة وبعــد <br> يرجى التفضل بالعلم بأننا نفوض السادة التالية أسماؤهم لاستخراج واستلام الملفات المذكورة أدناه','Greating <br> Please note that we give a permission for the folloing name to extravt and receive file','font-weight-bold') );
+
         this.forms.Form_ExtractAndReceiveFiles.addComponent(new DropDownListComponent('RequestType','نوع الطلب','Request Type',[new Option('','','0') ,new Option('حفظ ملفات','Save File','1'),new Option('مؤقتة ويتم ارجاعها','Temprory File','2')]) );
 
         this.forms.Form_ExtractAndReceiveFiles.addComponent(new DropDownListComponent('Status','بصفتـه','Status',[new Option('','','0') ,new Option('استخراج ملفات','Extract File','1'),new Option('دائمة ويحتفظ بها','Permanent File','2')]) );
@@ -75,7 +77,9 @@ process.controller = {
 
         /*this.forms.Form_ExtractAndReceiveFiles.addComponent(new TxtComponent('FileCartonNo','عدد الكرتون','File Carton No',5) );*/
 
-        this.forms.Form_ExtractAndReceiveFiles.addComponent(new TxtBetweenPlainLabelsComponent('FileCartonNo','عـدد','Number',20,'كرتـــــــون ','Carton') );
+        this.forms.Form_ExtractAndReceiveFiles.addComponent(new TxtBetweenPlainLabelsComponent('FileCartonNo','عـدد','Number',20,'كرتــــــــــون ','Carton') );
+
+        this.forms.Form_ExtractAndReceiveFiles.addComponent(new ParagraphComponent('Department','خاص بإدارة المشتريات والمناقصات','Purchases and Tenders Department','text-danger text-center font-weight-bold') );
 
         this.forms.Form_ExtractAndReceiveFiles.addComponent(new NotesComponent('Notes','المــلاحظــات','Notes',4,300) );
 
@@ -210,9 +214,9 @@ $(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alert
                             <div class="col pr-3 pl-3 pb-4"></div>
                         </div>
 
-                        <div style="text-align: right; font-weight: bold;">تحية طيبة وبعــد</div>
-
-                        <div style="text-align: right; font-weight: bold;">يرجى التفضل بالعلم بأننا نفوض السادة التالية أسماؤهم لاستخراج واستلام الملفات المذكورة أدناه</div>
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3 pt-2" data-container-for="WelcomeLine"></div>
+                        </div>
 
                         <div class="row p-1">
                             <div class="col-6 pr-3 pl-3 pt-3" data-container-for="RequestType"></div>
@@ -245,17 +249,19 @@ $(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alert
 
                         <div class="row p-1">
                             <div class="col-2 pr-3 pl-3" data-container-for="BoxFile"></div>
-                            <div class="col-3 pr-3 pl-3" data-container-for="BoxFileNo"></div>
+                            <div class="col-3 pr-2 pl-3" data-container-for="BoxFileNo"></div>
                             <div class="col-7 pr-3 pl-3"></div>
                         </div>
 
                         <div class="row p-1">
-                            <div class="col-2 pr-3 pl-3 " data-container-for="FileCarton"></div>
-                            <div class="col-3 pr-3 pl-3 " data-container-for="FileCartonNo"></div>
-                            <div class="col-7 pr-3 pl-3 "></div>
+                            <div class="col-2 pr-3 pl-3 pt-2 pb-5" data-container-for="FileCarton"></div>
+                            <div class="col-3 pr-3 pl-3 pt-2 pb-5" data-container-for="FileCartonNo"></div>
+                            <div class="col-7 pr-3 pl-3 pt-2 pb-5"></div>
                         </div>
 
-                        <div style="text-align: center; color: red; font-weight:bolder; font-size:1.2em; text-decoration: underline;">خاص بإدارة المشتريات والمناقصات</div>
+                        <div class="row p-1">
+                          <div class="col pr-3 pl-3 pt-2" data-container-for="Department"></div>
+                        </div>
 
                         <div class="row p-1">
                             <div class="col pr-3 pl-3 pt-2" data-container-for="Notes"></div>
