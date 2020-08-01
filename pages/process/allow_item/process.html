@@ -10,7 +10,7 @@
     
     
     
-    process.controller = {
+    processHandler.controller = {
         errMsg : "",
         groups : {  
              //groupFollowUpTLs : ["FollowUp_TLs"],    // groupFollowUpEmps : ["FollowUp_Emps"],
@@ -39,13 +39,14 @@
             Form_AllowItem : new Form('Form_AllowItem', 'نموذج سماح البند المالي','Leave Form'),
         },
     
-        defineComponents(){    
+        defineComponents(){   
             this.forms.Form_AllowItem.addComponent(new TxtComponent('ClientName','اسم الموظف','Name',5) );
             this.forms.Form_AllowItem.addComponent(new DateComponent('FromDate',' التاريخ','From','','') );
-            this.forms.Form_AllowItem.addComponent(new TxtComponent('TotalAmt','بقيمة إجمالية تقديرية','Total Amount') );
-            this.forms.Form_AllowItem.addComponent(new TxtComponent('AllowItemNo','رقم طلب سماح البند','Allow Item Number') );
-            this.forms.Form_AllowItem.addComponent(new TxtComponent('Notes','','',4,300) );
-          
+            this.forms.Form_AllowItem.addComponent(new TxtComponent('TotalAmt','بقيمة إجمالية تقديرية','Total Amount',50,5) );
+            this.forms.Form_AllowItem.addComponent(new TxtComponent('AllowItemNo','رقم طلب سماح البند','Allow Item Number',50,5) );
+           // this.forms.Form_AllowItem.addComponent(new TxtComponent('Notes','','',4,300) );
+            this.forms.Form_AllowItem.addComponent(new NotesComponent('Notes','الملاحظـــــات','Notes',4,300) );
+
             this.forms.Form_AllowItem.addSignature(new Signature('HREmpName','HREmpSig','اعتمـــاد المراقــب المختــص','Supervisor Approval')  );
             this.forms.Form_AllowItem.addSignature(new Signature('HRSupName','HRSupSig','توقيع موظف إدارة الموارد البشرية','Employee Signature') ); 
             this.forms.Form_AllowItem.addSignature(new Signature('HRMngName','HRMngSig','توقيع مدير إدارة الموارد البشرية','Manager Approval') );
@@ -69,20 +70,21 @@
             this.forms.Form_AllowItem.addSignature(new Signature('FinSupName','FinSupSig','توقيع مراجع الإدارة المالية','Supervisor Approval') );
             this.forms.Form_AllowItem.addSignature(new Signature('FinMngName','FinMngSig','ع/ مدير الإدارة المالية','Manager Approval') );
 
-            this.forms.Form_AllowItem.addComponent(new ParagraphComponent('line1','السيد مدير الإدارة المالية المحترم<br> تحية طيبة و بعد, نرجو إفادتنا عن سماح البند المالي لـ','Mng of FinDept <br> allow item clarification','text-danger font-weight-bold')  );
-            this.forms.Form_AllowItem.addComponent(new ParagraphComponent('line3','دولار أمريكي<br> و تفضلوا بقبول فائق الإحترام ،،','US Dollar <br> Best Regards','text-danger font-weight-bold') );
+            this.forms.Form_AllowItem.addComponent(new ParagraphComponent('line1','السيد مدير الإدارة المالية المحترم<br> تحية طيبة و بعد, نرجو إفادتنا عن سماح البند المالي لـ','Mng of FinDept <br> allow item clarification','font-weight-bold')  );
+            this.forms.Form_AllowItem.addComponent(new ParagraphComponent('line3','دولار أمريكي','US Dollar <br> Best Regards','font-weight-bold') );
+            this.forms.Form_AllowItem.addComponent(new ParagraphComponent('line4','و تفضلوا بقبول فائق الإحترام ،،','US Dollar <br> Best Regards','font-weight-bold') );
       
-            this.forms.Form_AllowItem.addComponent(new ParagraphComponent('line4','السيد مدير إدارة الموارد البشرية المحترم<br> بالإشارة إلى ماتقدم نود إفادتكم بأن :','Mng of HR','text-danger font-weight-bold') );
-            this.forms.Form_AllowItem.addComponent(new ParagraphComponent('line5','مراكز التكلفة','centers','text-danger font-weight-bold') );
+            this.forms.Form_AllowItem.addComponent(new ParagraphComponent('line5','السيد مدير الإدارة المحترم<br> بالإشارة إلى ماتقدم نود إفادتكم بأن :','','font-weight-bold') );
+            this.forms.Form_AllowItem.addComponent(new ParagraphComponent('line6','مراكز التكلفة','centers','font-weight-bold') );
      
         },
     
         main(){
             try{
                 this.defineComponents();
-                process.initialize();
-                let stepName = process.workItem.stepName;
-                process.recieversList.loadManager();
+                processHandler.initialize();
+                let stepName = processHandler.workItem.stepName;
+                processHandler.recieversList.loadManager();
                 //process.recieversList.loadDeptManager();
                 //process.branchesList.load()); //to load all branches
                 //process.branchesList.load([1,2,5]); // to load specific branches using branch id
@@ -99,8 +101,8 @@
                 this.forms.Form_AllowItem.updateComponentsFromEntity();
     
             app.renderLabels();
-            process.openProcessModal();
-            process.setWorkFlowIDLabel();
+            processHandler.openProcessModal();
+            processHandler.setWorkFlowIDLabel();
             }
             catch(error){ throw error;}
         },
@@ -110,7 +112,7 @@
          },    
     }
     
-    $(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alertError(error.message); }} );
+    $(document).ready( ()=>{ try{ processHandler.controller.main() }catch(error){ app.alertError(error.message); }} );
     </script>
     
     <style>
@@ -136,8 +138,10 @@
                                     <div class="col p-1 mb-4" data-container-for="Form_AllowItem_title"></div>
                                 </div>
                                 <div class="row pt-2">
-                                    <div class="col pr-3 pl-3" data-container-for="ClientName"></div>
-                                    <div class="col pr-3 pl-3" data-container-for="FromDate"></div>
+                                    <div class="col-6 pr-3 pl-3" data-container-for="ClientName"></div>
+                                    <div class="col pr-3 pl-3"></div>
+                                    <div class="col pr-3 pl-6" data-container-for="FromDate"></div>
+                               
                                 </div>
 
                             <div class="row pt-2">
@@ -149,59 +153,80 @@
                             </div>
 
                             <div class="row pt-2">
-                                <div class="col pr-3 pl-3" data-container-for="TotalAmt"></div>
+                                <div class="col-5 pr-3 pl-3" data-container-for="TotalAmt"></div>
                                 <div class="col pr-3 pl-3"data-container-for="line3"></div>
-                               <!-- <div class="col pr-3 pl-3"data-container-for="line2"></div> -->
+                                <div class="col pr-3 pl-3"data-container-for="line4"></div>
                             </div>
 
                             <div class="row pt-2">
-                                <div class="col pr-3 pl-3" data-container-for="AllowItemNo"></div>
+                                <div class="col-5 pr-3 pl-3" data-container-for="AllowItemNo"></div>
                                 <div class="col pr-3 pl-3"></div>
                             </div>
 
-                            
+                            <div class="row pt-4">
+                                <div class="col pr-3 pl-3"></div>
+                            </div>
+
                             <div class="row pt-3">
                                 <div class="col pr-3 pl-3" data-container-for="HREmpName"></div>
                                 <div class="col pr-3 pl-3" data-container-for="HRSupName"></div>
                                 <div class="col pr-3 pl-3" data-container-for="HRMngName"></div>
                             </div>
 
+                            <div class="row pt-4">
+                                <div class="col pr-3 pl-3"></div>
+                            </div>
+
 
                             <div class="row pt-2">
-                                <div class="col pr-3 pl-3" data-container-for="line4"></div>
+                                <div class="col pr-3 pl-3" data-container-for="line5"></div>
                             </div>
 
                             <div class="row pt-2">
-                                <div class="col pr-3 pl-3"></div>
-                                <div class="col pr-3 pl-3"  data-container-for="line5"></div>
+                                <div class="col-8 pr-3 pl-3"></div>
+                                <div class="col pr-3 pl-3"  data-container-for="line6"></div>
                             </div>
 
                             
                             <div class="row">
-                                <div class="col pr-3 pl-3" data-container-for="ReqNo"></div>
-                                <div class="col pr-3 pl-3" data-container-for="Center1"></div>
+                                <div class="col-5 pr-3 pl-3" data-container-for="ReqNo"></div>
+                                <div class="col pr-3 pl-3"></div>
+                                <div class="col-4 pr-3 pl-3" data-container-for="Center1"></div>
+                                <div class="col pr-3 pl-3"></div>
                             </div>
 
                             <div class="row pt-2">
-                                <div class="col pr-3 pl-3" data-container-for="Type"></div>
-                                <div class="col pr-3 pl-3" data-container-for="Center2"></div>
+                                <div class="col-5 pr-3 pl-3" data-container-for="Type"></div>
+                                <div class="col pr-3 pl-3"></div>
+                                <div class="col-4 pr-3 pl-3" data-container-for="Center2"></div>
+                                <div class="col pr-3 pl-3"></div>
                             </div>
 
                             <div class="row pt-2">
-                                <div class="col pr-3 pl-3" data-container-for="AcctNo"></div>
-                                <div class="col pr-3 pl-3" data-container-for="Center3"></div>
+                                <div class="col-5 pr-3 pl-3" data-container-for="AcctNo"></div>
+                                <div class="col pr-3 pl-3"></div>
+                                <div class="col-4 pr-3 pl-3" data-container-for="Center3"></div>
+                                <div class="col pr-3 pl-3"></div>
                             </div>
 
                             <div class="row pt-2">
-                                <div class="col pr-3 pl-3" data-container-for="AcctName"></div>
-                                <div class="col pr-3 pl-3" data-container-for="Center4"></div>
+                                <div class="col-5 pr-3 pl-3" data-container-for="AcctName"></div>
+                                <div class="col pr-3 pl-3"></div>
+                                <div class="col-4 pr-3 pl-3" data-container-for="Center4"></div>
+                                <div class="col pr-3 pl-3"></div>
                             </div>
 
                             <div class="row pt-2">
-                                <div class="col pr-3 pl-3" data-container-for="Status"></div>
-                                <div class="col pr-3 pl-3" data-container-for="Center5"></div>
+                                <div class="col-5 pr-3 pl-3" data-container-for="Status"></div>
+                                <div class="col pr-3 pl-3"></div>
+                                <div class="col-4 pr-3 pl-3" data-container-for="Center5"></div>
+                                <div class="col pr-3 pl-3"></div>
                             </div>
 
+                            <div class="row pt-4">
+                                <div class="col pr-3 pl-3"></div>
+                            </div>
+                            
                             <div class="row pt-3">
                                 <div class="col pr-3 pl-3" data-container-for="FinEmpName"></div>
                                 <div class="col pr-3 pl-3" data-container-for="FinSupName"></div>

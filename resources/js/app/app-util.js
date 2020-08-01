@@ -18,6 +18,8 @@ const util = {
 		}
 	},
 
+
+	
 	arrangeTextForDB(text){
 		let cleanText = "";
 		cleanText = text.replace(/'/gi,"''");

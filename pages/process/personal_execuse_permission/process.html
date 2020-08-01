@@ -1,6 +1,6 @@
 <script >
 
-process.controller = {
+processHandler.controller = {
     errMsg : "",
     groups : {  
          //groupFollowUpTLs : ["FollowUp_TLs"],    // groupFollowUpEmps : ["FollowUp_Emps"],
@@ -45,9 +45,12 @@ process.controller = {
 
         this.forms.Form_PersonalExecusePermission.addComponent(new DateComponent('RequestDate','التاريخ','Date') );
         
-        this.forms.Form_PersonalExecusePermission.addComponent(new DropDownListComponent('FromTime','من الساعة','From',[new Option('','','0'),new Option('','','0')]));
-        this.forms.Form_PersonalExecusePermission.addComponent(new DropDownListComponent('ToTime','حتى الساعة','To',[new Option('','','0'),new Option('','','0')]));
+        this.forms.Form_PersonalExecusePermission.addComponent(new TxtComponent('FromTime','من الساعة','From',[new Option('','','3'),new Option('','','0')]));
+        this.forms.Form_PersonalExecusePermission.addComponent(new TxtComponent('ToTime','حتى الساعة','To',[new Option('','','3'),new Option('','','0')]));
      
+
+
+
         this.forms.Form_PersonalExecusePermission.addComponent(new NotesComponent('Reasons','وذلك للآسباب التالية','Reassons',4,300) );
        
 
@@ -60,7 +63,7 @@ process.controller = {
         this.forms.Form_PersonalExecusePermission.addSignature(new Signature('RequesterDept','ReqDept','RequstDept','الإدارة') );
         this.forms.Form_PersonalExecusePermission.addSignature(new Signature('EmpSignature','EmpSign','EmployeeSign','التوقيع') );
    
-        this.forms.Form_PersonalExecusePermission.addComponent(new TxtComponent('Opinion','الرآي','Opninion',20) );
+        this.forms.Form_PersonalExecusePermission.addComponent(new TxtComponent('Opinion','الرآي','Opninion') );
 
 
 
@@ -71,9 +74,9 @@ process.controller = {
     main(){
         try{
             this.defineComponents();
-            process.initialize();
-            let stepName = process.workItem.stepName;
-            process.recieversList.loadManager();
+            processHandler.initialize();
+            let stepName = processHandler.workItem.stepName;
+            processHandler.recieversList.loadManager();
                         
 
             if(stepName == this.steps.PerLeave_Launch){   
@@ -88,8 +91,8 @@ process.controller = {
         
 
             app.renderLabels();
-            process.openProcessModal();
-            process.setWorkFlowIDLabel();
+            processHandler.openProcessModal();
+            processHandler.setWorkFlowIDLabel();
         }
         catch(error){ throw error;}
     },
@@ -105,7 +108,7 @@ process.controller = {
 
 }
 
-$(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alertError(error.message); }} );
+$(document).ready( ()=>{ try{ processHandler.controller.main() }catch(error){ app.alertError(error.message); }} );
 </script>
 
 <style>
@@ -134,40 +137,37 @@ $(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alert
                             <div class="col pr-3 pl-3" data-container-for="Salute"></div>
                         </div> -->
                        
-                        <div class="row">
+                        <div class="row p-1">
                                 <div class="col pr-3 pl-3" data-container-for="WelcomeLine"></div>
                         </div>
-
-                            <br>
-                        <div class="row">
-                            <div class="col-4 pr-5 pl-3" data-container-for="RequestDate"></div>
-                            <div class="col-6 pr-3 pl-3" data-container-for=""></div>
+                        <div class="row p-1">
+                            <div class="col-6 pr-3 pl-3" data-container-for="RequestDate"></div>
+                          
                          </div>
 
-                             <br>
+                         <div class="row p-5">
+                        </div>
+                     
 
-
-                        <div class="row">
+                        <div class="row p-1">
                             <!-- <div class="col pr-3 pl-3" data-container-for="RequesterName"></div> -->
-                            <div class="col pr pl-1" data-container-for=""></div>
+                            <div class="" data-container-for=""></div>
                             <div class="col pr-3 pl-3" data-container-for="FromTime"></div>
-                            <div class="col-1 pr pl" data-container-for=""></div>
+                            
                             <div class="col pr-3 pl-3" data-container-for="ToTime"></div>    
-                            <div class="col pr pl-1" data-container-for=""></div>
+                            <div class="" data-container-for=""></div>
                         </div>
 
-                        <br>
-
+                 
+               
                     
-                        <div class="row">
+
+
+                        <div class="row p-1">
                             <div class="col pr-3 pl-3" data-container-for="Reasons"></div>
                         </div>
 
-                        <br>
-
-                       
-
-                   
+                
                      
                         <div class="row p-1">
                             <div class="col-4 pr-3 pl-3" data-container-for="RequesterName"></div>
@@ -184,15 +184,17 @@ $(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alert
                       
                         <!--long line-->
                         <br>
-                        <div class="row">
-                            <div class="col-4 pr-5 pl-3" data-container-for="Opinion"></div>
+                        <div class="row p-1">
+                           
+                            <div class="col-12 pr-3 pl-3" data-container-for="Opinion"></div>
+                            
                         </div>
                    
 
                          <br>
                    
                         <div class="row p-1">
-                            <div class="col pr pl-1" data-container-for=""></div>
+                            <div class="col-8 pr pl-1" data-container-for=""></div>
                             <div class="col pr-3 pl-3" data-container-for="DeptMng"></div>
                       
                         </div>
@@ -208,33 +210,7 @@ $(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alert
 
 
 
-                 <!-- Form-WorkDeduction-Tab -->
-                <div class="tab-pane fade" id="nav-Form_WorkDeduction" role="tabpanel" aria-labelledby="Form_WorkDeduction-tab">
-                    <!-- the main container for all Form_PersonalExecusePermission controls -->
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col p-3" data-container-for="Form_WorkDeduction_title"></div>
-                        </div>
-                        <div class="row">
-                            <div class="col p-3">
-                                <!-- <input placeholder="Your Date"  class="form-control" type="text" onfocus="(this.type='date')" onblur="(this.type='text')" id="date" min="2018-01-01" max="2018-12-31"> -->
-                                <button type="button" class="btn btn-primary" onclick="process.controller.forms.Form_PersonalExecusePermission.disable()">disable نموذج اجازة دورية</button>
-                            </div>
-                            <div class="col p-3">
-                                <button type="button" class="btn btn-primary" onclick="process.controller.forms.Form_PersonalExecusePermission.enable()">enable نموذج اجازة دورية</button>
-                            </div>
-                            <div class="col p-3">
-                                <button type="button" class="btn btn-secondary" onclick="process.controller.forms.Form_WorkDeduction.show();">show نموذج انقطاع عن العمل</button>
-                            </div>
-                            <div class="col p-3">
-                                <button type="button" class="btn btn-secondary" onclick="process.controller.forms.Form_WorkDeduction.hide();">hide نموذج انقطاع عن العمل</button>
-                            </div>
-                            <div class="col p-3">
-                                <button type="button" class="btn btn-secondary" onclick="process.controller.forms.Form_PersonalExecusePermission.select();">goto نموذج اجازة دورية</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+               
 
                 <div class="text-right">
                     <hr>

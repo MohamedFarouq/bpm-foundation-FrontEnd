@@ -10,12 +10,12 @@
     <link rel="stylesheet" href="./resources/css/bootstrap.min.css">
     <script src="./resources/js/api/jquery-3.4.1.slim.min.js"></script>
     <script src="./resources/js/api/bootstrap.bundle.min.js"></script>
-    <script src="./resources/js/app/app-data.js"></script> 
+    <script src="./resources/js/app/app-factory.js"></script> 
     <script src="./resources/js/app/app-component.js"></script> 
     <script src="./resources/js/app/app-util.js"></script> 
     <script src="./resources/js/app/app-service.js"></script>
     <script src="./resources/js/app/app.js"></script> 
-    <!-- <script src="./resources/js/control/process.js"></script>  -->
+    
     
     
 </head>
@@ -39,7 +39,7 @@
       <li class="nav-item my-auto" >
         <a id="myProfile" onclick="menu.loadPage(menu.myProfile)" href="#" class="simpleLink text-white-50" style="padding-left:15px;" title="Notifications">
           <i class="far fa-bell text-white fontSize150" ></i>  
-          <label style="cursor:pointer;" data-label="notifications">Notifications</label>
+          <label style="cursor:pointer;" data-label="NOTIFICATIONS">Notifications</label>
         </a>
       </li>
       <li class="nav-item" >
@@ -66,27 +66,27 @@
      
   <!-- Process Modal -->
   <div class="modal" id="processModal" data-backdrop="static"  tabindex="-1" role="dialog" aria-labelledby="processModalTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document" style=" min-width: 90%;">
+    <div class="modal-dialog modal-dialog-centered" role="document" style=" min-width: 93%;">
         <div class="modal-content" style="background-color: #EAEAEA !important;">
           <!-- ToolBar Components -->
           <div id="processToolBar" class="modal-header bg-light p-0 ">
                 <nav class="navbar navbar-expand-sm container-fluid bg-dark p-1" >
-                  <a onclick="process.close()" href="#"><i class="fas fa-window-close modalCloseBtn"></i></a>
+                  <a onclick="processHandler.close()" href="#"><i class="fas fa-window-close modalCloseBtn"></i></a>
                   <ul class="navbar-nav ml-auto">
                       <li class="my-auto p-1" >
-                          <button id="procInstructionsBtn" onclick="process.openUserGuide()" type="button" class="btn btn-sm btn-dark"><span data-label="userGuide"></span><i class="fas fa-info-circle text-white"></i></button> 
+                          <button id="procInstructionsBtn" onclick="processHandler.openUserGuide()" type="button" class="btn btn-sm btn-dark"><span data-label="USER_GUIDE"></span><i class="fas fa-info-circle text-white"></i></button> 
                       </li>
                       <li class="my-auto p-1" >
-                          <button id="procStepsBtn" onclick="process.openSteps()" type="button" class="btn btn-sm btn-dark"><span data-label="steps"></span><i class="fas fa-list-ol text-white"></i></button> 
+                          <button id="procStepsBtn" onclick="processHandler.openSteps()" type="button" class="btn btn-sm btn-dark"><span data-label="STEPS"></span><i class="fas fa-list-ol text-white"></i></button> 
                       </li>
                       <li class="nav-item my-auto p-1" >
-                          <button id="procPrintBtn" onclick="process.print()" type="button" class="btn btn-sm btn-dark"><span data-label="print"></span><i class="fas fa-print text-white"></i></button> 
+                          <button id="procPrintBtn" onclick="processHandler.print()" type="button" class="btn btn-sm btn-dark"><span data-label="PRINT"></span><i class="fas fa-print text-white"></i></button> 
                       </li>
                       <li class="nav-item my-auto p-1" >
-                          <button id="procAttachmentsBtn" onclick="process.openAttachments()" type="button" class="btn btn-sm btn-dark"><span data-label="attachments"></span><i class="fas fa-paperclip text-white"></i></button>
+                          <button id="procAttachmentsBtn" onclick="processHandler.openAttachments()" type="button" class="btn btn-sm btn-dark"><span data-label="ATTACHMENTS"></span><i class="fas fa-paperclip text-white"></i></button>
                       </li>
                       <li class="nav-item my-auto p-1" >
-                          <button id="procDispatchBtn" onclick="process.controller.send()" type="button" class="btn btn-sm btn-success text-white"><span data-label="completeStep"></span><i class="fas fa-check-square text-white"></i></button>
+                          <button id="procDispatchBtn" onclick="processHandler.controller.send()" type="button" class="btn btn-sm btn-success text-white"><span data-label="COMPLETE_STEP"></span><i class="fas fa-check-square text-white"></i></button>
                       </li>
                   </ul>
                 </nav>
@@ -94,30 +94,30 @@
           <div class="modal-body overflow-auto pt-0">
             <div class="row">
               <!-- RightSideBar Components -->
-              <div id="processRightSideBar" class="col-3" >
+              <div id="processRightSideBar" class="col-2" >
                   <div id="senderDiv" class="form-group p-1">
-                    <label for="senderTxt" data-label="sender"></label>
+                    <label for="senderTxt" data-label="SENDER"></label>
                     <input id="senderTxt" type="text" class="form-control form-control text-muted " readonly>
                   </div>
                   <div id="recieverDiv" class="form-group border-top p-1">
                     <label for="recieversList" data-label="reciever"></label>
                     <div id="branchDiv" class="form-group p-1">
-                      <select onchange="process.branchesList.onSelect(this.options[this.selectedIndex])" name="branchesList" id="branchesList" class="form-control form-control-sm" disabled>
-                        <option data-label="branch" class="text-muted"></option>
+                      <select onchange="processHandler.branchesList.onSelect(this.options[this.selectedIndex])" name="branchesList" id="branchesList" class="form-control form-control-sm" disabled>
+                        <option data-label="BRANCH" class="text-muted"></option>
                       </select>
                     </div>
-                    <select onchange="process.recieversList.onSelect(this.options[this.selectedIndex])" name="recieversList" id="recieversList" class="form-control form-control-sm"></select>
+                    <select onchange="processHandler.recieversList.onSelect(this.options[this.selectedIndex])" name="recieversList" id="recieversList" class="form-control form-control-sm"></select>
                     <label id="recieverDeptTxt" class="text-muted" style="display: block; margin-top: 10px;height: 20px;"></label>
                   </div>
                   <div id="notesDiv" class="form-group p-1 border-top">
-                    <label for="notesTxt" data-label="notes"></label>
+                    <label for="notesTxt" data-label="NOTES"></label>
                     <textarea id="notesTxt" class="form-control"  rows="3" ></textarea>
                   </div>
                   <div id="actionDiv" class="form-group p-1 d-none" >
-                    <select onchange="process.actionsList.onSelect(this.options[this.selectedIndex])" name="actionsList" id="actionsList" class="form-control form-control-sm"></select>
+                    <select onchange="processHandler.actionsList.onSelect(this.options[this.selectedIndex])" name="actionsList" id="actionsList" class="form-control form-control-sm"></select>
                   </div>
               </div>
-              <div id="processBody" class="col-9" style="min-height: 100vh !important;"></div>
+              <div id="processBody" class="col-10" style="min-height: 100vh !important;"></div>
             </div>
           </div>
         </div>
@@ -135,13 +135,13 @@
                 <a onclick="formHandler.close()" href="#"><i class="fas fa-window-close modalCloseBtn"></i></a>
                 <ul class="navbar-nav ml-auto">
                   <li class="nav-item my-auto p-1" >
-                    <button id="formRedundantBtn" onclick="formHandler.printRedundant()" type="button" class="btn btn-sm btn-warning "><span data-label="supercededForms"></span><i class="fas fa-search text-dark"></i></button>
+                    <button id="formRedundantBtn" onclick="formHandler.printRedundant()" type="button" class="btn btn-sm btn-warning "><span data-label="SUPERCEDED_FORMS"></span><i class="fas fa-search text-dark"></i></button>
                   </li>
                   <li class="nav-item my-auto p-1" >
-                    <button id="formDeleteBtn" onclick="formHandler.deleteForm()" type="button" class="btn btn-sm btn-danger text-white"><span data-label="cancelForm"></span><i class="far fa-trash-alt text-white"></i></button>
+                    <button id="formDeleteBtn" onclick="formHandler.deleteForm()" type="button" class="btn btn-sm btn-danger text-white"><span data-label="CANCEL_FORM"></span><i class="far fa-trash-alt text-white"></i></button>
                   </li>
                   <li class="nav-item my-auto p-1" >
-                    <button id="formPrintBtn" onclick="formHandler.print()" type="button" class="btn btn-sm btn-success text-white"><span data-label="print"></span><i class="fas fa-print text-white"></i></button>
+                    <button id="formPrintBtn" onclick="formHandler.print()" type="button" class="btn btn-sm btn-success text-white"><span data-label="PRINT"></span><i class="fas fa-print text-white"></i></button>
                   </li>
                 </ul>
               </nav>
@@ -176,7 +176,7 @@
       <div class="modal-content">
         <div id="alertDiv" class="alert alert-dismissable m-0 p-2 text-left" role="alert" >
           <a onclick="app.closeAlertModal()" aria-label="Close" href="#"><i class="fas fa-window-close  alert-link fontSize150"></i></a>
-          <label class="d-inline font-weight-bold" data-label="systemMsgs"></label>
+          <label class="d-inline font-weight-bold" data-label="SYSTEM_MSGS"></label>
           <hr>
           <div id="alertBody" class="container-fluid d-block text-center text-wrap pl-3 pr-3 pb-3 "></div>
         </div>

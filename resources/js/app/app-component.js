@@ -1,23 +1,7 @@
 	"use strict";
 
 
-	class Page {
-		constructor(id, location, icon) {
-			this.id = id;
-			this.location = location;
-			this.icon = (icon) ? icon : "fas fa-square"; 
-		}
-
-		setPadge(value){
-			let css = (value > 20) ? 'badge-danger' : (value > 10) ? 'badge-warning' : 'badge-success';
-			this.getBadgeHTML().classList.add(css);
-			this.getBadgeHTML().innerHTML = value;
-		};
-
-		getBadgeHTML(){
-			return document.getElementById(`${this.id}_badge`);
-		}
-	}
+	
 
 	class Form{
 		constructor(dbTableName,labelAra,labelEng){
@@ -26,7 +10,7 @@
 				this.dbTableName = dbTableName;
 				this.label = app.chooseBasedOnLocale(labelAra,labelEng);
 				this.components = {};
-				this.entity = {};//{id:0, WorkFlowID : process.workItem.workflowID};
+				this.entity = {};
 				this.addTab();
 				this.renderFormHeader();
 			}
@@ -47,7 +31,7 @@
 
 		//@Deprecated
 		updateComponentsFromEntity(){
-			wf_TrackerService.loadFormEntity(this.entity);
+			processService.loadFormEntity(this.entity);
 			for(let property in this.entity){
 				if(this.components[property])
 					this.components[property].setValue(this.entity[property]);
@@ -499,7 +483,7 @@
 		render(){
 			try {
 				let html = `<label id="${this.id}" class="text-muted text-center text-nowrap p-0 fontSize75"></label>
-							<a id="${this.id}_btn" onclick="process.controller.forms.${this.form}.components.${this.dbColName}.setValue(loggedUser.signature);" href="#" class="text-muted text-center d-none fontSize75">Click here to sign</a>
+							<a id="${this.id}_btn" onclick="processHandler.controller.forms.${this.form}.components.${this.dbColName}.setValue(loggedUser.signature);" href="#" class="text-muted text-center d-none fontSize75">Click here to sign</a>
 							`;
 				this.getContainer().innerHTML = html;
 			} 
@@ -757,7 +741,7 @@
 				for(const att of this.attachmentsList){
 					html += `<div class="form-row  border" >
 								<div class="col-1 text-center border-right my-auto">
-									<input value="${att}" onclick="process.controller.forms.${this.form}.components.${this.dbColName}.calculateCheckedAttachments()" data-form-element-for="${this.dbColName}_checkBox" type="checkbox"  >
+									<input value="${att}" onclick="processHandler.controller.forms.${this.form}.components.${this.dbColName}.calculateCheckedAttachments()" data-form-element-for="${this.dbColName}_checkBox" type="checkbox"  >
 								</div>
 								<div class="col-11 my-auto">
 									<label class="text-left text-nowrap text-muted">${att}</label>			

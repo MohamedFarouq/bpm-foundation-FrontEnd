@@ -19,16 +19,15 @@
                 body: JSON.stringify(data) // body data type must match "Content-Type" header
             }
         */
+       let errDetails = null;
+       let data = {};
         try{
             if(isLocally){
                 reject();
                 return;
             }
             
-            
             app.openLoadingModal();
-            let data = {};
-            let errDetails = null;
             let response = await fetch(`http://localhost:8080${url}`, options);//(url, options);
             if(response.ok){
                 if(!returnDataType)
@@ -43,9 +42,14 @@
                     data = await response.blob();
                     data = URL.createObjectURL(data);
                 }
-                
-                app.closeLoadingModal();
-                resolve(data);
+                                
+                try {
+                    app.closeLoadingModal();
+                    resolve(data);
+                } catch (error) {
+                    errDetails = new ErrorDetails(error.message, ['something went wrong in fetch resolve body'] );
+                    app.alertError(errDetails);
+                }
             }
             else if(response.status == 400){ //handle bad request
                 data = await response.json();
@@ -56,7 +60,7 @@
             }
         }
         catch(error){
-            errDetails = new ErrorDetails(error.message, ['check (resolve/reject) body',`check url : ${url}`,,'check service is not down'] );
+            errDetails = new ErrorDetails(error.message, ['something went wrong in fetch call','check url','check service is not down'] );
             app.closeLoadingModal();
             app.alertError(errDetails);
             reject();
@@ -81,40 +85,65 @@
 
 
 
+    const appService = {
+        fetchAppDataThenDo(resolve,reject){
+            const url = `/bpmf/app/data`;
+            const options = {method:'GET'};
+            // const reject = ()=>{};
+            fetchJSON(url, options, resolve, reject);
+        },
+
+    };
+
 
     const peService = {
         fetchInboxWIs(username){
             let list = [];
-            list.push(new WorkItem("Template",100, "إجراء توضيحي" ,"12/5/2019") );
-			
-			list.push(new WorkItem("Periodical_Leave",500, "طلب اجازة دورية - شريفة" ,"12/5/2019") );
-            
-            list.push(new WorkItem("Pension_Advanced",600, "طلب صرف معاش مقدم - أنس" ,"12/6/2019") );
-            list.push(new WorkItem("Pension_Replacement_In_Employment",610, "طلب استبدال أثناء الخدمة - أنس" ,"12/6/2019") );
-            list.push(new WorkItem("Pension_Repayment",620, "طلب إعادة صرف معاش - أنس" ,"12/6/2019") );
-            list.push(new WorkItem("Process_Transfer",630, "طلب تحويل اجراء - أنس" ,"12/6/2019") );
-            
-            list.push(new WorkItem("Allow_Item",700, "طلب سماح البند المالي - عائشة" ,"12/7/2019") );
-            
-            list.push(new WorkItem("Personal_Execuse_Permission",800, "طلب استئذان شخصي - عاليه" ,"12/5/2019") );
-            list.push(new WorkItem("Bank_Transfer",810, "طلب تغيير حساب بنكي - عاليه" ,"12/5/2019") );
-            list.push(new WorkItem("Salary_Ded_Hiers",820, "طلب استقطاع من المرتب لصالح الورثة - عاليه" ,"12/5/2019") );
-            
-            list.push(new WorkItem("Program_Installation",900, "Program Installation - شريفة" ,"12/7/2019") );
-            list.push(new WorkItem("TS_Service",910,'طلب خدمة تشغيل آلي - شريفة' , '12/5/2019') );
-            list.push(new WorkItem("RACF_Security_Form",920,'نموذج طلب صلاحيات الخط الأول ونظام الإيجل - RACF - شريفة' , '12/5/2019') );
-            list.push(new WorkItem("Operation_Support_Request_Forms",930,'Operation Support Request Forms- شريفة' , '12/5/2019') );
-            list.push(new WorkItem("Document_Retrieval_Suggestions",940,'نظام الاسترجاع الآلي للوثائق- شريفة' , '12/5/2019') );
-            list.push(new WorkItem("Modification_Request",950,'طلب تعديل على الاسترجاع الرئيسي للوثائق- شريفة' , '12/5/2019') );
-            
+            try {
+                //list.push(new WorkItem("Template",100, "إجراء توضيحي" ,"12/5/2019") );
+                
+                list.push(new WorkItem("Periodical_Leave",500, "طلب اجازة دورية - شريفة" ,"12/5/2019") );
+                
+                list.push(new WorkItem("Pension_Advanced",600, "طلب صرف معاش مقدم - أنس" ,"12/6/2019") );
+                list.push(new WorkItem("Pension_Replacement_In_Employment",610, "طلب استبدال أثناء الخدمة - أنس" ,"12/6/2019") );
+                list.push(new WorkItem("Pension_Repayment",620, "طلب إعادة صرف معاش - أنس" ,"12/6/2019") );
+                list.push(new WorkItem("Process_Transfer",630, "طلب تحويل اجراء - أنس" ,"12/6/2019") );
+                
+                list.push(new WorkItem("Allow_Item",700, "طلب سماح البند المالي - عائشة" ,"12/7/2019") );
+                
+                list.push(new WorkItem("Personal_Execuse_Permission",800, "طلب استئذان شخصي - عاليه" ,"12/5/2019") );
+                list.push(new WorkItem("Bank_Transfer",810, "طلب تغيير حساب بنكي - عاليه" ,"12/5/2019") );
+                list.push(new WorkItem("Salary_Ded_Hiers",820, "طلب استقطاع من المرتب لصالح الورثة - عاليه" ,"12/5/2019") );
+                
+                list.push(new WorkItem("Program_Installation",900, "Program Installation - شريفة" ,"12/7/2019") );
+                list.push(new WorkItem("TS_Service",910,'طلب خدمة تشغيل آلي - شريفة' , '12/5/2019') );
+                list.push(new WorkItem("RACF_Security_Form",920,'نموذج طلب صلاحيات الخط الأول ونظام الإيجل - RACF - شريفة' , '12/5/2019') );
+                list.push(new WorkItem("Operation_Support_Request_Forms",930,'Operation Support Request Forms- شريفة' , '12/5/2019') );
+                list.push(new WorkItem("Document_Retrieval_Suggestions",940,'نظام الاسترجاع الآلي للوثائق- شريفة' , '12/5/2019') );
+                list.push(new WorkItem("Modification_Request",950,'طلب تعديل على الاسترجاع الرئيسي للوثائق- شريفة' , '12/5/2019') );
+                
 
-            return list;
+            } catch (error) {
+                app.alertError(new ErrorDetails(error.message,['check peService.fetchInboxWIs() @app-service.js ']));  
+            }
+            return list;    
+            
         },
 
-        fetchQueueWIs(){},
     }
 
-    const wf_TrackerService = {
+    const processService = {
+        
+        fetchInitialProcess(procTypeID,resolve,reject){
+            const url = `/bpmf/process/${procTypeID}/initial`;
+            const options = {method:'GET'};
+            fetchJSON(url, options, resolve, reject);
+        },
+
+      
+        
+        
+        
         loadFormEntity(formEntity){
             formEntity.RequesterName = 'محمد الديب';
             formEntity.FromDate = '2020-05-01';
@@ -836,7 +865,7 @@
         },
 
         getEmptyClientWithMissingDataMsg(){
-            return {errMsgKey:'missingClientData'};
+            return {errMsgKey:'MISSING_CLIENT_DATA'};
         },
 
         fixFileNo(fileNo){

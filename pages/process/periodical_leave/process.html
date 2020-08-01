@@ -10,7 +10,7 @@
 
 
 
-process.controller = {
+processHandler.controller = {
     errMsg : "",
     groups : {  
          //groupFollowUpTLs : ["FollowUp_TLs"],    // groupFollowUpEmps : ["FollowUp_Emps"],
@@ -56,7 +56,7 @@ process.controller = {
        this.forms.Form_PeriodicalLeave.addComponent(new TxtComponent('Title','الوظيفة','Title',80) );
        this.forms.Form_PeriodicalLeave.addComponent(new DateComponent('EndDate','تاريخ إنتهاء الإجازة','End Date','','',6) );
 
-       this.forms.Form_PeriodicalLeave.addComponent(new NumberComponent('EmpNumber','رقـم الموظـف','Emp Number') );
+       this.forms.Form_PeriodicalLeave.addComponent(new TxtComponent('EmpNumber','رقـم الموظـف','Emp Number',9) );
        this.forms.Form_PeriodicalLeave.addComponent(new DropDownListComponent('Salary','راتب الإجازة','Salary',[new Option('','','0') ,new Option('لا يصرف','Not paied','1') , 
        new Option('يصرف مقدما','Paid In Advance','2')],6) );
 
@@ -79,7 +79,7 @@ process.controller = {
        this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('Dept','إدارة/مكتب','Department',80) );
        this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('OperationSrc','مصدر العملية','Department',15,6) );
 
-       this.forms.Form_PeriodicalLeavePay.addComponent(new NumberComponent('EmpNumber','رقـم الموظـف','Emp Number') );
+       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('EmpNumber','رقـم الموظـف','Emp Number',9) );
 
        this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('BasicSalary','الراتب الأساسي','Basic Salary',15,5) );
        this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('PIFSSContr','اشتراك التأمينات','PIFSS Contr',15,5) );
@@ -126,20 +126,20 @@ process.controller = {
        this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('NetPaid','صافي المبلغ المستحق','NetPaid',15,5) );
        this.forms.Form_PeriodicalLeavePay.addComponent(new DateComponent('LastPaymentDate','تاريخ آخر عملية دفع','Last Payment Date','','',5) );
 
-       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('BasicSalary1','الراتب الأساسي','Basic Salary1',15) );
-       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('TecActAmount1','بدل طبيعة عمل','TecActAmount1',15) );
-       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('FinBonus','مكافأة مالية','FinBonus',15) );
+       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('BasicSalary1','الراتب الأساسي','Basic Salary1',15,5) );
+       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('TecActAmount1','بدل طبيعة عمل','TecActAmount1',15,5) );
+       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('FinBonus','مكافأة مالية','FinBonus',15,5) );
 
-       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('SocialRaise','علاوة إجتماعية','Social Raise',15) );
-       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('OvrRaise','مكافأة تشجيعية','Ovr Raise',15) );
-       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('SpecialRaise1','علاوة خاصة','Special Raise1',15) );
+       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('SocialRaise','علاوة إجتماعية','Social Raise',15,5) );
+       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('OvrRaise','مكافأة تشجيعية','Ovr Raise',15,5) );
+       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('SpecialRaise1','علاوة خاصة','Special Raise1',15,5) );
 
-       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('FinSupport','دعم مالي','FinSupport',15) );
-       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('OverAmount','غلاء معيشة','OverAmount',15) );
-       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('SpecialIncrease','زيادة خاصة','Special Increase',15) );
+       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('FinSupport','دعم مالي','FinSupport',15,5) );
+       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('OverAmount','غلاء معيشة','OverAmount',15,5) );
+       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('SpecialIncrease','زيادة خاصة','Special Increase',15,5) );
 
-       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('Raise_50','مكافأة خاصة ','Raise_50',15) );
-       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('TotalItems','إجمالي البنود','TotalItems',15) );
+       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('Raise_50','مكافأة خاصة ','Raise_50',15,5) );
+       this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('TotalItems','إجمالي البنود','TotalItems',15,5) );
 
        this.forms.Form_PeriodicalLeavePay.addComponent(new TxtComponent('Bank','البنـك/الفرع','Bank',60,2) );
 
@@ -156,9 +156,9 @@ process.controller = {
    main(){
        try{
            this.defineComponents();
-           process.initialize();
-           let stepName = process.workItem.stepName
-           process.recieversList.loadManager();
+           processHandler.initialize();
+           let stepName = processHandler.workItem.stepName
+           processHandler.recieversList.loadManager();
 
            
 
@@ -181,8 +181,8 @@ process.controller = {
 
 
            app.renderLabels();
-           process.openProcessModal();
-           process.setWorkFlowIDLabel();
+           processHandler.openProcessModal();
+           processHandler.setWorkFlowIDLabel();
        }
        catch(error){ throw error;}
    },
@@ -201,7 +201,7 @@ process.controller = {
 
 }
 
-$(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alertError(error.message); }} );
+$(document).ready( ()=>{ try{ processHandler.controller.main() }catch(error){ app.alertError(error.message); }} );
 </script>
 
 <style>
@@ -225,56 +225,65 @@ $(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alert
                            <div class="col p-1 mb-4" data-container-for="Form_PeriodicalLeave_title"></div>
                        </div>
 
-                       <div class="row">
-                           <div class="col-4 pr-3 pl-3 pt-2" data-container-for="RequesterDate"></div>
-                           <div class="col-3 pr-3 pl-3 pt-2"></div>
+                       <div class="row p-1">
+                           <div class="col-4 pr-3 pl-3" data-container-for="RequesterDate"></div>
+                           <div class="col-3 pr-3 pl-3"></div>
                        </div>
 
-                       <div class="row">
-                           <div class="col-6 pr-3 pl-3 pt-1" data-container-for="ClientName"></div>
-                           <div class="col-2 pr-3 pl-3 pt-1"></div>
-                           <div class="col-4 pr-3 pl-3 pt-1" data-container-for="HiringDate"></div>
+                       <div class="row p-1">
+                           <div class="col-6 pr-3 pl-3" data-container-for="ClientName"></div>
+                           <div class="col-2 pr-3 pl-3"></div>
+                           <div class="col-4 pr-3 pl-3" data-container-for="HiringDate"></div>
                        </div>
 
-                       <div class="row">
-                           <div class="col-6 pr-3 pl-3 pt-1" data-container-for="Dept"></div>
-                           <div class="col-2 pr-3 pl-3 pt-1"></div>
-                           <div class="col-4 pr-3 pl-3 pt-1" data-container-for="StartDate"></div>
+                       <div class="row p-1">
+                           <div class="col-6 pr-3 pl-3" data-container-for="Dept"></div>
+                           <div class="col-2 pr-3 pl-3"></div>
+                           <div class="col-4 pr-3 pl-3" data-container-for="StartDate"></div>
                        </div>
 
-                       <div class="row">
-                           <div class="col-6 pr-3 pl-3 pt-1" data-container-for="Title"></div>
-                           <div class="col-2 pr-3 pl-3 pt-1"></div>
-                           <div class="col-4 pr-3 pl-3 pt-1" data-container-for="EndDate"></div>
+                       <div class="row p-1">
+                           <div class="col-6 pr-3 pl-3" data-container-for="Title"></div>
+                           <div class="col-2 pr-3 pl-3"></div>
+                           <div class="col-4 pr-3 pl-3" data-container-for="EndDate"></div>
                        </div>
 
-                       <div class="row">
-                           <div class="col-6 pr-3 pl-3 pt-1" data-container-for="EmpNumber"></div>
-                           <div class="col-2 pr-3 pl-3 pt-1"></div>
-                           <div class="col-4 pr-3 pl-3 pt-1" data-container-for="Salary"></div>
+                       <div class="row p-1">
+                           <div class="col-6 pr-3 pl-3" data-container-for="EmpNumber"></div>
+                           <div class="col-2 pr-3 pl-3"></div>
+                           <div class="col-4 pr-3 pl-3" data-container-for="Salary"></div>
                        </div>
 
-                       <div class="row">
-                           <div class="col-6 pr-3 pl-3 pt-1" data-container-for="EmpSignature"></div>
-                           <div class="col-2 pr-3 pl-3 pt-1"></div>
-                           <div class="col-4 pr-3 pl-3 pt-1" data-container-for="VacationDuration"></div>
+                       <div class="row p-1">
+                           <div class="col-6 pr-3 pl-3" data-container-for="EmpSignature"></div>
+                           <div class="col-2 pr-3 pl-3"></div>
+                           <div class="col-4 pr-3 pl-3" data-container-for="VacationDuration"></div>
                        </div>
 
-                       <div class="row">
-                           <div class="col pr-3 pl-3 pt-4 pb-4" data-container-for="Address"></div>
+                       <div class="row pt-3">
                        </div>
 
-                       <div class="row">
-                           <div class="col-5 pr-2 pl-1 pt-4 pb-5" data-container-for="Responsible"></div>
-                           <div class="col-2 pr-3 pl-3 pt-2"></div>
-                           <div class="col-5 pr-2 pl-1 pt-4 pb-5" data-container-for="Approval"></div>
+                       <div class="row p-1">
+                           <div class="col pr-3 pl-3" data-container-for="Address"></div>
                        </div>
 
-                       <div class="row">
+                       <div class="row pt-5">
+                       </div>
+
+                       <div class="row p-1">
+                           <div class="col-5 pr-2 pl-1" data-container-for="Responsible"></div>
+                           <div class="col-2 pr-2 pl-1"></div>
+                           <div class="col-5 pr-2 pl-1" data-container-for="Approval"></div>
+                       </div>
+
+                       <div class="row pt-4">
+                       </div>
+ 
+                       <div class="row p-1">
                              <div class="col pr-3 pl-3" data-container-for="Note-1"></div>
                         </div>
 
-                        <div class="row">
+                        <div class="row p-1">
                             <div class="col pr-3 pl-3" data-container-for="Note-2"></div>
                         </div>
                    </div>
@@ -289,154 +298,173 @@ $(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alert
                            <div class="col p-1 mb-4" data-container-for="Form_PeriodicalLeavePay_title"></div>
                        </div>
 
-                       <div class="row">
-                           <div class="col-6 pr-3 pl-3 pt-2" data-container-for="RequesterName"></div>
-                           <div class="col-2 pr-3 pl-3 pt-2"></div>
-                           <div class="col-4 pr-3 pl-3 pt-2" data-container-for="SalarySettlementDate"></div>
+                       <div class="row p-1">
+                           <div class="col-6 pr-3 pl-3" data-container-for="RequesterName"></div>
+                           <div class="col-2 pr-3 pl-3"></div>
+                           <div class="col-4 pr-3 pl-3" data-container-for="SalarySettlementDate"></div>
                        </div>
 
-                       <div class="row">
+                       <div class="row p-1">
                            <div class="col-6 pr-3 pl-3" data-container-for="Dept"></div>
                            <div class="col-2 pr-3 pl-3"></div>
                            <div class="col-4 pr-3 pl-3" data-container-for="OperationSrc"></div>
                        </div>
 
-                       <div class="row">
+                       <div class="row p-1">
                            <div class="col-6 pr-3 pl-3" data-container-for="EmpNumber"></div>
                            <div class="col-2 pr-3 pl-3"></div>
                            <div class="col-4 pr-3 pl-3"></div>
                        </div>
 
-                       <div class="row">
-                           <div class="col-4 pr-3 pl-3 pt-3" data-container-for="BasicSalary"></div>
-                           <div class="col-4 pr-3 pl-3 pt-3"></div>
-                           <div class="col-4 pr-3 pl-3 pt-3" data-container-for="PIFSSContr"></div>
+                       <div class="row p-2">
                        </div>
 
-                       <div class="row">
+                       <div class="row p-1">
+                           <div class="col-4 pr-3 pl-3" data-container-for="BasicSalary"></div>
+                           <div class="col-4 pr-3 pl-3"></div>
+                           <div class="col-4 pr-3 pl-3" data-container-for="PIFSSContr"></div>
+                       </div>
+
+                       <div class="row p-1">
                            <div class="col-4 pr-3 pl-3" data-container-for="SocialBonus"></div>
                            <div class="col-4 pr-3 pl-3"></div>
                            <div class="col-4 pr-3 pl-3" data-container-for="PIFSSLoan"></div>
                        </div>
 
-                       <div class="row">
+                       <div class="row p-1">
                            <div class="col-4 pr-3 pl-3" data-container-for="TecActAmount"></div>
                            <div class="col-4 pr-3 pl-3"></div>
                            <div class="col-4 pr-3 pl-3" data-container-for="PIFSSHousing"></div>
                        </div>
 
-                       <div class="row">
+                       <div class="row p-1">
                            <div class="col-4 pr-3 pl-3" data-container-for="TelAmount"></div>
                            <div class="col-4 pr-3 pl-3"></div>
                            <div class="col-4 pr-3 pl-3" data-container-for="SocialLoan"></div>
                        </div>
 
-                       <div class="row">
+                       <div class="row p-1">
                            <div class="col-4 pr-3 pl-3" data-container-for="BonusAmount"></div>
                            <div class="col-4 pr-3 pl-3"></div>
                            <div class="col-4 pr-3 pl-3" data-container-for="Commutation"></div>
                        </div>
 
-                       <div class="row">
+                       <div class="row p-1">
                            <div class="col-4 pr-3 pl-3" data-container-for="SpecialRaise"></div>
                            <div class="col-4 pr-3 pl-3"></div>
                            <div class="col-4 pr-3 pl-3" data-container-for="TeleCalls"></div>
                        </div>
 
-                       <div class="row">
+                       <div class="row p-1">
                            <div class="col-4 pr-3 pl-3" data-container-for="BonusOvertime"></div>
                            <div class="col-4 pr-3 pl-3"></div>
                            <div class="col-4 pr-3 pl-3" data-container-for="Penalties"></div>
                        </div>
 
-                       <div class="row">
+                       <div class="row p-1">
                            <div class="col-4 pr-3 pl-3" data-container-for="OtherPayment"></div>
                            <div class="col-4 pr-3 pl-3"></div>
                            <div class="col-4 pr-3 pl-3" data-container-for="OtherDED"></div>
                        </div>
 
-                       <div class="row">
+                       <div class="row p-1">
                            <div class="col-4 pr-3 pl-3" data-container-for="SpecialBonus"></div>
                            <div class="col-4 pr-3 pl-3"></div>
                            <div class="col-4 pr-3 pl-3" data-container-for="CompleteContr"></div>
                        </div>
 
-                       <div class="row">
+                       <div class="row p-1">
                            <div class="col-4 pr-3 pl-3" data-container-for="UnfairDED"></div>
                            <div class="col-4 pr-3 pl-3"></div>
                            <div class="col-4 pr-3 pl-3" data-container-for="BasicContr"></div>
                        </div>
 
-                        <div class="row">
+                        <div class="row p-1">
                            <div class="col-4 pr-3 pl-3" data-container-for="Scholarship"></div>
                            <div class="col-4 pr-3 pl-3"></div>
                            <div class="col-4 pr-3 pl-3" data-container-for="IDMContr"></div>
                        </div>
 
-                        <div class="row">
+                        <div class="row p-1">
                            <div class="col-4 pr-3 pl-3" data-container-for="Coptin"></div>
                            <div class="col-4 pr-3 pl-3"></div>
                            <div class="col-4 pr-3 pl-3" data-container-for="FundCont"></div>
                        </div>
 
-                        <div class="row">
+                        <div class="row p-1">
                            <div class="col-4 pr-3 pl-3"></div>
                            <div class="col-4 pr-3 pl-3"></div>
                            <div class="col-4 pr-3 pl-3" data-container-for="FundInst"></div>
                        </div>
 
-                       <div>______________________________________________________________________________________________________________________________________________________________________________________________</div>
-
-                       <div class="row">
-                           <div class="col-4 pr-3 pl-3 pt-4" data-container-for="TotalPayment"></div>
-                           <div class="col-4 pr-3 pl-3 pt-4"></div>
-                           <div class="col-4 pr-3 pl-3 pt-4" data-container-for="TotalDED"></div>
+                       <div class="row p-1">
+                           <div>__________________________________________________________________________________________________________________________________________________________________</div>
                        </div>
 
-                       <div class="row">
+                       <div class="row p-1">
+                           <div class="border-bottom"></div>
+                       </div>
+                      
+
+                       <div class="row p-1">
+                           <div class="col-4 pr-3 pl-3" data-container-for="TotalPayment"></div>
+                           <div class="col-4 pr-3 pl-3"></div>
+                           <div class="col-4 pr-3 pl-3" data-container-for="TotalDED"></div>
+                       </div>
+
+                       <div class="row p-1">
                            <div class="col-4 pr-3 pl-3" data-container-for="NetPaid"></div>
                            <div class="col-4 pr-3 pl-3"></div>
                            <div class="col-4 pr-3 pl-3" data-container-for="LastPaymentDate"></div>
                        </div>
 
-                       <div class="row">
-                           <div class="col-4 pr-3 pl-3 pt-3" data-container-for="BasicSalary1"></div>
-                           <div class="col-4 pr-4 pl-4 pt-3" data-container-for="TecActAmount1"></div>
-                           <div class="col-4 pr-3 pl-3 pt-3" data-container-for="FinBonus"></div>
+                       <div class="row p-3">
                        </div>
 
-                       <div class="row">
+                       <div class="row p-1">
+                           <div class="col-4 pr-3 pl-3" data-container-for="BasicSalary1"></div>
+                           <div class="col-4 pr-4 pl-4" data-container-for="TecActAmount1"></div>
+                           <div class="col-4 pr-3 pl-3" data-container-for="FinBonus"></div>
+                       </div>
+
+                       <div class="row p-1">
                            <div class="col-4 pr-3 pl-3" data-container-for="SocialRaise"></div>
                            <div class="col-4 pr-4 pl-4" data-container-for="OvrRaise"></div>
                            <div class="col-4 pr-3 pl-3" data-container-for="SpecialRaise1"></div>
                        </div>
 
-                       <div class="row">
+                       <div class="row p-1">
                            <div class="col-4 pr-3 pl-3" data-container-for="FinSupport"></div>
                            <div class="col-4 pr-4 pl-4" data-container-for="OverAmount"></div>
                            <div class="col-4 pr-3 pl-3" data-container-for="SpecialIncrease"></div>
                        </div>
 
-                       <div class="row">
+                       <div class="row p-1">
                            <div class="col-4 pr-3 pl-3" data-container-for="Raise_50"></div>
                            <div class="col-4 pr-3 pl-3"></div>
                            <div class="col-4 pr-3 pl-3" data-container-for="TotalItems"></div>
                        </div>
 
-                       <div class="row">
-                           <div class="col pr-3 pl-3 pt-3" data-container-for="Bank"></div>
+                       <div class="row pt-3">
                        </div>
 
-                       <div class="row">
-                           <div class="col-6 pr-3 pl-3 pt-2" data-container-for="AccNum"></div>
-                           <div class="col-1 pr-3 pl-3 pt-2"></div>
-                           <div class="col-5 pr-3 pl-3 pt-2" data-container-for="AccType"></div>
+                       <div class="row p-1">
+                           <div class="col pr-3 pl-3" data-container-for="Bank"></div>
                        </div>
 
-                       <div class="row">
-                           <div class="col-4 pr-2 pl-1 pt-5" data-container-for="PersAdminEmp"></div>
-                           <div class="col-4 pr-2 pl-1 pt-5" data-container-for="PersAdminTL"></div>
-                           <div class="col-4 pr-2 pl-1 pt-5" data-container-for="PersAdminSup"></div>
+                       <div class="row p-1">
+                           <div class="col-6 pr-3 pl-3" data-container-for="AccNum"></div>
+                           <div class="col-1 pr-3 pl-3"></div>
+                           <div class="col-5 pr-3 pl-3" data-container-for="AccType"></div>
+                       </div>
+
+                       <div class="row pt-5">
+                       </div>
+
+                       <div class="row p-1">
+                           <div class="col-4 pr-2 pl-1" data-container-for="PersAdminEmp"></div>
+                           <div class="col-4 pr-2 pl-1" data-container-for="PersAdminTL"></div>
+                           <div class="col-4 pr-2 pl-1" data-container-for="PersAdminSup"></div>
                        </div>
 
                    </div>

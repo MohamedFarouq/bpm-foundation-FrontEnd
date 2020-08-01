@@ -1,0 +1,187 @@
+<script >
+    
+    /**
+     * WorkItem{
+            workFlowName,workflowID,subject,recieveDate,stepNo,workFlowVersion,workFlowType,stepName,nextStepName,instructions,workObjectID,comments,action,
+            sender,reciever,branch,forms,attachments
+            isLastStep = false;
+    }
+     */
+    
+    
+    
+    processHandler.controller = {
+        errMsg : "",
+        groups : {  
+             //groupFollowUpTLs : ["FollowUp_TLs"],    // groupFollowUpEmps : ["FollowUp_Emps"],
+        },
+    
+        steps : {
+            TaskReq_Launch : 'TaskReq_Launch',
+            TaskReq_Update: 'TaskReq_Update',
+            TaskReq_Mng: 'TaskReq_Mng',
+            TaskReq_Sup: 'TaskReq_Sup',
+            TaskReq_Emp: 'TaskReq_Emp',
+            TaskReq_Sup2: 'TaskReq_Sup2',
+        },
+    
+        forms : {
+            Form_TaskAssignmentRequest : new Form('Form_TaskAssignmentRequest', 'طلب تنفيذ مهمة','Leave Form'),
+        },
+    
+        defineComponents(){    
+            this.forms.Form_TaskAssignmentRequest.addComponent(new DateComponent('FromDate',' التاريخ','From','','') );
+            this.forms.Form_TaskAssignmentRequest.addComponent(new TxtComponent('ReqDept','الجهة الطالبة','Total Amount') );
+          
+            this.forms.Form_TaskAssignmentRequest.addComponent(new DateComponent('RecDate','تاريخ الاستلام','Recieving Date','','') );
+            this.forms.Form_TaskAssignmentRequest.addComponent(new DropDownListComponent('Type','النـــــــوع','type',[new Option('','','0') ,new Option('عاجل','Urgent','1') , new Option('عالي','High','2') ,new Option('متوسط','Medium','3') ,new Option('منخفض','Low','4')]) );
+      
+            this.forms.Form_TaskAssignmentRequest.addComponent(new TxtComponent('Subject','الموضوع','Subject',100,2) );
+            this.forms.Form_TaskAssignmentRequest.addComponent(new NotesComponent('Desc','التفصيل','Description',4,300) );
+           
+            this.forms.Form_TaskAssignmentRequest.addSignature(new Signature('ReqMngName','ReqMngSig','الاعتماد','Requestin Dept Approval') );
+
+            this.forms.Form_TaskAssignmentRequest.addComponent(new DateComponent('ExecDate','أقصى موعد تنفيذ','Mximum Execution Date','','') );
+            this.forms.Form_TaskAssignmentRequest.addComponent(new DropDownListComponent('RespEmp','الموظف المسؤول','Responsible Employee',[new Option('','','0') ,new Option('','','1') , new Option('','','2') ,new Option('','','3') ,new Option('','','4')]) );
+            this.forms.Form_TaskAssignmentRequest.addComponent(new TxtComponent('ReqStat','حالة الطلب','Request Status',5) );
+  
+            this.forms.Form_TaskAssignmentRequest.addComponent(new NotesComponent('Reply','رد الموظف المسؤول','Responsible Employee Reply',4,300) );
+            
+            this.forms.Form_TaskAssignmentRequest.addSignature(new Signature('EmpName','EmpSig','اعتمـــاد المراقــب','Supervisor Approval')  );
+            this.forms.Form_TaskAssignmentRequest.addSignature(new Signature('SupName','SupSig','اعتمـــاد الموظـــف','Employee Signature') );           
+        },
+    
+        main(){
+            try{
+                this.defineComponents();
+                processHandler.initialize();
+                let stepName = processHandler.workItem.stepName;
+                processHandler.recieversList.loadManager();
+                //process.recieversList.loadDeptManager();
+                //process.branchesList.load()); //to load all branches
+                //process.branchesList.load([1,2,5]); // to load specific branches using branch id
+                //process.actionsList.load([process.actionsList.status, process.actionsList.approved]);
+    
+                
+    
+                if(stepName == this.steps.PerLeave_Launch){   
+                }
+                else if(stepName == this.steps.PerLeave_TLApprove){
+                }
+            
+                this.forms.Form_TaskAssignmentRequest.select();
+                this.forms.Form_TaskAssignmentRequest.updateComponentsFromEntity();
+    
+            app.renderLabels();
+            processHandler.openProcessModal();
+            processHandler.setWorkFlowIDLabel();
+            }
+            catch(error){ throw error;}
+        },
+    
+        validate(){
+            //validator.markAsInvalidField('myTxt');
+         },    
+    }
+    
+    $(document).ready( ()=>{ try{ processHandler.controller.main() }catch(error){ app.alertError(error.message); }} );
+    </script>
+    
+    <style>
+        .nav-pills .nav-link.active {
+        background-color: rgb(108, 117, 126) !important;
+    }
+    </style>
+
+    <div class="container-fluid pr-1 pl-1" >
+   
+        <div class="row">
+            <div class="col p-1">
+                <nav>
+                    <div class="nav nav-pills mb-1 ml-auto" id="nav-tab" role="tablist"></div>
+                </nav>
+                <div class="tab-content shadow border border-secondary rounded p-2 bg-white" id="nav-tabContent">
+                    <!-- Form_TaskAssignmentRequest-Tab -->
+                    <div class="tab-pane fade show active" id="nav-Form_TaskAssignmentRequest" role="tabpanel" aria-labelledby="Form_TaskAssignmentRequest-tab">
+                        <!-- the main container for all Form_TaskAssignmentRequest controls -->
+                        <div class="container-fluid">
+                  
+                            <div class="row">
+                                <div class="col p-1 mb-4" data-container-for="Form_TaskAssignmentRequest_title"></div>
+                            </div>
+                            <div class="row pt-2">
+                                <div class="col-6 pr-3 pl-3" data-container-for="ReqDept"></div>
+                                <div class="col pr-3 pl-3"></div>
+                                <div class="col-4 pr-3 pl-3" data-container-for="FromDate"></div>
+                            </div>
+
+                            <div class="row pt-2">
+                                <div class="col-6 pr-3 pl-3" data-container-for="Type"></div>
+                                <div class="col pr-3 pl-3"></div>
+                                <div class="col-4 pr-3 pl-3" data-container-for="RecDate"></div>
+                            </div>
+
+                            <div class="row pt-2">
+                                <div class="col pr-3 pl-3" data-container-for="Subject"></div>
+                            </div>
+                                                    
+                            <div class="row pt-2">
+                                <div class="col pr-3 pl-3"></div>
+                            </div>
+
+                            <div class="row pt-2">
+                                <div class="col pr-3 pl-3" data-container-for="Desc"></div>
+                            </div>
+
+                            <div class="row pt-2">
+                                <div class="col pr-3 pl-3"></div>
+                            </div>
+
+                            <div class="row pt-3">
+                                <div class="col pr-3 pl-3"></div>
+                                <div class="col-5 pr-3 pl-3" data-container-for="ReqMngName"></div>
+                            </div>
+
+
+                            <div class="row pt-2">
+                                <div class="col pr-3 pl-3" data-container-for="ExecDate"></div>
+                                <div class="col-8 pr-3 pl-3"></div>
+                            </div>
+
+                            <div class="row pt-2">
+                                <div class="col pr-3 pl-3" data-container-for="RespEmp"></div>
+                                <div class="col pr-3 pl-3"></div>
+                            </div>
+                            
+
+                            <div class="row pt-2">
+                                <div class="col pr-3 pl-3" data-container-for="ReqStat"></div>
+                                <div class="col pr-3 pl-3"></div>
+                            </div>
+
+                            <div class="row pt-2">
+                                <div class="col pr-3 pl-3" data-container-for="Reply"></div>
+                            </div>
+                            
+
+                            <div class="row pt-3">
+                                <div class="col-5 pr-3 pl-3" data-container-for="EmpName"></div>
+                                <div class="col pr-3 pl-3"></div>
+                                <div class="col-5 pr-3 pl-3" data-container-for="SupName"></div>
+                            </div>
+
+
+                       </div>
+                       
+                    </div>
+    
+                    <div class="text-right">
+                        <hr>
+                        <label id="workflowIDLabel" class="text-danger">مسلسل الاجراء</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    

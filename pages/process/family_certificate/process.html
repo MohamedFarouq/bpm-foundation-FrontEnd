@@ -10,7 +10,7 @@
     
     
     
-    process.controller = {
+    processHandler.controller = {
         errMsg : "",
         groups : {  
              //groupFollowUpTLs : ["FollowUp_TLs"],    // groupFollowUpEmps : ["FollowUp_Emps"],
@@ -44,20 +44,22 @@
 
            // this.forms.Form_CertRequest.addComponent(new ParagraphComponent('Line','الأدارة العامة','Public Administration',' font-weight-bold') );
         
+           this.forms.Form_CertRequest.addComponent(new ParagraphComponent('Line','الإدارة العامة','Public Administration','font-weight-bold') );
+        
            
-            this.forms.Form_CertRequest.addComponent(new TxtComponent('RequesterName','اسم الموظف','Name',5) );
-            this.forms.Form_CertRequest.addComponent(new TxtComponent('PhoneNo','تلفـــــــون','Phone .No',8) );
-            this.forms.Form_CertRequest.addComponent(new TxtComponent('RequesterDept','الإدارة / المكتب','Dept. Name',15) );
-            this.forms.Form_CertRequest.addComponent(new TxtComponent('CertRequesterName','إسم صاحب الشهادة','Cert.Reqstr Name',15) );
-            this.forms.Form_CertRequest.addComponent(new TxtComponent('CivilID','رقم البطاقة المدنية','CivilID',12) );
-            this.forms.Form_CertRequest.addComponent(new TxtComponent('CertType','نوع الشهادة','Cert. Type',150) );
-            this.forms.Form_CertRequest.addComponent(new DropDownListComponent('Relationship',' صلة القرابة','Relationship',[new Option('','','0') ,new Option('الأم','Mother','1') , new Option('الآب','Father','2'), new Option('الجد والجدة','Grand Parents','3')]) );                            
+            this.forms.Form_CertRequest.addComponent(new TxtComponent('RequesterName','اسم الموظف','Name',100,3) );
+            this.forms.Form_CertRequest.addComponent(new TxtComponent('PhoneNo','تلفـــــــون','Phone .No',12,3) );
+            this.forms.Form_CertRequest.addComponent(new TxtComponent('RequesterDept','الإدارة / المكتب','Dept. Name',150,3) );
+            this.forms.Form_CertRequest.addComponent(new TxtComponent('CertRequesterName','إسم صاحب الشهادة','Cert.Reqstr Name',150,3) );
+            this.forms.Form_CertRequest.addComponent(new TxtComponent('CivilID','رقم البطاقة المدنية','CivilID',15,3) );
+            this.forms.Form_CertRequest.addComponent(new TxtComponent('CertType','نوع الشهادة','Cert. Type',300,3) );
+            this.forms.Form_CertRequest.addComponent(new DropDownListComponent('Relationship',' صلة القرابة','Relationship',[new Option('','','0') ,new Option('الأم','Mother','1') , new Option('الآب','Father','2'), new Option('الجد والجدة','Grand Parents','3')],3) );                            
            
            
              this.forms.Form_CertRequest.addSignature(new Signature('EmpSignature','EmpSign','EmpSig','توقيع الموظف','Employee Signature')  );
         
            
-            this.forms.Form_CertRequest.addComponent(new DateComponent('RequestDate',' التاريخ','Date','','') );           
+            this.forms.Form_CertRequest.addComponent(new DateComponent('RequestDate',' التاريخ','Date','','',3));           
             this.forms.Form_CertRequest.addComponent(new ParagraphComponent('Line_1','ملاحظة : <br> لا تعطي الشهادة إلا لصلة القرابة من الدرجة الأولى',': Note<br> The testimony is given only for the relationship of kinship of the first degree','text-danger font-weight-bold') );
         
            
@@ -69,13 +71,13 @@
         main(){
             try{
                 this.defineComponents();
-                process.initialize();
-                let stepName = process.workItem.stepName;
-                process.recieversList.loadManager();
-                //process.recieversList.loadDeptManager();
-                //process.branchesList.load()); //to load all branches
-                //process.branchesList.load([1,2,5]); // to load specific branches using branch id
-                //process.actionsList.load([process.actionsList.status, process.actionsList.approved]);
+                processHandler.initialize();
+                let stepName = processHandler.workItem.stepName;
+                processHandler.recieversList.loadManager();
+                //processHandler.recieversList.loadDeptManager();
+                //processHandler.branchesList.load()); //to load all branches
+                //processHandler.branchesList.load([1,2,5]); // to load specific branches using branch id
+                //processHandler.actionsList.load([processHandler.actionsList.status, processHandler.actionsList.approved]);
     
                 
     
@@ -99,8 +101,8 @@
     
     
                     app.renderLabels();
-            process.openProcessModal();
-            process.setWorkFlowIDLabel();
+            processHandler.openProcessModal();
+            processHandler.setWorkFlowIDLabel();
             }
             catch(error){ throw error;}
         },
@@ -119,7 +121,7 @@
     
     }
     
-    $(document).ready( ()=>{ try{ process.controller.main(); }catch(error){ app.alertError(error.message); }} );
+    $(document).ready( ()=>{ try{ processHandler.controller.main(); }catch(error){ app.alertError(error.message); }} );
     </script>
     
 
@@ -139,15 +141,25 @@
                                 <div class="row">
                                     <div class="col p-1 mb-4" data-container-for="Form_CertRequest_title"></div>
                                 </div>
-
-
-                                <br>
-
+                                  <div class="row pt-4">
+                                  </div>
                                 <div class="row p-1">
-                                    <div class="pr-6 pl-3" data-container-for="RequestDate"></div>
+                                    <div class="col pr-3 pl-3" data-container-for="Line"></div>
+                                    </div>
+                                     <div class="row pt-4">
+                                    </div>
+
+
+
+                                <div class="row p-1"> 
+                                    <div class="col-7 pr-2 pl-3" data-container-for="RequestDate"></div>
                                 </div>
 
-                             
+                              <!--  <div class="row p-1">
+                                    <div class="col-7 pr-2 pl-4"data-container-for="RequestDate"></div>
+                                </div> -->
+
+
                                 <div class="row p-1">
                                     <div class="col-7 pr-2 pl-3" data-container-for="RequesterName"></div>
                                 </div>
@@ -170,18 +182,16 @@
                                 <div class="row p-1">
                                     <div class="col-7 pr-2 pl-3" data-container-for="Relationship"></div>
                                 </div>
-                                <br>
-
-                                <div class="row ">
+                                <div class="row pt-4">
+                                </div>
+                                <div class="row p-1">
                                     <div class="col p-3"> </div>
                                     <div class="col-4 pr-4 pl-4" data-container-for="EmpSignature"></div>
                                 </div>
-
-                          
-                                    <br> 
-                            <div class="row">
+                                 <div class="row pt-4">
+                                </div>
+                            <div class="row p-1">
                                 <div class="col pr-3 pl-3" data-container-for="Line_1"></div>
-
                             </div>
 
                 

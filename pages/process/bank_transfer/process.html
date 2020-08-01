@@ -10,7 +10,7 @@
     
     
     
-    process.controller = {
+    processHandler.controller = {
         errMsg : "",
         groups : {  
              //groupFollowUpTLs : ["FollowUp_TLs"],    // groupFollowUpEmps : ["FollowUp_Emps"],
@@ -64,7 +64,7 @@
 
             this.forms.Form_BankTransfer.addComponent(new ParagraphComponent('Endorsment','اقر أنا في حالة  تغيير الحساب البنكي الخاص لي من  بنك إلى  بنك آخر',' I acknowledgment the change of my personal bank account to another bank','text-danger font-weight-bold'));
      
-            this.forms.Form_BankTransfer.addComponent(new ParagraphComponent('Commitment','أقر بأنه ليس لدي أي التزام تجاه البنك الذي يتم تحويل راتبي الشهري إليه،،،','I certify that I have no obligation to the bank to which my monthly salary is transferred','text-danger text font-weight-bold'));
+            this.forms.Form_BankTransfer.addComponent(new ParagraphComponent('Commitment','أقر بأنه ليس لدي أي التزام تجاه البنك الذي يتم تحويل راتبي الشهري إليه،،،','I certify that I have no obligation to the bank to which my monthly salary is transferred','text font-weight-bold'));
            
              this.forms.Form_BankTransfer.addSignature(new Signature('EmpSign','EmpeSign','EmpeName','التوقيع','Signature')  );
         
@@ -72,7 +72,7 @@
           //  this.forms.Form_BankTransfer.addComponent(new TxtComponent('EmpSign','التوقيع','Signature')  );
            
            
-            this.forms.Form_BankTransfer.addComponent(new ParagraphComponent('HRproperty','ادارة عمليات المـوارد الــبــشريـه','To be used under the Personnel Affairs Department','text-danger text font-weight-bold'));
+            this.forms.Form_BankTransfer.addComponent(new ParagraphComponent('HRproperty','ادارة عمليات المـوارد الــبــشريـه','To be used under the Personnel Affairs Department',' text font-weight-bold'));
     
 
         //this.forms.Form_PeriodicalLeave.addComponent(new ParagraphComponent('Ekrar','اقر انا الموقع ادناه بانني مسئول عن ماتم ادخاله من بيانات ','I admit that I am responsible for the entered data','text-danger font-weight-bold') );
@@ -100,13 +100,13 @@
         main(){
             try{
                 this.defineComponents();
-                process.initialize();
-                let stepName = process.workItem.stepName;
-                process.recieversList.loadManager();
-                //process.recieversList.loadDeptManager();
-                //process.branchesList.load()); //to load all branches
-                //process.branchesList.load([1,2,5]); // to load specific branches using branch id
-                //process.actionsList.load([process.actionsList.status, process.actionsList.approved]);
+                processHandler.initialize();
+                let stepName = processHandler.workItem.stepName;
+                processHandler.recieversList.loadManager();
+                //processHandler.recieversList.loadDeptManager();
+                //processHandler.branchesList.load()); //to load all branches
+                //processHandler.branchesList.load([1,2,5]); // to load specific branches using branch id
+                //processHandler.actionsList.load([processHandler.actionsList.status, processHandler.actionsList.approved]);
     
                 
     
@@ -124,8 +124,8 @@
     
     
             app.renderLabels();
-            process.openProcessModal();
-            process.setWorkFlowIDLabel();
+            processHandler.openProcessModal();
+            processHandler.setWorkFlowIDLabel();
             }
             catch(error){ throw error;}
         },
@@ -140,7 +140,7 @@
     
     }
     
-    $(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alertError(error.message); }} );
+    $(document).ready( ()=>{ try{ processHandler.controller.main() }catch(error){ app.alertError(error.message); }} );
     </script>
     
     <style>
@@ -193,39 +193,50 @@
                                 <div class="row p-1">
                                         <div class="col-7 pr-2 pl-3" data-container-for="AccType"></div>
                                  </div>
-                              
+                                  <div class="row">
+                                    <div class="col-7 pr-2 pl-3" data-container-for="EmpSign"></div>
+                                </div>
 
-                                <br>
-                                          
-                                            <div class="row">
-                                                <div class="col pr-6 pl-6" data-container-for="Endorsment"></div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col pr-6 pl-6" data-container-for="Commitment"></div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-7 pr-2 pl-3" data-container-for="EmpSign"></div>
-                                            </div>
+                                    <div class="row p-4">
+                                    </div>
+                                              
+                       <div class="row p-1">
+                              <div class="col pr pl"></div>
+                              <div class="col-6 pr-3 pl-3" data-container-for="Endorsment"></div>
+                              <div class="col pr pl"></div>
+                        </div>
+                                            
+                        <div class="row p-1">
+                            <div class="col pr pl"></div>
+                            <div class="col-7 pr-2 pl-3"  data-container-for="Commitment"></div>     
+                            <div class="col pr pl"></div>
+                        </div>
 
-                                       <br>
-<br><br>
+                                        
 
+                                            <div class="row p-4">
+                                            </div>
                                             <div class="row">
                                                 <div class="col pr pl"></div>
                                                 <div class="col-3 pr-3 pl-6" data-container-for="HRproperty"></div>
                                                 <div class="col pr pl"></div>
                                             </div>
-
-
-                                            <div class="row p-1">
-                                                <div class="col pr-3 pl-3" data-container-for="PersAdminEmp"></div>
-                                                <div class="col pr-3 pl-3" data-container-for="PersAdminSup"></div>
+                                            <div class="row p-4">
                                             </div>
+                                       
+                                            
 
+                            <div class="row p-1">
+                            <div class="col pr-3 pl-3" data-container-for="PersAdminEmp"></div>
+                            <div class="col pr-3 pl-3" data-container-for="PersAdminSup"></div>
+                            </div>
 
-                                        <div class="row">
-                                            <div class="col pr-3 pl-3" data-container-for="Requirments"></div>
-                                          </div>
+                                 <div class="row p-4">
+                                 </div>
+
+                             <div class="row">
+                             <div class="col pr-3 pl-3" data-container-for="Requirments"></div>
+                             </div>
 
     
                        </div>

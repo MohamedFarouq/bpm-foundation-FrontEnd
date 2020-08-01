@@ -24,16 +24,16 @@ if(! registery.mainPageController){
                                                                 <div class="row">
                                                                     <div class="col-9">
                                                                         <div class="p-1">
-                                                                            <a onclick="process.launch(new WorkItem('${wi.workFlowName}',${wi.workflowID},'${wi.subject}','${wi.recieveDate}'))" class="simpleLink font-weight-bolder" href="#" title="">${wi.subject}</a>
+                                                                            <a onclick="processHandler.launch(new WorkItem('${wi.workFlowName}',${wi.workflowID},'${wi.subject}','${wi.recieveDate}'))" class="simpleLink font-weight-bolder" href="#" title="">${wi.subject}</a>
                                                                         </div>
                                                                         <div class="p-1">
                                                                             <label class="text-dimmed fontSize85">${app.chooseBasedOnLocale(wi.sender.deptNameAra,wi.sender.deptNameEng)  }</label>
                                                                         </div>
                                                                     </div>
                                                                     <div class="col-3 p-2">
-                                                                        <span class="bg-dimmed p-1 pl-2 pr-2 text-dimmed fontSize85 hand" onclick="alert('under sondtruction')" >${app.getPropertyValue('notes')}</span>
-                                                                        <span class="bg-dimmed p-1 pl-2 pr-2 text-dimmed fontSize85 hand" onclick="alert('under sondtruction')" >${app.getPropertyValue('steps')}</span>
-                                                                        <span class="bg-dimmed p-1 pl-2 pr-2 text-dimmed fontSize85 hand" onclick="alert('under sondtruction')" >${app.getPropertyValue('reassign')}</span>
+                                                                        <span class="bg-dimmed p-1 pl-2 pr-2 text-dimmed fontSize85 hand" onclick="alert('under sondtruction')" >${app.getPropertyValue('NOTES')}</span>
+                                                                        <span class="bg-dimmed p-1 pl-2 pr-2 text-dimmed fontSize85 hand" onclick="alert('under sondtruction')" >${app.getPropertyValue('STEPS')}</span>
+                                                                        <span class="bg-dimmed p-1 pl-2 pr-2 text-dimmed fontSize85 hand" onclick="alert('under sondtruction')" >${app.getPropertyValue('RE_ASSIGN')}</span>
                                                                             
                                                                     </div>    
                                                                 </div>
@@ -65,68 +65,68 @@ if(! registery.mainPageController){
 
             render(){                
                 // HR requests
-                this.addLink(this.hrReqListID,processCatalog.Personal_Execuse_Permission);
-                this.addLink(this.hrReqListID,processCatalog.Periodical_Leave);
-                this.addLink(this.hrReqListID,processCatalog.Return_Endorsement);
-                this.addLink(this.hrReqListID,processCatalog.Absence_Form);
-                this.addLink(this.hrReqListID,processCatalog.Bank_Transfer);
-                this.addLink(this.hrReqListID,processCatalog.Issue_Certificate);
-                this.addLink(this.hrReqListID,processCatalog.Salary_Ded_Hiers);
-                this.addLink(this.hrReqListID,processCatalog.Loan_Request);
-                //this.addNewReqLinkToHR(processCatalog.Sick_Leave);
+                this.addLink(this.hrReqListID,data.processCatalog.Personal_Execuse_Permission);
+                this.addLink(this.hrReqListID,data.processCatalog.Periodical_Leave);
+                this.addLink(this.hrReqListID,data.processCatalog.Return_Endorsement);
+                this.addLink(this.hrReqListID,data.processCatalog.Absence_Form);
+                this.addLink(this.hrReqListID,data.processCatalog.Bank_Transfer);
+                this.addLink(this.hrReqListID,data.processCatalog.Issue_Certificate);
+                this.addLink(this.hrReqListID,data.processCatalog.Salary_Ded_Hiers);
+                this.addLink(this.hrReqListID,data.processCatalog.Loan_Request);
+                //this.addNewReqLinkToHR(data.processCatalog.Sick_Leave);
 
                 // IT requests
-                this.addLink(this.itReqListID,processCatalog.User_Signon);
-                this.addLink(this.itReqListID,processCatalog.System_Modification_Request);
-                this.addLink(this.itReqListID,processCatalog.Program_Installation);
-                this.addLink(this.itReqListID,processCatalog.Operation_Support_Request_Forms);
-                this.addLink(this.itReqListID,processCatalog.TS_Service);
-                this.addLink(this.itReqListID,processCatalog.RACF_Security_Form);
-                //this.addNewReqLinkToIT(processCatalog.Exit_Permit);
+                this.addLink(this.itReqListID,data.processCatalog.User_Signon);
+                this.addLink(this.itReqListID,data.processCatalog.System_Modification_Request);
+                this.addLink(this.itReqListID,data.processCatalog.Program_Installation);
+                this.addLink(this.itReqListID,data.processCatalog.Operation_Support_Request_Forms);
+                this.addLink(this.itReqListID,data.processCatalog.TS_Service);
+                this.addLink(this.itReqListID,data.processCatalog.RACF_Security_Form);
+                //this.addNewReqLinkToIT(data.processCatalog.Exit_Permit);
 
                 // SSSector requests
-                this.addLink(this.ssReqListID,processCatalog.Process_Transfer);
-                this.addLink(this.ssReqListID,processCatalog.Outgoing_Correspondences);
-                this.addLink(this.ssReqListID,processCatalog.Payment_Order);
-                this.addLink(this.ssReqListID,processCatalog.Pension_Advanced);
-                this.addLink(this.ssReqListID,processCatalog.Pension_Replacement);
-                this.addLink(this.ssReqListID,processCatalog.Pension_Repayment);
-                this.addLink(this.ssReqListID,processCatalog.Pension_Calculation);
-                this.addLink(this.ssReqListID,processCatalog.Pension_Replacement_In_Employment);
-                this.addLink(this.ssReqListID,processCatalog.Share_Advanced);
-                this.addLink(this.ssReqListID,processCatalog.Unemployment_Compensation_Calculation);
-                this.addLink(this.ssReqListID,processCatalog.UCC_Payment);
-                this.addLink(this.ssReqListID,processCatalog.Refund_Memo);
-                this.addLink(this.ssReqListID,processCatalog.Medical_Committee_Memo);
-                this.addLink(this.ssReqListID,processCatalog.Process_Cancellation);
-                this.addLink(this.ssReqListID,processCatalog.File_Change);
+                this.addLink(this.ssReqListID,data.processCatalog.Process_Transfer);
+                this.addLink(this.ssReqListID,data.processCatalog.Outgoing_Correspondences);
+                this.addLink(this.ssReqListID,data.processCatalog.Payment_Order);
+                this.addLink(this.ssReqListID,data.processCatalog.Pension_Advanced);
+                this.addLink(this.ssReqListID,data.processCatalog.Pension_Replacement);
+                this.addLink(this.ssReqListID,data.processCatalog.Pension_Repayment);
+                this.addLink(this.ssReqListID,data.processCatalog.Pension_Calculation);
+                this.addLink(this.ssReqListID,data.processCatalog.Pension_Replacement_In_Employment);
+                this.addLink(this.ssReqListID,data.processCatalog.Share_Advanced);
+                this.addLink(this.ssReqListID,data.processCatalog.Unemployment_Compensation_Calculation);
+                this.addLink(this.ssReqListID,data.processCatalog.UCC_Payment);
+                this.addLink(this.ssReqListID,data.processCatalog.Refund_Memo);
+                this.addLink(this.ssReqListID,data.processCatalog.Medical_Committee_Memo);
+                this.addLink(this.ssReqListID,data.processCatalog.Process_Cancellation);
+                this.addLink(this.ssReqListID,data.processCatalog.File_Change);
 
-                this.addLink(this.finReqListID,processCatalog.Process_Transfer);
-                this.addLink(this.finReqListID,processCatalog.Allow_Item);
-                this.addLink(this.finReqListID,processCatalog.Amounts_Paid_In_Excess);
-                this.addLink(this.finReqListID,processCatalog.Recover_Undeserved_Amounts);
-                this.addLink(this.finReqListID,processCatalog.Refund_Memo);
-                this.addLink(this.finReqListID,processCatalog.Reply_About_RUA);
-                this.addLink(this.finReqListID,processCatalog.Process_Cancellation);
+                this.addLink(this.finReqListID,data.processCatalog.Process_Transfer);
+                this.addLink(this.finReqListID,data.processCatalog.Allow_Item);
+                this.addLink(this.finReqListID,data.processCatalog.Amounts_Paid_In_Excess);
+                this.addLink(this.finReqListID,data.processCatalog.Recover_Undeserved_Amounts);
+                this.addLink(this.finReqListID,data.processCatalog.Refund_Memo);
+                this.addLink(this.finReqListID,data.processCatalog.Reply_About_RUA);
+                this.addLink(this.finReqListID,data.processCatalog.Process_Cancellation);
 
                 
-                this.addLink(this.genReqListID,processCatalog.File_Complaint);
-                this.addLink(this.genReqListID,processCatalog.Family_Certificate);
+                this.addLink(this.genReqListID,data.processCatalog.File_Complaint);
+                this.addLink(this.genReqListID,data.processCatalog.Family_Certificate);
 
-                this.addLink(this.adminReqListID,processCatalog.Purchase);
-                this.addLink(this.adminReqListID,processCatalog.Service_Request);
-                this.addLink(this.adminReqListID,processCatalog.Task_Aassignment_Request);
-                this.addLink(this.adminReqListID,processCatalog.Extract_And_Receive_Files);
-                this.addLink(this.adminReqListID,processCatalog.Document_Retrieval_Suggestions);
-                this.addLink(this.adminReqListID,processCatalog.Modification_Request);
+                this.addLink(this.adminReqListID,data.processCatalog.Purchase);
+                this.addLink(this.adminReqListID,data.processCatalog.Service_Request);
+                this.addLink(this.adminReqListID,data.processCatalog.Task_Aassignment_Request);
+                this.addLink(this.adminReqListID,data.processCatalog.Extract_And_Receive_Files);
+                this.addLink(this.adminReqListID,data.processCatalog.Document_Retrieval_Suggestions);
+                this.addLink(this.adminReqListID,data.processCatalog.Modification_Request);
 
             },	
 
-            addLink(containerID,process){
+            addLink(containerID,processDTO){
                 let html = `<li class="list-group-item p-2 ml-2"> 
                                 <i class="fas fa-file-alt text-secondary"></i> 
-                                <a onclick="process.launch(new WorkItem('${process.engName}'))" class="simpleLink text-secondary" href="#">
-                                    ${app.chooseBasedOnLocale(process.arabicName,process.engLabel)} </a>  
+                                <a onclick="processHandler.launchNew('${processDTO.engName}')" class="simpleLink text-secondary" href="#">
+                                    ${app.chooseBasedOnLocale(processDTO.arabicName,processDTO.engLabel)} </a>  
                             </li>`;  
                 util.append(containerID,html);
             },
@@ -144,7 +144,7 @@ if(! registery.mainPageController){
 
 }
 
-$(document).ready( ()=>{ try{registery.mainPageController.main(); }catch(error){ app.alertError(error.message); }} );
+$(document).ready( ()=>{ try{registery.mainPageController.main(); }catch(error){ app.alertError(new ErrorDetails(error.message,['check main() @mainPage.html'])  ); }} );
 
 </script>
 
@@ -155,7 +155,7 @@ $(document).ready( ()=>{ try{registery.mainPageController.main(); }catch(error){
         <div class="col-9 pl-1">
             <div class="p-1">
                 <i class="fas fa-envelope text-dark fontSize175"></i>
-                <h5 class="font-weight-bold text-dark d-inline" data-label="personalInbox"></h5>
+                <h5 class="font-weight-bold text-dark d-inline" data-label="My_INBOX"></h5>
             </div>
             <div id="myInboxGrid" class="container-fluid modal-body" ></div>
         </div>
@@ -163,13 +163,13 @@ $(document).ready( ()=>{ try{registery.mainPageController.main(); }catch(error){
         <div class="col-3 p-1 ">
             <div class="p-2">
                 <i class="fab fa-whmcs text-dark fontSize175"></i>
-                <h5 class="font-weight-bold text-dark d-inline" data-label="newRequestGrid"></h5>
+                <h5 class="font-weight-bold text-dark d-inline" data-label="NEW_REQUEST_GRID"></h5>
             </div>    
             <div class="accordion shadow-sm pt-0 p-0 " id="newRequestAccordion">
                 <div class="card border-0">
                     <div class="card-header bg-white" id="headingHRRequests">
                         <i class="fas fa-folder text-warning"></i>
-                        <a class="btn btn-white w-100 text-primary collapsed text-left d-inline"  data-label="humanResourcesRequests" data-target="#humanResourcesRequestsDiv" aria-controls="humanResourcesRequestsDiv" aria-expanded="false"  data-toggle="collapse"></a>
+                        <a class="btn btn-white w-100 text-primary collapsed text-left d-inline"  data-label="HR_REQUESTS" data-target="#humanResourcesRequestsDiv" aria-controls="humanResourcesRequestsDiv" aria-expanded="false"  data-toggle="collapse"></a>
                     </div>
                     <div id="humanResourcesRequestsDiv" class="collapse" aria-labelledby="headingHRRequests" data-parent="#newRequestAccordion">
                         <div class="card-body  overflow-auto modal-body" style="max-height: 40vh !important;">
@@ -180,7 +180,7 @@ $(document).ready( ()=>{ try{registery.mainPageController.main(); }catch(error){
                 <div class="card border-0">
                     <div class="card-header bg-white" id="headingITRequests">
                         <i class="fas fa-folder text-warning"></i>
-                        <a class="btn btn-white w-100 text-primary collapsed text-left d-inline" data-label="informationTechRequests" data-target="#informationTechRequestsDiv" aria-controls="informationTechRequestsDiv" aria-expanded="false" data-toggle="collapse"></a>
+                        <a class="btn btn-white w-100 text-primary collapsed text-left d-inline" data-label="IT_REQUESTS" data-target="#informationTechRequestsDiv" aria-controls="informationTechRequestsDiv" aria-expanded="false" data-toggle="collapse"></a>
                     </div>
                     <div id="informationTechRequestsDiv" class="collapse" aria-labelledby="headingITRequests" data-parent="#newRequestAccordion">
                         <div class="card-body">
@@ -191,7 +191,7 @@ $(document).ready( ()=>{ try{registery.mainPageController.main(); }catch(error){
                 <div class="card border-0">
                     <div class="card-header bg-white" id="headingSSRequests">
                         <i class="fas fa-folder text-warning"></i>
-                        <a class="btn btn-white w-100 text-primary collapsed text-left d-inline" data-label="socialSecurityRequests" data-target="#socialSecurityRequestsDiv" aria-controls="socialSecurityRequestsDiv" aria-expanded="false"data-toggle="collapse"></a>
+                        <a class="btn btn-white w-100 text-primary collapsed text-left d-inline" data-label="SS_REQUESTS" data-target="#socialSecurityRequestsDiv" aria-controls="socialSecurityRequestsDiv" aria-expanded="false"data-toggle="collapse"></a>
                     </div>
                     <div id="socialSecurityRequestsDiv" class="collapse" aria-labelledby="headingSSRequests" data-parent="#newRequestAccordion">
                         <div class="card-body  overflow-auto modal-body" style="max-height: 40vh !important;">
@@ -202,7 +202,7 @@ $(document).ready( ()=>{ try{registery.mainPageController.main(); }catch(error){
                 <div class="card border-0">
                     <div class="card-header bg-white" id="headingFinanceRequests">
                         <i class="fas fa-folder text-warning"></i>
-                        <a class="btn btn-white w-100 text-primary collapsed text-left d-inline" data-label="financeRequests" data-target="#financeRequestsDiv" aria-controls="financeRequestsDiv" aria-expanded="false" data-toggle="collapse"></a>
+                        <a class="btn btn-white w-100 text-primary collapsed text-left d-inline" data-label="FINANCE_REQUESTS" data-target="#financeRequestsDiv" aria-controls="financeRequestsDiv" aria-expanded="false" data-toggle="collapse"></a>
                     </div>
                     <div id="financeRequestsDiv" class="collapse" aria-labelledby="headingFinanceRequests" data-parent="#newRequestAccordion">
                         <div class="card-body">
@@ -213,7 +213,7 @@ $(document).ready( ()=>{ try{registery.mainPageController.main(); }catch(error){
                 <div class="card border-0">
                     <div class="card-header bg-white" id="headingAdminRequests">
                         <i class="fas fa-folder text-warning"></i>
-                        <a class="btn btn-white w-100 text-primary collapsed text-left d-inline" data-label="administrationRequests" data-target="#administrationRequestsDiv" aria-controls="administrationRequestsDiv" aria-expanded="false" data-toggle="collapse"></a>
+                        <a class="btn btn-white w-100 text-primary collapsed text-left d-inline" data-label="ADMINISTRATION_REQUESTS" data-target="#administrationRequestsDiv" aria-controls="administrationRequestsDiv" aria-expanded="false" data-toggle="collapse"></a>
                     </div>
                     <div id="administrationRequestsDiv" class="collapse" aria-labelledby="headingAdminRequests" data-parent="#newRequestAccordion">
                         <div class="card-body">
@@ -224,7 +224,7 @@ $(document).ready( ()=>{ try{registery.mainPageController.main(); }catch(error){
                 <div class="card border-0">
                     <div class="card-header bg-white" id="headingGenSectorRequests">
                         <i class="fas fa-folder text-warning"></i>
-                        <a class="btn btn-white text-primary collapsed text-left d-inline" data-label="generalSectorRequests" data-target="#generalSectorRequestsDiv" aria-controls="generalSectorRequestsDiv" aria-expanded="false" data-toggle="collapse"></a>
+                        <a class="btn btn-white text-primary collapsed text-left d-inline" data-label="GENERAL_SECTOR_REQUESTS" data-target="#generalSectorRequestsDiv" aria-controls="generalSectorRequestsDiv" aria-expanded="false" data-toggle="collapse"></a>
                     </div>
                     <div id="generalSectorRequestsDiv" class="collapse" aria-labelledby="headingGenSectorRequests" data-parent="#newRequestAccordion">
                         <div class="card-body">

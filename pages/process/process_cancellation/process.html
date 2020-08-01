@@ -10,7 +10,7 @@
     
     
     
-    process.controller = {
+    processHandler.controller = {
         errMsg : "",
         groups : {  
              //groupFollowUpTLs : ["FollowUp_TLs"],    // groupFollowUpEmps : ["FollowUp_Emps"],
@@ -41,14 +41,14 @@
     
         defineComponents(){    
             
-          this.forms.Form_ProcessCancellation.addComponent(new DateComponent('RequestDate',' التاريخ','From','','') );
+          this.forms.Form_ProcessCancellation.addComponent(new DateComponent('RequestDate',' التاريخ','From','','',5) );
            
 
-          this.forms.Form_ProcessCancellation.addComponent(new TxtComponent('CanceledWFID','مسلسل الإجراء','CanceledWFID',5) );
+          this.forms.Form_ProcessCancellation.addComponent(new TxtComponent('CanceledWFID','مسلسل الإجراء','CanceledWFID',10,5) );
           
-          this.forms.Form_ProcessCancellation.addComponent(new TxtComponent('CanceledWFName','الإجـــــــراء','CanceledWFName',5) );
+          this.forms.Form_ProcessCancellation.addComponent(new TxtComponent('CanceledWFName','الإجـــــــراء','CanceledWFName',100,3) );
           
-          this.forms.Form_ProcessCancellation.addComponent(new TxtComponent('RequesterDept','الجهة الطالبة','RequesterDept',20) );
+          this.forms.Form_ProcessCancellation.addComponent(new TxtComponent('RequesterDept','الجهة الطالبة','RequesterDept',200,3) );
           
 
           
@@ -82,53 +82,15 @@
         main(){
             try{
                 this.defineComponents();
-                process.initialize();
-                let stepName = process.workItem.stepName;
-                process.recieversList.loadManager();
-                //process.recieversList.loadDeptManager();
-                //process.branchesList.load()); //to load all branches
-                //process.branchesList.load([1,2,5]); // to load specific branches using branch id
-                //process.actionsList.load([process.actionsList.status, process.actionsList.approved]);
-    
-                
+                processHandler.initialize();
+                let stepName = processHandler.workItem.stepName;
+                processHandler.recieversList.loadManager();
+             
     
                 if(stepName == this.steps.PerLeave_Launch){   
                 }
                 else if(stepName == this.steps.PerLeave_TLApprove){
                 }
-            
-                
-                /* component manipulation */ 
-                    //this.forms.Form_ProcessCancellation.components.RequesterName.setValue('ABC');
-                    //this.forms.Form_ProcessCancellation.components.requesterName.disable();
-                    
-                    //this.forms.Form_ProcessCancellation.components.RequestDate.setMinDate('2020-05-01');
-                    //this.forms.Form_ProcessCancellation.components.RequestDate.setMaxDate('2020-05-10');
-                    
-                    //this.forms.Form_ProcessCancellation.components.VactionType.setValue(2);//give it the value of the option object to be selected
-                    //alert(this.forms.Form_ProcessCancellation.components.VactionType.getText()); // retrieves the shown selected text
-                    //this.forms.Form_ProcessCancellation.components.VactionType.setOptions([new Option('','','')]); //load different options
-                    //this.forms.Form_ProcessCancellation.components.VactionType.addOption( new Option('x','x','3') );
-                    //this.forms.Form_ProcessCancellation.components.VactionType.addOption(new Option('y','y','4') );
-                    //this.forms.Form_ProcessCancellation.components.VactionType.setValue('3');
-                    //this.forms.Form_ProcessCancellation.components.VactionType.removeOptionByValue('4');
-                    
-                    //this.forms.Form_ProcessCancellation.components.IsPaid.disable();
-                    //this.forms.Form_ProcessCancellation.components.IsPaid.setValue(true);
-                    //this.forms.Form_ProcessCancellation.components.IsPaid.check();
-                    //this.forms.Form_ProcessCancellation.components.IsPaid.uncheck();
-    
-                    //this.forms.Form_ProcessCancellation.components.SupSignature.enable();
-                
-    
-    
-    
-                
-                /* form manipulation */
-                    //this.forms.Form_ProcessCancellation.enable();
-                    //this.forms.Form_ProcessCancellation.disable();
-                    //this.forms.Form_WorkDeduction.hide();
-                    //this.forms.Form_WorkDeduction.select();
                     this.forms.Form_ProcessCancellation.select();
                     this.forms.Form_ProcessCancellation.updateComponentsFromEntity();
                     
@@ -138,8 +100,8 @@
     
     
                     app.renderLabels();
-            process.openProcessModal();
-            process.setWorkFlowIDLabel();
+            processHandler.openProcessModal();
+            processHandler.setWorkFlowIDLabel();
             }
             catch(error){ throw error;}
         },
@@ -161,7 +123,7 @@
     
     }
     
-    $(document).ready( ()=>{ try{ process.controller.main(); }catch(error){ app.alertError(error.message); }} );
+    $(document).ready( ()=>{ try{ processHandler.controller.main(); }catch(error){ app.alertError(error.message); }} );
     </script>
     
 
@@ -183,54 +145,58 @@
                                 </div>
 
                                 <div class="row p-1">
-                                    <div class="col-5 pr-2 pl-3" data-container-for="RequestDate"></div>
+                                    <div class="col-4 pr-2 pl-6"  data-container-for="RequestDate"></div>
                                 </div>
                              
-
-                             
+                              
 
                                 <div class="row p-1">
                                   
-                                    <div class="col-5 pr-1 pl-3" data-container-for="CanceledWFID"></div>
-                                    <div class="col-3 pr-3 p-6">
-                                        <button type="button" class="btn btn-secondary" onclick="alert(process.controller.forms.Form_WorkDeduction.components.WorkDedTable.getValue());">نموذج الإجراء</button>
+                                    <div class="col-4 pr-2 pl-6" data-container-for="CanceledWFID"></div>
+                                    <div class="col-4 pr-2 pl-6">
+                                        <button type="button" class="btn btn-secondary" onclick="alert(processHandler.controller.forms.Form_WorkDeduction.components.WorkDedTable.getValue());">نموذج الإجراء</button>
                                     </div>
                                 </div>
 
                                 <div class="row p-1">
-                                    <div class="col-5 pr-1 pl-3" data-container-for="CanceledWFName"></div>
+                                    <div class="col-7 pr-2 pl-3" data-container-for="CanceledWFName"></div>
+                                    
                                 </div>
 
                                 <div class="row p-1"> 
-                                    <div class="col-5 pr-1 pl-3" data-container-for="RequesterDept"></div>       
+                                    <div class="col-7 pr-2 pl-3"  data-container-for="RequesterDept"></div>       
                                 </div>
 
-                                    <br><br><br>  
+                                <div class="row p-4">
+                                </div>
 
                                 <div class="row p-1">
-                                    <div class="col p-3"> </div>
-                                    <div class="col pr-3 pl-3" data-container-for="Requester"></div>
-                                    <div class="col pr-3 pl-3" data-container-for="RequesterSig"></div>
+                                    <div class="col-5 pr-4 pl-3" data-container-for="Requester"></div>
+                                    <div class="col-5 pr-4 pl-3"data-container-for="RequesterSig"></div>
                                 </div>
 
-
-
-                                        <br>
-                                        <div class="row p-1">
-                                <div class="col-3 pr-3 pl-6" data-container-for="Line_2"></div>
-                                <div class="col-6 pr-3 pl-3" data-container-for="Line_3"></div>
+                                <div class="row p-4">
+                                </div>
+                                <div class="row p-4">
+                                </div>
+                                       
+                             <div class="row p-1">
+                                <div class="col-5 pr-4 pl-3" data-container-for="Line_2"></div>
+                                <div class="col-5 pr-4 pl-3" data-container-for="Line_3"></div>
                             </div>
                           
                             <div class="row p-1">
-                                <div class="col pr-3 pl-3" data-container-for="Line_4"></div>
+                                <div class="col-5 pr-4 pl-3"data-container-for="Line_4"></div>
                             </div>
 
-                            <br>
+                            <div class="row p-4">
+                            </div>
 
                             <div class="row p-1">
                                 <div class="col pr-3 pl-3" data-container-for="DeptNotes"></div>
                             </div>
-<br>
+                            <div class="row p-4">
+                            </div>
                             <div class="row p-1">   
                                 <div class="col pr-6 pl-6" data-container-for=""></div>
                                 <div class="col-5 pr-2 pl-5" data-container-for="DeptMngr"></div>

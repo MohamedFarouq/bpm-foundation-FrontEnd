@@ -10,7 +10,7 @@
     
     
     
-    process.controller = {
+    processHandler.controller = {
         errMsg : "",
         groups : {  
              //groupFollowUpTLs : ["FollowUp_TLs"],    // groupFollowUpEmps : ["FollowUp_Emps"],
@@ -42,9 +42,9 @@
         defineComponents(){    
 
 
-            this.forms.Form_IssueCertificate.addComponent(new DateComponent('RequestDate','التاريخ','Date','','') );
-            this.forms.Form_IssueCertificate.addComponent(new TxtComponent('RequesterName','اسم الموظف','Name',5) );
-            this.forms.Form_IssueCertificate.addComponent(new TxtComponent('RequesterDept','الإدارة','Department') );
+            this.forms.Form_IssueCertificate.addComponent(new DateComponent('RequestDate','التاريخ','Date','','',5) );
+            this.forms.Form_IssueCertificate.addComponent(new TxtComponent('RequesterName','اسم الموظف','Name',100) );
+            this.forms.Form_IssueCertificate.addComponent(new TxtComponent('RequesterDept','الإدارة','Department',200) );
            
             this.forms.Form_IssueCertificate.addComponent(new ParagraphComponent('Line_1','الشهادة المطلوبة : ',': Certificate Required','font-weight-bold') );
       
@@ -85,13 +85,13 @@
         main(){
             try{
                 this.defineComponents();
-                process.initialize();
-                let stepName = process.workItem.stepName;
-                process.recieversList.loadManager();
-                //process.recieversList.loadDeptManager();
-                //process.branchesList.load()); //to load all branches
-                //process.branchesList.load([1,2,5]); // to load specific branches using branch id
-                //process.actionsList.load([process.actionsList.status, process.actionsList.approved]);
+                processHandler.initialize();
+                let stepName = processHandler.workItem.stepName;
+                processHandler.recieversList.loadManager();
+                //processHandler.recieversList.loadDeptManager();
+                //processHandler.branchesList.load()); //to load all branches
+                //processHandler.branchesList.load([1,2,5]); // to load specific branches using branch id
+                //processHandler.actionsList.load([processHandler.actionsList.status, processHandler.actionsList.approved]);
     
                 
     
@@ -141,8 +141,8 @@
     
     
                     app.renderLabels();
-            process.openProcessModal();
-            process.setWorkFlowIDLabel();
+            processHandler.openProcessModal();
+            processHandler.setWorkFlowIDLabel();
             }
             catch(error){ throw error;}
         },
@@ -164,7 +164,7 @@
     
     }
     
-    $(document).ready( ()=>{ try{ process.controller.main(); }catch(error){ app.alertError(error.message); }} );
+    $(document).ready( ()=>{ try{ processHandler.controller.main(); }catch(error){ app.alertError(error.message); }} );
     </script>
     
 
@@ -181,29 +181,32 @@
                         <!-- the main container for all Form_IssueCertificate controls -->
                         <div class="container-fluid">
                   
-                                <div class="row">
+                            <div class="row p-1">
                                     <div class="col p-1 mb-4" data-container-for="Form_IssueCertificate_title"></div>
                                 </div>
 
 
                                 
                                 <div class="row p-1">
-                                    <div class="pr-6 pl-3" data-container-for="RequestDate"></div>
+                                    <div class="col-4 pr-2 pl-6" data-container-for="RequestDate"></div>
                                 </div>
 
+
+                           
                               
                                 <div class="row p-1">
-                                <div class="col-7 pr-2 pl-3" data-container-for="RequesterName"></div>
+                                    <div class="col-5 pr-2 pl-3" data-container-for="RequesterName"></div>
                                 </div>
 
                                 <div class="row p-1">
-                                <div class="col-7 pr-2 pl-3" data-container-for="RequesterDept"></div>
+                                    <div class="col-5 pr-2 pl-3"data-container-for="RequesterDept"></div>
                                 </div>
 
 
-                                <br>
+                                <div class="row pt-4">
+                                </div>   
 
-                            <div class="row">
+                                <div class="row p-1">
                                 <div class="col pr-3 pl-3" data-container-for="Line_1"></div>
                             </div>
 
@@ -242,12 +245,14 @@
                                 <div class="col pr-3 pl-3" data-container-for="LeavingPermitCert"></div>
                             </div>
 
-                            <br>
-                            <div class="row">
+                            <div class="row pt-4">
+                            </div>   
+                            <div class="row p-1">
                                 <div class="col pr-3 pl-3" data-container-for="FormPurpose"></div>
                             </div>
 
-                            <br>
+                            <div class="row pt-4">
+                            </div>   
 
                             <div class="row p-1">
                                 <div class="col pr-3 pl-3" data-container-for="RequesterName1"></div>
@@ -255,7 +260,10 @@
                             </div>
 
 
-                            <br><br>
+                            <div class="row pt-4">
+                            </div>   
+                            <div class="row pt-4">
+                            </div>   
 
                             <div class="row">
                                 <div class="col pr-3 pl-3" data-container-for="Line_2"></div>

@@ -10,7 +10,7 @@
     
     
     
-    process.controller = {
+    processHandler.controller = {
         errMsg : "",
         groups : {  
              //groupFollowUpTLs : ["FollowUp_TLs"],    // groupFollowUpEmps : ["FollowUp_Emps"],
@@ -31,19 +31,23 @@
             this.forms.Form_FileComplaint.addComponent(new TxtComponent('Name','الإســــــــــم','Name') );
             this.forms.Form_FileComplaint.addComponent(new TxtComponent('CID','الرقم المدني','Civil ID',5) );
             this.forms.Form_FileComplaint.addComponent(new TxtComponent('ReqDept','الإدارة المعنية','Concerned Department') );
-            this.forms.Form_FileComplaint.addComponent(new TxtComponent('Subject','الموضوع','Subject') );
+            this.forms.Form_FileComplaint.addComponent(new DropDownListComponent('ReqDept','الإدارة المعنية','type',[new Option('','','0') ,new Option('','','1') , new Option('',' ','2')]) );
+          
+            this.forms.Form_FileComplaint.addComponent(new TxtComponent('Subject','الموضوع','Subject',100,2) );
             this.forms.Form_FileComplaint.addComponent(new NotesComponent('Desc','تفصيل الشكوى','Complaint Description',4,300) );
             this.forms.Form_FileComplaint.addSignature(new Signature('SupName','SupSig','اعتماد المراقب','Supervisor Approval') );
-            this.forms.Form_FileComplaint.addComponent(new ParagraphComponent('line1','<h4><u>الإدارة المعنية بالشكوى:</u></h4>','The Concerned Department:')  );
-            this.forms.Form_FileComplaint.addComponent(new NotesComponent('Ans','الإجراء المتخذ','Descision Made',4,300) );
+            this.forms.Form_FileComplaint.addComponent(new ParagraphComponent('line1','<h4>الإدارة المعنية بالشكوى:</h4>','The Concerned Department:')  );
+            this.forms.Form_FileComplaint.addComponent(new NotesComponent('Descision','الإجراء المتخذ','Descision Made',4,300) );
+            this.forms.Form_FileComplaint.addSignature(new Signature('MngName','MngSig','اعتماد المدير','Manager Approval') );
+       
             },
     
         main(){
             try{
                 this.defineComponents();
-                process.initialize();
-                let stepName = process.workItem.stepName;
-                process.recieversList.loadManager();
+                processHandler.initialize();
+                let stepName = processHandler.workItem.stepName;
+                processHandler.recieversList.loadManager();
                 //process.recieversList.loadDeptManager();
                 //process.branchesList.load()); //to load all branches
                 //process.branchesList.load([1,2,5]); // to load specific branches using branch id
@@ -60,8 +64,8 @@
                 this.forms.Form_FileComplaint.updateComponentsFromEntity();
     
             app.renderLabels();
-            process.openProcessModal();
-            process.setWorkFlowIDLabel();
+            processHandler.openProcessModal();
+            processHandler.setWorkFlowIDLabel();
             }
             catch(error){ throw error;}
         },
@@ -71,7 +75,7 @@
          },    
     }
     
-    $(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alertError(error.message); }} );
+    $(document).ready( ()=>{ try{ processHandler.controller.main() }catch(error){ app.alertError(error.message); }} );
     </script>
     
     <style>
@@ -98,8 +102,8 @@
                                 </div>
                                 <div class="row pt-2">
                                     <div class="col-6 pr-3 pl-3" data-container-for="Name"></div>
-                                    <div class="col-2 pr-3 pl-3"></div>
-                                    <div class="col-3" data-container-for="ReqDate"></div>
+                                    <div class="col pr-3 pl-3"></div>
+                                    <div class="col-4" data-container-for="ReqDate"></div>
                                 </div>
 
                             <div class="row pt-2">
@@ -123,7 +127,7 @@
                             <div class="row pt-3">
                                 <div class="col pr-3 pl-3"></div>
                                 <div class="col pr-3 pl-3"></div>
-                                <div class="col pr-3 pl-3" data-container-for="SupName"></div>
+                                <div class="col-5 pr-3 pl-3" data-container-for="SupName"></div>
                             </div> 
 
                             <div class="row pt-3">
@@ -133,8 +137,14 @@
                             </div> 
 
                             <div class="row pt-2">
-                                <div class="col pr-3 pl-3" data-container-for="Ans"></div>
+                                <div class="col pr-3 pl-3" data-container-for="Descision"></div>
                             </div>
+                            
+                            <div class="row pt-3">
+                                <div class="col pr-3 pl-3"></div>
+                                <div class="col pr-3 pl-3"></div>
+                                <div class="col-5 pr-3 pl-3" data-container-for="MngName"></div>
+                            </div> 
 
                        </div>
                     </div>

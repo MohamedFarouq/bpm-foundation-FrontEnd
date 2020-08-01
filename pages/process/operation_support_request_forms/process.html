@@ -11,7 +11,7 @@
 
 
 
-process.controller = {
+processHandler.controller = {
     errMsg : "",
     groups : {  
          //groupFollowUpTLs : ["FollowUp_TLs"],    // groupFollowUpEmps : ["FollowUp_Emps"],
@@ -224,8 +224,11 @@ process.controller = {
                                                                                     ], 4
                                                                                     ) );
 
-        this.forms.Form_DataModification.addComponent(new TxtComponent('DB2Description','','','') );  
-        this.forms.Form_DataModification.addComponent(new TxtComponent('DB2Desc','','','') );                                                                          
+         this.forms.Form_DataModification.addComponent(new TableComponent('DB2Description',[
+                                                                                        new TableColTxt('',''),
+                                                                                        new TableColTxt('',''),
+                                                                                    ], 1
+                                                                                    ) );                                                                      
 
         this.forms.Form_DataModification.addSignature(new Signature('RSE','SEName','SESig','Responsible SE','Responsible SE') ); 
         this.forms.Form_DataModification.addSignature(new Signature('TeamLd','TeamLdName','TeamLeaderSig','Team Leader','Team Leader') );
@@ -306,9 +309,9 @@ process.controller = {
     main(){
         try{
             this.defineComponents();
-            process.initialize();
-            let stepName = process.workItem.stepName
-            process.recieversList.loadManager();
+            //processHandler.initialize();
+            let stepName = '';//processHandler.workItem.stepName;
+            processHandler.recieversList.loadManager();
 
             
 
@@ -331,8 +334,8 @@ process.controller = {
 
 
             app.renderLabels();
-            process.openProcessModal();
-            process.setWorkFlowIDLabel();
+            processHandler.openProcessModal();
+            processHandler.setWorkFlowIDLabel();
         }
         catch(error){ throw error;}
     },
@@ -351,7 +354,7 @@ process.controller = {
 
 }
 
-$(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alertError(error.message); }} );
+$(document).ready( ()=>{ try{ processHandler.controller.main() }catch(error){ app.alertError(error.message); }} );
 </script>
 
 <style>
@@ -375,46 +378,55 @@ $(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alert
                             <div class="col p-1 mb-4" data-container-for="Form_PromotionForm_title"></div>
                         </div>
 
-                        <div class="row">
-                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RFCNumber"></div>
-                            <div class="col pr-3 pl-3 pt-2"></div>
-                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RequesterDate"></div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-4 pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="ImplementDate"></div>
-                            <div class="col-2 pr-3 pl-3 pt-2"></div>
-                            <div class="col-6 pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RequestingDept"></div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-4 pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="ImplementTime"></div>
-                            <div class="col-2 pr-3 pl-3 pt-2"></div>
-                            <div class="col-6 pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="Systems"></div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-4 pr-3 pl-3 pt-2"></div>
-                            <div class="col-2 pr-3 pl-3 pt-2"></div>
-                            <div class="col-6 pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="PackageName"></div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RFCDesc"></div>
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" style="direction:ltr;" data-container-for="RFCNumber"></div>
+                            <div class="col pr-3 pl-3"></div>
+                            <div class="col pr-3 pl-3" style="direction:ltr;" data-container-for="RequesterDate"></div>
                         </div>
 
                         <div class="row p-1">
-                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="ProgramTable"></div>
+                            <div class="col-4 pr-3 pl-3" style="direction:ltr;" data-container-for="ImplementDate"></div>
+                            <div class="col-2 pr-3 pl-3"></div>
+                            <div class="col-6 pr-3 pl-3" style="direction:ltr;" data-container-for="RequestingDept"></div>
                         </div>
 
-                        <div class="row">
-                            <div class="col pr-3 pl-3 pt-2 pb-2" style="direction: ltr;" data-container-for="SpecialInstructions"></div>
+                        <div class="row p-1">
+                            <div class="col-4 pr-3 pl-3" style="direction:ltr;" data-container-for="ImplementTime"></div>
+                            <div class="col-2 pr-3 pl-3"></div>
+                            <div class="col-6 pr-3 pl-3" style="direction:ltr;" data-container-for="Systems"></div>
                         </div>
-                        
-                        <div class="row">
-                            <div class="col pr-2 pl-1 pt-2 pb-2" data-container-for="GroupLeader"></div>
-                            <div class="col pr-2 pl-1 pt-2 pb-2" data-container-for="TeamLeader"></div>
-                            <div class="col pr-2 pl-1 pt-2 pb-2" data-container-for="SE"></div>
+
+                        <div class="row p-1">
+                            <div class="col-4 pr-3 pl-3"></div>
+                            <div class="col-2 pr-3 pl-3"></div>
+                            <div class="col-6 pr-3 pl-3" style="direction:ltr;" data-container-for="PackageName"></div>
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" style="direction:ltr;" data-container-for="RFCDesc"></div>
+                        </div>
+
+                        <div class="row pt-2">
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" style="direction:ltr;" data-container-for="ProgramTable"></div>
+                        </div>
+
+                        <div class="row pt-2">
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" style="direction: ltr;" data-container-for="SpecialInstructions"></div>
+                        </div>
+
+                        <div class="row pt-4">
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col-4 pr-2 pl-1" data-container-for="GroupLeader"></div>
+                            <div class="col-4 pr-2 pl-1" data-container-for="TeamLeader"></div>
+                            <div class="col-4 pr-2 pl-1" data-container-for="SE"></div>
                         </div>
                     </div>
                 </div>
@@ -428,62 +440,74 @@ $(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alert
                             <div class="col p-1 mb-4" data-container-for="Form_QMFBatchJob_title"></div>
                         </div>
 
-                        <div class="row">
-                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RFCNumber"></div>
-                            <div class="col pr-3 pl-3 pt-2"></div>
-                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RequesterDate"></div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-4 pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="NoOfCopy"></div>
-                            <div class="col-2 pr-3 pl-3 pt-2"></div>
-                            <div class="col-6 pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RequestingDept"></div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-4 pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="ImplementDate"></div>
-                            <div class="col-2 pr-3 pl-3 pt-2"></div>
-                            <div class="col-6 pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="UserDeptName"></div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-4 pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="ImplementTime"></div>
-                            <div class="col-2 pr-3 pl-3 pt-2"></div>
-                            <div class="col-6 pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="Systems"></div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-4 pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="NEWOld"></div>
-                            <div class="col-2 pr-3 pl-3 pt-2"></div>
-                            <div class="col-6 pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="QMFjob"></div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-4 pr-3 pl-3 pt-2"></div>
-                            <div class="col-2 pr-3 pl-3 pt-2"></div>
-                            <div class="col-6 pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="Environments"></div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RFCDesc"></div>
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" style="direction:ltr;" data-container-for="RFCNumber"></div>
+                            <div class="col pr-3 pl-3"></div>
+                            <div class="col pr-3 pl-3" style="direction:ltr;" data-container-for="RequesterDate"></div>
                         </div>
 
                         <div class="row p-1">
-                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="JobTable"></div>
+                            <div class="col-4 pr-3 pl-3" style="direction:ltr;" data-container-for="NoOfCopy"></div>
+                            <div class="col-2 pr-3 pl-3"></div>
+                            <div class="col-6 pr-3 pl-3" style="direction:ltr;" data-container-for="RequestingDept"></div>
                         </div>
 
                         <div class="row p-1">
-                            <div class="col pr-3 pl-3 pt-2 pb-2" style="direction:ltr;" data-container-for="QueryTable"></div>
+                            <div class="col-4 pr-3 pl-3" style="direction:ltr;" data-container-for="ImplementDate"></div>
+                            <div class="col-2 pr-3 pl-3"></div>
+                            <div class="col-6 pr-3 pl-3" style="direction:ltr;" data-container-for="UserDeptName"></div>
                         </div>
 
-                        <div class="row">
-                            <div class="col pr-3 pl-3 pt-2 pb-2" style="direction: ltr;" data-container-for="SpecialInstructions"></div>
+                        <div class="row p-1">
+                            <div class="col-4 pr-3 pl-3" style="direction:ltr;" data-container-for="ImplementTime"></div>
+                            <div class="col-2 pr-3 pl-3"></div>
+                            <div class="col-6 pr-3 pl-3" style="direction:ltr;" data-container-for="Systems"></div>
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col-4 pr-3 pl-3" style="direction:ltr;" data-container-for="NEWOld"></div>
+                            <div class="col-2 pr-3 pl-3"></div>
+                            <div class="col-6 pr-3 pl-3" style="direction:ltr;" data-container-for="QMFjob"></div>
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col-4 pr-3 pl-3"></div>
+                            <div class="col-2 pr-3 pl-3"></div>
+                            <div class="col-6 pr-3 pl-3" style="direction:ltr;" data-container-for="Environments"></div>
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" style="direction:ltr;" data-container-for="RFCDesc"></div>
+                        </div>
+
+                        <div class="row pt-2">
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" style="direction:ltr;" data-container-for="JobTable"></div>
+                        </div>
+
+                        <div class="row pt-2">
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" style="direction:ltr;" data-container-for="QueryTable"></div>
+                        </div>
+
+                        <div class="row pt-2">
+                        </div>
+                        
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" style="direction: ltr;" data-container-for="SpecialInstructions"></div>
                         </div>
                       
-                        <div class="row">
-                            <div class="col pr-2 pl-1 pt-2 pb-2" data-container-for="Group"></div>
-                            <div class="col pr-2 pl-1 pt-2 pb-2" data-container-for="Team"></div>
-                            <div class="col pr-2 pl-1 pt-2 pb-2" data-container-for="ResSE"></div>
+                        <div class="row pt-4">
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col-4 pr-2 pl-1" data-container-for="Group"></div>
+                            <div class="col-4 pr-2 pl-1" data-container-for="Team"></div>
+                            <div class="col-4 pr-2 pl-1" data-container-for="ResSE"></div>
                         </div>
                         
                     </div>
@@ -498,76 +522,88 @@ $(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alert
                             <div class="col p-1 mb-4" data-container-for="Form_BatchJob_title"></div>
                         </div>
 
-                        <div class="row">
-                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RFCNumber"></div>
-                            <div class="col pr-3 pl-3 pt-2"></div>
-                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RequesterDate"></div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-4 pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="JobDate"></div>
-                            <div class="col-2 pr-3 pl-3 pt-2"></div>
-                            <div class="col-6 pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RequestingDept"></div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-4 pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="JobTime"></div>
-                            <div class="col-2 pr-3 pl-3 pt-2"></div>
-                            <div class="col-6 pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="Systems"></div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-4 pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="ImplementDate"></div>
-                            <div class="col-2 pr-3 pl-3 pt-2"></div>
-                            <div class="col-6 pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="JobName"></div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-4 pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="ImplementTime"></div>
-                            <div class="col-2 pr-3 pl-3 pt-2"></div>
-                            <div class="col-6 pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="JobType"></div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-4 pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="NEWOld"></div>
-                            <div class="col-2 pr-3 pl-3 pt-2"></div>
-                            <div class="col-6 pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="JobFrequency"></div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-4 pr-3 pl-3 pt-2"></div>
-                            <div class="col-2 pr-3 pl-3 pt-2"></div>
-                            <div class="col-6 pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RecoveryJobReq"></div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RFCDesc"></div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col pr-3 pl-3 pt-2 pb-2" style="direction:ltr;" data-container-for="UserDeptName"></div>
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" style="direction:ltr;" data-container-for="RFCNumber"></div>
+                            <div class="col pr-3 pl-3"></div>
+                            <div class="col pr-3 pl-3" style="direction:ltr;" data-container-for="RequesterDate"></div>
                         </div>
 
                         <div class="row p-1">
-                            <div class="col pr-3 pl-3 pb-3" style="direction:ltr;" data-container-for="ReportTable"></div>
+                            <div class="col-4 pr-3 pl-3" style="direction:ltr;" data-container-for="JobDate"></div>
+                            <div class="col-2 pr-3 pl-3"></div>
+                            <div class="col-6 pr-3 pl-3" style="direction:ltr;" data-container-for="RequestingDept"></div>
                         </div>
 
                         <div class="row p-1">
-                            <div class="col pr-3 pl-3 pt-2" data-container-for="DB2Table"></div>
+                            <div class="col-4 pr-3 pl-3" style="direction:ltr;" data-container-for="JobTime"></div>
+                            <div class="col-2 pr-3 pl-3"></div>
+                            <div class="col-6 pr-3 pl-3" style="direction:ltr;" data-container-for="Systems"></div>
                         </div>
 
                         <div class="row p-1">
-                            <div class="col pr-3 pl-3 pt-1" style="direction:ltr;" data-container-for="RunProgTable"></div>
+                            <div class="col-4 pr-3 pl-3" style="direction:ltr;" data-container-for="ImplementDate"></div>
+                            <div class="col-2 pr-3 pl-3"></div>
+                            <div class="col-6 pr-3 pl-3" style="direction:ltr;" data-container-for="JobName"></div>
                         </div>
 
-                        <div class="row">
-                            <div class="col pr-3 pl-3 pt-2 pb-2" style="direction: ltr;" data-container-for="SpecialInstructions"></div>
+                        <div class="row p-1">
+                            <div class="col-4 pr-3 pl-3" style="direction:ltr;" data-container-for="ImplementTime"></div>
+                            <div class="col-2 pr-3 pl-3"></div>
+                            <div class="col-6 pr-3 pl-3" style="direction:ltr;" data-container-for="JobType"></div>
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col-4 pr-3 pl-3" style="direction:ltr;" data-container-for="NEWOld"></div>
+                            <div class="col-2 pr-3 pl-3"></div>
+                            <div class="col-6 pr-3 pl-3" style="direction:ltr;" data-container-for="JobFrequency"></div>
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col-4 pr-3 pl-3"></div>
+                            <div class="col-2 pr-3 pl-3"></div>
+                            <div class="col-6 pr-3 pl-3" style="direction:ltr;" data-container-for="RecoveryJobReq"></div>
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" style="direction:ltr;" data-container-for="RFCDesc"></div>
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" style="direction:ltr;" data-container-for="UserDeptName"></div>
+                        </div>
+
+                        <div class="row pt-2">
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" style="direction:ltr;" data-container-for="ReportTable"></div>
+                        </div>
+
+                        <div class="row pt-4">
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" data-container-for="DB2Table"></div>
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" style="direction:ltr;" data-container-for="RunProgTable"></div>
+                        </div>
+
+                        <div class="row pt-2">
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" style="direction: ltr;" data-container-for="SpecialInstructions"></div>
                         </div>
                       
-                        <div class="row">
-                            <div class="col pr-2 pl-1 pt-2 pb-2" data-container-for="GroupL"></div>
-                            <div class="col pr-2 pl-1 pt-2 pb-2" data-container-for="TeamL"></div>
-                            <div class="col pr-2 pl-1 pt-2 pb-2" data-container-for="ReSE"></div>
+                        <div class="row pt-4">
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col-4 pr-2 pl-1" data-container-for="GroupL"></div>
+                            <div class="col-4 pr-2 pl-1" data-container-for="TeamL"></div>
+                            <div class="col-4 pr-2 pl-1" data-container-for="ReSE"></div>
                         </div>
                         
                     </div>
@@ -581,54 +617,55 @@ $(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alert
                             <div class="col p-1 mb-4" data-container-for="Form_DataModification_title"></div>
                         </div>
 
-                        <div class="row">
-                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RFCNumber"></div>
-                            <div class="col pr-3 pl-3 pt-2"></div>
-                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RequesterDate"></div>
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" style="direction:ltr;" data-container-for="RFCNumber"></div>
+                            <div class="col pr-3 pl-3"></div>
+                            <div class="col pr-3 pl-3" style="direction:ltr;" data-container-for="RequesterDate"></div>
                         </div>
-
-                        <div class="row">
-                            <div class="col-4 pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="ImplementDate"></div>
-                            <div class="col-2 pr-3 pl-3 pt-2"></div>
-                            <div class="col-6 pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RequestingDept"></div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-4 pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="ImplementTime"></div>
-                            <div class="col-2 pr-3 pl-3 pt-2"></div>
-                            <div class="col-6 pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="Systems"></div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-4 pr-3 pl-3 pt-2"></div>
-                            <div class="col-2 pr-3 pl-3 pt-2"></div>
-                            <div class="col-6 pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="Environments"></div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RFCDesc"></div>
-                        </div>
-
-                        <br>
 
                         <div class="row p-1">
-                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="SpufiTable"></div>
+                            <div class="col-4 pr-3 pl-3" style="direction:ltr;" data-container-for="ImplementDate"></div>
+                            <div class="col-2 pr-3 pl-3"></div>
+                            <div class="col-6 pr-3 pl-3" style="direction:ltr;" data-container-for="RequestingDept"></div>
                         </div>
 
-                        <br>
+                        <div class="row p-1">
+                            <div class="col-4 pr-3 pl-3" style="direction:ltr;" data-container-for="ImplementTime"></div>
+                            <div class="col-2 pr-3 pl-3"></div>
+                            <div class="col-6 pr-3 pl-3" style="direction:ltr;" data-container-for="Systems"></div>
+                        </div>
 
-                        <div class="row">
-                            <div class="col pr-3 pl-3 pt-2" data-container-for="DB2Description"></div>
-                            <div class="col pr-3 pl-3 pt-2" data-container-for="DB2Desc"></div>
+                        <div class="row p-1">
+                            <div class="col-4 pr-3 pl-3"></div>
+                            <div class="col-2 pr-3 pl-3"></div>
+                            <div class="col-6 pr-3 pl-3" style="direction:ltr;" data-container-for="Environments"></div>
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" style="direction:ltr;" data-container-for="RFCDesc"></div>
+                        </div>
+
+                        <div class="row pt-2">
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" style="direction:ltr;" data-container-for="SpufiTable"></div>
+                        </div>
+
+                        <div class="row pt-3">
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" data-container-for="DB2Description"></div>
                         </div>
                         
-                        <br>
-                        <br>
-                        
-                        <div class="row">
-                            <div class="col pr-2 pl-1 pt-3 pb-2" data-container-for="GroupLd"></div>
-                            <div class="col pr-2 pl-1 pt-3 pb-2" data-container-for="TeamLd"></div>
-                            <div class="col pr-2 pl-1 pt-3 pb-2" data-container-for="RSE"></div>
+                        <div class="row pt-4">
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col-4 pr-2 pl-1" data-container-for="GroupLd"></div>
+                            <div class="col-4 pr-2 pl-1" data-container-for="TeamLd"></div>
+                            <div class="col-4 pr-2 pl-1" data-container-for="RSE"></div>
                         </div>
                     </div>
                 </div>
@@ -641,50 +678,55 @@ $(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alert
                             <div class="col p-1 mb-4" data-container-for="Form_EGLDeployment_title"></div>
                         </div>
 
-                        <div class="row">
-                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RFCNumber"></div>
-                            <div class="col pr-3 pl-3 pt-2"></div>
-                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RequesterDate"></div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-4 pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="ImplementDate"></div>
-                            <div class="col-2 pr-3 pl-3 pt-2"></div>
-                            <div class="col-6 pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RequestingDept"></div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-4 pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="ImplementTime"></div>
-                            <div class="col-2 pr-3 pl-3 pt-2"></div>
-                            <div class="col-6 pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="Systems"></div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-4 pr-3 pl-3 pt-2"></div>
-                            <div class="col-2 pr-3 pl-3 pt-2"></div>
-                            <div class="col-6 pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="Documentations"></div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RFCDesc"></div>
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" style="direction:ltr;" data-container-for="RFCNumber"></div>
+                            <div class="col pr-3 pl-3"></div>
+                            <div class="col pr-3 pl-3" style="direction:ltr;" data-container-for="RequesterDate"></div>
                         </div>
 
                         <div class="row p-1">
-                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="ModuleTable"></div>
+                            <div class="col-4 pr-3 pl-3" style="direction:ltr;" data-container-for="ImplementDate"></div>
+                            <div class="col-2 pr-3 pl-3"></div>
+                            <div class="col-6 pr-3 pl-3" style="direction:ltr;" data-container-for="RequestingDept"></div>
                         </div>
 
-                        <br> 
-
-                        <div class="row">
-                            <div class="col pr-3 pl-3 pt-2" style="direction: ltr;" data-container-for="SpecialInstructions"></div>
+                        <div class="row p-1">
+                            <div class="col-4 pr-3 pl-3" style="direction:ltr;" data-container-for="ImplementTime"></div>
+                            <div class="col-2 pr-3 pl-3"></div>
+                            <div class="col-6 pr-3 pl-3" style="direction:ltr;" data-container-for="Systems"></div>
                         </div>
-                        <br>
-                        <br> 
 
-                        <div class="row">
-                            <div class="col pr-2 pl-1 pt-3 pb-2" data-container-for="GroupLed"></div>
-                            <div class="col pr-2 pl-1 pt-3 pb-2" data-container-for="TeamLed"></div>
-                            <div class="col pr-2 pl-1 pt-3 pb-2" data-container-for="ResponSE"></div>
+                        <div class="row p-1">
+                            <div class="col-4 pr-3 pl-3"></div>
+                            <div class="col-2 pr-3 pl-3"></div>
+                            <div class="col-6 pr-3 pl-3" style="direction:ltr;" data-container-for="Documentations"></div>
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" style="direction:ltr;" data-container-for="RFCDesc"></div>
+                        </div>
+
+                        <div class="row pt-2">
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" style="direction:ltr;" data-container-for="ModuleTable"></div>
+                        </div>
+
+                        <div class="row pt-2">
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" style="direction: ltr;" data-container-for="SpecialInstructions"></div>
+                        </div>
+
+                        <div class="row pt-4">
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col-4 pr-2 pl-1" data-container-for="GroupLed"></div>
+                            <div class="col-4 pr-2 pl-1" data-container-for="TeamLed"></div>
+                            <div class="col-4 pr-2 pl-1" data-container-for="ResponSE"></div>
                         </div>
                     </div>
                 </div>
@@ -697,48 +739,48 @@ $(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alert
                             <div class="col p-1 mb-4" data-container-for="Form_SpecialReqforReport_title"></div>
                         </div>
 
-                        <div class="row">
-                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="StartDate"></div>
-                            <div class="col pr-3 pl-3 pt-2"></div>
-                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RequesterDate"></div>
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" style="direction:ltr;" data-container-for="StartDate"></div>
+                            <div class="col pr-3 pl-3"></div>
+                            <div class="col pr-3 pl-3" style="direction:ltr;" data-container-for="RequesterDate"></div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-4 pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="EndDate"></div>
-                            <div class="col-2 pr-3 pl-3 pt-2"></div>
-                            <div class="col-6 pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RequestingDept"></div>
+                        <div class="row p-1">
+                            <div class="col-4 pr-3 pl-3" style="direction:ltr;" data-container-for="EndDate"></div>
+                            <div class="col-2 pr-3 pl-3"></div>
+                            <div class="col-6 pr-3 pl-3" style="direction:ltr;" data-container-for="RequestingDept"></div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-4 pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="NoOfCopy"></div>
-                            <div class="col-2 pr-3 pl-3 pt-2"></div>
-                            <div class="col-6 pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="ReportName"></div>
+                        <div class="row p-1">
+                            <div class="col-4 pr-3 pl-3" style="direction:ltr;" data-container-for="NoOfCopy"></div>
+                            <div class="col-2 pr-3 pl-3"></div>
+                            <div class="col-6 pr-3 pl-3" style="direction:ltr;" data-container-for="ReportName"></div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-4 pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="CopiesType"></div>
-                            <div class="col-2 pr-3 pl-3 pt-2"></div>
-                            <div class="col-6 pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="ReportNo"></div>
+                        <div class="row p-1">
+                            <div class="col-4 pr-3 pl-3" style="direction:ltr;" data-container-for="CopiesType"></div>
+                            <div class="col-2 pr-3 pl-3"></div>
+                            <div class="col-6 pr-3 pl-3" style="direction:ltr;" data-container-for="ReportNo"></div>
                         </div>
 
-                        <div class="row">
-                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RFCDesc"></div>
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" style="direction:ltr;" data-container-for="RFCDesc"></div>
                         </div>
 
-                        <br> 
+                        <div class="row pt-4">
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" style="direction: ltr;" data-container-for="SpecialInstructions"></div>
+                        </div>
                         
-                        <div class="row">
-                            <div class="col pr-3 pl-3 pt-2" style="direction: ltr;" data-container-for="SpecialInstructions"></div>
+                        <div class="row pt-4">
                         </div>
-                        
-                        <br>
-                        <br>
-                        <br>
 
-                        <div class="row">
-                            <div class="col pr-2 pl-1 pt-3 pb-2" data-container-for="GroupLead"></div>
-                            <div class="col pr-2 pl-1 pt-3 pb-2" data-container-for="TeamLead"></div>
-                            <div class="col pr-2 pl-1 pt-3 pb-2" data-container-for="ResponsibleSE"></div>
+                        <div class="row p-1">
+                            <div class="col-4 pr-2 pl-1" data-container-for="GroupLead"></div>
+                            <div class="col-4 pr-2 pl-1" data-container-for="TeamLead"></div>
+                            <div class="col-4 pr-2 pl-1" data-container-for="ResponsibleSE"></div>
                         </div>
                     </div>
                 </div>
@@ -751,38 +793,38 @@ $(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alert
                             <div class="col p-1 mb-4" data-container-for="Form_OperationSupportAction_title"></div>
                         </div>
 
-                        <div class="row">
-                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RFCNumber"></div>
-                            <div class="col pr-3 pl-3 pt-2"></div>
-                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RequesterDate"></div>
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" style="direction:ltr;" data-container-for="RFCNumber"></div>
+                            <div class="col pr-3 pl-3"></div>
+                            <div class="col pr-3 pl-3" style="direction:ltr;" data-container-for="RequesterDate"></div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-4 pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="ImplementDate"></div>
-                            <div class="col-2 pr-3 pl-3 pt-2"></div>
-                            <div class="col-6 pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RequestingDept"></div>
+                        <div class="row p-1">
+                            <div class="col-4 pr-3 pl-3" style="direction:ltr;" data-container-for="ImplementDate"></div>
+                            <div class="col-2 pr-3 pl-3"></div>
+                            <div class="col-6 pr-3 pl-3" style="direction:ltr;" data-container-for="RequestingDept"></div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-4 pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="ImplementTime"></div>
-                            <div class="col-2 pr-3 pl-3 pt-2"></div>
-                            <div class="col-6 pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="Systems"></div>
+                        <div class="row p-1">
+                            <div class="col-4 pr-3 pl-3" style="direction:ltr;" data-container-for="ImplementTime"></div>
+                            <div class="col-2 pr-3 pl-3"></div>
+                            <div class="col-6 pr-3 pl-3" style="direction:ltr;" data-container-for="Systems"></div>
                         </div>
 
-                        <br> 
-
-                        <div class="row">
-                            <div class="col pr-3 pl-3 pt-2" style="direction: ltr;" data-container-for="OpsNotes"></div>
+                        <div class="row pt-4">
                         </div>
 
-                        <br>
-                        <br>
-                        <br>
-                        
-                        <div class="row">
-                            <div class="col-5 pr-2 pl-1 pt-2 pb-2" data-container-for="Approval"></div>
-                            <div class="col-2 pr-2 pl-1 pt-2"></div>
-                            <div class="col-5 pr-2 pl-1 pt-2 pb-2" data-container-for="ImplementedBy"></div>
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" style="direction: ltr;" data-container-for="OpsNotes"></div>
+                        </div>
+
+                        <div class="row pt-5">
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col-5 pr-2 pl-1" data-container-for="Approval"></div>
+                            <div class="col-2 pr-2 pl-1"></div>
+                            <div class="col-5 pr-2 pl-1" data-container-for="ImplementedBy"></div>
                         </div>
                     </div>
                 </div>

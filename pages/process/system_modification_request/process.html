@@ -1,0 +1,275 @@
+<script >
+    
+    /**
+     * WorkItem{
+            workFlowName,workflowID,subject,recieveDate,stepNo,workFlowVersion,workFlowType,stepName,nextStepName,instructions,workObjectID,comments,action,
+            sender,reciever,branch,forms,attachments
+            isLastStep = false;
+    }
+     */
+    
+    
+    
+    processHandler.controller = {
+        errMsg : "",
+        groups : {  
+             //groupFollowUpTLs : ["FollowUp_TLs"],    // groupFollowUpEmps : ["FollowUp_Emps"],
+        },
+    
+        steps : {
+            SMR_Launch : 'SMR_Launch',
+            SMR_ReqTL: 'SMR_ReqTL',
+            SMR_ReqSup: 'SMR_ReqSup',
+            SMR_ReqMng: 'SMR_ReqMng',
+            SMR_ReqUpdate: 'SMR_ReqUpdate',
+            SMR_ReqSec: 'SMR_ReqSec',
+            SMR_OrigSignature: 'SMR_OrigSignature',
+            SMR_SysSec: 'SMR_SysSec',
+            SMR_SysSup: 'SMR_SysSup',
+            SMR_OrigApproval: 'SMR_OrigApproval',
+            SMR_SysEmp: 'SMR_SysEmp',
+            SMR_SysEmp: 'SMR_SysEmp',
+        },
+    
+        forms : {
+            Form_SystemModificationRequest : new Form('Form_SystemModificationRequest', 'طلب تعديل أنظمة آلية SMR-SSR','System Modification Request'),
+        },
+    
+        defineComponents(){    
+            this.forms.Form_SystemModificationRequest.addComponent(new DateComponent('FromDate',' التــــاريــــخ','From','','',5) );
+            this.forms.Form_SystemModificationRequest.addComponent(new TxtComponent('ReqDept','الإدارة الطالبة للتعديل','Total Amount') );
+          
+            this.forms.Form_SystemModificationRequest.addComponent(new TxtComponent('Orig','محرر الاستمارة','originator') );
+            this.forms.Form_SystemModificationRequest.addComponent(new DropDownListComponent('ReqType','نوع الطلــــب','Request Type',[new Option('','','0') ,new Option('SMR','','1') , new Option('SSR','','2')] ,5));
+      
+            this.forms.Form_SystemModificationRequest.addComponent(new TxtComponent('DeptCode','دليل الإدارة','Dept Code') );
+            this.forms.Form_SystemModificationRequest.addComponent(new TxtComponent('SMRNo','رقم الطلــــب','SMR Number',50,5) );
+           
+            this.forms.Form_SystemModificationRequest.addComponent(new TxtComponent('SysDept','الإدارة المنفذة للتعديل','Requesting Departmen',5) );
+            this.forms.Form_SystemModificationRequest.addComponent(new DropDownListComponent('priority','الأولويـــة','Priority',[new Option('','','0') 
+                                                                                                                            ,new Option('عاجل','Urgent','1') 
+                                                                                                                            , new Option('عالية','High','2')
+                                                                                                                            ,new Option('متوسطة','Medium','3') 
+                                                                                                                            ,new Option('منخفضة','Low','4')] ,5) );
+  
+            this.forms.Form_SystemModificationRequest.addComponent(new TxtComponent('DevEmp','موظف التطوير المختص','Request Status',5) );
+            this.forms.Form_SystemModificationRequest.addComponent(new DropDownListComponent('ProjArea','النظام المختــص','Project Area',[new Option('','','0') 
+                                                                                                                                  ,new Option('الخط الأول','Mainframe','1') 
+                                                                                                                                  ,new Option('الميكنة','BPM','2') 
+                                                                                                                                  ,new Option('المواعيد','المواعيد','3')
+                                                                                                                                  ,new Option('التوقيع الالكتروني','E-Signature','4')
+                                                                                                                                  ,new Option('الرسائل النصية','SMS','5')
+                                                                                                                                  ,new Option('الاسترجاع الرئيسي','','6')
+                                                                                                                                  ,new Option('الشهادات ','Kiosk','7')
+                                                                                                                                  ,new Option('الصادر والوارد','','8')
+                                                                                                                                  ,new Option('EGL','','9')
+                                                                                                                                  ,new Option('موقع المؤسسة (رسمي/داخلي)','','10')
+                                                                                                                                  ,new Option('الخدمات الالكترونية (الانترنت)','','11')
+                                                                                                                                  ,new Option('تأمين خليجيين ( الخليجيين العاملين في الكويت)','','12')
+                                                                                                                                  ,new Option('تحويل الملف (السجل العام)','','13')
+                                                                                                                                  ,new Option('إدارة التقارير','','14')
+                                                                                                                                  ,new Option('Data-Warehouse','','15')
+                                                                                                                                  ,new Option('كشـوف آليـة','','16')
+                                                                                                                                  ,new Option('الهيكل التنظيمي','','17')
+                                                                                                                                  ,new Option('نظام الإشعارات','','18')
+                                                                                                                                  ,new Option('الحضور والانصراف','','19')
+                                                                                                                                  ,new Option('الحضور و الانصراف (شركات)','','20')
+                                                                                                                                  ,new Option('التقييم(دوت نت)','','21')
+                                                                                                                                  ,new Option('نظام إدارة الحالات القانونية (دوت نت)','','22')
+                                                                                                                                  ,new Option('النظام المالي (دوت نت)','','23')
+                                                                                                                                  ,new Option('اللجنة الطبية (دوت نت)','','24')
+                                                                                                                                  ,new Option('شؤون العاملين (دوت نت)','','25')
+                                                                                                                                  ,new Option('الميزانية التقديرية (دوت نت)','','26')
+                                                                                                                                  ,new Option('القائمة الرئيسية (دوت نت)','','27')
+                                                                                                                                  ,new Option('رسائل التنبيه','','28')
+                                                                                                                                  ,new Option('فهرسة و استرجاع (السجل العام)','','29')
+                                                                                                                                  ,new Option('كشوف اكتوارية','','30')
+                                                                                                                                  ,new Option('نظام المخازن','','31')
+                                                                                                                                  ,new Option('(QAO)ضمان الجودة','','32')
+                                                                                                                                  ,new Option('الشاشة الرئيسية','','33')
+                                                                                                                                  ,new Option('نظام ملصقات الملفات','','34')
+                                                                                                                                  ,new Option('نظام الخدمة الهاتفية','','35')
+                                                                                                                                  ,new Option('تقارير الصندوق','','36')]
+                                                                                                                                  ,4) );
+            this.forms.Form_SystemModificationRequest.addComponent(new DropDownListComponent('SSRtype','نوع طلب الخدمة','SSR Type',[new Option('','','0') 
+                                                                                                                                  ,new Option('Zoro','Zoro','1') 
+                                                                                                                                  ,new Option('New bank code','New bank code','2') 
+                                                                                                                                  ,new Option('بحث حالة','Investigation','3') 
+                                                                                                                                  ,new Option('Sign-on table','Sign-on table','4')
+                                                                                                                                  ,new Option('CICS tables','CICS tables','5')
+                                                                                                                                  ,new Option('Menu changes','Menu changes','6')
+                                                                                                                                  ,new Option('Customer Control File (KKF)','Customer Control File (KKF)','7')
+                                                                                                                                  ,new Option('Load data base file','Load data base file','8')
+                                                                                                                                  ,new Option('Others','Others','9')
+                                                                                                                                  ,new Option('عدم قبول عملية تسجيل','عدم قبول عملية تسجيل','10') ]
+                                                                                                                                  ,4 ) );
+
+            this.forms.Form_SystemModificationRequest.addComponent(new NotesComponent('ReqTitle','موضوع التعديل المطلوب','Request Title',4,300) );
+            this.forms.Form_SystemModificationRequest.addComponent(new NotesComponent('Desc','شــــــرح التعديـــــــل','Modification Desc',20,1000) );
+
+            this.forms.Form_SystemModificationRequest.addSignature(new Signature('SysMngName','SysMngSig','إعتماد الإدارة المنفذة للتعديل','Systems Dept Approval')  );
+            this.forms.Form_SystemModificationRequest.addSignature(new Signature('ReqMngName','ReqMngSig','إعتماد الإدارة الطالبة','Requesting Depratment Signature') );           
+            
+            this.forms.Form_SystemModificationRequest.addComponent(new ParagraphComponent('line1','خاص بالإدارة المنفذة للتعديل','Requesting Department Section','text-muted fontSize100 font-weight-bold') );
+    
+            this.forms.Form_SystemModificationRequest.addComponent(new NotesComponent('Reply','الإجراء الذي تم إتخاذه','Action Taken',7,300) );
+
+            this.forms.Form_SystemModificationRequest.addSignature(new Signature('OrigName','OrigSig','اعتمـــاد المراقــب','Originator Approval')  );
+            this.forms.Form_SystemModificationRequest.addSignature(new Signature('SEName','SESig','اعتمـــاد الموظـــف','SE Signature') );           
+        },
+    
+        main(){
+            try{
+                this.defineComponents();
+                processHandler.initialize();
+                let stepName = '';//processHandler.workItem.stepName;
+                processHandler.recieversList.loadManager();
+                //process.recieversList.loadDeptManager();
+                //process.branchesList.load()); //to load all branches
+                //process.branchesList.load([1,2,5]); // to load specific branches using branch id
+                //process.actionsList.load([process.actionsList.status, process.actionsList.approved]);
+    
+                
+    
+                if(stepName == this.steps.PerLeave_Launch){   
+                }
+                else if(stepName == this.steps.PerLeave_TLApprove){
+                }
+            
+                this.forms.Form_SystemModificationRequest.select();
+                this.forms.Form_SystemModificationRequest.updateComponentsFromEntity();
+    
+            app.renderLabels();
+            processHandler.openProcessModal();
+            processHandler.setWorkFlowIDLabel();
+            }
+            catch(error){ throw error;}
+        },
+    
+        validate(){
+            //validator.markAsInvalidField('myTxt');
+         },    
+    }
+    
+    $(document).ready( ()=>{ try{ processHandler.controller.main() }catch(error){ app.alertError(error.message); }} );
+    </script>
+    
+    <style>
+        .nav-pills .nav-link.active {
+        background-color: rgb(108, 117, 126) !important;
+    }
+    </style>
+
+    <div class="container-fluid pr-1 pl-1" >
+   
+        <div class="row">
+            <div class="col p-1">
+                <nav>
+                    <div class="nav nav-pills mb-1 ml-auto" id="nav-tab" role="tablist"></div>
+                </nav>
+                <div class="tab-content shadow border border-secondary rounded p-2 bg-white" id="nav-tabContent">
+                    <!-- Form_SystemModificationRequest-Tab -->
+                    <div class="tab-pane fade show active" id="nav-Form_SystemModificationRequest" role="tabpanel" aria-labelledby="Form_SystemModificationRequest-tab">
+                        <!-- the main container for all Form_SystemModificationRequest controls -->
+                        <div class="container-fluid">
+                  
+                            <div class="row">
+                                <div class="col p-1 mb-4" data-container-for="Form_SystemModificationRequest_title"></div>
+                            </div>
+                            <div class="row pt-2">
+                                <div class="col-4 pr-3 pl-3" data-container-for="FromDate"></div>
+                                <div class="col pr-3 pl-3"></div>
+                            </div>
+
+                            <div class="row pt-2">
+                                <div class="col-4 pr-3 pl-3" data-container-for="ReqType"></div>
+                                <div class="col pr-2 pl-3"></div>
+                                <div class="col-6 spr-3 pl-3" data-container-for="ReqDept"></div>
+                            </div>
+
+                            <div class="row pt-2">
+                                <div class="col-4 pr-3 pl-3" data-container-for="SMRNo"></div>
+                                <div class="col pr-2 pl-3"></div>
+                                <div class="col-6 pr-3 pl-3" data-container-for="Orig"></div>
+                            </div>
+
+                            <div class="row pt-2">
+                                <div class="col-4 pr-3 pl-3" data-container-for="priority"></div>
+                                <div class="col pr-2 pl-3"></div>
+                                <div class="col-6 pr-3 pl-3" data-container-for="DeptCode"></div>
+                            </div>
+
+                            <div class="row pt-2">
+                                <div class="col-6 pr-3 pl-3" data-container-for="ProjArea"></div>
+                               
+                                <div class="col-6 pr-3 pl-3" data-container-for="SysDept"></div>
+                            </div>
+
+                            <div class="row pt-2">
+                                <div class="col-6 pr-3 pl-3" data-container-for="SSRtype"></div>
+                             
+                                <div class="col-6 pr-3 pl-3" data-container-for="DevEmp"></div>
+                            </div>
+                                                    
+                            <div class="row pt-2">
+                                <div class="col pr-3 pl-3"></div>
+                            </div>
+
+                            <div class="row pt-4">
+                                <div class="col pr-3 pl-3" data-container-for="ReqTitle"></div>
+                            </div>
+
+                            <div class="row pt-2">
+                                <div class="col pr-3 pl-3"></div>
+                            </div>
+
+                            <div class="row pt-2">
+                                <div class="col pr-3 pl-3" data-container-for="Desc"></div>
+                            </div>
+                            
+                            <div class="row pt-2">
+                                <div class="col pr-3 pl-3" data-container-for="Desc"></div>
+                            </div>
+                            
+                            <div class="row pt-3">
+                                <div class="col-5 pr-3 pl-3" data-container-for="SysMngName"></div>
+                                <div class="col pr-3 pl-3"></div>
+                                <div class="col-5 pr-3 pl-3" data-container-for="ReqMngName"></div>
+                            </div>
+
+                            <div class="row pt-5">
+                                <div class="col pr-3 pl-3" data-container-for="Desc"></div>
+                            </div>
+
+                            <div class="row pt-3">
+                                <div class="col-5 pr-3 pl-3"></div>
+                                <div class="col pr-3 pl-3" data-container-for="line1"></div>
+                                <div class="col pr-3 pl-3"></div>
+                            </div>
+
+
+                            <div class="row pt-1">
+                                <div class="col pr-3 pl-3" data-container-for="Reply"></div>
+                            </div>
+
+                            <div class="row pt-3">
+                                <div class="col-5 pr-3 pl-3" data-container-for="OrigName"></div>
+                                <div class="col pr-3 pl-3"></div>
+                                <div class="col-5 pr-3 pl-3" data-container-for="SEName"></div>
+                            </div>
+
+
+                       </div>
+                       
+                    </div>
+    
+                    <div class="text-right">
+                        <hr>
+                        <label id="workflowIDLabel" class="text-danger">مسلسل الاجراء</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    

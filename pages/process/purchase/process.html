@@ -10,7 +10,7 @@
     
     
     
-    process.controller = {
+    processHandler.controller = {
         errMsg : "",
         groups : {  
              //groupFollowUpTLs : ["FollowUp_TLs"],    // groupFollowUpEmps : ["FollowUp_Emps"],
@@ -61,9 +61,9 @@
             this.forms.Form_Purchase.addComponent(new DateComponent('FromDate',' التاريخ','From','','') );
             this.forms.Form_Purchase.addComponent(new TxtComponent('ReqDept','الجهة الطالبة','Total Amount') );
             this.forms.Form_Purchase.addComponent(new TxtComponent('EmpName','اسم الموظف','Name',5) );
-            this.forms.Form_Purchase.addComponent(new TxtComponent('Subject','الموضوع','Subject') );
+            this.forms.Form_Purchase.addComponent(new TxtComponent('Subject','الموضوع','Subject',100,2) );
             this.forms.Form_Purchase.addComponent(new NotesComponent('Description','التفصيل','Description',9,300) );
-            this.forms.Form_Purchase.addComponent(new NotesComponent('Notes','ملاحظات الشؤون الإدارية','Notes',4,300) );
+            this.forms.Form_Purchase.addComponent(new NotesComponent('Notes','ملاحظات إدارة الخدمات العامة / إدارة المشتريات والمناقصات','Notes',4,300) );
       
       
             this.forms.Form_Purchase.addSignature(new Signature('AdminMngName','AdminMngSig','توقيع مدير إدارة الشئون الإدارية','Admin Manager Approval')  );
@@ -73,9 +73,9 @@
         main(){
             try{
                 this.defineComponents();
-                process.initialize();
-                let stepName = process.workItem.stepName;
-                process.recieversList.loadManager();
+                processHandler.initialize();
+                let stepName = processHandler.workItem.stepName;
+                processHandler.recieversList.loadManager();
                 //process.recieversList.loadDeptManager();
                 //process.branchesList.load()); //to load all branches
                 //process.branchesList.load([1,2,5]); // to load specific branches using branch id
@@ -92,8 +92,8 @@
                 this.forms.Form_Purchase.updateComponentsFromEntity();
     
             app.renderLabels();
-            process.openProcessModal();
-            process.setWorkFlowIDLabel();
+            processHandler.openProcessModal();
+            processHandler.setWorkFlowIDLabel();
             }
             catch(error){ throw error;}
         },
@@ -103,7 +103,7 @@
          },    
     }
     
-    $(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alertError(error.message); }} );
+    $(document).ready( ()=>{ try{ processHandler.controller.main() }catch(error){ app.alertError(error.message); }} );
     </script>
     
     <style>
@@ -128,39 +128,47 @@
                                 <div class="row">
                                     <div class="col p-1 mb-4" data-container-for="Form_Purchase_title"></div>
                                 </div>
-                                <div class="row pt-2">
-                                    <div class="col pr-3 pl-3" data-container-for="FromDate"></div>
-                                    <div class="col pr-3 pl-3"></div>
-                                    <div class="col pr-3 pl-3"></div>
-                                </div>
 
                             <div class="row pt-2">
-                                <div class="col pr-3 pl-3" data-container-for="ReqDept"></div>
+                                <div class="col-6 pr-3 pl-3" data-container-for="ReqDept"></div>
                                 <div class="col pr-3 pl-3"></div>
+                                <div class="col-4 pr-3 pl-3" data-container-for="FromDate"></div>
                             </div>
 
                             <div class="row pt-2">
                                 <div class="col pr-3 pl-3" data-container-for="EmpName"></div>
                                 <div class="col pr-3 pl-3"></div>
                             </div>
+                            
 
                             <div class="row pt-2">
                                 <div class="col pr-3" data-container-for="Subject"></div>
+                            </div>
+                            
+                            <div class="row pt-4">
+                                <div class="col pr-3 pl-3"></div>
                             </div>
 
                             <div class="row pt-2">
                                 <div class="col pr-3 pl-3" data-container-for="Description"></div>
                             </div>
-
+                            
+                            <div class="row pt-4">
+                                <div class="col pr-3 pl-3"></div>
+                            </div>
 
                             <div class="row pt-3 p-1">
                                 <div class="col pr-3 pl-3" data-container-for="Notes"></div>
                             </div>
-                          
-                            <div class="row pt-3">
-                                <div class="col pr-3 pl-3" data-container-for="ReqMngName"></div>
+                                           
+                            <div class="row pt-4">
                                 <div class="col pr-3 pl-3"></div>
-                                <div class="col pr-3 pl-3" data-container-for="AdminMngName"></div>
+                            </div>
+
+                            <div class="row pt-3">
+                                <div class="col-5 pr-3 pl-3" data-container-for="ReqMngName"></div>
+                                <div class="col pr-3 pl-3"></div>
+                                <div class="col-5 pr-3 pl-3" data-container-for="AdminMngName"></div>
                             </div> 
 
                        </div>

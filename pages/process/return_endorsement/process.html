@@ -11,7 +11,7 @@
 
 
 
-process.controller = {
+processHandler.controller = {
     errMsg : "",
     groups : {  
          //groupFollowUpTLs : ["FollowUp_TLs"],    // groupFollowUpEmps : ["FollowUp_Emps"],
@@ -105,9 +105,9 @@ process.controller = {
     main(){
         try{
             this.defineComponents();
-            process.initialize();
-            let stepName = process.workItem.stepName
-            process.recieversList.loadManager();
+            processHandler.initialize();
+            let stepName = processHandler.workItem.stepName
+            processHandler.recieversList.loadManager();
 
             
 
@@ -130,8 +130,8 @@ process.controller = {
 
 
             app.renderLabels();
-            process.openProcessModal();
-            process.setWorkFlowIDLabel();
+            processHandler.openProcessModal();
+            processHandler.setWorkFlowIDLabel();
         }
         catch(error){ throw error;}
     },
@@ -150,7 +150,7 @@ process.controller = {
 
 }
 
-$(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alertError(error.message); }} );
+$(document).ready( ()=>{ try{ processHandler.controller.main() }catch(error){ app.alertError(error.message); }} );
 </script>
 
 <style>
@@ -174,62 +174,74 @@ $(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alert
                             <div class="col p-1 mb-4" data-container-for="Form_ReturnEndorsement_title"></div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-4 pr-3 pl-3 pt-2" data-container-for="RequesterDate"></div>
-                            <div class="col-3 pr-3 pl-3 pt-2"></div>
-                            <div class="col-5 pr-3 pl-3 pt-2" data-container-for="StartDate"></div>
+                        <div class="row p-1">
+                            <div class="col-4 pr-3 pl-3" data-container-for="RequesterDate"></div>
+                            <div class="col-3 pr-3 pl-3"></div>
+                            <div class="col-5 pr-3 pl-3" data-container-for="StartDate"></div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-6 pr-3 pl-3 pt-2" data-container-for="ClientName"></div>
-                            <div class="col-1 pr-3 pl-3 pt-2"></div>
-                            <div class="col-5 pr-3 pl-3 pt-2" data-container-for="EndDate"></div>
+                        <div class="row p-1">
+                            <div class="col-6 pr-3 pl-3" data-container-for="ClientName"></div>
+                            <div class="col-1 pr-3 pl-3"></div>
+                            <div class="col-5 pr-3 pl-3" data-container-for="EndDate"></div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-6 pr-3 pl-3 pt-2" data-container-for="Dept"></div>
-                            <div class="col-1 pr-3 pl-3 pt-2"></div>
-                            <div class="col-5 pr-3 pl-3 pt-2" data-container-for="ReturnDate"></div>
+                        <div class="row p-1">
+                            <div class="col-6 pr-3 pl-3" data-container-for="Dept"></div>
+                            <div class="col-1 pr-3 pl-3"></div>
+                            <div class="col-5 pr-3 pl-3" data-container-for="ReturnDate"></div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-6 pr-3 pl-3 pt-2" data-container-for="EmpNumber"></div>
-                            <div class="col-1 pr-3 pl-3 pt-2"></div>
-                            <div class="col-5 pr-3 pl-3 pt-2" data-container-for="Status"></div>
+                        <div class="row p-1">
+                            <div class="col-6 pr-3 pl-3" data-container-for="EmpNumber"></div>
+                            <div class="col-1 pr-3 pl-3"></div>
+                            <div class="col-5 pr-3 pl-3" data-container-for="Status"></div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-6 pr-3 pl-3 pt-2" data-container-for="EmpSignature"></div>
-                            <div class="col-1 pr-3 pl-3 pt-2"></div>
-                            <div class="col-5 pr-3 pl-3 pt-2" data-container-for="LeaveType"></div>
+                        <div class="row p-1">
+                            <div class="col-6 pr-3 pl-3" data-container-for="EmpSignature"></div>
+                            <div class="col-1 pr-3 pl-3"></div>
+                            <div class="col-5 pr-3 pl-3" data-container-for="LeaveType"></div>
                         </div>
 
-                        <div class="row">
-                            <div class="col pr-3 pl-3 pt-3 pb-2" data-container-for="Reasons"></div>
+                        <div class="row pt-2">
                         </div>
 
-                        <div class="row">
-                            <div class="col pr-3 pl-3 pt-2 pb-2" data-container-for="Notes"></div>
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" data-container-for="Reasons"></div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-5 pr-2 pl-1 pt-4 pb-5" data-container-for="Responsible"></div>
-                            <div class="col-2 pr-3 pl-3 pt-4 pb-5"></div>
-                            <div class="col-5 pr-2 pl-1 pt-4 pb-5" data-container-for="Approval"></div>
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" data-container-for="Notes"></div>
                         </div>
 
-                        <div class="row">
-                            <div class="col pr-3 pl-3 pt-2" data-container-for="HRDept"></div>
+                        <div class="row pt-3">
                         </div>
 
-                        <div class="row">
-                            <div class="col pr-3 pl-3 pt-3 pb-2" data-container-for="AdminNotes"></div>
+                        <div class="row p-1">
+                            <div class="col-5 pr-2 pl-1" data-container-for="Responsible"></div>
+                            <div class="col-2 pr-3 pl-3"></div>
+                            <div class="col-5 pr-2 pl-1" data-container-for="Approval"></div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-5 pr-2 pl-1 pt-4" data-container-for="RespEmp"></div>
-                            <div class="col-2 pr-3 pl-3 pt-2"></div>
-                            <div class="col-5 pr-2 pl-1 pt-4" data-container-for="Manager"></div>
+                        <div class="row pt-5">
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" data-container-for="HRDept"></div>
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" data-container-for="AdminNotes"></div>
+                        </div>
+
+                        <div class="row pt-4">
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col-5 pr-2 pl-1" data-container-for="RespEmp"></div>
+                            <div class="col-2 pr-3 pl-3"></div>
+                            <div class="col-5 pr-2 pl-1" data-container-for="Manager"></div>
                         </div>
 
                        
@@ -245,48 +257,57 @@ $(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alert
                             <div class="col p-1 mb-4" data-container-for="Form_WorkDeduction_title"></div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-4 pr-3 pl-3 pt-2" data-container-for="RequesterDate"></div>
-                            <div class="col-2 pr-3 pl-3 pt-2"></div>
-                            <div class="col-6 pr-3 pl-3 pt-2"></div>
+                        <div class="row p-1">
+                            <div class="col-4 pr-3 pl-3" data-container-for="RequesterDate"></div>
+                            <div class="col-2 pr-3 pl-3"></div>
+                            <div class="col-6 pr-3 pl-3"></div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-6 pr-3 pl-3 pt-2" data-container-for="ClientName"></div>
-                            <div class="col-2 pr-3 pl-3 pt-2"></div>
-                            <div class="col-4 pr-3 pl-3 pt-2"></div>
+                        <div class="row p-1">
+                            <div class="col-6 pr-3 pl-3" data-container-for="ClientName"></div>
+                            <div class="col-2 pr-3 pl-3"></div>
+                            <div class="col-4 pr-3 pl-3"></div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-6 pr-3 pl-3 pt-2" data-container-for="Dept"></div>
-                            <div class="col-2 pr-3 pl-3 pt-2"></div>
-                            <div class="col-4 pr-3 pl-3 pt-2"></div>
+                        <div class="row p-1">
+                            <div class="col-6 pr-3 pl-3" data-container-for="Dept"></div>
+                            <div class="col-2 pr-3 pl-3"></div>
+                            <div class="col-4 pr-3 pl-3"></div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-6 pr-3 pl-3 pt-2 pb-4" data-container-for="EmpNumber"></div>
-                            <div class="col-2 pr-3 pl-3 pt-2 pb-4"></div>
-                            <div class="col-4 pr-3 pl-3 pt-2 pb-4"></div>
+                        <div class="row p-1">
+                            <div class="col-6 pr-3 pl-3" data-container-for="EmpNumber"></div>
+                            <div class="col-2 pr-3 pl-3"></div>
+                            <div class="col-4 pr-3 pl-3"></div>
                         </div>
 
-                        <div class="row">
+                        <div class="row pt-4">
+                        </div>
+
+                        <div class="row p-1">
                             <div class="col pr-3 pl-3 pt-2" data-container-for="Notes"></div>
                         </div>
 
-                        <div class="row">
+                        <div class="row p-1">
                             <div class="col pr-3 pl-3 pt-2" data-container-for="Salary"></div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-2 pr-3 pl-3 pt-4"></div>
-                            <div class="col-8 pr-3 pl-3 pt-4" data-container-for="DateTable"></div>
-                            <div class="col-2 pr-3 pl-3 pt-4"></div>
+                        <div class="row pt-4">
                         </div>
 
-                        <div class="row">
-                            <div class="col-5 pr-2 pl-1 pt-4" data-container-for="ResponsibleEmp"></div>
-                            <div class="col-2 pr-3 pl-3 pt-2"></div>
-                            <div class="col-5 pr-2 pl-1 pt-4" data-container-for="HRManager"></div>
+                        <div class="row p-1">
+                            <div class="col-2 pr-3 pl-3"></div>
+                            <div class="col-8 pr-3 pl-3" data-container-for="DateTable"></div>
+                            <div class="col-2 pr-3 pl-3"></div>
+                        </div>
+
+                        <div class="row pt-5">
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col-5 pr-2 pl-1" data-container-for="ResponsibleEmp"></div>
+                            <div class="col-2 pr-3 pl-3"></div>
+                            <div class="col-5 pr-2 pl-1" data-container-for="HRManager"></div>
                         </div>
 
                     </div>

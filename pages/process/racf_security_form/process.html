@@ -11,7 +11,7 @@
 
 
 
-process.controller = {
+processHandler.controller = {
     errMsg : "",
     groups : {  
          //groupFollowUpTLs : ["FollowUp_TLs"],    // groupFollowUpEmps : ["FollowUp_Emps"],
@@ -97,7 +97,7 @@ process.controller = {
         this.forms.Form_RACFSecutiyForm.addSignature(new Signature('TeamLeader','TeamLdName','TeamLeaderSig','Team Leader','Team Leader') );
         this.forms.Form_RACFSecutiyForm.addSignature(new Signature('GroupLeader','GroupLeaderName','GroupLeaderSig','Group Leader','Group Leader') );
 
-        this.forms.Form_RACFSecutiyForm.addComponent(new ParagraphComponent('RACFAuthorization','تفويض','RACFAuthorization','text-danger font-weight-bold') );
+        this.forms.Form_RACFSecutiyForm.addComponent(new ParagraphComponent('RACFAuthorization','تفويض','RACFAuthorization','text-danger text-center font-weight-bold') );
         
         this.forms.Form_RACFSecutiyForm.addComponent(new NotesComponent('Note','Notes','Notes',4,300) );
 
@@ -108,9 +108,9 @@ process.controller = {
     main(){
         try{
             this.defineComponents();
-            process.initialize();
-            let stepName = process.workItem.stepName;
-            process.recieversList.loadManager();
+            processHandler.initialize();
+            let stepName = processHandler.workItem.stepName;
+            processHandler.recieversList.loadManager();
 
             
 
@@ -158,8 +158,8 @@ process.controller = {
 
 
             app.renderLabels();
-            process.openProcessModal();
-            process.setWorkFlowIDLabel();
+            processHandler.openProcessModal();
+            processHandler.setWorkFlowIDLabel();
         }
         catch(error){ throw error;}
     },
@@ -178,7 +178,7 @@ process.controller = {
 
 }
 
-$(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alertError(error.message); }} );
+$(document).ready( ()=>{ try{ processHandler.controller.main() }catch(error){ app.alertError(error.message); }} );
 </script>
 
 <style>
@@ -203,52 +203,66 @@ $(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alert
                         </div>
 
                         <div class="row p-1">
-                            <div class="col-4 pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="SMRNo"></div>
-                            <div class="col-5 pr-3 pl-3 pt-2"></div>
-                            <div class="col-3 pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RequesterDate"></div>
+                            <div class="col-4 pr-3 pl-3" style="direction:ltr;" data-container-for="SMRNo"></div>
+                            <div class="col-5 pr-3 pl-3"></div>
+                            <div class="col-3 pr-3 pl-3" style="direction:ltr;" data-container-for="RequesterDate"></div>
                         </div>
 
                         <div class="row p-1">
-                            <div class="col-4 pr-3 pl-3 pt-2 pb-4" style="direction:ltr;" data-container-for="Forms"></div>
-                            <div class="col-4 pr-3 pl-3 pt-2 pb-4"></div>
-                            <div class="col-4 pr-3 pl-3 pt-2 pb-4" style="text-align: left; font-weight:bolder;" data-container-for="NEWprog"></div>
+                            <div class="col-4 pr-3 pl-3" style="direction:ltr;" data-container-for="Forms"></div>
+                            <div class="col-4 pr-3 pl-3"></div>
+                            <div class="col-4 pr-3 pl-3" style="text-align: left; font-weight:bolder;" data-container-for="NEWprog"></div>
                         </div>
 
-                        <div class="row">
-                            <div class="col pr-3 pl-3 pt-2" data-container-for="Program"></div>
-                        </div>
-                        
-                        <div class="row">
-                            <div class="col pr-3 pl-3 pt-1 pb-4" data-container-for="ProgramTable"></div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col pr-3 pl-3 pt-1" data-container-for="Function"></div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col pr-3 pl-3 pt-2 pb-4" data-container-for="FunctionTable"></div>
-                        </div>
-
-                        
-                        <div class="row">
-                            <div class="col pr-2 pl-1 pt-2 pb-5" data-container-for="GroupLeader"></div>
-                            <div class="col pr-2 pl-1 pt-2 pb-5" data-container-for="TeamLeader"></div>
-                            <div class="col pr-2 pl-1 pt-2 pb-5" data-container-for="SE"></div>
+                        <div class="row pt-3">
                         </div>
 
                         <div class="row p-1">
-                            <div class="col pr-3 pl-3 pt-2" data-container-for="RACFAuthorization"></div>
+                            <div class="col pr-3 pl-3" data-container-for="Program"></div>
+                        </div>
+                        
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" data-container-for="ProgramTable"></div>
                         </div>
 
-                        <div class="row">
-                            <div class="col pr-3 pl-3 pt-2 pb-3" style="direction: ltr;" data-container-for="Note"></div>
+                        <div class="row pt-4">
                         </div>
 
-                        <div class="row">
-                            <div class="col pr-2 pl-1 pt-2"></div>
-                            <div class="col pr-2 pl-1 pt-2"></div>
-                            <div class="col pr-2 pl-1 pt-2" data-container-for="ImplementedBy"></div>
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" data-container-for="Function"></div>
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" data-container-for="FunctionTable"></div>
+                        </div>
+
+                        <div class="row pt-3">
+                        </div>
+                        
+                        <div class="row p-1">
+                            <div class="col pr-2 pl-1" data-container-for="GroupLeader"></div>
+                            <div class="col pr-2 pl-1" data-container-for="TeamLeader"></div>
+                            <div class="col pr-2 pl-1" data-container-for="SE"></div>
+                        </div>
+
+                        <div class="row pt-5">
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" data-container-for="RACFAuthorization"></div>
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" style="direction: ltr;" data-container-for="Note"></div>
+                        </div>
+
+                        <div class="row pt-3">
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col pr-2 pl-1"></div>
+                            <div class="col pr-2 pl-1"></div>
+                            <div class="col pr-2 pl-1" data-container-for="ImplementedBy"></div>
                         </div>
 
                     </div>

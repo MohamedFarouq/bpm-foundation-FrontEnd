@@ -10,7 +10,7 @@
 
 
 
-process.controller = {
+ processHandler.controller = {
     errMsg : "",
     groups : {  
          //groupFollowUpTLs : ["FollowUp_TLs"],    // groupFollowUpEmps : ["FollowUp_Emps"],
@@ -100,14 +100,10 @@ process.controller = {
     main(){
         try{
             this.defineComponents();
-            process.initialize();
-            let stepName = process.workItem.stepName;
-            process.recieversList.loadManager();
-            //process.recieversList.loadDeptManager();
-            //process.branchesList.load()); //to load all branches
-            //process.branchesList.load([1,2,5]); // to load specific branches using branch id
-            //process.actionsList.load([process.actionsList.status, process.actionsList.approved]);
-
+            processHandler.initialize();
+            let stepName = processHandler.workItem.stepName;
+            processHandler.recieversList.loadManager();
+            
                  
 
             if(stepName == this.steps.PerLeave_Launch){   
@@ -160,8 +156,8 @@ process.controller = {
 
 
             app.renderLabels();
-            process.openProcessModal();
-            process.setWorkFlowIDLabel();
+            processHandler.openProcessModal();
+            processHandler.setWorkFlowIDLabel();
         }
         catch(error){ throw error;}
     },
@@ -210,7 +206,7 @@ process.controller = {
 
 }
 
-$(document).ready( ()=>{ try{ process.controller.main(); }catch(error){ app.alertError(error.message); }} );
+$(document).ready( ()=>{ try{ processHandler.controller.main(); }catch(error){ app.alertError(error.message); }} );
 </script>
 
 
@@ -286,28 +282,28 @@ $(document).ready( ()=>{ try{ process.controller.main(); }catch(error){ app.aler
                         <div class="row p-1">
                             <div class="col-8 pr-3 pl-3" data-container-for="WorkDedTable"></div>
                             <div class="col-4 p-3">
-                                <button type="button" class="btn btn-primary" onclick="alert(process.controller.forms.Form_WorkDeduction.components.WorkDedTable.getValue());">get Table Value</button>
+                                <button type="button" class="btn btn-primary" onclick="alert(processHandler.controller.forms.Form_WorkDeduction.components.WorkDedTable.getValue());">get Table Value</button>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col p-3">
                                 <!-- <input placeholder="Your Date"  class="form-control" type="text" onfocus="(this.type='date')" onblur="(this.type='text')" id="date" min="2018-01-01" max="2018-12-31"> -->
-                                <button type="button" class="btn btn-primary" onclick="process.controller.forms.Form_PeriodicalLeave.disable()">disable نموذج اجازة دورية</button>
+                                <button type="button" class="btn btn-primary" onclick="processHandler.controller.forms.Form_PeriodicalLeave.disable()">disable نموذج اجازة دورية</button>
                             </div>
                             <div class="col p-3">
-                                <button type="button" class="btn btn-primary" onclick="process.controller.forms.Form_PeriodicalLeave.enable()">enable نموذج اجازة دورية</button>
+                                <button type="button" class="btn btn-primary" onclick="processHandler.controller.forms.Form_PeriodicalLeave.enable()">enable نموذج اجازة دورية</button>
                             </div>
                             <div class="col p-3">
-                                <button type="button" class="btn btn-secondary" onclick="process.controller.forms.Form_WorkDeduction.show();">show نموذج انقطاع عن العمل</button>
+                                <button type="button" class="btn btn-secondary" onclick="processHandler.controller.forms.Form_WorkDeduction.show();">show نموذج انقطاع عن العمل</button>
                             </div>
                             <div class="col p-3">
-                                <button type="button" class="btn btn-secondary" onclick="process.controller.forms.Form_WorkDeduction.hide();">hide نموذج انقطاع عن العمل</button>
+                                <button type="button" class="btn btn-secondary" onclick="processHandler.controller.forms.Form_WorkDeduction.hide();">hide نموذج انقطاع عن العمل</button>
                             </div>
                             <div class="col p-3">
-                                <button type="button" class="btn btn-secondary" onclick="process.controller.forms.Form_PeriodicalLeave.select();">goto نموذج اجازة دورية</button>
+                                <button type="button" class="btn btn-secondary" onclick="processHandler.controller.forms.Form_PeriodicalLeave.select();">goto نموذج اجازة دورية</button>
                             </div>
                             <div class="col p-3">
-                                <button type="button" class="btn btn-secondary" onclick="alert(process.controller.forms.Form_PeriodicalLeave.components.RequesterName.getValue()); alert(process.controller.forms.Form_WorkDeduction.components.RequesterName.getValue()) ">goto نموذج اجازة دورية</button>
+                                <button type="button" class="btn btn-secondary" onclick="alert(processHandler.controller.forms.Form_PeriodicalLeave.components.RequesterName.getValue()); alert(processHandler.controller.forms.Form_WorkDeduction.components.RequesterName.getValue()) ">goto نموذج اجازة دورية</button>
                             </div>
                         </div>
                         <div class="row">

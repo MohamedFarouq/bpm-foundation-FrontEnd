@@ -10,7 +10,7 @@
 
 
 
-process.controller = {
+processHandler.controller = {
     errMsg : "",
     groups : {  
          //groupFollowUpTLs : ["FollowUp_TLs"],    // groupFollowUpEmps : ["FollowUp_Emps"],
@@ -72,9 +72,9 @@ process.controller = {
     main(){
         try{
             this.defineComponents();
-            process.initialize();
-            let stepName = process.workItem.stepName;
-            process.recieversList.loadManager();
+            processHandler.initialize();
+            let stepName = processHandler.workItem.stepName;
+            processHandler.recieversList.loadManager();
 
 
             if(stepName == this.steps.PerLeave_Launch){   
@@ -125,8 +125,8 @@ process.controller = {
 
 
             app.renderLabels();
-            process.openProcessModal();
-            process.setWorkFlowIDLabel();
+            processHandler.openProcessModal();
+            processHandler.setWorkFlowIDLabel();
         }
         catch(error){ throw error;}
     },
@@ -149,7 +149,7 @@ process.controller = {
 
 }
 
-$(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alertError(error.message); }} );
+$(document).ready( ()=>{ try{ processHandler.controller.main() }catch(error){ app.alertError(error.message); }} );
 </script>
 
 <style>
@@ -173,67 +173,70 @@ $(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alert
                             <div class="col p-1 mb-4" data-container-for="Form_DocumentRetrievalSuggestions_title"></div>
                         </div>
 
-                        <div class="row">
+                        <div class="row p-1">
                             <div class="col-4 pr-3 pl-3" data-container-for="RequesterDate"></div>
                             <div class="col-8 pr-3 pl-3"></div>
                         </div>
 
-                        <div class="row">
-                            <div class="col pr-3 pl-3 pt-1" data-container-for="FileNo"></div>
-                            <div class="col pr-3 pl-3 pt-1"></div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col pr-3 pl-3 pt-1" data-container-for="SSNNo"></div>
-                            <div class="col pr-3 pl-3 pt-1"></div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col pr-3 pl-3 pt-1" data-container-for="RegNo"></div>
-                            <div class="col pr-3 pl-3 pt-1"></div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col pr-3 pl-3 pt-1" data-container-for="Department"></div>
-                            <div class="col pr-3 pl-3 pt-1"></div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col pr-3 pl-3 pt-1" data-container-for="ClientName"></div>
-                            <div class="col pr-3 pl-3 pt-1"></div>
-                        </div>
-                        
-                        <div class="row">
-                            <div class="col pr-3 pl-3 pt-1" data-container-for="EmployerName"></div>
-                            <div class="col pr-3 pl-3 pt-1"></div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col pr-3 pl-3 pt-2" data-container-for="Explain"></div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col pr-3 pl-3 pt-2" data-container-for="Suggestions"></div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col pr-2 pl-1 pt-2 pb-4" data-container-for="DeptEmp"></div>
-                            <div class="col pr-2 pl-1 pt-2 pb-4"></div>
-                            <div class="col pr-2 pl-1 pt-2 pb-4" data-container-for="DeptMng"></div>
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" data-container-for="FileNo"></div>
+                            <div class="col pr-3 pl-3"></div>
                         </div>
 
                         <div class="row p-1">
-                            <div class="col pr-3 pl-3 pt-2" data-container-for="IMGDept"></div>
+                            <div class="col pr-3 pl-3" data-container-for="SSNNo"></div>
+                            <div class="col pr-3 pl-3"></div>
                         </div>
 
-                        <div class="row">
-                            <div class="col pr-3 pl-3 pt-3" data-container-for="Notes"></div>
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" data-container-for="RegNo"></div>
+                            <div class="col pr-3 pl-3"></div>
                         </div>
 
-                        <div class="row">
-                            <div class="col pr-2 pl-1 pt-2" data-container-for="ImpEmp"></div>
-                            <div class="col pr-2 pl-1 pt-2"></div>
-                            <div class="col pr-2 pl-1 pt-2" data-container-for="ImpDeptMng"></div>
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" data-container-for="Department"></div>
+                            <div class="col pr-3 pl-3"></div>
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" data-container-for="ClientName"></div>
+                            <div class="col pr-3 pl-3"></div>
+                        </div>
+                        
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" data-container-for="EmployerName"></div>
+                            <div class="col pr-3 pl-3"></div>
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" data-container-for="Explain"></div>
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" data-container-for="Suggestions"></div>
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col-5 pr-2 pl-1" data-container-for="DeptEmp"></div>
+                            <div class="col-2 pr-2 pl-1"></div>
+                            <div class="col-5 pr-2 pl-1" data-container-for="DeptMng"></div>
+                        </div>
+
+                        <div class="row pt-4">
+                        </div>   
+
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" data-container-for="IMGDept"></div>
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" data-container-for="Notes"></div>
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col-5 pr-2 pl-1" data-container-for="ImpEmp"></div>
+                            <div class="col-2 pr-2 pl-1"></div>
+                            <div class="col-5 pr-2 pl-1 " data-container-for="ImpDeptMng"></div>
                         </div>
 
                     </div>

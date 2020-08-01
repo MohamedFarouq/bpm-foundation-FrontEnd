@@ -11,7 +11,7 @@
 
 
 
-process.controller = {
+processHandler.controller = {
     errMsg : "",
     groups : {  
          //groupFollowUpTLs : ["FollowUp_TLs"],    // groupFollowUpEmps : ["FollowUp_Emps"],
@@ -85,9 +85,9 @@ process.controller = {
     main(){
         try{
             this.defineComponents();
-            process.initialize();
-            let stepName = process.workItem.stepName;
-            process.recieversList.loadManager();
+            processHandler.initialize();
+            let stepName = processHandler.workItem.stepName;
+            processHandler.recieversList.loadManager();
 
             
 
@@ -135,8 +135,8 @@ process.controller = {
 
 
             app.renderLabels();
-            process.openProcessModal();
-            process.setWorkFlowIDLabel();
+            processHandler.openProcessModal();
+            processHandler.setWorkFlowIDLabel();
         }
         catch(error){ throw error;}
     },
@@ -155,7 +155,7 @@ process.controller = {
 
 }
 
-$(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alertError(error.message); }} );
+$(document).ready( ()=>{ try{ processHandler.controller.main() }catch(error){ app.alertError(error.message); }} );
 </script>
 
 <style>
@@ -181,83 +181,98 @@ $(document).ready( ()=>{ try{ process.controller.main() }catch(error){ app.alert
 
 
                         <div class="row p-1">
-                            <div class="col pr-3 pl-3 pt-2" data-container-for="SystemSection"></div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="MaximoNo"></div>
-                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="Priority"></div>
-                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="RequesterDate"></div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-8 pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="SMRNO"></div>
-                            <div class="col-4 pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="MemoDate"></div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-8 pr-3 pl-3 pt-2 pb-3" style="direction:ltr;" data-container-for="To"></div>
-                            <div class="col-4 pr-3 pl-3 pt-2 pb-3" style="direction:ltr;" data-container-for="RequestType"></div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="ProgName" ></div>
-                        </div>
-                        <div class="row">
-                            <div class="col pr-3 pl-3 pt-1" style="direction:ltr;" data-container-for="SrcDes" ></div>
-                        </div>
-                        <div class="row">
-                            <div class="col pr-3 pl-3 pt-1 pb-1" style="direction:ltr;" data-container-for="InstallLocation" ></div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="CrystalRepName" ></div>
-                        </div>
-                        <div class="row">
-                            <div class="col pr-3 pl-3 pt-1" style="direction:ltr;" data-container-for="SrcDestination" ></div>
-                        </div>
-                        <div class="row">
-                            <div class="col pr-3 pl-3 pt-1 pb-1" style="direction:ltr;" data-container-for="InstallLoc" ></div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="TxtFilesName" ></div>
-                        </div>
-                        <div class="row">
-                            <div class="col pr-3 pl-3 pt-1" style="direction:ltr;" data-container-for="SourceDes" ></div>
-                        </div>
-                        <div class="row">
-                            <div class="col pr-3 pl-3 pt-1 pb-1" style="direction:ltr;" data-container-for="Installocation" ></div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col pr-3 pl-3 pt-2 pb-2" style="direction:ltr;" data-container-for="InstallationRemarks"></div>
-                        </div>
-                        
-                        <div class="row">
-                            <div class="col pr-2 pl-1 pt-2 pb-3" data-container-for="Sup"></div>
-                            <div class="col pr-2 pl-1 pt-2 pb-3" data-container-for="TeamLeader"></div>
-                            <div class="col pr-2 pl-1 pt-2 pb-3" data-container-for="SysEng"></div>
+                            <div class="col pr-3 pl-3" data-container-for="SystemSection"></div>
                         </div>
 
                         <div class="row p-1">
-                            <div class="col pr-3 pl-3 pt-2" data-container-for="OpertationsSection"></div>
+                            <div class="col pr-3 pl-3" style="direction:ltr;" data-container-for="MaximoNo"></div>
+                            <div class="col pr-3 pl-3" style="direction:ltr;" data-container-for="Priority"></div>
+                            <div class="col pr-3 pl-3" style="direction:ltr;" data-container-for="RequesterDate"></div>
                         </div>
 
-                        <div class="row">
-                            <div class="col pr-3 pl-3 pt-2 pb-2" style="direction:ltr;" data-container-for="Notes"></div>
+                        <div class="row p-1">
+                            <div class="col-8 pr-3 pl-3" style="direction:ltr;" data-container-for="SMRNO"></div>
+                            <div class="col-4 pr-3 pl-3" style="direction:ltr;" data-container-for="MemoDate"></div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-5 pr-2 pl-1 pt-2 pb-2" data-container-for="Approve"></div>
-                            <div class="col-2 pr-2 pl-1 pt-2 pb-2"></div>
-                            <div class="col-5 pr-2 pl-1 pt-2 pb-2" data-container-for="SystemEng"></div>
+                        <div class="row p-1">
+                            <div class="col-8 pr-3 pl-3" style="direction:ltr;" data-container-for="To"></div>
+                            <div class="col-4 pr-3 pl-3" style="direction:ltr;" data-container-for="RequestType"></div>
                         </div>
 
-                        <div class="row">
-                            <div class="col pr-3 pl-3 pt-2"></div>
-                            <div class="col pr-3 pl-3 pt-2"></div>
-                            <div class="col pr-3 pl-3 pt-2" style="direction:ltr;" data-container-for="CompletionDate"></div>
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" style="direction:ltr;" data-container-for="ProgName" ></div>
+                        </div>
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" style="direction:ltr;" data-container-for="SrcDes" ></div>
+                        </div>
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" style="direction:ltr;" data-container-for="InstallLocation" ></div>
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" style="direction:ltr;" data-container-for="CrystalRepName" ></div>
+                        </div>
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" style="direction:ltr;" data-container-for="SrcDestination" ></div>
+                        </div>
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" style="direction:ltr;" data-container-for="InstallLoc" ></div>
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" style="direction:ltr;" data-container-for="TxtFilesName" ></div>
+                        </div>
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" style="direction:ltr;" data-container-for="SourceDes" ></div>
+                        </div>
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" style="direction:ltr;" data-container-for="Installocation" ></div>
+                        </div>
+
+                        <div class="row pt-3">
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" style="direction:ltr;" data-container-for="InstallationRemarks"></div>
+                        </div>
+                        
+                        <div class="row pt-3">
+                        </div>
+                        
+                        <div class="row p-1">
+                            <div class="col pr-2 pl-1" data-container-for="Sup"></div>
+                            <div class="col pr-2 pl-1" data-container-for="TeamLeader"></div>
+                            <div class="col pr-2 pl-1" data-container-for="SysEng"></div>
+                        </div>
+
+                        <div class="row pt-4">
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" data-container-for="OpertationsSection"></div>
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3" style="direction:ltr;" data-container-for="Notes"></div>
+                        </div>
+
+                        <div class="row pt-3">
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col-5 pr-2 pl-1" data-container-for="Approve"></div>
+                            <div class="col-2 pr-2 pl-1"></div>
+                            <div class="col-5 pr-2 pl-1" data-container-for="SystemEng"></div>
+                        </div>
+
+                        <div class="row pt-1">
+                        </div>
+
+                        <div class="row p-1">
+                            <div class="col pr-3 pl-3"></div>
+                            <div class="col pr-3 pl-3"></div>
+                            <div class="col pr-3 pl-3" style="direction:ltr;" data-container-for="CompletionDate"></div>
                         </div>
                     </div>
                 </div>
